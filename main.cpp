@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(qtgr);
 
     QApplication app(argc, argv);
-    app.setOrganizationName("Trolltech");
-    app.setApplicationName("Application Example");
+    app.setOrganizationName("Pappus Inc.");
+    app.setApplicationName("QTGR");
     MainWindow mainWin;
 
     mainWin.show();
