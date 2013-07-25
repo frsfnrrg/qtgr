@@ -5,7 +5,6 @@
 
 
 ViewWorld::ViewWorld(MainWindow* mainWin) : QDialog(mainWin) {
-   
         this->mainWindow = mainWin;
 	this->setWindowTitle("QTGR: Define World");
       
@@ -31,7 +30,7 @@ ViewWorld::ViewWorld(MainWindow* mainWin) : QDialog(mainWin) {
 	xMinTic->setMaximumWidth(100); 
 	yMajTic->setMaximumWidth(100); 
 	yMinTic->setMaximumWidth(100); 
-      
+
 	// make buttons
 	QPushButton* apply = new QPushButton("Apply");
  	connect(apply, SIGNAL(clicked()), this, SLOT(applyWorld()));
