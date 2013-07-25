@@ -1,2 +1,7 @@
-*.o
+# Misc
 .directory
+# C compile garbage
+*.o
+# QT autogen
+moc_*
+qrc_*
