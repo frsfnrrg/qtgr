@@ -5,3 +5,5 @@
 # QT autogen
 moc_*
 qrc_*
+# The executable
+qtgr

@@ -474,8 +474,7 @@ void qtlibdrawarc(int x, int y, int r)
     qtview_arc(x,win_h-y,r,0);
 }
 
-void qtlibfillarc(x, y, r)
-    int x, y, r;
+void qtlibfillarc(int x, int y, int r)
 {
 //     printf("qtlibfillarc %i %i %i \n",x, y, r);
     qtview_arc(x,win_h-y,r,1);

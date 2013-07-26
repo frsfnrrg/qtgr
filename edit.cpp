@@ -62,9 +62,7 @@ void EditMenu::createMenus()
     this->addAction(pasteAct);
     
     QMenu* graphs = new QMenu("Graphs");
-    this->addMenu(graphs);
-
-  
+    this->addMenu(graphs);  
 }
 
 void EditMenu::createActions()

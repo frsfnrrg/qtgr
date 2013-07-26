@@ -129,9 +129,7 @@ void MainWindow::about()
 //! [13] //! [14]
 {
    QMessageBox::about(this, tr("About Application"),
-            tr("The <b>Application</b> example demonstrates how to "
-               "write modern GUI applications using Qt, with a menu bar, "
-               "toolbars, and a status bar."));
+            tr("QTGR is a port to QT of the graphing program XVGR."));
 }
 //! [14]
 

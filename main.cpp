@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setOrganizationName("Pappus Inc.");
     app.setApplicationName("QTGR");
+    app.setApplicationVersion("0.1.0");
     MainWindow mainWin;
 
     mainWin.show();
