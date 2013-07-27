@@ -88,7 +88,7 @@ public:
 	if (rx <  g[cg].v.xv1) { // y-axis props 
 	    view->ticks();
 	    view->ticksDialog->editAxis->setCurrentIndex(1);
-	    view->ticksDialog->updateTicks();
+        view->ticksDialog->updateDialog();
 	    return;
 	}
 	if (rx > g[cg].v.xv2) { // legend
@@ -98,7 +98,7 @@ public:
 	if (ry < g[cg].v.yv1) { // x-axis props
 	    view->ticks();
 	    view->ticksDialog->editAxis->setCurrentIndex(0);
-	    view->ticksDialog->updateTicks();
+        view->ticksDialog->updateDialog();
 	    return;
 	}
 	if (ry > g[cg].v.yv2) { // title
@@ -144,13 +144,13 @@ void ViewMenu::world()
         worldDialog = new ViewWorld(this->mainWindow);
         worldDialog->show();
     }
-    worldDialog->updateWorld();
+    worldDialog->updateDialog();
 }
 
 void ViewMenu::updateWorld() 
 {
     if (worldDialog) {
-        worldDialog->updateWorld();
+        worldDialog->updateDialog();
     }
 }
 
@@ -181,13 +181,13 @@ void ViewMenu::ticks()
         ticksDialog = new ViewTicks(this->mainWindow);
         ticksDialog->show();
     }
-    ticksDialog->updateTicks();
+    ticksDialog->updateDialog();
 }
 
 void ViewMenu::updateTicks() 
 {
     if (ticksDialog) {
-        ticksDialog->updateTicks();
+        ticksDialog->updateDialog();
     }
 }
 

@@ -4,8 +4,7 @@
 #include "globals.h"
 
 
-ViewWorld::ViewWorld(MainWindow* mainWin) : QDialog(mainWin) {
-        this->mainWindow = mainWin;
+ViewWorld::ViewWorld(MainWindow* mainWin) : Dialog(mainWin) {
 	this->setWindowTitle("QTGR: Define World");
       
 	// make combo box
@@ -30,13 +29,6 @@ ViewWorld::ViewWorld(MainWindow* mainWin) : QDialog(mainWin) {
 	xMinTic->setMaximumWidth(100); 
 	yMajTic->setMaximumWidth(100); 
 	yMinTic->setMaximumWidth(100); 
-
-	// make buttons
-    QPushButton* apply = new QPushButton(tr("Apply"));
- 	connect(apply, SIGNAL(clicked()), this, SLOT(applyWorld()));
-	
-    QPushButton* done  = new QPushButton(tr("Done"));
- 	connect(done, SIGNAL(clicked()), this, SLOT(doneWorld()));
 
 	QGridLayout* layout = new QGridLayout();
 	    
@@ -73,17 +65,11 @@ ViewWorld::ViewWorld(MainWindow* mainWin) : QDialog(mainWin) {
 	
 
 	layout->addWidget(fileType,6,1,1,1);
-	
-	layout->addWidget(new QLabel(""),7,0);
 
-	layout->addWidget(apply,8,1);
-	layout->addWidget(done,8,4);
+    this->setDialogLayout(layout);
+}
 
-	this->setLayout(layout);
-  }
-  
-  
-void ViewWorld::updateWorld()
+void ViewWorld::updateDialog()
 {
     int gno; 
     
@@ -103,7 +89,7 @@ void ViewWorld::updateWorld()
 
 }
   
-void ViewWorld::applyWorld()
+void ViewWorld::applyDialog()
 {
     int i, which, ming, maxg;
 
@@ -138,11 +124,4 @@ void ViewWorld::applyWorld()
     
     ViewMenu* viewMenu = (ViewMenu*) mainWindow->viewMenu;  // FIXME hack  
     viewMenu->updateTicks();
-}
-
-void ViewWorld::doneWorld()
-{
-  printf("done\n");
-  this->applyWorld();
-  this->setVisible(false);
 }

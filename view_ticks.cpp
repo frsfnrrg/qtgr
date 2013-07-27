@@ -4,9 +4,8 @@
 #include "globals.h"
 
 
-ViewTicks::ViewTicks(MainWindow* mainWin) : QDialog(mainWin) 
+ViewTicks::ViewTicks(MainWindow* mainWin) : Dialog(mainWin)
 {
-    this->mainWindow = mainWin;
     this->setWindowTitle("QTGR: Ticks/Tick Labels");
   
     // make input fields
@@ -17,7 +16,7 @@ ViewTicks::ViewTicks(MainWindow* mainWin) : QDialog(mainWin)
     editAxis->addItem("Zero Y axis");
     editAxis->addItem("Alternate X axis");
     editAxis->addItem("Alternate Y axis");
-    connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTicks()));	
+    connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));	
     
     // make line edits
     axisLabel = new QLineEdit();
@@ -46,13 +45,7 @@ ViewTicks::ViewTicks(MainWindow* mainWin) : QDialog(mainWin)
     
     QPushButton* barProps = new QPushButton("Bar props");
 // 	connect(apply, SIGNAL(clicked()), this, SLOT(applyTicks()));
-    
-    QPushButton* apply = new QPushButton("Apply");
-    connect(apply, SIGNAL(clicked()), this, SLOT(applyTicks()));
-    
-    QPushButton* done  = new QPushButton("Done");
-    connect(done, SIGNAL(clicked()), this, SLOT(doneTicks()));
-    
+
 
     QGridLayout* layout = new QGridLayout();
 	
@@ -81,22 +74,17 @@ ViewTicks::ViewTicks(MainWindow* mainWin) : QDialog(mainWin)
     layout->addWidget(markProps,8,1);
     layout->addWidget(barProps,9,1);
     
-    layout->addWidget(new QLabel(""),10,0);
-
-    layout->addWidget(apply,11,1,Qt::AlignHCenter);
-    layout->addWidget(done,11,3,Qt::AlignHCenter);
-    
     layout->setColumnMinimumWidth(0,80);
     layout->setColumnMinimumWidth(1,80);
     layout->setColumnMinimumWidth(2,80);
     layout->setColumnMinimumWidth(3,80);
     layout->setColumnMinimumWidth(4,80);
 
-    this->setLayout(layout);
+    this->setDialogLayout(layout);
   }
   
   
-void ViewTicks::updateTicks()
+void ViewTicks::updateDialog()
 {
     int gno,axis; 
     
@@ -111,7 +99,7 @@ void ViewTicks::updateTicks()
 
 }
   
-void ViewTicks::applyTicks()
+void ViewTicks::applyDialog()
 {
   
     int gno,axis; 
@@ -132,95 +120,87 @@ void ViewTicks::applyTicks()
     viewMenu->updateWorld();
 }
 
-void ViewTicks::doneTicks()
-{
-  this->applyTicks();
-  this->setVisible(false);
-}
-
-
 void ViewTicks::labelProps()
 {
-  if (labelPropsDialog) {
-      printf("test\n");
-      labelPropsDialog->setVisible(true);
+    if (labelPropsDialog) {
+        printf("test\n");
+        labelPropsDialog->setVisible(true);
     } else {
         printf("test1\n");
-	labelPropsDialog = new QDialog(this);
-	labelPropsDialog->setWindowTitle("QTGR: Edit tick labels");
-	labelPropsDialog->setMaximumHeight(300);
-	labelPropsDialog->setMinimumWidth(400);
-	
-	axisName = new QLabel(editAxis->currentText());
-	
-	// make input fields
- 	labelFormat = new QComboBox();
-	labelFormat->addItem("Decimal");
-	labelFormat->addItem("Exponential");
-	labelFormat->addItem("Power");
-	
-	labelPrecision = new QComboBox;
-	for (int i=0; i<10; i++) {
-	  labelPrecision->addItem(QString::number(i));
-	}
-	labelPrecision->setCurrentIndex(1);
+        labelPropsDialog = new QDialog(this);
+        labelPropsDialog->setWindowTitle("QTGR: Edit tick labels");
+        labelPropsDialog->setMaximumHeight(300);
+        labelPropsDialog->setMinimumWidth(400);
 
-	// buttons
-	QPushButton* apply = new QPushButton("Apply");
-	connect(apply, SIGNAL(clicked()), this, SLOT(applyLabelProps()));
-	
-	QPushButton* done  = new QPushButton("Done");
-	connect(done, SIGNAL(clicked()), this, SLOT(doneLabelProps()));
-// 
- 	QGridLayout* layout = new QGridLayout(); 
-	
-	layout->addWidget(new QLabel("Axis: "),0,0);
-	layout->addWidget(axisName,0,1);
-	
-	layout->addWidget(new QLabel(""),1,0);
-// 	
-	layout->addWidget(new QLabel("Font: "),2,0);
+        axisName = new QLabel(editAxis->currentText());
 
- 	layout->addWidget(new QLabel("Color"),3,0);
+        // make input fields
+        labelFormat = new QComboBox();
+        labelFormat->addItem("Decimal");
+        labelFormat->addItem("Exponential");
+        labelFormat->addItem("Power");
+
+        labelPrecision = new QComboBox;
+        for (int i=0; i<10; i++) {
+            labelPrecision->addItem(QString::number(i));
+        }
+        labelPrecision->setCurrentIndex(1);
+
+        // buttons
+        QPushButton* apply = new QPushButton("Apply");
+        connect(apply, SIGNAL(clicked()), this, SLOT(applyLabelProps()));
+
+        QPushButton* done  = new QPushButton("Done");
+        connect(done, SIGNAL(clicked()), this, SLOT(doneLabelProps()));
+
+        QGridLayout* layout = new QGridLayout();
+
+        layout->addWidget(new QLabel("Axis: "),0,0);
+        layout->addWidget(axisName,0,1);
+
+        layout->addWidget(new QLabel(""),1,0);
+
+        layout->addWidget(new QLabel("Font: "),2,0);
+
+        layout->addWidget(new QLabel("Color"),3,0);
  	
- 	layout->addWidget(new QLabel("Width:"),4,0);
+        layout->addWidget(new QLabel("Width:"),4,0);
 	
- 	layout->addWidget(new QLabel("Char size:"),5,0);
+        layout->addWidget(new QLabel("Char size:"),5,0);
 	
-	layout->addWidget(new QLabel(""),6,0);
+        layout->addWidget(new QLabel(""),6,0);
 	
-	layout->addWidget(new QLabel("Format:"),7,0);
-	layout->addWidget(labelFormat,7,1);
+        layout->addWidget(new QLabel("Format:"),7,0);
+        layout->addWidget(labelFormat,7,1);
 	
-	layout->addWidget(new QLabel("Stagger:"),8,0);
-// 	layout->addWidget(legendX,7,1);
+        layout->addWidget(new QLabel("Stagger:"),8,0);
+    //  layout->addWidget(legendX,7,1);
 	
-	layout->addWidget(new QLabel("Precision:"),9,0);
-	layout->addWidget(labelPrecision,9,1);
-// 
-	layout->addWidget(new QLabel("Skip every:"),10,0);
-// 	layout->addWidget(precision,9,1);
-	
-	layout->addWidget(new QLabel("Start labels at:"),11,0);
-// 	layout->addWidget(precision,9,1);
-	layout->addWidget(new QLabel("         "),11,3);
-	
-	layout->addWidget(new QLabel("Stop labels at:"),12,0);
-// 	layout->addWidget(precision,9,1);
-	layout->addWidget(new QLabel("         "),12,3);
-// 		
-	layout->addWidget(new QLabel(""),14,0);
+        layout->addWidget(new QLabel("Precision:"),9,0);
+        layout->addWidget(labelPrecision,9,1);
 
-	layout->addWidget(apply,15,1,Qt::AlignLeft);
-	layout->addWidget(done,15,3,Qt::AlignLeft);
-// 	
+        layout->addWidget(new QLabel("Skip every:"),10,0);
+//      layout->addWidget(precision,9,1);
+
+        layout->addWidget(new QLabel("Start labels at:"),11,0);
+    // 	layout->addWidget(precision,9,1);
+        layout->addWidget(new QLabel("         "),11,3);
 	
- 	labelPropsDialog->setLayout(layout);
-// 	  
-	labelPropsDialog->show();  
-// 	
+        layout->addWidget(new QLabel("Stop labels at:"),12,0);
+    // 	layout->addWidget(precision,9,1);
+        layout->addWidget(new QLabel("         "),12,3);
+
+        layout->addWidget(new QLabel(""),14,0);
+
+        layout->addWidget(apply,15,1,Qt::AlignLeft);
+        layout->addWidget(done,15,3,Qt::AlignLeft);
+
+	
+        labelPropsDialog->setLayout(layout);
+
+        labelPropsDialog->show();
+
     } //labelPropsDialog != NULL
-//     
     updateLabelProps();
 
 }

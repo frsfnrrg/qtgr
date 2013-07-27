@@ -3,8 +3,9 @@
 
 #include <QtGui>
 #include "mainwindow.h"
+#include "dialog.h"
 
-class ViewWorld : public QDialog
+class ViewWorld : public Dialog
 {
   Q_OBJECT
   
@@ -12,8 +13,6 @@ class ViewWorld : public QDialog
     ViewWorld(MainWindow* mainWin);
     
   private:
-    MainWindow *mainWindow;
-    
     QLineEdit *xMin;
     QLineEdit *xMax;
     QLineEdit *yMin;
@@ -24,13 +23,10 @@ class ViewWorld : public QDialog
     QLineEdit *yMinTic;  
     
  public slots:
-    void updateWorld();
+    void updateDialog();
    
  private slots:
-   
-    void applyWorld();
-    void doneWorld();
-  
+    void applyDialog();
 };
 
 #endif

@@ -3,8 +3,9 @@
 
 #include <QtGui>
 #include "mainwindow.h"
+#include "dialog.h"
 
-class ViewTicks : public QDialog
+class ViewTicks : public Dialog
 {
   Q_OBJECT
   
@@ -17,10 +18,9 @@ class ViewTicks : public QDialog
 
     
   public slots:
-    void updateTicks();
+    void updateDialog();
     
   private:
-    MainWindow *mainWindow;
     
     QLineEdit *axisLabel;
     QLineEdit *majTic;
@@ -32,14 +32,12 @@ class ViewTicks : public QDialog
     QLabel* axisName;
     
  private slots:
-    void applyTicks();
-    void doneTicks();
-    
+    void applyDialog();
+
     void labelProps();
     void updateLabelProps();
     void applyLabelProps();
     void doneLabelProps();
-  
 };
 
 #endif
