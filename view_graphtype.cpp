@@ -1,5 +1,4 @@
 #include "view_graphtype.h"
-
 #include "globals.h"
 
 const int indx2type[] = { XY, LOGY, LOGX, LOGXY, BAR, STACKEDBAR, HBAR, STACKEDHBAR};
@@ -12,10 +11,9 @@ const char* opts[] = {"X Linear, Y Linear",
                         "Horizontal Bar",
                         "Horizontal Bar Stacked"};
 
-ViewGraphType::ViewGraphType(MainWindow* mainWin) : QDialog(mainWin)
+ViewGraphType::ViewGraphType(MainWindow* mainWin) : Dialog(mainWin)
 {
     printf("creating graph window");
-    this->mainWindow = mainWin;
     this->setWindowTitle(tr("QTGR: Set Graph Type"));
 
     // items
@@ -34,16 +32,12 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) : QDialog(mainWin)
     connect(setNumbers, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
     graphTypes = new QComboBox();
-    for (int k=0;k<4;k++) {
+    for (int k=0;k<4;k++) {// FIXME: find out why bar charts fail (and others are skewed)
         graphTypes->addItem(tr(opts[k]));
     }
 
     // layouting
-
-    QVBoxLayout* layout = new QVBoxLayout();
-
     QGridLayout* primary = new QGridLayout();
-    layout->addLayout(primary);
 
     primary->addWidget(new QLabel(tr("Select Graph:"),0,0));
     primary->addWidget(setNumbers,0,1);
@@ -55,15 +49,7 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) : QDialog(mainWin)
     primary->addWidget(new QLabel(tr("Graph Type")), 2,0);
     primary->addWidget(graphTypes, 2, 1);
 
-    QHBoxLayout* finals = new QHBoxLayout();
-    layout->addLayout(finals);
-
-    finals->addWidget(cancel);
-    finals->addStretch();
-    finals->addWidget(apply);
-    finals->addWidget(done);
-
-    this->setLayout(layout);
+    this->setDialogLayout(primary);
 }
 
 void ViewGraphType::applyDialog() {
@@ -77,12 +63,6 @@ void ViewGraphType::applyDialog() {
 
     // & show it too
     drawgraph();
-}
-
-void ViewGraphType::doneDialog() {
-    printf("done setting graph types\n");
-    this->applyDialog();
-    this->setVisible(false);
 }
 
 void ViewGraphType::updateDialog() {
@@ -134,9 +114,4 @@ void ViewGraphType::updateDialog() {
     } else {
         printf("Unsupported graph type...\n");
     }
-}
-
-void ViewGraphType::cancelDialog() {
-    printf("cancelling graph types\n");
-    this->setVisible(false);
 }

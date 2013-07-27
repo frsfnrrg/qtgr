@@ -3,8 +3,9 @@
 
 #include <QtGui>
 #include "mainwindow.h"
+#include "dialog.h"
 
-class ViewSymbols : public QDialog
+class ViewSymbols : public Dialog
 {
   Q_OBJECT
   
@@ -12,8 +13,6 @@ class ViewSymbols : public QDialog
     ViewSymbols(MainWindow* mainWin);
 
   private:
-    MainWindow *mainWindow;
-    
     QComboBox* setNumber;
     QComboBox* symbolSymbol;
     QComboBox* symbolFill;
@@ -23,12 +22,10 @@ class ViewSymbols : public QDialog
     QLineEdit* legendS;
     
   public slots:
-    void updateSymbols();   
+    void updateDialog();
    
   private slots:	
-    void applySymbols();
-    void doneSymbols();
-  
+    void applyDialog();
 };
 
 #endif

@@ -3,15 +3,15 @@
 
 #include <QtGui>
 #include "mainwindow.h"
+#include "dialog.h"
 
 // Hey... you could subclass QDialog, have reqed. apply, done, update, cancel
-class ViewGraphType : public QDialog
+class ViewGraphType : public Dialog
 {
     Q_OBJECT
 public:
-    ViewGraphType(MainWindow* mainWin);
+    explicit ViewGraphType(MainWindow* mainWin);
 private:
-    MainWindow* mainWindow;
     QComboBox* setNumbers;
     QComboBox* graphTypes;
 
@@ -22,10 +22,6 @@ public slots:
 
 private slots:
     void applyDialog();
-    
-    void doneDialog();
-
-    void cancelDialog();
 };
 
 #endif // VIEW_GRAPHTYPE_H

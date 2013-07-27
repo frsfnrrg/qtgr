@@ -23,7 +23,6 @@ TransformIntegration::TransformIntegration(MainWindow* mainWin) :
     integrationType->addItem(tr("Result and plot"));
 
     // layout
-
     QGridLayout* layout = new QGridLayout();
     layout->addWidget(new QLabel(tr("Select Set:")),0,0);
     layout->addWidget(setNumber,0,1);

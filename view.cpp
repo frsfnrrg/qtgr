@@ -149,26 +149,26 @@ void ViewMenu::world()
 
 void ViewMenu::updateWorld() 
 {
-  if (worldDialog) {
-	worldDialog->updateWorld();
-  }
+    if (worldDialog) {
+        worldDialog->updateWorld();
+    }
 }
 
 void ViewMenu::symbols()
 {
     if (symbolsDialog) {
-	symbolsDialog->setVisible(true);
+        symbolsDialog->setVisible(true);
     } else {
-	symbolsDialog = new ViewSymbols(this->mainWindow);
-	symbolsDialog->show();
+        symbolsDialog = new ViewSymbols(this->mainWindow);
+        symbolsDialog->show();
     }
-    symbolsDialog->updateSymbols();
+    symbolsDialog->updateDialog();
 }
 
 void ViewMenu::updateSymbols()
 {
     if (symbolsDialog) {
-	symbolsDialog->updateSymbols();
+	symbolsDialog->updateDialog();
     }
 }
 
@@ -176,19 +176,19 @@ void ViewMenu::updateSymbols()
 void ViewMenu::ticks()
 {   
     if (ticksDialog) {
-      ticksDialog->setVisible(true);
+        ticksDialog->setVisible(true);
     } else {
-	ticksDialog = new ViewTicks(this->mainWindow);
-	ticksDialog->show();
+        ticksDialog = new ViewTicks(this->mainWindow);
+        ticksDialog->show();
     }
     ticksDialog->updateTicks();
 }
 
 void ViewMenu::updateTicks() 
 {
-  if (ticksDialog) {
-	ticksDialog->updateTicks();
-  }
+    if (ticksDialog) {
+        ticksDialog->updateTicks();
+    }
 }
 
 void ViewMenu::graphTypes() {
@@ -207,7 +207,6 @@ void ViewMenu::updateGraphTypes() {
     }
 }
 
-// TODO: classify it out!
 void ViewMenu::legends()
 {   
     if (legendsDialog) {
@@ -217,6 +216,13 @@ void ViewMenu::legends()
         legendsDialog->show();
     }
     legendsDialog->updateDialog();
+}
+
+void ViewMenu::updateLegends()
+{
+    if (legendsDialog) {
+        legendsDialog->updateDialog();
+    }
 }
 
 

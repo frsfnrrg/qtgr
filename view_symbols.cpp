@@ -3,7 +3,7 @@
 #include "globals.h"
 
 
-ViewSymbols::ViewSymbols(MainWindow* mainWin) : QDialog(mainWin) 
+ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin)
 {
 	
     const int maxsets = 16; //FIXME move out to a constant file
@@ -11,7 +11,6 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) : QDialog(mainWin)
     const int maxpatterns = 16; //FIXME
     const int maxcolors = 16; //FIXME
     
-    this->mainWindow = mainWin;
     this->setWindowTitle("QTGR: Symbols");
 	       
     //make input fields
@@ -19,7 +18,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) : QDialog(mainWin)
     for (int i=0; i<maxsets; i++) {
       setNumber->addItem(QString::number(i));
     }
-    connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSymbols()));	
+    connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
     
     // symbols inputs
     symbolSymbol = new QComboBox;
@@ -76,13 +75,6 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) : QDialog(mainWin)
     
     legendS = new QLineEdit();
     legendS->setMaximumWidth(300); 
-    
-    // make buttons
-    QPushButton* apply = new QPushButton("Apply");
-    connect(apply, SIGNAL(clicked()), this, SLOT(applySymbols()));
-
-    QPushButton* done  = new QPushButton("Done");
-    connect(done, SIGNAL(clicked()), this, SLOT(doneSymbols()));
 
     QGridLayout* layout = new QGridLayout();
 	
@@ -131,20 +123,17 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) : QDialog(mainWin)
     layout->addWidget(fillStyle,4,7);
     layout->addWidget(fillColor,5,7);
     layout->addWidget(fillPattern,6,7);
-    
-    layout->addWidget(new QLabel(""),9,0);
 
-    layout->addWidget(apply,10,1,Qt::AlignHCenter);
-    layout->addWidget(done,10,4,Qt::AlignHCenter);
-
-    this->setLayout(layout);
+    this->setDialogLayout(layout);
   
+    // are these necessary?? Should be called from the outside...
+    // or, should all things show on construction?
     this->show();
 
-    updateSymbols();
+    updateDialog();
 }  
   
-void ViewSymbols::updateSymbols()
+void ViewSymbols::updateDialog()
 {
   
     int gno,cset,iv; 
@@ -183,7 +172,7 @@ void ViewSymbols::updateSymbols()
     update();
 }
   
-void ViewSymbols::applySymbols()
+void ViewSymbols::applyDialog()
 {
     int cset, sym, symchar, symskip, symfill, style, color, wid, fill, fillpat, fillusing, fillcol, i;
     double symsize;
@@ -233,10 +222,4 @@ void ViewSymbols::applySymbols()
     
     
     drawgraph();    
-}
-
-void ViewSymbols::doneSymbols()
-{
-  this->applySymbols();
-  this->setVisible(false);
 }

@@ -3,15 +3,15 @@
 
 #include <QtGui>
 #include "mainwindow.h"
+#include "dialog.h"
 
-class ViewLegends : public QDialog
+class ViewLegends : public Dialog
 {
     Q_OBJECT
 public:
     static const int maxsets = 16; // FIXME
 
     explicit ViewLegends(MainWindow* mainWin);
-    MainWindow* mainWindow;
     QLineEdit* legendX;
     QLineEdit* legendY;
 
@@ -29,9 +29,6 @@ public slots:
     void applyDialog();
 
 private slots:
-    void doneDialog();
-    void cancelDialog();
-
     void placeLegends();
     void legendsEdit();
     void updateLegendsEdit();

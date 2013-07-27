@@ -53,28 +53,16 @@ public slots:
     void ticks();
     void legends();
     void graphTypes();
-   // void applyLegends();
 
 
 private slots:
-
-//     void updateSymbols();
-//     void applySymbols();
-//     void doneSymbols();
-
-    // todo: bring into another class
-   // void doneLegends();
-   // void placeLegends();
-   // void legendsEdit();
-   // void applyLegendsEdit();
-   // void doneLegendsEdit();
    
 private:
 
     void createMenus();
     void createActions();
    
-    int set_mode;
+    int set_mode; // not implemented yet
     
     QAction *worldAct;
     QAction *titleAct;
@@ -82,25 +70,6 @@ private:
     QAction *symbolsAct;
     QAction *legendsAct;
     QAction *graphTypesAct;
-
-// //     QDialog* symbolsDialog;
-//     QComboBox* setNumber;
-//     QComboBox* symbolSymbol;
-//     QComboBox* symbolFill;
-//     QComboBox* lineWidth;
-//     QComboBox* lineStyle;
-//     QComboBox* lineColor;
-//     QLineEdit* legendS;
-    
-   // QDialog* legendsDialog;
-  //  QCheckBox* showLegend;
-   // QComboBox *locType;
-
-    //void updateLegends();
-    
-    //QDialog* legendsEditDialog;
-
-    // void updateLegendsEdit();
 };
 
 #endif
