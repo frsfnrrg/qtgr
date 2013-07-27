@@ -11,10 +11,9 @@ const char* opts[] = {"X Linear, Y Linear",
                         "Horizontal Bar",
                         "Horizontal Bar Stacked"};
 
-ViewGraphType::ViewGraphType(MainWindow* mainWin) : Dialog(mainWin)
+ViewGraphType::ViewGraphType(MainWindow* mainWin) : Dialog(mainWin, tr("Set Graph Type"))
 {
     printf("creating graph window");
-    this->setWindowTitle(tr("QTGR: Set Graph Type"));
 
     // items
 

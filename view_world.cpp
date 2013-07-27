@@ -4,8 +4,7 @@
 #include "globals.h"
 
 
-ViewWorld::ViewWorld(MainWindow* mainWin) : Dialog(mainWin) {
-	this->setWindowTitle("QTGR: Define World");
+ViewWorld::ViewWorld(MainWindow* mainWin) : Dialog(mainWin, tr("Define World")) {
       
 	// make combo box
 	QComboBox* fileType = new QComboBox;

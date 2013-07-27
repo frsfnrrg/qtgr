@@ -1,14 +1,10 @@
 #include "transform/integration.h"
 
 TransformIntegration::TransformIntegration(MainWindow* mainWin) :
-    Dialog(mainWin)
+    Dialog(mainWin, tr("Transforms: Integration"))
 {
     printf("creating integration dialog\n");
-    this->setWindowTitle(tr("Transforms: Integration"));
 
-    // what??
-    //printf("%i %i %i %i %i %i %i %i\n", resultL, nl1, nl2, nl3 , nl4,nl5,nl6,nl7);
-    //resultL = NULL;
     resultL = new QLabel("Volia!");
     resultL->setText(".....");
 

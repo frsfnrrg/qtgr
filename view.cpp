@@ -54,14 +54,16 @@ ViewMenu::ViewMenu(MainWindow* mainWin)
     symbolsDialog = NULL;
     ticksDialog = NULL;
     legendsDialog = NULL;
-//    legendsEditDialog = NULL;
     graphTypesDialog = NULL;
+    viewDialog = NULL;
+
     set_mode = 0 ; // 0 means act on one set; <>0 means all sets (FIXME not implemented);
 }
 
 void ViewMenu::createMenus()
 {
     this->setTearOffEnabled(true);
+    this->addAction(viewAct);
     this->addAction(worldAct);
     this->addSeparator();
     this->addAction(titleAct);
@@ -113,11 +115,14 @@ public:
 
 void ViewMenu::createActions()
 {  
+    viewAct = new QAction(tr("Define viewport..."), this);
+    connect(viewAct, SIGNAL(triggered()), this, SLOT(view()));
+
     worldAct = new QAction(tr("Define world..."), this);
     connect(worldAct, SIGNAL(triggered()), this, SLOT(world()));
 
     titleAct = new QAction(tr("Title/Subtitle..."), this);
-    //     connect(autoScaleAct, SIGNAL(triggered()), this, SLOT(autoScale()));
+    // TODO: create a dialog for it!
 
     ticksAct = new QAction(tr("Ticks/Tick lables..."), this);
     connect(ticksAct, SIGNAL(triggered()), this, SLOT(ticks()));
@@ -168,7 +173,7 @@ void ViewMenu::symbols()
 void ViewMenu::updateSymbols()
 {
     if (symbolsDialog) {
-	symbolsDialog->updateDialog();
+        symbolsDialog->updateDialog();
     }
 }
 
@@ -225,6 +230,23 @@ void ViewMenu::updateLegends()
     }
 }
 
+void ViewMenu::view()
+{
+    if (viewDialog) {
+        viewDialog->setVisible(true);
+    } else {
+        viewDialog = new ViewView(this->mainWindow);
+        viewDialog->show();
+    }
+    viewDialog->updateDialog();
+}
+
+void ViewMenu::updateView()
+{
+    if (viewDialog) {
+        viewDialog->updateDialog();
+    }
+}
 
 
 

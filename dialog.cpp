@@ -1,8 +1,9 @@
 #include "dialog.h"
 
-Dialog::Dialog(MainWindow* mainWin) :
+Dialog::Dialog(MainWindow* mainWin, QString title) :
     QDialog(mainWin)
 {
+    this->setWindowTitle("QTGR: " + title);
     this->mainWindow = mainWin;
     layout = new QVBoxLayout();
 

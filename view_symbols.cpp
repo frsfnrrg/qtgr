@@ -3,15 +3,13 @@
 #include "globals.h"
 
 
-ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin)
+ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin, tr("Symbols"))
 {
 	
     const int maxsets = 16; //FIXME move out to a constant file
     const int maxwidths = 9; //FIXME
     const int maxpatterns = 16; //FIXME
     const int maxcolors = 16; //FIXME
-    
-    this->setWindowTitle("QTGR: Symbols");
 	       
     //make input fields
     setNumber = new QComboBox;
@@ -128,9 +126,9 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin)
   
     // are these necessary?? Should be called from the outside...
     // or, should all things show on construction?
-    this->show();
+//    this->show();
 
-    updateDialog();
+//    updateDialog();
 }  
   
 void ViewSymbols::updateDialog()

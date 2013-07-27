@@ -12,6 +12,7 @@
 #include "view_world.h"
 #include "view_graphtype.h"
 #include "view_legends.h"
+#include "view_view.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -34,6 +35,7 @@ public:
     ViewWorld*   worldDialog;
     ViewGraphType* graphTypesDialog;
     ViewLegends* legendsDialog;
+    ViewView* viewDialog;
 
    // QLineEdit* legendX;
   //  QLineEdit* legendY;
@@ -43,6 +45,7 @@ public:
     void updateWorld();
     void updateLegends();
     void updateGraphTypes();
+    void updateView();
     
 protected:
   
@@ -53,6 +56,7 @@ public slots:
     void ticks();
     void legends();
     void graphTypes();
+    void view();
 
 
 private slots:
@@ -64,6 +68,7 @@ private:
    
     int set_mode; // not implemented yet
     
+    QAction *viewAct;
     QAction *worldAct;
     QAction *titleAct;
     QAction *ticksAct;

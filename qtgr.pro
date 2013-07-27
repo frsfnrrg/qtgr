@@ -13,7 +13,8 @@ HEADERS       = edit.h \
     view_legends.h \
     transform.h \
     transform/integration.h \
-    dialog.h
+    dialog.h \
+    view_view.h
 		
 SOURCES       = edit.cpp \	
 		file.cpp \
@@ -47,7 +48,8 @@ SOURCES       = edit.cpp \
     view_legends.cpp \
     transform.cpp \
     transform/integration.cpp \
-    dialog.cpp
+    dialog.cpp \
+    view_view.cpp
 
 RESOURCES     = qtgr.qrc
 

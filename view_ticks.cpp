@@ -4,10 +4,8 @@
 #include "globals.h"
 
 
-ViewTicks::ViewTicks(MainWindow* mainWin) : Dialog(mainWin)
-{
-    this->setWindowTitle("QTGR: Ticks/Tick Labels");
-  
+ViewTicks::ViewTicks(MainWindow* mainWin) : Dialog(mainWin, tr("Ticks/Tick Labels"))
+{  
     // make input fields
     editAxis = new QComboBox(this);
     editAxis->addItem("X axis");
