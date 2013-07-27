@@ -1,7 +1,9 @@
 HEADERS       = edit.h \
     file.h \
     graphwidget.h \
-    globals.h \
+    core/globals.h \
+    core/defines.h \
+    core/pars.h \
     mainwindow.h \
     mousecall.h \
     view.h \ 
@@ -26,24 +28,23 @@ SOURCES       = edit.cpp \
     view/ticks.cpp \
     view/symbols.cpp \
     view/world.cpp \
-    alerts.c \
-    checkon.c \
-    chersh.c \
-    defaults.c \
-    draw.c \
-    drawticks.c \
-    events.c \
-    files.c \
-    fit.c \
-    graphutils.c \
-    objutils.c \
-    pars.c \
-    plotone.c \
-    qtlib.c \
-    utils.c \
-    setprops.c \
-    setutils.c \
-    getparms.c \
+    core/alerts.c \
+    core/checkon.c \
+    core/chersh.c \
+    core/defaults.c \
+    core/draw.c \
+    core/drawticks.c \
+    core/events.c \
+    core/files.c \
+    core/fit.c \
+    core/graphutils.c \
+    core/objutils.c \
+    core/pars.c \
+    core/plotone.c \
+    core/qtlib.c \
+    core/utils.c \
+    core/setutils.c \
+    core/getparms.c \
     view/graphtype.cpp \
     view/legends.cpp \
     transform.cpp \

@@ -1,12 +1,10 @@
 #include <iostream>
 #include "view/symbols.h"
 #include "view.h"
-#include "globals.h"
-
+#include "core/globals.h"
 
 ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin, tr("Symbols"))
 {
-	
     const int maxsets = 16; //FIXME move out to a constant file
     const int maxwidths = 9; //FIXME
     const int maxpatterns = 16; //FIXME

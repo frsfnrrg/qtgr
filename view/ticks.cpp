@@ -1,7 +1,7 @@
 //#include <iostream>
 #include "view.h"
 #include "view/ticks.h"
-#include "globals.h"
+#include "core/globals.h"
 
 
 ViewTicks::ViewTicks(MainWindow* mainWin) : Dialog(mainWin, tr("Ticks/Tick Labels"))

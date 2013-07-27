@@ -1,5 +1,5 @@
 #include "view/graphtype.h"
-#include "globals.h"
+#include "core/globals.h"
 
 const int indx2type[] = { XY, LOGY, LOGX, LOGXY, BAR, STACKEDBAR, HBAR, STACKEDHBAR};
 const char* opts[] = {"X Linear, Y Linear",

@@ -1,8 +1,8 @@
-#include <iostream>
+//#include <iostream>
 #include <QtGui>
 #include "mainwindow.h"
 #include "view.h"
-#include "globals.h"
+#include "core/globals.h"
 
 ViewMenu::ViewMenu(MainWindow* mainWin)
 {  

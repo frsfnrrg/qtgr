@@ -1,5 +1,5 @@
 #include "view/legends.h"
-#include "globals.h"
+#include "core/globals.h"
 
 ViewLegends::ViewLegends(MainWindow* mainWin) :
     Dialog(mainWin, tr("Legends"))
