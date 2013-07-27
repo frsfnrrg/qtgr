@@ -1,4 +1,4 @@
-#include <iostream>
+//#include <iostream>
 #include "view.h"
 #include "view_ticks.h"
 #include "globals.h"

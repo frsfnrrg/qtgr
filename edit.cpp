@@ -60,9 +60,6 @@ void EditMenu::createMenus()
     this->addAction(cutAct);
     this->addAction(copyAct);
     this->addAction(pasteAct);
-    
-    QMenu* graphs = new QMenu("Graphs");
-    this->addMenu(graphs);  
 }
 
 void EditMenu::createActions()
@@ -89,7 +86,6 @@ void EditMenu::createActions()
     
     cutAct->setEnabled(false);
     copyAct->setEnabled(false);
-
 }
 
 void EditMenu::autoScale()

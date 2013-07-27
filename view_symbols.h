@@ -10,7 +10,7 @@ class ViewSymbols : public QDialog
   
   public:	
     ViewSymbols(MainWindow* mainWin);
-    
+
   private:
     MainWindow *mainWindow;
     

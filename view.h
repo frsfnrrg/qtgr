@@ -10,7 +10,7 @@
 #include "view_symbols.h"
 #include "view_ticks.h"
 #include "view_world.h"
-
+#include "view_graphtype.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -31,6 +31,7 @@ public:
     ViewSymbols* symbolsDialog;
     ViewTicks*   ticksDialog;
     ViewWorld*   worldDialog;
+    ViewGraphType* graphTypesDialog;
 
     QLineEdit* legendX;
     QLineEdit* legendY;   
@@ -38,6 +39,7 @@ public:
     void updateSymbols();
     void updateTicks();
     void updateWorld();
+    void updateGraphTypes();
     
 protected:
   
@@ -47,6 +49,7 @@ public slots:
     void symbols();
     void ticks();
     void legends();
+    void graphTypes();
     void applyLegends();
 
 
@@ -56,15 +59,13 @@ private slots:
 //     void applySymbols();
 //     void doneSymbols();
 
- 
+    // todo: bring into another class
     void doneLegends();
     void placeLegends();
     void legendsEdit();
     void applyLegendsEdit();
     void doneLegendsEdit();
    
-
-
 private:
 
     void createMenus();
@@ -77,10 +78,8 @@ private:
     QAction *ticksAct;
     QAction *symbolsAct;
     QAction *legendsAct;
-    
+    QAction *graphTypesAct;
 
-    
-    
 // //     QDialog* symbolsDialog;
 //     QComboBox* setNumber;
 //     QComboBox* symbolSymbol;
@@ -89,8 +88,6 @@ private:
 //     QComboBox* lineStyle;
 //     QComboBox* lineColor;
 //     QLineEdit* legendS;
-
-
     
     QDialog* legendsDialog;
     QCheckBox* showLegend;

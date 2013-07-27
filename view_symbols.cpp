@@ -6,7 +6,7 @@
 ViewSymbols::ViewSymbols(MainWindow* mainWin) : QDialog(mainWin) 
 {
 	
-    const int maxsets = 16; //FIXME
+    const int maxsets = 16; //FIXME move out to a constant file
     const int maxwidths = 9; //FIXME
     const int maxpatterns = 16; //FIXME
     const int maxcolors = 16; //FIXME

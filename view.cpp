@@ -69,7 +69,10 @@ void ViewMenu::createMenus()
     this->addAction(symbolsAct);
     this->addAction(legendsAct);
     this->addSeparator();
-  
+
+    QMenu* graphs = new QMenu("Graphs");
+    graphs->addAction(graphTypesAct);
+    this->addMenu(graphs);
 }
 
 class MouseDoubleCall : public MouseCallBack
@@ -125,6 +128,9 @@ void ViewMenu::createActions()
     legendsAct = new QAction(tr("Legends..."), this);
     connect(legendsAct, SIGNAL(triggered()), this, SLOT(legends()));
     
+    graphTypesAct = new QAction(tr("Graph Types"), this);
+    connect(graphTypesAct, SIGNAL(triggered()), this, SLOT(graphTypes()));
+
     // setup double click handler
     mouseDouble.view = this;
     mainWindow->gwidget->mouseDoubleCall =  &mouseDouble;
@@ -186,19 +192,35 @@ void ViewMenu::updateTicks()
   }
 }
 
+void ViewMenu::graphTypes() {
+    if (graphTypesDialog) {
+        graphTypesDialog->setVisible(true);
+    } else {
+        graphTypesDialog = new ViewGraphType(this->mainWindow);
+        graphTypesDialog->show();
+    }
+    graphTypesDialog->updateType();
+}
 
+void ViewMenu::updateGraphTypes() {
+    if (graphTypesDialog) {
+        graphTypesDialog->updateType();
+    }
+}
+
+// TODO: classify it out!
 void ViewMenu::legends()
 {   
     if (legendsDialog) {
       legendsDialog->setVisible(true);
     } else {
 	legendsDialog = new QDialog(this->mainWindow);
-	legendsDialog->setWindowTitle("QTGR: Legends");
+    legendsDialog->setWindowTitle(tr("QTGR: Legends"));
       
 	// make input fields
 	locType = new QComboBox;
-	locType->addItem("Viewport coordinates");
-	locType->addItem("World coordinates");
+    locType->addItem(tr("Viewport coordinates"));
+    locType->addItem(tr("World coordinates"));
 //	connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTicks()));	
 	
 // 	// make line edits

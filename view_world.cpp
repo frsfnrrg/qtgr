@@ -32,10 +32,10 @@ ViewWorld::ViewWorld(MainWindow* mainWin) : QDialog(mainWin) {
 	yMinTic->setMaximumWidth(100); 
 
 	// make buttons
-	QPushButton* apply = new QPushButton("Apply");
+    QPushButton* apply = new QPushButton(tr("Apply"));
  	connect(apply, SIGNAL(clicked()), this, SLOT(applyWorld()));
 	
-	QPushButton* done  = new QPushButton("Done");
+    QPushButton* done  = new QPushButton(tr("Done"));
  	connect(done, SIGNAL(clicked()), this, SLOT(doneWorld()));
 
 	QGridLayout* layout = new QGridLayout();

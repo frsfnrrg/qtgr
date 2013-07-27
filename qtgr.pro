@@ -8,7 +8,8 @@ HEADERS       = edit.h \
 		view_ticks.h \
 		view_symbols.h \
 		view_world.h \
-		tools.h
+		tools.h \
+    view_graphtype.h
 		
 SOURCES       = edit.cpp \	
 		file.cpp \
@@ -37,7 +38,8 @@ SOURCES       = edit.cpp \
 		utils.c \
 		setprops.c \
 		setutils.c \
-		getparms.c
+		getparms.c \
+    view_graphtype.cpp
 
 RESOURCES     = qtgr.qrc
 
