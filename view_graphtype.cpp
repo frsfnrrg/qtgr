@@ -21,19 +21,17 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) : QDialog(mainWin)
     // items
 
     QPushButton* apply = new QPushButton(tr("Apply"));
-    connect(apply, SIGNAL(clicked()), this, SLOT(applyType()));
+    connect(apply, SIGNAL(clicked()), this, SLOT(applyDialog()));
 
     QPushButton* done = new QPushButton(tr("Done"));
-    connect(done, SIGNAL(clicked()), this, SLOT(doneType()));
+    connect(done, SIGNAL(clicked()), this, SLOT(doneDialog()));
 
     QPushButton* cancel = new QPushButton(tr("Cancel"));
-    connect(cancel, SIGNAL(clicked()), this, SLOT(cancelType()));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(cancelDialog()));
 
-    // FIXME: abstract this out; view symbols has the exact
-    // same mess.
     setNumbers = new QComboBox();
     setNumbers->addItem(QString::number(0));
-    connect(setNumbers, SIGNAL(currentIndexChanged(int)), this, SLOT(updateType()));
+    connect(setNumbers, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
     graphTypes = new QComboBox();
     for (int k=0;k<4;k++) {
@@ -47,7 +45,7 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) : QDialog(mainWin)
     QGridLayout* primary = new QGridLayout();
     layout->addLayout(primary);
 
-    primary->addWidget(new QLabel(tr("Select Set:"),0,0));
+    primary->addWidget(new QLabel(tr("Select Graph:"),0,0));
     primary->addWidget(setNumbers,0,1);
 
     // spacer
@@ -68,7 +66,7 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) : QDialog(mainWin)
     this->setLayout(layout);
 }
 
-void ViewGraphType::applyType() {
+void ViewGraphType::applyDialog() {
     printf("applying graph types\n");
 
     int cset = setNumbers->currentIndex();
@@ -81,13 +79,13 @@ void ViewGraphType::applyType() {
     drawgraph();
 }
 
-void ViewGraphType::doneType() {
+void ViewGraphType::doneDialog() {
     printf("done setting graph types\n");
-    this->applyType();
+    this->applyDialog();
     this->setVisible(false);
 }
 
-void ViewGraphType::updateType() {
+void ViewGraphType::updateDialog() {
     printf("updating graph types\n");
 
     int cset = setNumbers->currentIndex();
@@ -102,7 +100,7 @@ void ViewGraphType::updateType() {
     case POLAR:
     case PIE:
     case STACKEDLINE:
-        printf("type not implemented");
+        printf("type not implemented\n");
         break;
 
     case XY:
@@ -134,11 +132,11 @@ void ViewGraphType::updateType() {
     if (vk != -1) {
         graphTypes->setCurrentIndex(vk);
     } else {
-        printf("Unsupported graph type...");
+        printf("Unsupported graph type...\n");
     }
 }
 
-void ViewGraphType::cancelType() {
+void ViewGraphType::cancelDialog() {
     printf("cancelling graph types\n");
     this->setVisible(false);
 }

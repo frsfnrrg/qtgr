@@ -58,7 +58,9 @@ void ToolsMenu::createMenus()
 {
     this->setTearOffEnabled(true);
     this->addAction(autoScaleAct);
-    this->addAction(worldAct);
+    this->addAction(zoomRectAct);
+    this->addAction(zoomOutAct);
+//    this->addAction(worldAct);
 //     this->addAction(viewAct);
   
 }
@@ -66,7 +68,7 @@ void ToolsMenu::createMenus()
 void ToolsMenu::createActions()
 {
    
-    worldAct = new QAction(tr("Define world..."), this);
+//    worldAct = new QAction(tr("Define world..."), this);
 //     connect(autoScaleAct, SIGNAL(triggered()), this, SLOT(autoScale()));
 //   
 //     viewAct = new QAction(tr("Define view..."), this);
@@ -74,6 +76,9 @@ void ToolsMenu::createActions()
   
     autoScaleAct = new QAction(tr("Autoscale"), this);
     connect(autoScaleAct, SIGNAL(triggered()), this, SLOT(autoScale()));
+
+    zoomRectAct = new QAction(tr("Zoom rect"), this);
+    zoomOutAct = new QAction(tr("Zoom out"), this);
 
 }
 

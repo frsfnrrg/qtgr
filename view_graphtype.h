@@ -18,14 +18,14 @@ private:
 signals:
     
 public slots:
-    void updateType();
+    void updateDialog();
 
 private slots:
-    void applyType();
+    void applyDialog();
     
-    void doneType();
+    void doneDialog();
 
-    void cancelType();
+    void cancelDialog();
 };
 
 #endif // VIEW_GRAPHTYPE_H

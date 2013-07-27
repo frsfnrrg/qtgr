@@ -43,6 +43,7 @@
 #include "mainwindow.h"
 #include "edit.h"
 #include "globals.h"
+#include "transform.h"
 
 EditMenu::EditMenu(MainWindow* mainWin)
 
@@ -57,6 +58,7 @@ EditMenu::EditMenu(MainWindow* mainWin)
 void EditMenu::createMenus()
 {
     this->setTearOffEnabled(true);
+    this->addMenu(new TransformMenu(mainWindow));
     this->addAction(cutAct);
     this->addAction(copyAct);
     this->addAction(pasteAct);

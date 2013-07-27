@@ -10,7 +10,8 @@ HEADERS       = edit.h \
 		view_world.h \
 		tools.h \
     view_graphtype.h \
-    view_legends.h
+    view_legends.h \
+    transform.h
 		
 SOURCES       = edit.cpp \	
 		file.cpp \
@@ -41,7 +42,8 @@ SOURCES       = edit.cpp \
 		setutils.c \
 		getparms.c \
     view_graphtype.cpp \
-    view_legends.cpp
+    view_legends.cpp \
+    transform.cpp
 
 RESOURCES     = qtgr.qrc
 

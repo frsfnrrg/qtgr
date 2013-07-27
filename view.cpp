@@ -198,12 +198,12 @@ void ViewMenu::graphTypes() {
         graphTypesDialog = new ViewGraphType(this->mainWindow);
         graphTypesDialog->show();
     }
-    graphTypesDialog->updateType();
+    graphTypesDialog->updateDialog();
 }
 
 void ViewMenu::updateGraphTypes() {
     if (graphTypesDialog) {
-        graphTypesDialog->updateType();
+        graphTypesDialog->updateDialog();
     }
 }
 
