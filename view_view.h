@@ -1,7 +1,7 @@
 #ifndef VIEW_VIEW_H
 #define VIEW_VIEW_H
 
-#include "QtGui"
+#include <QtGui>
 #include "mainwindow.h"
 #include "dialog.h"
 
@@ -16,6 +16,15 @@ class ViewView : public Dialog
 public:
     explicit ViewView(MainWindow *parent);
     
+
+
+private:
+    QComboBox* snapSize;
+    QDoubleSpinBox* xn;
+    QDoubleSpinBox* xx;
+    QDoubleSpinBox* yn;
+    QDoubleSpinBox* yx;
+
 signals:
     
 public slots:
