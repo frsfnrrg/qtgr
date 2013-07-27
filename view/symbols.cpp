@@ -1,4 +1,5 @@
 #include <iostream>
+#include "view/symbols.h"
 #include "view.h"
 #include "globals.h"
 

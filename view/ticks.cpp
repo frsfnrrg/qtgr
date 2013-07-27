@@ -1,6 +1,6 @@
 //#include <iostream>
 #include "view.h"
-#include "view_ticks.h"
+#include "view/ticks.h"
 #include "globals.h"
 
 

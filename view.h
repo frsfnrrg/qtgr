@@ -3,12 +3,12 @@
 
 #include <QtGui>
 #include "mainwindow.h"
-#include "view_symbols.h"
-#include "view_ticks.h"
-#include "view_world.h"
-#include "view_graphtype.h"
-#include "view_legends.h"
-#include "view_view.h"
+#include "view/symbols.h"
+#include "view/ticks.h"
+#include "view/world.h"
+#include "view/graphtype.h"
+#include "view/legends.h"
+#include "view/viewport.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;

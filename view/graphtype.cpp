@@ -1,4 +1,4 @@
-#include "view_graphtype.h"
+#include "view/graphtype.h"
 #include "globals.h"
 
 const int indx2type[] = { XY, LOGY, LOGX, LOGXY, BAR, STACKEDBAR, HBAR, STACKEDHBAR};

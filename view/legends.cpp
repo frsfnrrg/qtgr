@@ -1,4 +1,4 @@
-#include "view_legends.h"
+#include "view/legends.h"
 #include "globals.h"
 
 ViewLegends::ViewLegends(MainWindow* mainWin) :

@@ -1,4 +1,4 @@
-#include "view_view.h"
+#include "view/viewport.h"
 
 const double snap_sizes[] = {0.0, 0.1, 0.05, 0.01, 0.05, 0.001};
 

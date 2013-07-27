@@ -1,6 +1,6 @@
 #include <iostream>
 #include "view.h"
-#include "view_world.h"
+#include "view/world.h"
 #include "globals.h"
 
 
