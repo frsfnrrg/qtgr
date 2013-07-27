@@ -9,7 +9,8 @@ HEADERS       = edit.h \
 		view_symbols.h \
 		view_world.h \
 		tools.h \
-    view_graphtype.h
+    view_graphtype.h \
+    view_legends.h
 		
 SOURCES       = edit.cpp \	
 		file.cpp \
@@ -39,7 +40,8 @@ SOURCES       = edit.cpp \
 		setprops.c \
 		setutils.c \
 		getparms.c \
-    view_graphtype.cpp
+    view_graphtype.cpp \
+    view_legends.cpp
 
 RESOURCES     = qtgr.qrc
 

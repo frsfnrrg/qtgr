@@ -10,10 +10,8 @@ class ViewGraphType : public QDialog
     Q_OBJECT
 public:
     ViewGraphType(MainWindow* mainWin);
-
-    static const int maxsets = 16;// FIXME
 private:
-    MainWindow *mainWindow;
+    MainWindow* mainWindow;
     QComboBox* setNumbers;
     QComboBox* graphTypes;
 

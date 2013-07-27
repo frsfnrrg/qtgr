@@ -11,6 +11,7 @@
 #include "view_ticks.h"
 #include "view_world.h"
 #include "view_graphtype.h"
+#include "view_legends.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -32,13 +33,15 @@ public:
     ViewTicks*   ticksDialog;
     ViewWorld*   worldDialog;
     ViewGraphType* graphTypesDialog;
+    ViewLegends* legendsDialog;
 
-    QLineEdit* legendX;
-    QLineEdit* legendY;   
+   // QLineEdit* legendX;
+  //  QLineEdit* legendY;
 
     void updateSymbols();
     void updateTicks();
     void updateWorld();
+    void updateLegends();
     void updateGraphTypes();
     
 protected:
@@ -50,7 +53,7 @@ public slots:
     void ticks();
     void legends();
     void graphTypes();
-    void applyLegends();
+   // void applyLegends();
 
 
 private slots:
@@ -60,11 +63,11 @@ private slots:
 //     void doneSymbols();
 
     // todo: bring into another class
-    void doneLegends();
-    void placeLegends();
-    void legendsEdit();
-    void applyLegendsEdit();
-    void doneLegendsEdit();
+   // void doneLegends();
+   // void placeLegends();
+   // void legendsEdit();
+   // void applyLegendsEdit();
+   // void doneLegendsEdit();
    
 private:
 
@@ -89,16 +92,15 @@ private:
 //     QComboBox* lineColor;
 //     QLineEdit* legendS;
     
-    QDialog* legendsDialog;
-    QCheckBox* showLegend;
-    QComboBox *locType;
+   // QDialog* legendsDialog;
+  //  QCheckBox* showLegend;
+   // QComboBox *locType;
 
-    void updateLegends();
+    //void updateLegends();
     
-    QDialog* legendsEditDialog;
-    QLineEdit* setLabels[ViewMenu::maxsets];
-    void updateLegendsEdit();
-   
+    //QDialog* legendsEditDialog;
+
+    // void updateLegendsEdit();
 };
 
 #endif
