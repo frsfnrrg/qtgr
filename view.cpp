@@ -139,10 +139,10 @@ void ViewMenu::createActions()
 void ViewMenu::world()
 {
     if (worldDialog) {
-	worldDialog->setVisible(true);
+        worldDialog->setVisible(true);
     } else {
-	worldDialog = new ViewWorld(this->mainWindow);
-	worldDialog->show();
+        worldDialog = new ViewWorld(this->mainWindow);
+        worldDialog->show();
     }
     worldDialog->updateWorld();
 }

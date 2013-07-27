@@ -11,7 +11,9 @@ HEADERS       = edit.h \
 		tools.h \
     view_graphtype.h \
     view_legends.h \
-    transform.h
+    transform.h \
+    transform/integration.h \
+    dialog.h
 		
 SOURCES       = edit.cpp \	
 		file.cpp \
@@ -43,7 +45,9 @@ SOURCES       = edit.cpp \
 		getparms.c \
     view_graphtype.cpp \
     view_legends.cpp \
-    transform.cpp
+    transform.cpp \
+    transform/integration.cpp \
+    dialog.cpp
 
 RESOURCES     = qtgr.qrc
 

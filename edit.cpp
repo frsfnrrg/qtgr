@@ -59,6 +59,7 @@ void EditMenu::createMenus()
 {
     this->setTearOffEnabled(true);
     this->addMenu(new TransformMenu(mainWindow));
+    this->addSeparator();
     this->addAction(cutAct);
     this->addAction(copyAct);
     this->addAction(pasteAct);

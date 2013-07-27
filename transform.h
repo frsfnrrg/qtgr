@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include "mainwindow.h"
+#include "dialog.h"
 
 class TransformMenu : public QMenu
 {
@@ -17,11 +18,14 @@ private:
     void createMenus();
     QAction* integrateAct;
     QAction* differentiateAct;
+    Dialog* integrateDialog;
+    Dialog* differentiateDialog;
 
 signals:
     
 public slots:
-
+    void integrate();
+    void differentiate();
 
 private slots:
 };
