@@ -12,7 +12,6 @@ public:
     ViewGraphType(MainWindow* mainWin);
 
     static const int maxsets = 16;// FIXME
-    
 private:
     MainWindow *mainWindow;
     QComboBox* setNumbers;

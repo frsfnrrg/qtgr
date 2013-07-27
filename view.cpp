@@ -45,7 +45,6 @@
 #include "globals.h"
 
 ViewMenu::ViewMenu(MainWindow* mainWin)
-
 {  
     this->mainWindow = mainWin;
     this->setTitle(tr("View"));
@@ -56,6 +55,7 @@ ViewMenu::ViewMenu(MainWindow* mainWin)
     ticksDialog = NULL;
     legendsDialog = NULL;
     legendsEditDialog = NULL;
+    graphTypesDialog = NULL;
     set_mode = 0 ; // 0 means act on one set; <>0 means all sets (FIXME not implemented);
 }
 

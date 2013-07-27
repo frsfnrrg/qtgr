@@ -2,6 +2,16 @@
 
 #include "globals.h"
 
+const int indx2type[] = { XY, LOGY, LOGX, LOGXY, BAR, STACKEDBAR, HBAR, STACKEDHBAR};
+const char* opts[] = {"X Linear, Y Linear",
+                        "X Linear, Y Logarithmic",
+                        "X Logarithmic, Y Linear",
+                        "X Logarithmic, Y Logarithmic",
+                        "Vertical Bar",
+                        "Vertical Bar Stacked",
+                        "Horizontal Bar",
+                        "Horizontal Bar Stacked"};
+
 ViewGraphType::ViewGraphType(MainWindow* mainWin) : QDialog(mainWin)
 {
     printf("creating graph window");
@@ -22,22 +32,13 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) : QDialog(mainWin)
     // FIXME: abstract this out; view symbols has the exact
     // same mess.
     setNumbers = new QComboBox();
-    for (int i=0;i<maxsets;i++) {
-        setNumbers->addItem(QString::number(i));
-    }
-    //connect(setNumbers, SIGNAL(currentIndexChanged(int)), this, SLOT(updateType()));
+    setNumbers->addItem(QString::number(0));
+    connect(setNumbers, SIGNAL(currentIndexChanged(int)), this, SLOT(updateType()));
 
-    // add icons?
     graphTypes = new QComboBox();
-    graphTypes->addItem("X Lin, Y Lin");
-    graphTypes->addItem("X Lin, Y Log");
-    graphTypes->addItem("X Log, Y Lin");
-    graphTypes->addItem("X Log, Y Log");
-    graphTypes->addItem("X Log, Y Log");
-    graphTypes->addItem("Vertical Bar");
-    graphTypes->addItem("Vertical Bar Stacked");
-    graphTypes->addItem("Horizontal Bar");
-    graphTypes->addItem("Horizontal Bar Stacked");
+    for (int k=0;k<4;k++) {
+        graphTypes->addItem(tr(opts[k]));
+    }
 
     // layouting
 
@@ -68,7 +69,13 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) : QDialog(mainWin)
 }
 
 void ViewGraphType::applyType() {
-    printf("applying graph types");
+    printf("applying graph types\n");
+
+    int cset = setNumbers->currentIndex();
+    int t = graphTypes->currentIndex();
+
+    g[cset].type = indx2type[t];
+    printf("%i %i\n", g[cset].type, t);
 
     // & show it too
     drawgraph();
@@ -81,10 +88,57 @@ void ViewGraphType::doneType() {
 }
 
 void ViewGraphType::updateType() {
-    printf("updating graph types");
+    printf("updating graph types\n");
+
+    int cset = setNumbers->currentIndex();
+    int g_type = g[cset].type;
+
+    // darn, need a good solution to unite
+    // the graph display types and #enums.
+    // too hacky
+    int vk = -1;
+    switch (g_type) {
+
+    case POLAR:
+    case PIE:
+    case STACKEDLINE:
+        printf("type not implemented");
+        break;
+
+    case XY:
+        vk = 0;
+        break;
+    case LOGY:
+        vk = 1;
+        break;
+    case LOGX:
+        vk = 2;
+        break;
+    case LOGXY:
+        vk = 3;
+        break;
+    case BAR:
+        vk = 4;
+        break;
+    case STACKEDBAR:
+        vk = 5;
+        break;
+    case HBAR:
+        vk = 6;
+        break;
+    case STACKEDHBAR:
+        vk = 7;
+        break;
+    }
+
+    if (vk != -1) {
+        graphTypes->setCurrentIndex(vk);
+    } else {
+        printf("Unsupported graph type...");
+    }
 }
 
 void ViewGraphType::cancelType() {
-    printf("cancelling graph types");
+    printf("cancelling graph types\n");
     this->setVisible(false);
 }
