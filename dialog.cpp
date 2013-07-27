@@ -21,15 +21,19 @@ Dialog::Dialog(MainWindow* mainWin) :
     base->addWidget(apply);
     base->addWidget(done);
 
-    layout->addWidget(new QLabel("Replace Me!"));
     layout->addStretch();
     layout->addLayout(base);
 
-    QDialog::setLayout(layout);
+    this->setLayout(layout);
 }
 
-void Dialog::setLayout(QLayout* lt) {
-    layout->insertLayout(1, lt);
+/**
+ * Please don't call this more than once;
+ * @brief Dialog::setDialogLayout
+ * @param lt
+ */
+void Dialog::setDialogLayout(QLayout* lt) {
+    layout->insertLayout(0, lt);
 }
 
 void Dialog::doneDialog() {

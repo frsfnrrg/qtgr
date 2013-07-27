@@ -11,7 +11,7 @@ public:
     explicit Dialog(MainWindow* mainWin);
     MainWindow* mainWindow;
 
-    void setLayout(QLayout* layout);
+    void setDialogLayout(QLayout* layout);
 // we could abstract these out, so only the main pane
 // gets changed
 

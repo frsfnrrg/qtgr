@@ -9,11 +9,14 @@ class TransformIntegration : public Dialog
 {
     Q_OBJECT
 public:
+    const static int maxsets = 16;
+
     explicit TransformIntegration(MainWindow* mainWin);
 
 private:
+    QComboBox* setNumber;
     QComboBox* integrationType;
-    QLabel* result;
+    QLabel* resultL;
 
 signals:
     

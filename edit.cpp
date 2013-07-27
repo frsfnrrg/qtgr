@@ -46,7 +46,6 @@
 #include "transform.h"
 
 EditMenu::EditMenu(MainWindow* mainWin)
-
 {  
     this->mainWindow = mainWin;
     this->setTitle(tr("Edit"));
@@ -58,7 +57,7 @@ EditMenu::EditMenu(MainWindow* mainWin)
 void EditMenu::createMenus()
 {
     this->setTearOffEnabled(true);
-    this->addMenu(new TransformMenu(mainWindow));
+    this->addMenu(new TransformMenu(this->mainWindow));
     this->addSeparator();
     this->addAction(cutAct);
     this->addAction(copyAct);
