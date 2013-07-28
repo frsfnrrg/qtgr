@@ -23,6 +23,7 @@ Dialog::Dialog(MainWindow* mainWin, QString title) :
     base->addWidget(done);
 
     layout->addStretch();
+    layout->addSpacing(12);
     layout->addLayout(base);
 
     this->setLayout(layout);

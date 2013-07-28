@@ -71,8 +71,6 @@ void FileMenu::createMenus()
     this->addAction(exportAct);
     this->addSeparator();
     this->addAction(exitAct);
-
-
 }
 
 void FileMenu::createActions()
@@ -100,6 +98,9 @@ void FileMenu::createActions()
     connect(clearAct, SIGNAL(triggered()), this, SLOT(clear()));
 	
     printAct = new QAction(tr("&Print..."), this);
+    QString printDesc = tr("Print the current view to file or printer.");
+    printAct->setStatusTip(printDesc);
+    printAct->setToolTip(printDesc);
     connect(printAct, SIGNAL(triggered()), this, SLOT(print()));
     
     exportAct = new QAction(tr("Export..."), this);

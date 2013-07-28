@@ -15,11 +15,8 @@ class ViewView : public Dialog
     Q_OBJECT
 public:
     explicit ViewView(MainWindow *parent);
-    
-
 
 private:
-    QComboBox* snapSize;
     QDoubleSpinBox* xn;
     QDoubleSpinBox* xx;
     QDoubleSpinBox* yn;

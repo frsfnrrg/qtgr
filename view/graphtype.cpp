@@ -52,6 +52,8 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) : Dialog(mainWin, tr("Set Grap
 }
 
 void ViewGraphType::applyDialog() {
+    // FIXME TODO: give this a warning when the world dimensions dip below 0
+
     printf("applying graph types\n");
 
     int cset = setNumbers->currentIndex();

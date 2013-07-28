@@ -1,6 +1,7 @@
 #include "view/viewport.h"
+#include "core/globals.h"
 
-const double snap_sizes[] = {0.0, 0.1, 0.05, 0.01, 0.05, 0.001};
+const double snap_sizes[] = {0.1, 0.05, 0.01, 0.005, 0.001};
 
 inline QDoubleSpinBox* getUnitDoubleSpinBox() {
     QDoubleSpinBox* f = new QDoubleSpinBox();
@@ -14,11 +15,6 @@ inline QDoubleSpinBox* getUnitDoubleSpinBox() {
 ViewView::ViewView(MainWindow *parent) :
     Dialog(parent, tr("Viewport"))
 {
-    snapSize = new QComboBox();
-    snapSize->addItem(tr("None"));
-    for (int i=1;i<6;i++) {
-        snapSize->addItem(QString::number(snap_sizes[i]));
-    }
 
     QGridLayout* layout = new QGridLayout();
 
@@ -43,16 +39,34 @@ ViewView::ViewView(MainWindow *parent) :
     layout->addWidget(new QLabel(tr("Y max")), 5,0);
     layout->addWidget(yx, 5, 1);
 
-    layout->addWidget(new QLabel(tr("Snap")), 6,0);
-    layout->addWidget(snapSize, 6, 1);
-
     this->setDialogLayout(layout);
 }
 
-void ViewView::applyDialog() {
+void ViewView::updateDialog() {
+    int gno = cg;
 
+    double xnv = g[gno].v.xv1;
+    double xxv = g[gno].v.xv2;
+
+    double ynv = g[gno].v.yv1;
+    double yxv = g[gno].v.yv2;
+
+    printf("Viewport: %f %f %f %f\n",xnv,xxv,ynv,yxv);
+
+    xn->setValue(xnv);
+    yn->setValue(ynv);
+    xx->setValue(xxv);
+    yx->setValue(yxv);
 }
 
-void ViewView::updateDialog() {
+void ViewView::applyDialog() {
+    // settings are applied to current graph
+    int gno = cg;
 
+    g[gno].v.xv1 = xn->value();
+    g[gno].v.xv2 = xx->value();
+    g[gno].v.yv1 = yn->value();
+    g[gno].v.yv2 = yx->value();
+
+    drawgraph();
 }
