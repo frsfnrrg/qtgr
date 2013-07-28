@@ -46,7 +46,7 @@
 #include "view.h"
 #include "tools.h"
 #include "graphwidget.h"
-#include "core/globals.h"
+#include "base/globals.h"
 
 MainWindow::MainWindow()
 

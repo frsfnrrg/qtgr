@@ -1,5 +1,5 @@
 #include "transform/integration.h"
-#include "core/globals.h"
+#include "base/globals.h"
 #include "setcombobox.h"
 
 TransformIntegration::TransformIntegration(MainWindow* mainWin) :

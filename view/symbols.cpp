@@ -1,7 +1,7 @@
 #include <iostream>
 #include "view/symbols.h"
 #include "view.h"
-#include "core/globals.h"
+#include "base/globals.h"
 #include "setcombobox.h"
 
 ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin, tr("Symbols"))

@@ -3,7 +3,7 @@
 
 #include <QtGui>
 #include "dialog.h"
-#include "core/globals.h"
+#include "base/globals.h"
 
 class ViewLegends : public Dialog
 {

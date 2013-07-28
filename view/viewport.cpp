@@ -1,5 +1,5 @@
 #include "view/viewport.h"
-#include "core/globals.h"
+#include "base/globals.h"
 
 const double snap_sizes[] = {0.1, 0.05, 0.01, 0.005, 0.001};
 

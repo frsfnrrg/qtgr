@@ -1,5 +1,5 @@
 #include "view/legends.h"
-#include "core/globals.h"
+#include "base/globals.h"
 #include "setcombobox.h"
 #include "view.h"
 

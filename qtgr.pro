@@ -1,15 +1,15 @@
 HEADERS       = edit.h \
     file.h \
     graphwidget.h \
-    core/globals.h \
-    core/defines.h \
-    core/pars.h \
-    core/externs.h \
-    core/hersh.h \
-    core/patterns.h \
-    core/special.h \
-    core/symdefs.h \
-    core/f2c.h \
+    base/globals.h \
+    base/defines.h \
+    base/pars.h \
+    base/externs.h \
+    base/hersh.h \
+    base/patterns.h \
+    base/special.h \
+    base/symdefs.h \
+    base/f2c.h \
     mainwindow.h \
     mousecall.h \
     view.h \ 
@@ -38,30 +38,30 @@ SOURCES       = edit.cpp \
     view/ticks.cpp \
     view/symbols.cpp \
     view/world.cpp \
-    core/alerts.c \
-    core/checkon.c \
-    core/chersh.c \
-    core/defaults.c \
-    core/draw.c \
-    core/drawticks.c \
-    core/events.c \
-    core/files.c \
-    core/fit.c \
-    core/graphutils.c \
-    core/objutils.c \
-    core/pars.c \
-    core/plotone.c \
-    core/qtlib.c \
-    core/utils.c \
-    core/setutils.c \
-    core/getparms.c \
-    core/setprops.c \
-    core/compute.c \
-    core/computils.c \
-    core/fourier.c \
-    core/lmdif1.c \
-    core/params.c \
-    core/regionutils.c \
+    base/alerts.c \
+    base/checkon.c \
+    base/chersh.c \
+    base/defaults.c \
+    base/draw.c \
+    base/drawticks.c \
+    base/events.c \
+    base/files.c \
+    base/fit.c \
+    base/graphutils.c \
+    base/objutils.c \
+    base/pars.c \
+    base/plotone.c \
+    base/qtlib.c \
+    base/utils.c \
+    base/setutils.c \
+    base/getparms.c \
+    base/setprops.c \
+    base/compute.c \
+    base/computils.c \
+    base/fourier.c \
+    base/lmdif1.c \
+    base/params.c \
+    base/regionutils.c \
     view/graphtype.cpp \
     view/legends.cpp \
     transform.cpp \

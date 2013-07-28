@@ -42,7 +42,7 @@
 
 #include "graphwidget.h"
 #include "mainwindow.h"
-#include "core/globals.h"
+#include "base/globals.h"
 
 MainWindow *mainWindow;
 

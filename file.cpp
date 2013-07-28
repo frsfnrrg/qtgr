@@ -42,7 +42,7 @@
 #include <QtGui>
 #include "mainwindow.h"
 #include "file.h"
-#include "core/globals.h"
+#include "base/globals.h"
 
 FileMenu::FileMenu(MainWindow* mainWin)
 

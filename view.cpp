@@ -2,7 +2,7 @@
 #include <QtGui>
 #include "mainwindow.h"
 #include "view.h"
-#include "core/globals.h"
+#include "base/globals.h"
 
 ViewMenu::ViewMenu(MainWindow* mainWin)
 {  

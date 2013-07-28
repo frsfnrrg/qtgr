@@ -1,5 +1,5 @@
 #include "view/title.h"
-#include "core/globals.h"
+#include "base/globals.h"
 
 ViewTitle::ViewTitle(MainWindow* mainWin) :
     Dialog(mainWin, tr("Title"))

@@ -1,5 +1,5 @@
 #include "setcombobox.h"
-#include "core/globals.h"
+#include "base/globals.h"
 
 LegendSender* SetComboBox::legendSender = NULL;
 

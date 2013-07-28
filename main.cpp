@@ -44,7 +44,7 @@
 #include "mainwindow.h"
 
 #define MAIN
-#include "core/globals.h"
+#include "base/globals.h"
 
 
 int main(int argc, char *argv[])

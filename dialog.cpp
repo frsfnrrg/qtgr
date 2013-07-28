@@ -1,5 +1,5 @@
 #include "dialog.h"
-#include "core/globals.h"
+#include "base/globals.h"
 
 Dialog::Dialog(MainWindow* mainWin, QString title) :
     QDialog(mainWin)

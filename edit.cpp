@@ -42,7 +42,7 @@
 #include <QtGui>
 #include "mainwindow.h"
 #include "edit.h"
-#include "core/globals.h"
+#include "base/globals.h"
 #include "transform.h"
 
 EditMenu::EditMenu(MainWindow* mainWin)

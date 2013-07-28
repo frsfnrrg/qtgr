@@ -42,7 +42,7 @@
 #include <QtGui>
 #include "mainwindow.h"
 #include "tools.h"
-#include "core/globals.h"
+#include "base/globals.h"
 
 ToolsMenu::ToolsMenu(MainWindow* mainWin)
 

@@ -1,8 +1,7 @@
 #include <iostream>
 #include "view.h"
 #include "view/world.h"
-#include "core/globals.h"
-
+#include "base/globals.h"
 
 ViewWorld::ViewWorld(MainWindow* mainWin) : Dialog(mainWin, tr("Define World")) {
 
