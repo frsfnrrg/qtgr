@@ -24,7 +24,8 @@ HEADERS       = edit.h \
     view/viewport.h \
     transform/differentiation.h \
     transform/evaluate.h \
-    view/title.h
+    view/title.h \
+    setcombobox.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -62,7 +63,8 @@ SOURCES       = edit.cpp \
     view/viewport.cpp \
     transform/differentiation.cpp \
     transform/evaluate.cpp \
-    view/title.cpp
+    view/title.cpp \
+    setcombobox.cpp
 
 RESOURCES     = qtgr.qrc
 

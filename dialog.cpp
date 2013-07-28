@@ -1,4 +1,5 @@
 #include "dialog.h"
+#include "core/globals.h"
 
 Dialog::Dialog(MainWindow* mainWin, QString title) :
     QDialog(mainWin)
@@ -49,3 +50,4 @@ void Dialog::doneDialog() {
 void Dialog::cancelDialog() {
     this->setVisible(false);
 }
+

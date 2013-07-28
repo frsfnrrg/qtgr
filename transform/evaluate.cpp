@@ -1,14 +1,12 @@
 #include "transform/evaluate.h"
 #include "core/globals.h"
+#include "setcombobox.h"
 
 TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
     Dialog(mainWin, tr("Transform: Evaluate"))
 {
     // hmmm.. extract this into a static Dialog method?
-    setNumber = new QComboBox();
-    for (int i=0;i<MAXPLOT;i++) {
-        setNumber->addItem(QString::number(i));
-    }
+    setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
     destination = new QComboBox();

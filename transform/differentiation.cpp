@@ -1,14 +1,12 @@
 #include "transform/differentiation.h"
 #include "core/globals.h"
+#include "setcombobox.h"
 
-TransformDifferentiation::TransformDifferentiation(MainWindow* parent) :
-    Dialog(parent, tr("Transform: Differentiate"))
+TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
+    Dialog(mainWin, tr("Transform: Differentiate"))
 {
     // hmmm.. extract this into a static Dialog method?
-    setNumber = new QComboBox();
-    for (int i=0;i<MAXPLOT;i++) {
-        setNumber->addItem(QString::number(i));
-    }
+    setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
     destination = new QComboBox();
@@ -36,6 +34,8 @@ TransformDifferentiation::TransformDifferentiation(MainWindow* parent) :
 
     layout->addWidget(new QLabel(tr("Difference Type")), 4,0);
     layout->addWidget(diffType, 4, 1);
+
+    layout->setColumnMinimumWidth(1, 150);
 
     this->setDialogLayout(layout);
 }

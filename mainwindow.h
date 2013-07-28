@@ -44,6 +44,8 @@
 #include <QtGui>
 #include "graphwidget.h"
 
+class ViewMenu;
+
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
@@ -59,7 +61,7 @@ public:
     QGraphicsView *view;
     GraphWidget *gwidget;   
     
-    QMenu *viewMenu;
+    ViewMenu *viewMenu;
 
 protected:
     void closeEvent(QCloseEvent *event);

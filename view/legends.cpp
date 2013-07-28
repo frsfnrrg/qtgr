@@ -1,5 +1,7 @@
 #include "view/legends.h"
 #include "core/globals.h"
+#include "setcombobox.h"
+#include "view.h"
 
 ViewLegends::ViewLegends(MainWindow* mainWin) :
     Dialog(mainWin, tr("Legends"))
@@ -93,28 +95,28 @@ void ViewLegends::applyDialog() {
     int gno,axis;
     legend leg;
 
-      gno = cg; // current graph only
+    gno = cg; // current graph only
 
-      get_graph_legend(gno,&leg);
+    get_graph_legend(gno,&leg);
 
   //     printf("ApplyLegends %i %f %f\n",leg.active == ON, leg.legx, leg.legy);
 
-      if (showLegend->isChecked()) {
-      g[gno].l.active = ON;
-      } else {
-      g[gno].l.active = OFF;
-      }
+    if (showLegend->isChecked()) {
+        g[gno].l.active = ON;
+    } else {
+        g[gno].l.active = OFF;
+    }
 
-      if (locType->currentIndex() == 0) {
-      g[gno].l.loctype = VIEW;
-      } else {
-      g[gno].l.loctype = WORLD;
-      }
+    if (locType->currentIndex() == 0) {
+        g[gno].l.loctype = VIEW;
+    } else {
+        g[gno].l.loctype = WORLD;
+    }
 
-      g[gno].l.legx = legendX->text().toDouble();
-      g[gno].l.legy = legendY->text().toDouble();
+    g[gno].l.legx = legendX->text().toDouble();
+    g[gno].l.legy = legendY->text().toDouble();
 
-      drawgraph();
+    drawgraph();
 }
 
 
@@ -225,12 +227,26 @@ void ViewLegends::applyLegendsEdit()
     for (int i=0; i<MAXPLOT; i++) {
         strcpy((char*)g[gno].l.str[i].s,setLabels[i]->text().toAscii().data());
     }
+
+    drawgraph();
+
+    // send update to set selectors
+    SetComboBox::sendUpdate();
+
+    this->mainWindow->viewMenu->updateSymbolsLegend();
 }
 
 void ViewLegends::doneLegendsEdit()
 {
     this->applyLegendsEdit();
     this->legendsEditDialog->setVisible(false);
+}
+
+void ViewLegends::updateLegendsField(int cset) {
+    if (legendsEditDialog) {
+        int gno = cg;
+        setLabels[cset]->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));
+    }
 }
 
 

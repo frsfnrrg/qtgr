@@ -1,5 +1,6 @@
 #include "transform/integration.h"
 #include "core/globals.h"
+#include "setcombobox.h"
 
 TransformIntegration::TransformIntegration(MainWindow* mainWin) :
     Dialog(mainWin, tr("Transforms: Integration"))
@@ -9,10 +10,7 @@ TransformIntegration::TransformIntegration(MainWindow* mainWin) :
     resultL = new QLabel("Volia!");
     resultL->setText(".....");
 
-    setNumber = new QComboBox();
-    for (int i=0;i<MAXPLOT;i++) {
-        setNumber->addItem(QString::number(i));
-    }
+    setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
     integrationType = new QComboBox();

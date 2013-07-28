@@ -11,6 +11,8 @@ class ViewSymbols : public Dialog
   public:	
     ViewSymbols(MainWindow* mainWin);
 
+    void updateLegend();
+
   private:
     QComboBox* setNumber;
     QComboBox* symbolSymbol;

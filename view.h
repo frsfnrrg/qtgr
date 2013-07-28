@@ -40,6 +40,9 @@ public:
     void updateView();
     void updateTitle();
 
+    void updateSymbolsLegend();
+    void updateIndividualLegend(int cset);
+
 protected:
   
   

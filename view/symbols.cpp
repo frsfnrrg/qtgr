@@ -2,6 +2,7 @@
 #include "view/symbols.h"
 #include "view.h"
 #include "core/globals.h"
+#include "setcombobox.h"
 
 ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin, tr("Symbols"))
 {
@@ -168,6 +169,13 @@ void ViewSymbols::updateDialog()
     update();
 }
   
+
+void ViewSymbols::updateLegend() {
+    int gno = cg;
+    int cset = setNumber->currentIndex();
+    legendS->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));
+}
+
 void ViewSymbols::applyDialog()
 {
     int cset, sym, symchar, symskip, symfill, style, color, wid, fill, fillpat, fillusing, fillcol, i;
@@ -217,5 +225,10 @@ void ViewSymbols::applyDialog()
    // updatesymbols(cg, cset);
     
     
-    drawgraph();    
+    drawgraph();
+
+    //update set selection dialogs
+    SetComboBox::sendUpdate();
+    mainWindow->viewMenu->updateIndividualLegend(cset);
 }
+

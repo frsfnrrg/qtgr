@@ -3,6 +3,10 @@
  * Global variables for gr
  *
  */
+
+#ifndef GLOBALS_H
+#define GLOBALS_H
+
 #ifdef __cplusplus 
 extern "C" {
 #endif
@@ -353,3 +357,5 @@ extern void updatesetminmax(int gno, int setno);
 #ifdef __cplusplus 
 } // extern C
 #endif
+
+#endif // GLOBALS_H

@@ -227,5 +227,15 @@ void ViewMenu::updateTitle()
     }
 }
 
+void ViewMenu::updateSymbolsLegend() {
+    if (symbolsDialog) {
+        symbolsDialog->updateLegend();
+    }
+}
 
+void ViewMenu::updateIndividualLegend(int cset) {
+    if (legendsDialog) {
+        legendsDialog->updateLegendsField(cset);
+    }
+}
 

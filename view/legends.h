@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include "dialog.h"
+#include "core/globals.h"
 
 class ViewLegends : public Dialog
 {
@@ -11,14 +12,14 @@ public:
     explicit ViewLegends(MainWindow* mainWin);
     QLineEdit* legendX;
     QLineEdit* legendY;
+    void updateLegendsField(int cset);
 
 private:
     QComboBox* locType;
     QCheckBox* showLegend;
     QDialog* legendsEditDialog;
 
-    // 30=MAXPLOT from core/defines.h; including it blows stuff up
-    QLineEdit* setLabels[30];
+    QLineEdit* setLabels[MAXPLOT];
 signals:
 
 public slots:
