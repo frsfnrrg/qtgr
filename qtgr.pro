@@ -4,6 +4,11 @@ HEADERS       = edit.h \
     core/globals.h \
     core/defines.h \
     core/pars.h \
+    core/externs.h \
+    core/hersh.h \
+    core/patterns.h \
+    core/special.h \
+    core/symdefs.h \
     mainwindow.h \
     mousecall.h \
     view.h \ 
