@@ -16,6 +16,7 @@ ViewMenu::ViewMenu(MainWindow* mainWin)
     legendsDialog = NULL;
     graphTypesDialog = NULL;
     viewDialog = NULL;
+    titleDialog = NULL;
 
     set_mode = 0 ; // 0 means act on one set; <>0 means all sets (FIXME not implemented);
 }
@@ -23,6 +24,10 @@ ViewMenu::ViewMenu(MainWindow* mainWin)
 void ViewMenu::createMenus()
 {
     this->setTearOffEnabled(true);
+    QMenu* graphs = new QMenu("Graphs");
+    graphs->addAction(graphTypesAct);
+    this->addMenu(graphs);
+    this->addSeparator();
     this->addAction(viewAct);
     this->addAction(worldAct);
     this->addSeparator();
@@ -30,11 +35,6 @@ void ViewMenu::createMenus()
     this->addAction(ticksAct);
     this->addAction(symbolsAct);
     this->addAction(legendsAct);
-    this->addSeparator();
-
-    QMenu* graphs = new QMenu("Graphs");
-    graphs->addAction(graphTypesAct);
-    this->addMenu(graphs);
 }
 
 class MouseDoubleCall : public MouseCallBack
@@ -47,7 +47,7 @@ public:
         double rx = double(x)/w;
 	double ry = 1.0-double(y)/h;
 	
-	if (rx <  g[cg].v.xv1) { // y-axis props 
+    if (rx < g[cg].v.xv1) { // y-axis props
 	    view->ticks();
 	    view->ticksDialog->editAxis->setCurrentIndex(1);
         view->ticksDialog->updateDialog();
@@ -64,6 +64,7 @@ public:
 	    return;
 	}
 	if (ry > g[cg].v.yv2) { // title
+        view->title();
 	    return;
 	}
 	
@@ -82,7 +83,7 @@ void ViewMenu::createActions()
     connect(worldAct, SIGNAL(triggered()), this, SLOT(world()));
 
     titleAct = new QAction(tr("Title/Subtitle..."), this);
-    // TODO: create a dialog for it!
+    connect(titleAct, SIGNAL(triggered()), this, SLOT(title()));
 
     ticksAct = new QAction(tr("Ticks/Tick lables..."), this);
     connect(ticksAct, SIGNAL(triggered()), this, SLOT(ticks()));
@@ -208,6 +209,23 @@ void ViewMenu::updateView()
     }
 }
 
+void ViewMenu::title()
+{
+    if (titleDialog) {
+        titleDialog->setVisible(true);
+    } else {
+        titleDialog = new ViewTitle(this->mainWindow);
+        titleDialog->show();
+    }
+    titleDialog->updateDialog();
+}
+
+void ViewMenu::updateTitle()
+{
+    if (titleDialog) {
+        titleDialog->updateDialog();
+    }
+}
 
 
 

@@ -2,7 +2,6 @@
 #define MENUVIEWTICKS_H
 
 #include <QtGui>
-#include "mainwindow.h"
 #include "dialog.h"
 
 class ViewTicks : public Dialog

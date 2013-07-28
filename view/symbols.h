@@ -2,7 +2,6 @@
 #define VIEWSYMBOLS_H
 
 #include <QtGui>
-#include "mainwindow.h"
 #include "dialog.h"
 
 class ViewSymbols : public Dialog

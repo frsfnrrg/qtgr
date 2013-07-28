@@ -61,8 +61,8 @@ void ViewView::updateDialog() {
     printf("Viewport: %f %f %f %f\n",xnv,xxv,ynv,yxv);
 
     xn->setValue(xnv);
-    yn->setValue(ynv);
     xx->setValue(xxv);
+    yn->setValue(ynv);
     yx->setValue(yxv);
 }
 

@@ -23,7 +23,8 @@ HEADERS       = edit.h \
     dialog.h \
     view/viewport.h \
     transform/differentiation.h \
-    transform/evaluate.h
+    transform/evaluate.h \
+    view/title.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -60,7 +61,8 @@ SOURCES       = edit.cpp \
     dialog.cpp \
     view/viewport.cpp \
     transform/differentiation.cpp \
-    transform/evaluate.cpp
+    transform/evaluate.cpp \
+    view/title.cpp
 
 RESOURCES     = qtgr.qrc
 

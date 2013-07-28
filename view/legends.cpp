@@ -223,14 +223,14 @@ void ViewLegends::applyLegendsEdit()
     gno = cg; // current graph only
 
     for (int i=0; i<MAXPLOT; i++) {
-    strcpy((char*)g[gno].l.str[i].s,setLabels[i]->text().toAscii().data());
+        strcpy((char*)g[gno].l.str[i].s,setLabels[i]->text().toAscii().data());
     }
 }
 
 void ViewLegends::doneLegendsEdit()
 {
-  this->applyLegendsEdit();
-  this->legendsEditDialog->setVisible(false);
+    this->applyLegendsEdit();
+    this->legendsEditDialog->setVisible(false);
 }
 
 

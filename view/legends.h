@@ -20,7 +20,7 @@ private:
     // 30=MAXPLOT from core/defines.h; including it blows stuff up
     QLineEdit* setLabels[30];
 signals:
-    
+
 public slots:
     void updateDialog();
     void applyDialog();

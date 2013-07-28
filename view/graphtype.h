@@ -4,7 +4,6 @@
 #include <QtGui>
 #include "dialog.h"
 
-// Hey... you could subclass QDialog, have reqed. apply, done, update, cancel
 class ViewGraphType : public Dialog
 {
     Q_OBJECT

@@ -4,6 +4,8 @@
 #include <QtGui>
 #include "mainwindow.h"
 
+// TODO: wrap in a legend list generator, that hooks things up well.
+// Or, subclass again!
 class Dialog : public QDialog
 {
     Q_OBJECT

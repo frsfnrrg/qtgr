@@ -11,21 +11,12 @@ const char* opts[] = {"X Linear, Y Linear",
                         "Horizontal Bar",
                         "Horizontal Bar Stacked"};
 
-ViewGraphType::ViewGraphType(MainWindow* mainWin) : Dialog(mainWin, tr("Set Graph Type"))
+ViewGraphType::ViewGraphType(MainWindow* mainWin) :
+    Dialog(mainWin, tr("Set Graph Type"))
 {
     printf("creating graph window");
 
     // items
-
-    QPushButton* apply = new QPushButton(tr("Apply"));
-    connect(apply, SIGNAL(clicked()), this, SLOT(applyDialog()));
-
-    QPushButton* done = new QPushButton(tr("Done"));
-    connect(done, SIGNAL(clicked()), this, SLOT(doneDialog()));
-
-    QPushButton* cancel = new QPushButton(tr("Cancel"));
-    connect(cancel, SIGNAL(clicked()), this, SLOT(cancelDialog()));
-
     setNumbers = new QComboBox();
     setNumbers->addItem(QString::number(0));
     connect(setNumbers, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));

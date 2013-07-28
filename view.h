@@ -9,6 +9,7 @@
 #include "view/graphtype.h"
 #include "view/legends.h"
 #include "view/viewport.h"
+#include "view/title.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -29,9 +30,7 @@ public:
     ViewGraphType* graphTypesDialog;
     ViewLegends* legendsDialog;
     ViewView* viewDialog;
-
-   // QLineEdit* legendX;
-  //  QLineEdit* legendY;
+    ViewTitle* titleDialog;
 
     void updateSymbols();
     void updateTicks();
@@ -39,7 +38,8 @@ public:
     void updateLegends();
     void updateGraphTypes();
     void updateView();
-    
+    void updateTitle();
+
 protected:
   
   
@@ -50,7 +50,7 @@ public slots:
     void legends();
     void graphTypes();
     void view();
-
+    void title();
 
 private slots:
    
