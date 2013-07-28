@@ -11,10 +11,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin, tr("Symbols"))
     const int maxcolors = 16; //FIXME
 	       
     //make input fields
-    setNumber = new QComboBox;
-    for (int i=0; i<MAXPLOT; i++) {
-      setNumber->addItem(QString::number(i));
-    }
+    setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
     
     // symbols inputs
