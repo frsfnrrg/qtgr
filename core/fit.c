@@ -87,74 +87,74 @@ void stasum(x, n, xbar, sd, flag)
 	least squares polynomial fit - for polynomials
 	of degree 5 or less
 */
-// void leasqu(n, x, y, degree, w, wdim, r)
-//     int n, degree, wdim;
-//     double x[], y[], w[], r[];
-// 
-// {
-//     double b[11];
-//     double sumy1, sumy2, ybar, ysdev, stemp, rsqu;
-//     double xbar, xsdev;
-//     int i, j, k;
-// 
-//     sumy1 = 0.0;
-//     sumy2 = 0.0;
-//     /* form the matrix with normal equations and RHS */
-//     for (k = 0; k <= degree; k++) {
-// 	for (j = k; j <= degree; j++) {
-// 	    w[wdim * k + j] = 0.0;
-// 	    for (i = 0; i < n; i++) {
-// 		if (x[i] != 0.0)
-// 		    w[wdim * k + j] = pow(x[i], (double) (k)) * pow(x[i], (double) (j)) + w[wdim * k + j];
-// 	    }
-// 	    if (k != j)
-// 		w[wdim * j + k] = w[wdim * k + j];
-// 	}
-//     }
-//     for (k = 0; k <= degree; k++) {
-// 	b[k] = 0.0;
-// 	for (i = 0; i < n; i++) {
-// 	    if (x[i] != 0.0)
-// 		b[k] = b[k] + pow(x[i], (double) (k)) * y[i];
-// 	}
-//     }
-//     gauss(degree + 1, w, wdim, b, r);	/* solve */
-//     stasum(y, n, &ybar, &ysdev, 1);	/* compute statistics on fit */
-//     stasum(x, n, &xbar, &xsdev, 1);
-//     for (i = 0; i < n; i++) {
-// 	stemp = 0.0;
-// 	for (j = 1; j <= degree; j++) {
-// 	    if (x[i] != 0.0)
-// 		stemp = stemp + r[j] * pow(x[i], (double) (j));
-// 	}
-// 	sumy1 = sumy1 + (stemp + r[0] - y[i]) * (stemp + r[0] - y[i]);
-// 	sumy2 = sumy2 + y[i] * y[i];
-//     }
-//     rsqu = 1.0 - sumy1 / (sumy2 - n * ybar * ybar);
-//     if (rsqu < 0.0) {
-// 	rsqu = 0.0;
-//     }
-//     sprintf(buf, "Number of observations = %10d\n", n);
-//     stufftext(buf, 0);
-//     sprintf(buf, "A[0] is the constant, A[i] is the coefficient for ith power of X\n", n);
-//     stufftext(buf, 0);
-//     for (i = 0; i <= degree; i++) {
-// 	sprintf(buf, "A[%d] = %.9lg\n", i, r[i]);
-// 	stufftext(buf, 0);
-//     }
-//     i += 4;
-//     sprintf(buf, "R square = %.7lg\n", rsqu);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Avg Y    = %.7lg\n", ybar);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Sdev Y   = %.7lg\n", ysdev);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Avg X    = %.7lg\n", xbar);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Sdev X   = %.7lg\n\n", xsdev);
-//     stufftext(buf, 0);
-//     stufftext("\n", 2);
-// }
+ void leasqu(n, x, y, degree, w, wdim, r)
+     int n, degree, wdim;
+     double x[], y[], w[], r[];
+
+ {
+     double b[11];
+     double sumy1, sumy2, ybar, ysdev, stemp, rsqu;
+     double xbar, xsdev;
+     int i, j, k;
+
+     sumy1 = 0.0;
+     sumy2 = 0.0;
+     /* form the matrix with normal equations and RHS */
+     for (k = 0; k <= degree; k++) {
+    for (j = k; j <= degree; j++) {
+        w[wdim * k + j] = 0.0;
+        for (i = 0; i < n; i++) {
+        if (x[i] != 0.0)
+            w[wdim * k + j] = pow(x[i], (double) (k)) * pow(x[i], (double) (j)) + w[wdim * k + j];
+        }
+        if (k != j)
+        w[wdim * j + k] = w[wdim * k + j];
+    }
+     }
+     for (k = 0; k <= degree; k++) {
+    b[k] = 0.0;
+    for (i = 0; i < n; i++) {
+        if (x[i] != 0.0)
+        b[k] = b[k] + pow(x[i], (double) (k)) * y[i];
+    }
+     }
+     gauss(degree + 1, w, wdim, b, r);	/* solve */
+     stasum(y, n, &ybar, &ysdev, 1);	/* compute statistics on fit */
+     stasum(x, n, &xbar, &xsdev, 1);
+     for (i = 0; i < n; i++) {
+    stemp = 0.0;
+    for (j = 1; j <= degree; j++) {
+        if (x[i] != 0.0)
+        stemp = stemp + r[j] * pow(x[i], (double) (j));
+    }
+    sumy1 = sumy1 + (stemp + r[0] - y[i]) * (stemp + r[0] - y[i]);
+    sumy2 = sumy2 + y[i] * y[i];
+     }
+     rsqu = 1.0 - sumy1 / (sumy2 - n * ybar * ybar);
+     if (rsqu < 0.0) {
+    rsqu = 0.0;
+     }
+     sprintf(buf, "Number of observations = %10d\n", n);
+//frsfnrrg     stufftext(buf, 0);
+     sprintf(buf, "A[0] is the constant, A[i] is the coefficient for ith power of X\n", n);
+//frsfnrrg     stufftext(buf, 0);
+     for (i = 0; i <= degree; i++) {
+    sprintf(buf, "A[%d] = %.9lg\n", i, r[i]);
+//frsfnrrg    stufftext(buf, 0);
+     }
+     i += 4;
+     sprintf(buf, "R square = %.7lg\n", rsqu);
+//frsfnrrg     stufftext(buf, 0);
+     sprintf(buf, "Avg Y    = %.7lg\n", ybar);
+//frsfnrrg     stufftext(buf, 0);
+     sprintf(buf, "Sdev Y   = %.7lg\n", ysdev);
+//frsfnrrg     stufftext(buf, 0);
+     sprintf(buf, "Avg X    = %.7lg\n", xbar);
+//frsfnrrg     stufftext(buf, 0);
+     sprintf(buf, "Sdev X   = %.7lg\n\n", xsdev);
+//frsfnrrg     stufftext(buf, 0);
+//frsfnrrg     stufftext("\n", 2);
+ }
 
 /*
 	evaluate least squares polynomial
@@ -179,29 +179,28 @@ double leasev(c, degree, x)
 /*
 	curve fitting
 */
-// void fitcurve(x, y, n, ideg, fitted)
-//     double x[], y[], fitted[];
-// int ideg, n;
-// 
-// {
-//     int i, ifail;
-//     double result[20], w[MAXFIT][MAXFIT], leasev();
-// 
-//     ifail = 1;
-//     if (ideg > 1) {
-// 	leasqu(n, x, y, ideg, w, MAXFIT, result);
-// 	for (i = 0; i < n; i++)
-// 	    fitted[i] = leasev(result, ideg, x[i]);
-// 	ifail = 0;
-//     } else {
-// 	ifail = linear_regression(n, x, y, fitted);
-// 	if (ifail == 1) {
-// 	    errwin("Linear_regression entered with N <= 3");
-// 	} else if (ifail == 2) {
-// 	    errwin("Linear_regression - all values of x or y are the same");
-// 	}
-//     }
-// }
+void fitcurve(x, y, n, ideg, fitted)
+    double x[], y[], fitted[];
+    int ideg, n;
+{
+    int i, ifail;
+    double result[20], w[MAXFIT][MAXFIT], leasev();
+
+     ifail = 1;
+     if (ideg > 1) {
+    leasqu(n, x, y, ideg, w, MAXFIT, result);
+    for (i = 0; i < n; i++)
+        fitted[i] = leasev(result, ideg, x[i]);
+    ifail = 0;
+     } else {
+    ifail = linear_regression(n, x, y, fitted);
+    if (ifail == 1) {
+        errwin("Linear_regression entered with N <= 3");
+    } else if (ifail == 2) {
+        errwin("Linear_regression - all values of x or y are the same");
+    }
+    }
+}
 
 /*
 	compute a running average
@@ -258,43 +257,43 @@ int n, ilen;
 /*
 	compute a running median
 */
-// void runmedian(x, y, ax, ay, n, ilen)
-//     double *x, *y, *ax, *ay;
-//     int n, ilen;
-// 
-// {
-//     int i, j, nlen = n - ilen + 1;
-//     double *tmpx, *tmpy;
-// 
-//     tmpx = (double *) calloc(ilen, sizeof(double));
-//     if (tmpx == NULL) {
-// 	errwin("Can't calloc tmpx in runmedian");
-// 	return;
-//     }
-//     tmpy = (double *) calloc(ilen, sizeof(double));
-//     if (tmpy == NULL) {
-// 	errwin("Can't calloc tmpy in runmedian");
-// 	cxfree(tmpx);
-// 	return;
-//     }
-//     for (i = 0; i < nlen; i++) {
-// 	for (j = 0; j < ilen; j++) {
-// 	    tmpx[j] = x[j + i];
-// 	    tmpy[j] = y[j + i];
-// 	}
-// 	sort_xy(tmpx, tmpy, ilen, 1, 0);
-// 
-// 	if (ilen % 2) {
-// 	    ax[i] = x[i + (ilen / 2)];
-// 	    ay[i] = tmpy[ilen / 2];
-// 	} else {
-// 	    ax[i] = (x[i + ilen / 2] + x[i + (ilen - 1) / 2]) * 0.5;
-// 	    ay[i] = (tmpy[ilen / 2] + tmpy[(ilen - 1) / 2]) * 0.5;
-// 	}
-//     }
-//     cxfree(tmpx);
-//     cxfree(tmpy);
-// }
+ void runmedian(x, y, ax, ay, n, ilen)
+     double *x, *y, *ax, *ay;
+     int n, ilen;
+
+ {
+     int i, j, nlen = n - ilen + 1;
+     double *tmpx, *tmpy;
+
+     tmpx = (double *) calloc(ilen, sizeof(double));
+     if (tmpx == NULL) {
+    errwin("Can't calloc tmpx in runmedian");
+    return;
+     }
+     tmpy = (double *) calloc(ilen, sizeof(double));
+     if (tmpy == NULL) {
+    errwin("Can't calloc tmpy in runmedian");
+    cxfree(tmpx);
+    return;
+     }
+     for (i = 0; i < nlen; i++) {
+    for (j = 0; j < ilen; j++) {
+        tmpx[j] = x[j + i];
+        tmpy[j] = y[j + i];
+    }
+    sort_xy(tmpx, tmpy, ilen, 1, 0);
+
+    if (ilen % 2) {
+        ax[i] = x[i + (ilen / 2)];
+        ay[i] = tmpy[ilen / 2];
+    } else {
+        ax[i] = (x[i + ilen / 2] + x[i + (ilen - 1) / 2]) * 0.5;
+        ay[i] = (tmpy[ilen / 2] + tmpy[(ilen - 1) / 2]) * 0.5;
+    }
+     }
+     cxfree(tmpx);
+     cxfree(tmpy);
+ }
 
 /*
 	compute a running minimum or maximum
@@ -498,95 +497,95 @@ int n, lag, meth;
 
 */
 
-// int linear_regression(n, x, y, fitted)
-//     double x[], y[], fitted[];
-// int n;
-// 
-// {
-//     double xbar, ybar;		/* sample means */
-//     double sdx, sdy;		/* sample standard deviations */
-//     double sxy, rxy;		/* sample covariance and sample correlation */
-//     double SXX, SYY, SXY;	/* sums of squares */
-//     double RSS;			/* residual sum of squares */
-//     double rms;			/* residual mean square */
-//     double sereg;		/* standard error of regression */
-//     double seslope, seintercept;
-//     double slope, intercept;	/* */
-//     double SSreg, F, R2;
-//     int i;
-// 
-//     if (n <= 3)
-// 	return 1;
-//     xbar = ybar = 0.0;
-//     SXX = SYY = SXY = 0.0;
-//     for (i = 0; i < n; i++) {
-// 	xbar = xbar + x[i];
-// 	ybar = ybar + y[i];
-//     }
-//     xbar = xbar / n;
-//     ybar = ybar / n;
-//     for (i = 0; i < n; i++) {
-// 	SXX = SXX + (x[i] - xbar) * (x[i] - xbar);
-// 	SYY = SYY + (y[i] - ybar) * (y[i] - ybar);
-// 	SXY = SXY + (x[i] - xbar) * (y[i] - ybar);
-//     }
-//     sdx = sqrt(SXX / (n - 1));
-//     sdy = sqrt(SYY / (n - 1));
-//     if (sdx == 0.0)
-// 	return 2;
-//     if (sdy == 0.0)
-// 	return 2;
-//     sxy = SXY / (n - 1);
-//     rxy = sxy / (sdx * sdy);
-//     slope = SXY / SXX;
-//     intercept = ybar - slope * xbar;
-//     RSS = SYY - slope * SXY;
-//     rms = RSS / (n - 2);
-//     sereg = sqrt(RSS / (n - 2));
-//     seintercept = sqrt(rms * (1.0 / n + xbar * xbar / SXX));
-//     seslope = sqrt(rms / SXX);
-//     SSreg = SYY - RSS;
-//     F = SSreg / rms;
-//     R2 = SSreg / SYY;
-//     sprintf(buf, "Number of observations\t\t\t = %d\n", n); 
-//     stufftext(buf, 0);
-//     sprintf(buf, "Mean of independent variable\t\t = %.7g\n", xbar);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Mean of dependent variable\t\t = %.7g\n", ybar);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Standard dev. of ind. variable\t\t = %.7g\n", sdx);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Standard dev. of dep. variable\t\t = %.7g\n", sdy);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Correlation coefficient\t\t\t = %.7g\n", rxy);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Regression coefficient (SLOPE)\t\t = %.7g\n", slope);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Standard error of coefficient\t\t = %.7g\n", seslope);
-//     stufftext(buf, 0);
-//     sprintf(buf, "t - value for coefficient\t\t = %.7g\n", slope / seslope);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Regression constant (INTERCEPT)\t\t = %.7g\n", intercept);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Standard error of constant\t\t = %.7g\n", seintercept);
-//     stufftext(buf, 0);
-//     sprintf(buf, "t - value for constant\t\t\t = %.7g\n", intercept / seintercept);
-//     stufftext(buf, 0);
-//     sprintf(buf, "\nAnalysis of variance\n");
-//     stufftext(buf, 0);
-//     sprintf(buf, "Source\t\t d.f\t Sum of squares\t Mean Square\t F\n");
-//     stufftext(buf, 0);
-//     sprintf(buf, "Regression\t   1\t%.7g\t%.7g\t%.7g\n", SSreg, SSreg, F);
-//     stufftext(buf, 0);
-//     sprintf(buf, "Residual\t%5d\t%.7g\t%.7g\n", n - 2, RSS, RSS / (n - 2));
-//     stufftext(buf, 0);
-//     sprintf(buf, "Total\t\t%5d\t%.7g\n\n", n - 1, SYY);
-//     stufftext(buf, 2);
-//     for (i = 0; i < n; i++) {
-// 	fitted[i] = slope * x[i] + intercept;
-//     }
-//     return 0;
-// }
+ int linear_regression(n, x, y, fitted)
+     double x[], y[], fitted[];
+ int n;
+
+ {
+     double xbar, ybar;		/* sample means */
+     double sdx, sdy;		/* sample standard deviations */
+     double sxy, rxy;		/* sample covariance and sample correlation */
+     double SXX, SYY, SXY;	/* sums of squares */
+     double RSS;			/* residual sum of squares */
+     double rms;			/* residual mean square */
+     double sereg;		/* standard error of regression */
+     double seslope, seintercept;
+     double slope, intercept;	/* */
+     double SSreg, F, R2;
+     int i;
+
+     if (n <= 3)
+    return 1;
+     xbar = ybar = 0.0;
+     SXX = SYY = SXY = 0.0;
+     for (i = 0; i < n; i++) {
+    xbar = xbar + x[i];
+    ybar = ybar + y[i];
+     }
+     xbar = xbar / n;
+     ybar = ybar / n;
+     for (i = 0; i < n; i++) {
+    SXX = SXX + (x[i] - xbar) * (x[i] - xbar);
+    SYY = SYY + (y[i] - ybar) * (y[i] - ybar);
+    SXY = SXY + (x[i] - xbar) * (y[i] - ybar);
+     }
+     sdx = sqrt(SXX / (n - 1));
+     sdy = sqrt(SYY / (n - 1));
+     if (sdx == 0.0)
+    return 2;
+     if (sdy == 0.0)
+    return 2;
+     sxy = SXY / (n - 1);
+     rxy = sxy / (sdx * sdy);
+     slope = SXY / SXX;
+     intercept = ybar - slope * xbar;
+     RSS = SYY - slope * SXY;
+     rms = RSS / (n - 2);
+     sereg = sqrt(RSS / (n - 2));
+     seintercept = sqrt(rms * (1.0 / n + xbar * xbar / SXX));
+     seslope = sqrt(rms / SXX);
+     SSreg = SYY - RSS;
+     F = SSreg / rms;
+     R2 = SSreg / SYY;
+     sprintf(buf, "Number of observations\t\t\t = %d\n", n);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Mean of independent variable\t\t = %.7g\n", xbar);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Mean of dependent variable\t\t = %.7g\n", ybar);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Standard dev. of ind. variable\t\t = %.7g\n", sdx);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Standard dev. of dep. variable\t\t = %.7g\n", sdy);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Correlation coefficient\t\t\t = %.7g\n", rxy);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Regression coefficient (SLOPE)\t\t = %.7g\n", slope);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Standard error of coefficient\t\t = %.7g\n", seslope);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "t - value for coefficient\t\t = %.7g\n", slope / seslope);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Regression constant (INTERCEPT)\t\t = %.7g\n", intercept);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Standard error of constant\t\t = %.7g\n", seintercept);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "t - value for constant\t\t\t = %.7g\n", intercept / seintercept);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "\nAnalysis of variance\n");
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Source\t\t d.f\t Sum of squares\t Mean Square\t F\n");
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Regression\t   1\t%.7g\t%.7g\t%.7g\n", SSreg, SSreg, F);
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Residual\t%5d\t%.7g\t%.7g\n", n - 2, RSS, RSS / (n - 2));
+     //frsfnrrg stufftext(buf, 0);
+     sprintf(buf, "Total\t\t%5d\t%.7g\n\n", n - 1, SYY);
+     // stufftext(buf, 2);
+     for (i = 0; i < n; i++) {
+    fitted[i] = slope * x[i] + intercept;
+     }
+     return 0;
+ }
 
 /*
 	a literal translation of the spline routine in

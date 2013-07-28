@@ -121,23 +121,25 @@ void convertchar(char *s)
 	    *s = 'e';
     }
 }
-// 
-// /*
-//  * log base 2
-//  */
-// int ilog2(n)
-//     int n;
-// {
-//     int i = 0;
-//     int n1 = n;
-// 
-//     while (n1 >>= 1)
-// 	i++;
-//     if (1 << i != n)
-// 	return -1;
-//     else
-// 	return i;
-// }
+
+// frsfnrrg: is there a math.h eqv? Or is this faster?
+
+ /*
+  * log base 2
+  */
+ int ilog2(n)
+     int n;
+ {
+     int i = 0;
+     int n1 = n;
+
+     while (n1 >>= 1)
+    i++;
+     if (1 << i != n)
+    return -1;
+     else
+    return i;
+ }
 // 
 // /*
 //  * compute the area bounded by the polygon (xi,yi)

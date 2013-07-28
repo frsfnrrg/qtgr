@@ -643,21 +643,21 @@ int activeset(int gno)
 /*
  * drop points from a set
  */
-// void droppoints(int gno, int setno, int startno, int endno, int dist)
-// {
-//     double *x;
-//     int i, j, len, ncols;
-// 
-//     len = getsetlength(gno, setno);
-//     ncols = getncols(gno, setno);
-//     for (j = 0; j < ncols; j++) {
-// 	x = getcol(gno, setno, j);
-// 	for (i = endno + 1; i < len; i++) {
-// 	    x[i - dist] = x[i];
-// 	}
-//     }
-//     setlength(gno, setno, len - dist);
-// }
+ void droppoints(int gno, int setno, int startno, int endno, int dist)
+ {
+     double *x;
+     int i, j, len, ncols;
+
+     len = getsetlength(gno, setno);
+     ncols = getncols(gno, setno);
+     for (j = 0; j < ncols; j++) {
+    x = getcol(gno, setno, j);
+    for (i = endno + 1; i < len; i++) {
+        x[i - dist] = x[i];
+    }
+     }
+     setlength(gno, setno, len - dist);
+ }
 // 
 // /*
 //  * join 2 sets together
@@ -682,51 +682,51 @@ int activeset(int gno)
 //     }
 // }
 // 
-// /*
-//  * sort a set - only does type XY
-//  */
-// void sort_xy(double *tmp1, double *tmp2, int up, int sorton, int stype)
-// {
-// 
-//     int d, i, j;
-//     int lo = 0;
-//     double t1, t2;
-// 
-//     if (sorton == 1) {
-// 	double *ttmp;
-// 
-// 	ttmp = tmp1;
-// 	tmp1 = tmp2;
-// 	tmp2 = ttmp;
-//     }
-//     up--;
-// 
-//     for (d = up - lo + 1; d > 1;) {
-// 	if (d < 5)
-// 	    d = 1;
-// 	else
-// 	    d = (5 * d - 1) / 11;
-// 	for (i = up - d; i >= lo; i--) {
-// 	    t1 = tmp1[i];
-// 	    t2 = tmp2[i];
-// 	    if (!stype) {
-// 		for (j = i + d; j <= up && (t1 > tmp1[j]); j += d) {
-// 		    tmp1[j - d] = tmp1[j];
-// 		    tmp2[j - d] = tmp2[j];
-// 		}
-// 		tmp1[j - d] = t1;
-// 		tmp2[j - d] = t2;
-// 	    } else {
-// 		for (j = i + d; j <= up && (t1 < tmp1[j]); j += d) {
-// 		    tmp1[j - d] = tmp1[j];
-// 		    tmp2[j - d] = tmp2[j];
-// 		}
-// 		tmp1[j - d] = t1;
-// 		tmp2[j - d] = t2;
-// 	    }
-// 	}
-//     }
-// }
+ /*
+  * sort a set - only does type XY
+  */
+ void sort_xy(double *tmp1, double *tmp2, int up, int sorton, int stype)
+ {
+
+     int d, i, j;
+     int lo = 0;
+     double t1, t2;
+
+     if (sorton == 1) {
+    double *ttmp;
+
+    ttmp = tmp1;
+    tmp1 = tmp2;
+    tmp2 = ttmp;
+     }
+     up--;
+
+     for (d = up - lo + 1; d > 1;) {
+    if (d < 5)
+        d = 1;
+    else
+        d = (5 * d - 1) / 11;
+    for (i = up - d; i >= lo; i--) {
+        t1 = tmp1[i];
+        t2 = tmp2[i];
+        if (!stype) {
+        for (j = i + d; j <= up && (t1 > tmp1[j]); j += d) {
+            tmp1[j - d] = tmp1[j];
+            tmp2[j - d] = tmp2[j];
+        }
+        tmp1[j - d] = t1;
+        tmp2[j - d] = t2;
+        } else {
+        for (j = i + d; j <= up && (t1 < tmp1[j]); j += d) {
+            tmp1[j - d] = tmp1[j];
+            tmp2[j - d] = tmp2[j];
+        }
+        tmp1[j - d] = t1;
+        tmp2[j - d] = t2;
+        }
+    }
+     }
+ }
 // 
 // /*
 //  * locate a point and the set the point is in
@@ -817,35 +817,35 @@ void add_point(int gno, int setno, double px, double py, double tx, double ty, i
     }
     updatesetminmax(gno, setno);
 }
-// 
-// /*
-//  * copy a set to another set, if the to set doesn't exist
-//  * get a new one, if it does, ask if it is okay to overwrite
-//  */
-// void do_copyset(int gfrom, int j1, int gto, int j2)
-// {
-//     if (!isactive_graph(gto)) {
-// 	set_graph_active(gto);
-//     }
-//     if (!isactive(gfrom, j1)) {
-// 	return;
-//     }
-//     if (j1 == j2 && gfrom == gto) {
-// 	return;
-//     }
-//     if (isactive(gto, j2)) {
-// 	killset(gto, j2);
-//     }
-//     activateset(gto, j2);
-//     settype(gto, j2, dataset_type(gfrom, j1));
-//     setlength(gto, j2, getsetlength(gfrom, j1));
-//     copyset(gfrom, j1, gto, j2);
-//     sprintf(buf, "copy of set %d", j1);
-//     setcomment(gto, j2, buf);
-//     updatesetminmax(gto, j2);
-//     update_set_status(gto, j2);
-// }
-// 
+
+ /*
+  * copy a set to another set, if the to set doesn't exist
+  * get a new one, if it does, ask if it is okay to overwrite
+  */
+ void do_copyset(int gfrom, int j1, int gto, int j2)
+ {
+     if (!isactive_graph(gto)) {
+    set_graph_active(gto);
+     }
+     if (!isactive(gfrom, j1)) {
+    return;
+     }
+     if (j1 == j2 && gfrom == gto) {
+    return;
+     }
+     if (isactive(gto, j2)) {
+    killset(gto, j2);
+     }
+     activateset(gto, j2);
+     settype(gto, j2, dataset_type(gfrom, j1));
+     setlength(gto, j2, getsetlength(gfrom, j1));
+     copyset(gfrom, j1, gto, j2);
+     sprintf(buf, "copy of set %d", j1);
+     setcomment(gto, j2, buf);
+     updatesetminmax(gto, j2);
+     //frsfnrrg update_set_status(gto, j2);
+ }
+
 /*
  * move a set to another set, in possibly another graph
  */

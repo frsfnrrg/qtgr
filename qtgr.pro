@@ -9,6 +9,7 @@ HEADERS       = edit.h \
     core/patterns.h \
     core/special.h \
     core/symdefs.h \
+    core/f2c.h \
     mainwindow.h \
     mousecall.h \
     view.h \ 
@@ -55,6 +56,12 @@ SOURCES       = edit.cpp \
     core/setutils.c \
     core/getparms.c \
     core/setprops.c \
+    core/compute.c \
+    core/computils.c \
+    core/fourier.c \
+    core/lmdif1.c \
+    core/params.c \
+    core/regionutils.c \
     view/graphtype.cpp \
     view/legends.cpp \
     transform.cpp \
