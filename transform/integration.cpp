@@ -1,4 +1,5 @@
 #include "transform/integration.h"
+#include "core/globals.h"
 
 TransformIntegration::TransformIntegration(MainWindow* mainWin) :
     Dialog(mainWin, tr("Transforms: Integration"))
@@ -9,7 +10,7 @@ TransformIntegration::TransformIntegration(MainWindow* mainWin) :
     resultL->setText(".....");
 
     setNumber = new QComboBox();
-    for (int i=0;i<TransformIntegration::maxsets;i++) {
+    for (int i=0;i<MAXPLOT;i++) {
         setNumber->addItem(QString::number(i));
     }
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));

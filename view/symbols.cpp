@@ -5,14 +5,13 @@
 
 ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin, tr("Symbols"))
 {
-    const int maxsets = 16; //FIXME move out to a constant file
     const int maxwidths = 9; //FIXME
     const int maxpatterns = 16; //FIXME
     const int maxcolors = 16; //FIXME
 	       
     //make input fields
     setNumber = new QComboBox;
-    for (int i=0; i<maxsets; i++) {
+    for (int i=0; i<MAXPLOT; i++) {
       setNumber->addItem(QString::number(i));
     }
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));

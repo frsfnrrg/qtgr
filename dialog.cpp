@@ -8,12 +8,15 @@ Dialog::Dialog(MainWindow* mainWin, QString title) :
     layout = new QVBoxLayout();
 
     QPushButton* apply = new QPushButton(tr("Apply"));
+    apply->setToolTip(tr("Apply dialog values."));
     connect(apply, SIGNAL(clicked()), this, SLOT(applyDialog()));
 
     QPushButton* done = new QPushButton(tr("Done"));
+    apply->setToolTip(tr("Apply values and close dialog."));
     connect(done, SIGNAL(clicked()), this, SLOT(doneDialog()));
 
     QPushButton* cancel = new QPushButton(tr("Cancel"));
+    apply->setToolTip(tr("Close dialog, without applying values."));
     connect(cancel, SIGNAL(clicked()), this, SLOT(cancelDialog()));
 
     QHBoxLayout* base = new QHBoxLayout();

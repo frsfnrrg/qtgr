@@ -15,8 +15,12 @@ inline QDoubleSpinBox* getUnitDoubleSpinBox() {
 ViewView::ViewView(MainWindow *parent) :
     Dialog(parent, tr("Viewport"))
 {
+    useRect = new QPushButton(tr("Rect Select"));
+
+    QVBoxLayout* over = new QVBoxLayout();
 
     QGridLayout* layout = new QGridLayout();
+    over->addLayout(layout);
 
     xn = getUnitDoubleSpinBox();
     xx = getUnitDoubleSpinBox();
@@ -25,7 +29,7 @@ ViewView::ViewView(MainWindow *parent) :
 
     layout->addWidget(new QLabel(tr("Viewport settings (from 0.0 to 1.0)")), 0,0,2,0);
 
-    layout->addWidget(new QLabel(""), 1, 0);
+    layout->setRowMinimumHeight(1, 8);
 
     layout->addWidget(new QLabel(tr("X min")), 2,0);
     layout->addWidget(xn, 2, 1);
@@ -39,7 +43,10 @@ ViewView::ViewView(MainWindow *parent) :
     layout->addWidget(new QLabel(tr("Y max")), 5,0);
     layout->addWidget(yx, 5, 1);
 
-    this->setDialogLayout(layout);
+    over->addSpacing(8);
+    over->addWidget(useRect);
+
+    this->setDialogLayout(over);
 }
 
 void ViewView::updateDialog() {

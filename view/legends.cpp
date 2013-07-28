@@ -168,7 +168,7 @@ void ViewLegends::legendsEdit()
         QWidget* widget = new QWidget();
         QGridLayout* layout = new QGridLayout();
 
-        for (int i=0; i<ViewLegends::maxsets; i++) {
+        for (int i=0; i<MAXPLOT; i++) {
             setLabels[i] = new QLineEdit();
             setLabels[i]->setMinimumWidth(240);
             layout->addWidget(new QLabel(QString("Set ")+QString::number(i)),i,0);
@@ -209,7 +209,7 @@ void ViewLegends::updateLegendsEdit()
 
 //     printf("updateLegendEdit  max %i s %s\n",g[gno].maxplot,g[gno].l.str[0].s);
 
-    for (int i=0; i<ViewLegends::maxsets; i++) {
+    for (int i=0; i<MAXPLOT; i++) {
 //        printf("updateLegendEdit   %i s %s\n",i,g[gno].l.str[i].s);
        setLabels[i]->setText(QString::fromLocal8Bit(g[gno].l.str[i].s));
     }
@@ -222,7 +222,7 @@ void ViewLegends::applyLegendsEdit()
 
     gno = cg; // current graph only
 
-    for (int i=0; i<ViewLegends::maxsets; i++) {
+    for (int i=0; i<MAXPLOT; i++) {
     strcpy((char*)g[gno].l.str[i].s,setLabels[i]->text().toAscii().data());
     }
 }

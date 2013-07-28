@@ -19,9 +19,6 @@ class ViewMenu : public QMenu
 {
     Q_OBJECT
     
-    static const int maxsets = 16; //FIXME
-
-
 public:
     MainWindow *mainWindow;
     ViewMenu(MainWindow* );

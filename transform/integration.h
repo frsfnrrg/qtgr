@@ -2,15 +2,12 @@
 #define INTEGRATION_H
 
 #include <QtGui>
-#include "mainwindow.h"
 #include "dialog.h"
 
 class TransformIntegration : public Dialog
 {
     Q_OBJECT
 public:
-    const static int maxsets = 16;
-
     explicit TransformIntegration(MainWindow* mainWin);
 
 private:

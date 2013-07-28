@@ -21,6 +21,7 @@ private:
     QDoubleSpinBox* xx;
     QDoubleSpinBox* yn;
     QDoubleSpinBox* yx;
+    QPushButton* useRect;
 
 signals:
     

@@ -18,12 +18,15 @@ private:
     void createMenus();
     QAction* integrateAct;
     QAction* differentiateAct;
+    QAction* evaluateAct;
     Dialog* integrateDialog;
     Dialog* differentiateDialog;
+    Dialog* evaluateDialog;
 
 signals:
     
 public slots:
+    void evaluate();
     void integrate();
     void differentiate();
 

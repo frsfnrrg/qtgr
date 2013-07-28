@@ -2,7 +2,6 @@
 #define VIEW_GRAPHTYPE_H
 
 #include <QtGui>
-#include "mainwindow.h"
 #include "dialog.h"
 
 // Hey... you could subclass QDialog, have reqed. apply, done, update, cancel
