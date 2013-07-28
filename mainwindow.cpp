@@ -129,7 +129,9 @@ void MainWindow::about()
 //! [13] //! [14]
 {
    QMessageBox::about(this, tr("About Application"),
-            tr("QTGR is a port to QT of the graphing program XVGR."));
+            tr("QTGR is a port to QT of the graphing program XVGR.\n"
+               "Formula transformation format is complicated:\n"
+               "x = (index < 10)*y + (index >= 10)*(- x*x)"));
 }
 //! [14]
 

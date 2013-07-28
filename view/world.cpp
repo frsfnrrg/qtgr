@@ -5,7 +5,7 @@
 
 
 ViewWorld::ViewWorld(MainWindow* mainWin) : Dialog(mainWin, tr("Define World")) {
-      
+
 	// make combo box
 	QComboBox* fileType = new QComboBox;
 	fileType->addItem("X Y");

@@ -28,7 +28,7 @@ TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
 
     layout->setRowMinimumHeight(3, 8);
 
-    layout->addWidget(new QLabel("f(x)"), 4,0);
+    layout->addWidget(new QLabel("(x,y,a,b,c,d)=<expr>"), 4,0);
     layout->addWidget(formulaBox, 4, 1);
 
     this->setDialogLayout(layout);
