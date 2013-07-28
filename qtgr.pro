@@ -45,6 +45,7 @@ SOURCES       = edit.cpp \
     core/utils.c \
     core/setutils.c \
     core/getparms.c \
+    core/setprops.c \
     view/graphtype.cpp \
     view/legends.cpp \
     transform.cpp \
