@@ -36,9 +36,26 @@ TransformIntegration::TransformIntegration(MainWindow* mainWin) :
 }
 
 void TransformIntegration::updateDialog() {
-    printf("updating integration dialog\n");
+    resultL->setText(".....");
 }
 
 void TransformIntegration::applyDialog() {
     printf("applying integration dialog\n");
+
+    int setno, itype;
+
+    setno = setNumber->currentIndex();
+
+    // like so
+    if (integrationType->currentIndex() == 0) {
+        itype = 1;
+    } else {
+        itype = 0;
+    }
+
+    double result;
+    result = do_int(setno, itype);
+    resultL->setText(QString::number(result));
+
+    drawgraph();
 }

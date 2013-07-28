@@ -352,6 +352,10 @@ extern void activateset(int , int );
 extern void setcol(int gno, double *x, int setno, int len, int col);
 extern void updatesetminmax(int gno, int setno);
 
+//computils
+
+extern double do_int(int, int);
+
 #endif
 
 #ifdef __cplusplus 
