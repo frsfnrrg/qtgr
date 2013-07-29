@@ -46,5 +46,21 @@ void TransformDifferentiation::updateDialog() {
 
 void TransformDifferentiation::applyDialog() {
     printf("applying diff dialog\n");
+
+    int setno, itype;
+    setno = setNumber->currentIndex();
+    switch (diffType->currentIndex()) {
+    case 0:
+        itype = 2;
+        break;
+    case 1:
+        itype = 0;
+        break;
+    case 2:
+        itype = 1;
+        break;
+    }
+
+    do_differ(setno, itype);
 }
 

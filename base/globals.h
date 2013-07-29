@@ -354,7 +354,22 @@ extern void updatesetminmax(int gno, int setno);
 
 //computils
 
-extern double do_int(int, int);
+extern double do_int(int setno, int itype);//integration
+extern void do_compute(int setno, int loadto, int graphto, char* fstr);//expression
+extern void do_digfilter(int set1, int set2);//digital filter
+extern void do_linearc(int set1, int set2);// linear convolve
+extern void do_xcor(int set1, int set2, int itype, int lag); // cross correlation (itype true false)
+extern void do_spline(int set, double start, double stop, int n); // splines
+extern void do_differ(int setno, int itype); // difference (0 forward, 1 back, 2 center)
+extern void do_regress(int setno, int ideg, int iresid); // regression
+extern void do_runavg(int setno, int runlen, int runtype); // 0 avg 1 median 2 min 3 max 4 stdev
+extern void do_fourier(int fftflag,int setno, int load, int loadx, int invflag,
+                       int type, int wind); // fourier
+extern void do_window(int setno, int type, int wind); // window
+extern void do_histo(int hset, double binw, double xmin, double xmax,
+                     int hist_type); // histogram
+extern void do_sample(int setno, int typeno, char* exprstr,
+                      int startno, int stepno); // sample set
 
 #endif
 

@@ -56,6 +56,4 @@ void TransformIntegration::applyDialog() {
     double result;
     result = do_int(setno, itype);
     resultL->setText(QString::number(result));
-
-    drawgraph();
 }

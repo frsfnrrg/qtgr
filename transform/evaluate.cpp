@@ -28,7 +28,7 @@ TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
 
     layout->setRowMinimumHeight(3, 8);
 
-    layout->addWidget(new QLabel("(x,y,a,b,c,d)=<expr>"), 4,0);
+    layout->addWidget(new QLabel("Formula"), 4,0);
     layout->addWidget(formulaBox, 4, 1);
 
     this->setDialogLayout(layout);
@@ -39,5 +39,20 @@ void TransformEvaluate::updateDialog() {
 }
 
 void TransformEvaluate::applyDialog() {
+    int setno, loadto, graphto;
+    char* fstr;
 
+    setno = this->setNumber->currentIndex();
+
+    graphto = cg;
+
+    if (destination->currentIndex() == 0) {
+        loadto = 1;
+    } else {
+        loadto = 0; // send to the next set
+    }
+
+    fstr = formulaBox->text().toLocal8Bit().data();
+
+    do_compute(setno, loadto, graphto, fstr);
 }
