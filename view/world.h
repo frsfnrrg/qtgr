@@ -11,7 +11,7 @@ class ViewWorld : public Dialog
   
   public:	
     ViewWorld(MainWindow* mainWin);
-    
+
   private:
     QLineEdit *xMin;
     QLineEdit *xMax;
@@ -23,6 +23,7 @@ class ViewWorld : public Dialog
     QLineEdit *yMinTic;  
     
  public slots:
+    void updateWorldDimensions();
     void updateDialog();
    
  private slots:

@@ -45,13 +45,14 @@
 
 #include <QtGui>
 #include "mousecall.h"
+//#include "base/globals.h"
 
 
 //! [0]
 class GraphWidget : public QGraphicsView
 {
     Q_OBJECT
-    static const int maxcolors = 256;
+    //static const int maxcolors = 256;
     static GraphWidget *myGraphWidget;
 
 public:
@@ -66,7 +67,7 @@ public:
     static void clear();
     static void update();
     static void getcanvas(int* win_w, int* win_h);
-    QColor cmscolors[maxcolors];
+    QColor cmscolors[16];
     MouseCallBack *mouseClickCall;
     MouseCallBack *mouseDoubleCall;
 

@@ -44,6 +44,7 @@
 #include "edit.h"
 #include "base/globals.h"
 #include "transform.h"
+#include "prop.h"
 
 EditMenu::EditMenu(MainWindow* mainWin)
 {  
@@ -92,7 +93,8 @@ void EditMenu::createActions()
 
 void EditMenu::autoScale()
 {
-   autoscale_proc(); 
+    autoscale_proc();
+    WorldDimProp::send();
 }
 
 

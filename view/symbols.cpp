@@ -228,4 +228,3 @@ void ViewSymbols::applyDialog()
     SetComboBox::sendUpdate();
     mainWindow->viewMenu->updateIndividualLegend(cset);
 }
-

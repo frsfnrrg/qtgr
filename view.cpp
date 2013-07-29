@@ -238,4 +238,3 @@ void ViewMenu::updateIndividualLegend(int cset) {
         legendsDialog->updateLegendsField(cset);
     }
 }
-

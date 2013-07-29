@@ -2,8 +2,10 @@
 #include "view.h"
 #include "view/world.h"
 #include "base/globals.h"
+#include "prop.h"
 
 ViewWorld::ViewWorld(MainWindow* mainWin) : Dialog(mainWin, tr("Define World")) {
+    WorldDimProp::add(this);
 
 	// make combo box
 	QComboBox* fileType = new QComboBox;
@@ -122,4 +124,14 @@ void ViewWorld::applyDialog()
     
     ViewMenu* viewMenu = (ViewMenu*) mainWindow->viewMenu;  // FIXME hack  
     viewMenu->updateTicks();
+}
+
+void ViewWorld::updateWorldDimensions() {
+    int gno;
+    gno = cg; // current graph only
+
+    xMin->setText(QString::number(g[gno].w.xg1,'g',9));
+    xMax->setText(QString::number(g[gno].w.xg2,'g',9));
+    yMin->setText(QString::number(g[gno].w.yg1,'g',9));
+    yMax->setText(QString::number(g[gno].w.yg2,'g',9));
 }

@@ -48,7 +48,6 @@ MainWindow *mainWindow;
 
 GraphWidget* GraphWidget::myGraphWidget;
 
-
 GraphWidget::GraphWidget(QGraphicsScene *s, QWidget *parent)
     : QGraphicsView(s,parent)
 {
@@ -106,7 +105,6 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent *event)
 	mouseDoubleCall->mouse(event->x(),event->y(),scene->width(),scene->height());
     }
 }
-
 
 void GraphWidget::getcanvas(int* win_w, int* win_h)
 {
@@ -340,7 +338,7 @@ void GraphWidget::update()
 void GraphWidget::initialize_cms_data()
 {
     int i;
-    int red[maxcolors],green[maxcolors],blue[maxcolors];
+    int red[MAXCOLORS],green[MAXCOLORS],blue[MAXCOLORS];
 
     /* white  */
     red[0] = 255;
@@ -407,12 +405,13 @@ void GraphWidget::initialize_cms_data()
     green[15] = 192;
     blue[15] = 52;
 
-    for (i = 16; i < maxcolors; i++) {
+    for (i = 16; i < MAXCOLORS; i++) {
 	red[i] = i;
 	green[i] = i;
 	blue[i] = i;
     }
-    for (i = 0; i < maxcolors; i++) {
+
+    for (i = 0; i < MAXCOLORS; i++) {
 // 	printf("setcolor %i,%i,%i \n",red[i],green[i],blue[i]);
 	cmscolors[i].setRgb(red[i],green[i],blue[i]);
     }

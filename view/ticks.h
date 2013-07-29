@@ -15,7 +15,6 @@ class ViewTicks : public Dialog
     
     QDialog* labelPropsDialog;
 
-    
   public slots:
     void updateDialog();
     

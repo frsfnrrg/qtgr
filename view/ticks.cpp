@@ -233,4 +233,3 @@ void ViewTicks::doneLabelProps()
   this->applyLabelProps();
   this->labelPropsDialog->setVisible(false);
 }
-

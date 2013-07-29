@@ -43,6 +43,7 @@
 #include "mainwindow.h"
 #include "tools.h"
 #include "base/globals.h"
+#include "prop.h"
 
 ToolsMenu::ToolsMenu(MainWindow* mainWin)
 
@@ -84,7 +85,8 @@ void ToolsMenu::createActions()
 
 void ToolsMenu::autoScale()
 {
-   autoscale_proc(); 
+   autoscale_proc();
+   WorldDimProp::send();
 }
 
 

@@ -1,5 +1,6 @@
 #include "view/graphtype.h"
 #include "base/globals.h"
+#include "view.h"
 
 const int indx2type[] = { XY, LOGY, LOGX, LOGXY, BAR, STACKEDBAR, HBAR, STACKEDHBAR};
 const char* opts[] = {"X Linear, Y Linear",
@@ -50,7 +51,8 @@ void ViewGraphType::applyDialog() {
     int cset = setNumbers->currentIndex();
     int t = graphTypes->currentIndex();
 
-    g[cset].type = indx2type[t];
+    int type = indx2type[t];
+    g[cset].type = type;
     printf("%i %i\n", g[cset].type, t);
 
     // & show it too

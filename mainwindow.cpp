@@ -47,6 +47,7 @@
 #include "tools.h"
 #include "graphwidget.h"
 #include "base/globals.h"
+#include "prop.h"
 
 MainWindow::MainWindow()
 
@@ -144,7 +145,8 @@ void MainWindow::documentWasModified()
 
 void MainWindow::autoScale()
 {
-   autoscale_proc(); 
+    autoscale_proc();
+    WorldDimProp::send();
 }
 
 // Actions
