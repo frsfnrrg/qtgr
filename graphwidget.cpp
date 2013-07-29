@@ -57,6 +57,8 @@ GraphWidget::GraphWidget(QGraphicsScene *s, QWidget *parent)
     initialize_cms_data();
     mouseClickCall = NULL;
     mouseDoubleCall = NULL;
+    overlay = new Overlay(this);
+    overlay->setMouseTracking(true);
 }
 
 void GraphWidget::mouseMoveEvent(QMouseEvent *event)
@@ -84,26 +86,37 @@ void GraphWidget::mouseMoveEvent(QMouseEvent *event)
       mainWindow->statusBar()->showMessage(message);
     }
 //     printf("mouseMove %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
-}
 
+    overlay->updateMouse(event->x(),event->y(),scene->width(),scene->height());
+}
 
 void GraphWidget::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     printf("mouseClick %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
-     if (mouseClickCall != NULL) {
+    if (mouseClickCall != NULL) {
        mouseClickCall->mouse(event->x(),event->y(),scene->width(),scene->height());
-     }
+    }
+    overlay->clickMouse(event->x(),event->y(),scene->width(),scene->height());
 }
 
 
 void GraphWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
-    printf("mouseDoubeClick %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
+    printf("mouseDoubleClick %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
     if (mouseDoubleCall != NULL) {
-	mouseDoubleCall->mouse(event->x(),event->y(),scene->width(),scene->height());
+        mouseDoubleCall->mouse(event->x(),event->y(),scene->width(),scene->height());
     }
+}
+
+void GraphWidget::resizeEvent(QResizeEvent *r) {
+    overlay->resize(this->size());
+    QGraphicsView::resizeEvent(r);
+}
+
+void GraphWidget::startRect(RectReceiver* r) {
+    GraphWidget::myGraphWidget->overlay->startRect(r);
 }
 
 void GraphWidget::getcanvas(int* win_w, int* win_h)

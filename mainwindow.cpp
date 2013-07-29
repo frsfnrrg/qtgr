@@ -61,6 +61,8 @@ MainWindow::MainWindow()
     gwidget->setMouseTracking(true);
     gwidget->setMinimumWidth(806);
     gwidget->setMaximumWidth(806);
+    gwidget->setMaximumHeight(606);
+    gwidget->setMinimumHeight(606);
 
     setCentralWidget(gwidget);
 

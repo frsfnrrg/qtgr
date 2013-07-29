@@ -60,7 +60,6 @@ public:
     MainWindow();
     QGraphicsView *view;
     GraphWidget *gwidget;   
-    
     ViewMenu *viewMenu;
 
 protected:

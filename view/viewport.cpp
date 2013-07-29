@@ -16,6 +16,8 @@ ViewView::ViewView(MainWindow *parent) :
     Dialog(parent, tr("Viewport"))
 {
     useRect = new QPushButton(tr("Rect Select"));
+    connect(useRect, SIGNAL(clicked()), this, SLOT(doRect()));
+
 
     QVBoxLayout* over = new QVBoxLayout();
 
@@ -76,4 +78,9 @@ void ViewView::applyDialog() {
     g[gno].v.yv2 = yx->value();
 
     drawgraph();
+}
+
+void ViewView::doRect() {
+    // graphicsoverlay::startRect(this)
+    // this->setVisible(false)
 }

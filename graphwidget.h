@@ -45,7 +45,7 @@
 
 #include <QtGui>
 #include "mousecall.h"
-//#include "base/globals.h"
+#include "overlay.h"
 
 
 //! [0]
@@ -71,15 +71,18 @@ public:
     MouseCallBack *mouseClickCall;
     MouseCallBack *mouseDoubleCall;
 
+    static void startRect(RectReceiver* r);
+
 public slots:
-   
 
 protected:
   void mouseMoveEvent(QMouseEvent *event);
   void mousePressEvent(QMouseEvent *event);
   void mouseDoubleClickEvent(QMouseEvent *event);
+  void resizeEvent(QResizeEvent* r);
 
 private:
+   Overlay* overlay;
    QPen *pen;
    void initialize_cms_data();  
    
