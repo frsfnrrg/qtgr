@@ -7,6 +7,7 @@
 
 #include <QtGui>
 #include "mainwindow.h"
+#include "overlay.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -21,20 +22,24 @@ QT_END_NAMESPACE
  * move right, move up, move down
  *
  */
-class ToolsMenu : public QMenu
+class ToolsMenu : public QMenu, public RectReceiver
 {
     Q_OBJECT
 
 public:
     ToolsMenu(MainWindow* );
 
+    void finishRect(double, double, double, double);
+
+    QToolBar* createToolBar();
+
 protected:
    
 
 private slots:
     void autoScale();
+    void zoom();
     
-
 private:
     MainWindow *mainWindow;
     void createMenus();
@@ -49,8 +54,6 @@ private:
    // QAction *resetViewAct;
 //    QAction *worldAct;
 //     QAction *viewAct;
-
-   
 };
 
 #endif

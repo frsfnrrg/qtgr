@@ -145,11 +145,6 @@ void MainWindow::documentWasModified()
 //     setWindowModified(textEdit->document()->isModified());
 }
 
-void MainWindow::autoScale()
-{
-    autoscale_proc();
-    WorldDimProp::send();
-}
 
 // Actions
 void MainWindow::createActions()
@@ -207,8 +202,11 @@ void MainWindow::createMenus()
     
     viewMenu = new ViewMenu(this);
     this->menuBar()->addMenu(viewMenu);
-    
-    toolsMenu = new ToolsMenu(this);
+
+    ToolsMenu* t = new ToolsMenu(this);
+    toolsToolBar = t->createToolBar();
+    this->addToolBar(toolsToolBar);
+    toolsMenu = t;
     this->menuBar()->addMenu(toolsMenu);
 
     this->menuBar()->addSeparator();
@@ -220,13 +218,6 @@ void MainWindow::createMenus()
 
 void MainWindow::createToolBars()
 {
-    fileToolBar = this->addToolBar(tr("File"));
-    
-    autoScaleAct = new QAction(tr("&AS"), this);
-    autoScaleAct->setStatusTip(tr("Autoscale"));
-    connect(autoScaleAct, SIGNAL(triggered()), this, SLOT(autoScale()));  
-    fileToolBar->addAction(autoScaleAct);
-
     editToolBar = this->addToolBar(tr("Edit"));
     editToolBar->addAction(((EditMenu*) editMenu)->cutAct);
     editToolBar->addAction(((EditMenu*) editMenu)->copyAct);

@@ -72,7 +72,7 @@ private slots:
     bool saveAs();
     void about();
     void documentWasModified();
-    void autoScale();
+
 
 private:
     void createActions();
@@ -95,7 +95,7 @@ private:
     QMenu *editMenu;
     QMenu *toolsMenu;
     QMenu *helpMenu;
-    QToolBar *fileToolBar;
+    QToolBar *toolsToolBar;
     QToolBar *editToolBar;
     QAction *readSetAct;
     QAction *readParaAct;

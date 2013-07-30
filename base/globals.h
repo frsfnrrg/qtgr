@@ -342,6 +342,7 @@ extern void set_graph_active(int gno);
 extern void get_graph_legend(int gno, legend* leg);
 extern void set_graph_legend(int gno, legend* leg);
 extern int get_format_index(int f);
+extern void default_axis(int gno, int method, int axis);
 
 //setprops
 extern void set_prop(int gno,...);
@@ -370,6 +371,10 @@ extern void do_histo(int hset, double binw, double xmin, double xmax,
                      int hist_type); // histogram
 extern void do_sample(int setno, int typeno, char* exprstr,
                       int startno, int stepno); // sample set
+
+// utils
+
+extern void fswap(double*, double*);
 
 #endif
 

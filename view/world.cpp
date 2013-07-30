@@ -99,10 +99,10 @@ void ViewWorld::applyDialog()
     maxg = cg;
 
     if (ming == cg && maxg == cg) {
-	if (!isactive_graph(cg)) {
-	    errwin("Current graph is not active!");
-	    return;
-	}
+        if (!isactive_graph(cg)) {
+            errwin("Current graph is not active!");
+            return;
+        }
     }
     for (i = ming; i <= maxg; i++) {
 	if (isactive_graph(i)) {
