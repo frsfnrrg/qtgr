@@ -43,6 +43,7 @@ public:
     void updateSymbolsLegend();
     void updateIndividualLegend(int cset);
 
+    QToolBar* createToolBar();
 protected:
   
   

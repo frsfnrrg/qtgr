@@ -33,27 +33,21 @@ public:
 
     QToolBar* createToolBar();
 
+public slots:
+    void autoScale();
+    void zoom();
+
 protected:
    
 
 private slots:
-    void autoScale();
-    void zoom();
     
 private:
     MainWindow *mainWindow;
     void createMenus();
     void createActions();
     QAction *autoScaleAct;
-
     QAction *zoomRectAct;
-    QAction *zoomOutAct;
-   // QAction *pushStackAct;
-   // QAction *popStackAct;
-   // QAction *cycleStackAct;
-   // QAction *resetViewAct;
-//    QAction *worldAct;
-//     QAction *viewAct;
 };
 
 #endif

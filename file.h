@@ -16,15 +16,16 @@ class FileMenu : public QMenu
 public:
     FileMenu(MainWindow* );
 
+public slots:
+    void open();
+    void clear();
+    void print();
+
 protected:
    
 
 private slots:
-    void open();
-    void clear();
-    void print();
     void exportProc();
-    
 
 private:
     MainWindow *mainWindow;
@@ -41,7 +42,6 @@ private:
     QAction *exportAct;
     QAction *printSetupAct;
     QAction *exitAct;
-   
 };
 
 #endif

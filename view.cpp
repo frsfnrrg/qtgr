@@ -1,4 +1,3 @@
-//#include <iostream>
 #include <QtGui>
 #include "mainwindow.h"
 #include "view.h"
@@ -34,6 +33,21 @@ void ViewMenu::createMenus()
     this->addSeparator();
     this->addAction(ticksAct);
     this->addAction(symbolsAct);
+}
+
+QToolBar* ViewMenu::createToolBar() {
+    QToolBar* tl = new QToolBar(tr("View"));
+    tl->addAction(viewAct);
+    tl->addAction(worldAct);
+    tl->addSeparator();
+    tl->addAction(graphTypesAct);
+    tl->addSeparator();
+    tl->addAction(titleAct);
+    tl->addAction(legendsAct);
+    tl->addSeparator();
+    tl->addAction(ticksAct);
+    tl->addAction(symbolsAct);
+    return tl;
 }
 
 class MouseDoubleCall : public MouseCallBack
@@ -75,25 +89,39 @@ public:
 
 void ViewMenu::createActions()
 {  
-    viewAct = new QAction(tr("Define viewport..."), this);
+    viewAct = createQAction(tr("Set viewport"),
+                            tr("Determine the onscreen boundaries of the graph."),
+                            this);
     connect(viewAct, SIGNAL(triggered()), this, SLOT(view()));
 
-    worldAct = new QAction(tr("Define world..."), this);
+    worldAct = createQAction(tr("Set world"),
+                             tr("Determine the range of values displayed in the graph."),
+                             this);
     connect(worldAct, SIGNAL(triggered()), this, SLOT(world()));
 
-    titleAct = new QAction(tr("Title/Subtitle..."), this);
+    titleAct = createQAction(tr("Titling"),
+                             tr("Set the title and subtitle of the graph."),
+                             this);
     connect(titleAct, SIGNAL(triggered()), this, SLOT(title()));
 
-    ticksAct = new QAction(tr("Ticks/Tick lables..."), this);
+    ticksAct = createQAction(tr("Ticks"),
+                             tr("Change spacing and labels for the graph axes."),
+                             this);
     connect(ticksAct, SIGNAL(triggered()), this, SLOT(ticks()));
 
-    symbolsAct = new QAction(tr("Symbols..."), this);
+    symbolsAct = createQAction(tr("Symbols"),
+                               tr("Change display of sets on the graph."),
+                               this);
     connect(symbolsAct, SIGNAL(triggered()), this, SLOT(symbols()));
 
-    legendsAct = new QAction(tr("Legends..."), this);
+    legendsAct = createQAction(tr("Legends"),
+                               tr("Give legends to sets on the graph."),
+                               this);
     connect(legendsAct, SIGNAL(triggered()), this, SLOT(legends()));
     
-    graphTypesAct = new QAction(tr("Graph Types"), this);
+    graphTypesAct = createQAction(tr("Graph Type"),
+                                  tr("Set the graph display metric."),
+                                  this);
     connect(graphTypesAct, SIGNAL(triggered()), this, SLOT(graphTypes()));
 
     // setup double click handler
