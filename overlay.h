@@ -5,7 +5,7 @@
 
 class RectReceiver {
 public:
-    void finishRect(double x1, double x2, double y1, double y2);
+    virtual void finishRect(double , double , double , double ) {}
 };
 
 class Overlay : public QWidget

@@ -69,18 +69,22 @@ void ViewView::updateDialog() {
 }
 
 void ViewView::applyDialog() {
-    // settings are applied to current graph
-    int gno = cg;
-
-    g[gno].v.xv1 = xn->value();
-    g[gno].v.xv2 = xx->value();
-    g[gno].v.yv1 = yn->value();
-    g[gno].v.yv2 = yx->value();
-
-    drawgraph();
+    finishRect(xn->value(),xx->value(),yn->value(),yx->value());
 }
 
 void ViewView::doRect() {
-    // graphicsoverlay::startRect(this)
-    // this->setVisible(false)
+    GraphWidget::startRect(this);
+    this->setVisible(false);
+}
+
+void ViewView::finishRect(double x1, double x2, double y1, double y2) {
+    printf("Viewport: %f %f %f %f\n",x1,x2,y1,y2);
+
+    int gno = cg;
+    g[gno].v.xv1 = x1;
+    g[gno].v.xv2 = x2;
+    g[gno].v.yv1 = y1;
+    g[gno].v.yv2 = y2;
+
+    drawgraph();
 }

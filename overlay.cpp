@@ -1,8 +1,6 @@
 #include "overlay.h"
 
-void RectReceiver::finishRect(double x1, double x2, double y1, double y2) {
-
-}
+const int offset = 3;
 
 Overlay::Overlay(QWidget* parent) :
     QWidget(parent)
@@ -15,11 +13,15 @@ Overlay::Overlay(QWidget* parent) :
 }
 
 void Overlay::startRect(RectReceiver* r) {
-    stage = 0;
-    this->rec = r;
+    if (rec == NULL) {
+        stage = 0;
+        this->rec = r;
+    } else {
+        printf("Already processing a rectangle demand. Can't acquiesce.");
+    }
 }
 
-void Overlay::updateMouse(int x, int y, int w, int h) {
+void Overlay::updateMouse(int x, int y, int, int) {
     if (this->rec != NULL && (x != this->x || y != this->y)) {
         this->x = x;
         this->y = y;
@@ -27,13 +29,19 @@ void Overlay::updateMouse(int x, int y, int w, int h) {
     }
 }
 
-void Overlay::paintEvent(QPaintEvent *event) {
+void Overlay::paintEvent(QPaintEvent*) {
+    if (rec == NULL || stage != 1) return;
+
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::Antialiasing, false);
     painter.setPen(QPen(Qt::black));
-    painter.drawLine(width()/8, height()/8, 7*width()/8, 7*height()/8);
-    painter.drawLine(width()/8, 7*height()/8, 7*width()/8, height()/8);
+
+    painter.drawLine(offset + x1, offset + y1, offset + x1,offset + y);
+    painter.drawLine(offset + x1,offset +  y1,offset +  x,offset + y1);
+    painter.drawLine(offset + x, offset + y1, offset + x, offset + y);
+    painter.drawLine(offset + x1,offset +  y,offset +  x, offset + y);
 }
+
 
 void Overlay::clickMouse(int x, int y, int w, int h) {
     if (rec == NULL) return;
@@ -47,20 +55,18 @@ void Overlay::clickMouse(int x, int y, int w, int h) {
         y2 = y;
 
         double lx1, lx2, ly1, ly2;
-        if (x1 > x2) {
-            lx1 = double(x2) / w;
-            lx2 = double(x1) / w;
-        } else {
-            lx1 = double(x2) / w;
-            lx2 = double(x1) / w;
-        }
+        lx1 = double(x1+offset) / w;
+        lx2 = double(x2+offset) / w;
 
-        if (y1 > y2) {
-            ly1 = 1.0 - double(y2) / h;
-            ly2 = 1.0 - double(y1) / h;
-        } else {
-            ly1 = 1.0 - double(y2) / h;
-            ly2 = 1.0 - double(y1) / h;
+        ly1 = 1.0 - double(y1+offset) / h;
+        ly2 = 1.0 - double(y2+offset) / h;
+
+        double tmp;
+        if (lx1 > lx2) {
+            tmp = lx2; lx2 = lx1; lx1 = tmp;
+        }
+        if (ly1 > ly2) {
+            tmp = ly2; ly2 = ly1; ly1 = tmp;
         }
 
         rec->finishRect(lx1, lx2, ly1, ly2);

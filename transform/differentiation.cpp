@@ -59,6 +59,8 @@ void TransformDifferentiation::applyDialog() {
     case 2:
         itype = 1;
         break;
+    default:
+        return;
     }
 
     do_differ(setno, itype);
