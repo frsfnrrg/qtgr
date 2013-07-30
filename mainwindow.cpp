@@ -21,7 +21,7 @@ QAction* createQAction(const QString &name, const QString &explained, QObject* p
 MainWindow::MainWindow()
 
 {
-    QGraphicsScene *scene = new QGraphicsScene();
+    QGraphicsScene *scene = new GraphicsScene(this);
     scene->setSceneRect(0, 0, 800, 600);
     scene->setBackgroundBrush(Qt::white);
 

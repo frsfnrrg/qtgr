@@ -40,6 +40,8 @@ public:
     void updateView();
     void updateTitle();
 
+    void populateMenu(QMenu* q);
+
     void updateSymbolsLegend();
     void updateIndividualLegend(int cset);
 

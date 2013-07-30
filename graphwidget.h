@@ -7,12 +7,21 @@
 #include "mousecall.h"
 #include "overlay.h"
 
+class MainWindow;
 
-//! [0]
+class GraphicsScene : public QGraphicsScene {
+    Q_OBJECT
+public:
+    GraphicsScene(MainWindow*);
+protected slots:
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+private:
+    MainWindow* mainWindow;
+};
+
 class GraphWidget : public QGraphicsView
 {
     Q_OBJECT
-    //static const int maxcolors = 256;
     static GraphWidget *myGraphWidget;
 
 public:
@@ -40,6 +49,8 @@ protected:
   void mousePressEvent(QMouseEvent *event);
   void mouseDoubleClickEvent(QMouseEvent *event);
   void resizeEvent(QResizeEvent* r);
+
+private slots:
 
 private:
    Overlay* overlay;

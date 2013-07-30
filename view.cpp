@@ -20,19 +20,23 @@ ViewMenu::ViewMenu(MainWindow* mainWin)
     set_mode = 0 ; // 0 means act on one set; <>0 means all sets (FIXME not implemented);
 }
 
+void ViewMenu::populateMenu(QMenu* q) {
+    q->addAction(viewAct);
+    q->addAction(worldAct);
+    q->addSeparator();
+    q->addAction(graphTypesAct);
+    q->addSeparator();
+    q->addAction(titleAct);
+    q->addAction(legendsAct);
+    q->addSeparator();
+    q->addAction(ticksAct);
+    q->addAction(symbolsAct);
+}
+
 void ViewMenu::createMenus()
 {
     this->setTearOffEnabled(true);
-    this->addAction(viewAct);
-    this->addAction(worldAct);
-    this->addSeparator();
-    this->addAction(graphTypesAct);
-    this->addSeparator();
-    this->addAction(titleAct);
-    this->addAction(legendsAct);
-    this->addSeparator();
-    this->addAction(ticksAct);
-    this->addAction(symbolsAct);
+    populateMenu(this);
 }
 
 QToolBar* ViewMenu::createToolBar() {

@@ -3,10 +3,24 @@
 #include "graphwidget.h"
 #include "mainwindow.h"
 #include "base/globals.h"
+#include "view.h"
 
 MainWindow *mainWindow;
 
 GraphWidget* GraphWidget::myGraphWidget;
+
+GraphicsScene::GraphicsScene(MainWindow* mwin) :
+    QGraphicsScene()
+{
+    mainWindow = mwin;
+}
+
+void GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    QMenu menu(event->widget());
+    mainWindow->viewMenu->populateMenu(&menu);
+    menu.exec(event->screenPos());
+}
 
 GraphWidget::GraphWidget(QGraphicsScene *s, QWidget *parent)
     : QGraphicsView(s,parent)
