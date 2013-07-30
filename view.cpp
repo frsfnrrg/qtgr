@@ -24,17 +24,16 @@ ViewMenu::ViewMenu(MainWindow* mainWin)
 void ViewMenu::createMenus()
 {
     this->setTearOffEnabled(true);
-    QMenu* graphs = new QMenu("Graphs");
-    graphs->addAction(graphTypesAct);
-    this->addMenu(graphs);
-    this->addSeparator();
     this->addAction(viewAct);
     this->addAction(worldAct);
     this->addSeparator();
+    this->addAction(graphTypesAct);
+    this->addSeparator();
     this->addAction(titleAct);
+    this->addAction(legendsAct);
+    this->addSeparator();
     this->addAction(ticksAct);
     this->addAction(symbolsAct);
-    this->addAction(legendsAct);
 }
 
 class MouseDoubleCall : public MouseCallBack

@@ -74,22 +74,18 @@ void ToolsMenu::createActions()
 //   
 //     viewAct = new QAction(tr("Define view..."), this);
 //     connect(autoScaleAct, SIGNAL(triggered()), this, SLOT(autoScale()));
-  
+
     autoScaleAct = new QAction(tr("Autoscale"), this);
     connect(autoScaleAct, SIGNAL(triggered()), this, SLOT(autoScale()));
 
     zoomRectAct = new QAction(tr("Zoom rect"), this);
     connect(zoomRectAct, SIGNAL(triggered()), this, SLOT(zoom()));
-
-    zoomOutAct = new QAction(tr("Zoom out"), this);
-
 }
 
 QToolBar* ToolsMenu::createToolBar() {
     QToolBar* foo = new QToolBar(tr("Tools"));
     foo->addAction(autoScaleAct);
     foo->addAction(zoomRectAct);
-    foo->addAction(zoomOutAct);
     return foo;
 }
 
