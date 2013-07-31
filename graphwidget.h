@@ -39,6 +39,7 @@ public:
     QColor cmscolors[16];
     MouseCallBack *mouseClickCall;
     MouseCallBack *mouseDoubleCall;
+    Overlay* overlay;
 
     static void startRect(RectReceiver* r);
 
@@ -53,7 +54,6 @@ protected:
 private slots:
 
 private:
-   Overlay* overlay;
    QPen *pen;
    void initialize_cms_data();  
    

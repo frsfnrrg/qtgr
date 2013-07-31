@@ -20,7 +20,14 @@ public:
 
     void clickMouse(int x, int y, int w, int h);
 
+    bool isRectSelecting();
+
     void paintEvent(QPaintEvent *event);
+
+    QAction* cancelRectSelect;
+private slots:
+    void cancelRect();
+
 private:
     int x,y,x1,x2,y1,y2;
     int stage;

@@ -95,36 +95,43 @@ void ViewMenu::createActions()
 {  
     viewAct = createQAction(tr("Set viewport"),
                             tr("Determine the onscreen boundaries of the graph."),
+                            tr("Ctrl+Shift+v"),
                             this);
     connect(viewAct, SIGNAL(triggered()), this, SLOT(view()));
 
     worldAct = createQAction(tr("Set world"),
                              tr("Determine the range of values displayed in the graph."),
+                             tr("Ctrl+w"),
                              this);
     connect(worldAct, SIGNAL(triggered()), this, SLOT(world()));
 
     titleAct = createQAction(tr("Titling"),
                              tr("Set the title and subtitle of the graph."),
+                             tr("Ctrl+Shift+t"),
                              this);
     connect(titleAct, SIGNAL(triggered()), this, SLOT(title()));
 
     ticksAct = createQAction(tr("Ticks"),
                              tr("Change spacing and labels for the graph axes."),
+                             tr("Ctrl+t"),
                              this);
     connect(ticksAct, SIGNAL(triggered()), this, SLOT(ticks()));
 
     symbolsAct = createQAction(tr("Symbols"),
                                tr("Change display of sets on the graph."),
+                               tr("Ctrl+s"),
                                this);
     connect(symbolsAct, SIGNAL(triggered()), this, SLOT(symbols()));
 
     legendsAct = createQAction(tr("Legends"),
                                tr("Give legends to sets on the graph."),
+                               tr("Ctrl+L"),
                                this);
     connect(legendsAct, SIGNAL(triggered()), this, SLOT(legends()));
     
     graphTypesAct = createQAction(tr("Graph Type"),
                                   tr("Set the graph display metric."),
+                                  tr("Ctrl+g"),
                                   this);
     connect(graphTypesAct, SIGNAL(triggered()), this, SLOT(graphTypes()));
 

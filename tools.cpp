@@ -24,14 +24,14 @@ void ToolsMenu::createActions()
 {
     autoScaleAct = createQAction(tr("Autoscale"),
                                  tr("Rescale the displayed area of the graph to show all points."),
+                                 tr("Ctrl+a"),
                                  this);
-    autoScaleAct->setShortcut(QKeySequence(tr("Ctrl+a")));
     connect(autoScaleAct, SIGNAL(triggered()), this, SLOT(autoScale()));
 
     zoomRectAct = createQAction(tr("Rect Zoom"),
                                 tr("Zoom the graph in."),
+                                tr("Ctrl+r"),
                                 this);
-    zoomRectAct->setShortcut(QKeySequence(tr("Ctrl+r")));
     connect(zoomRectAct, SIGNAL(triggered()), this, SLOT(zoom()));
 }
 

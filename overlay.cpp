@@ -1,4 +1,5 @@
 #include "overlay.h"
+#include "mainwindow.h"
 
 const int offset = 3;
 
@@ -10,15 +11,21 @@ Overlay::Overlay(QWidget* parent) :
     rec = NULL;
     x = 0;
     y = 0;
+
+    cancelRectSelect = createQAction(tr("Cancel rect select"),
+                                     tr("Stop the process of choosing a rectangle"),
+                                     "",
+                                     this);
+    connect(cancelRectSelect, SIGNAL(triggered()), this, SLOT(cancelRect()));
 }
 
 void Overlay::startRect(RectReceiver* r) {
-    if (rec == NULL) {
-        stage = 0;
-        this->rec = r;
-    } else {
-        printf("Already processing a rectangle demand. Can't acquiesce.");
+    if (rec != NULL) {
+        printf("Already processing a rectangle demand. Acquiescing, alas.");
     }
+    this->rec = r;
+    stage = 0;
+    update();
 }
 
 void Overlay::updateMouse(int x, int y, int, int) {
@@ -55,11 +62,11 @@ void Overlay::clickMouse(int x, int y, int w, int h) {
         y2 = y;
 
         double lx1, lx2, ly1, ly2;
-        lx1 = double(x1+offset) / w;
-        lx2 = double(x2+offset) / w;
+        lx1 = double(x1) / w;
+        lx2 = double(x2) / w;
 
-        ly1 = 1.0 - double(y1+offset) / h;
-        ly2 = 1.0 - double(y2+offset) / h;
+        ly1 = 1.0 - double(y1) / h;
+        ly2 = 1.0 - double(y2) / h;
 
         double tmp;
         if (lx1 > lx2) {
@@ -72,5 +79,14 @@ void Overlay::clickMouse(int x, int y, int w, int h) {
         rec->finishRect(lx1, lx2, ly1, ly2);
         rec = NULL;
     }
+    update();
+}
+
+bool Overlay::isRectSelecting() {
+    return rec != NULL;
+}
+
+void Overlay::cancelRect() {
+    rec = NULL;
     update();
 }

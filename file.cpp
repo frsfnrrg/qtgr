@@ -34,8 +34,10 @@ void FileMenu::createMenus()
 
 void FileMenu::createActions()
 {
-    readSetAct = new QAction(tr("Read sets"), this);
-    readSetAct->setShortcut(QKeySequence(tr("Ctrl+o")));
+    readSetAct = createQAction(tr("Read sets"),
+                               tr("Load a set from file or pipe onto the graph"),
+                               tr("Ctrl+O"),
+                               this);
     connect(readSetAct, SIGNAL(triggered()), this, SLOT(open()));
 
     readParaAct = new QAction(tr("Read parameters..."), this);
@@ -53,17 +55,22 @@ void FileMenu::createActions()
     saveAllAct = new QAction(tr("Save all..."), this);
 //     connect(saveAllAct, SIGNAL(triggered()), this, SLOT(newFile()));
     
-    clearAct = new QAction(tr("Clear all"), this);
-    clearAct->setShortcut(QKeySequence(tr("Ctrl+d")));
+    clearAct = createQAction(tr("Clear all"),
+                             tr("Reset the graph to its original state"),
+                             tr("Ctrl+Shift+d"),
+                             this);
     connect(clearAct, SIGNAL(triggered()), this, SLOT(clear()));
 	
     printAct = createQAction(tr("&Print"),
                              tr("Print the current view to file or printer."),
+                             tr("Ctrl+p"),
                              this);
-    printAct->setShortcut(QKeySequence(tr("Ctrl+p")));
     connect(printAct, SIGNAL(triggered()), this, SLOT(print()));
     
-    exportAct = new QAction(tr("Export"), this);
+    exportAct = createQAction(tr("Export"),
+                              tr("Export display to an image"),
+                              tr("Ctrl+E"),
+                              this);
     connect(exportAct, SIGNAL(triggered()), this, SLOT(exportProc()));
     
     printSetupAct = new QAction(tr("&Printer setup..."), this);

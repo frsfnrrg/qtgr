@@ -18,6 +18,11 @@ GraphicsScene::GraphicsScene(MainWindow* mwin) :
 void GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QMenu menu(event->widget());
+    if (mainWindow->gwidget->overlay->isRectSelecting()) {
+        menu.addAction(mainWindow->gwidget->overlay->cancelRectSelect);
+        menu.addSeparator();
+    }
+
     mainWindow->viewMenu->populateMenu(&menu);
     menu.exec(event->screenPos());
 }
@@ -66,12 +71,19 @@ void GraphWidget::mouseMoveEvent(QMouseEvent *event)
 
 void GraphWidget::mousePressEvent(QMouseEvent *event)
 {
+    // Graph is strictly interacted with using left click
+    if (!(event->buttons() & Qt::LeftButton)) {
+        event->ignore();
+        return;
+    }
+
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     printf("mouseClick %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
     if (mouseClickCall != NULL) {
        mouseClickCall->mouse(event->x(),event->y(),scene->width(),scene->height());
     }
     overlay->clickMouse(event->x(),event->y(),scene->width(),scene->height());
+    event->accept();
 }
 
 
