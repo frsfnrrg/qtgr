@@ -31,6 +31,7 @@ void ViewMenu::populateMenu(QMenu* q) {
     q->addSeparator();
     q->addAction(ticksAct);
     q->addAction(symbolsAct);
+    q->addAction(frameAct);
 }
 
 void ViewMenu::createMenus()
@@ -51,6 +52,7 @@ QToolBar* ViewMenu::createToolBar() {
     tl->addSeparator();
     tl->addAction(ticksAct);
     tl->addAction(symbolsAct);
+    tl->addAction(frameAct);
     return tl;
 }
 
@@ -134,6 +136,11 @@ void ViewMenu::createActions()
                                   tr("Ctrl+g"),
                                   this);
     connect(graphTypesAct, SIGNAL(triggered()), this, SLOT(graphTypes()));
+
+    frameAct = createQAction(tr("Frame"),
+                             tr("Alter the look of the graph frame"),
+                             tr("Ctrl+f"),
+                             this);
 
     // setup double click handler
     mouseDouble.view = this;

@@ -9,7 +9,13 @@ class QAction;
 class QMenu;
 QT_END_NAMESPACE
 
-// NOTE: set ops (activ, deactiv) should be put in?
+/*
+ This menu holds modification stuff,
+ as well as copy-to-clipboard and paste-from-clipboard
+
+ Adding points, deleting points, and changing set points are done from
+ here
+ */
 class EditMenu : public QMenu
 {
     Q_OBJECT

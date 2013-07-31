@@ -5,6 +5,7 @@
 #include "edit.h"
 #include "view.h"
 #include "tools.h"
+#include "sets.h"
 #include "transform.h"
 #include "graphwidget.h"
 #include "base/globals.h"
@@ -71,22 +72,24 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::createMenus()
 {
     fileMenu = new FileMenu(this);
-    this->menuBar()->addMenu(fileMenu);
-    
     editMenu = new EditMenu(this);
-    this->menuBar()->addMenu(editMenu);
-
     transformMenu = new TransformMenu(this);
-    this->menuBar()->addMenu(transformMenu);
-
     viewMenu = new ViewMenu(this);
-    this->menuBar()->addMenu(viewMenu);
-
     toolsMenu = new ToolsMenu(this);
-    this->menuBar()->addMenu(toolsMenu);
+    setMenu = new SetsMenu(this);
 
-    this->menuBar()->addSeparator();
-
+    // Something feels off with the order and naming of these menus...
+    QMenuBar* mb = this->menuBar();
+    mb->addMenu(fileMenu);
+    mb->addSeparator();
+    mb->addMenu(viewMenu);
+    mb->addSeparator();
+    mb->addMenu(editMenu);
+    mb->addMenu(setMenu);
+    mb->addMenu(transformMenu);
+    mb->addSeparator();
+    mb->addMenu(toolsMenu);
+    mb->addSeparator();
     createHelpMenu();
 
     // for some odd reason, these must be added _after_ the menus
@@ -105,7 +108,11 @@ void MainWindow::createHelpMenu()
     aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
     connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
+    QAction* optionsAct = new QAction(tr("Options"), this);
+
     helpMenu = this->menuBar()->addMenu(tr("&Help"));
+    helpMenu->addAction(optionsAct);
+    helpMenu->addSeparator();
     helpMenu->addAction(aboutAct);
     helpMenu->addAction(aboutQtAct);
 }

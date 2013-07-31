@@ -12,6 +12,7 @@ class FileMenu;
 class EditMenu;
 class ToolsMenu;
 class TransformMenu;
+class SetsMenu;
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -30,6 +31,7 @@ public:
     ViewMenu* viewMenu;
     FileMenu* fileMenu;
     EditMenu* editMenu;
+    SetsMenu* setMenu;
     ToolsMenu* toolsMenu;
     TransformMenu* transformMenu;
     QMenu* helpMenu;

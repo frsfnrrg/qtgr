@@ -74,6 +74,7 @@ private:
     QAction *symbolsAct;
     QAction *legendsAct;
     QAction *graphTypesAct;
+    QAction *frameAct;
 };
 
 #endif
