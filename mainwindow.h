@@ -11,6 +11,7 @@ class ViewMenu;
 class FileMenu;
 class EditMenu;
 class ToolsMenu;
+class TransformMenu;
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -30,12 +31,14 @@ public:
     FileMenu* fileMenu;
     EditMenu* editMenu;
     ToolsMenu* toolsMenu;
+    TransformMenu* transformMenu;
     QMenu* helpMenu;
 
 protected:
     void closeEvent(QCloseEvent *);
 private slots:
     void about();
+    void dropEvent(QDropEvent *);
 private:
     void readSettings();
     void writeSettings();

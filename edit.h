@@ -9,6 +9,7 @@ class QAction;
 class QMenu;
 QT_END_NAMESPACE
 
+// NOTE: set ops (activ, deactiv) should be put in?
 class EditMenu : public QMenu
 {
     Q_OBJECT
@@ -23,8 +24,6 @@ protected:
    
 
 private slots:
-    void autoScale();
-    
 
 private:
     MainWindow *mainWindow;

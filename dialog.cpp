@@ -14,6 +14,7 @@ Dialog::Dialog(MainWindow* mainWin, QString title) :
 
     QPushButton* done = new QPushButton(tr("Done"));
     done->setToolTip(tr("Apply values and close dialog."));
+    done->setDefault(true);
     connect(done, SIGNAL(clicked()), this, SLOT(doneDialog()));
 
     QPushButton* cancel = new QPushButton(tr("Cancel"));
@@ -50,4 +51,3 @@ void Dialog::doneDialog() {
 void Dialog::cancelDialog() {
     this->setVisible(false);
 }
-

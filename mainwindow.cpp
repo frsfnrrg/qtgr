@@ -5,6 +5,7 @@
 #include "edit.h"
 #include "view.h"
 #include "tools.h"
+#include "transform.h"
 #include "graphwidget.h"
 #include "base/globals.h"
 #include "prop.h"
@@ -74,7 +75,10 @@ void MainWindow::createMenus()
     
     editMenu = new EditMenu(this);
     this->menuBar()->addMenu(editMenu);
-    
+
+    transformMenu = new TransformMenu(this);
+    this->menuBar()->addMenu(transformMenu);
+
     viewMenu = new ViewMenu(this);
     this->menuBar()->addMenu(viewMenu);
 
@@ -122,3 +126,6 @@ void MainWindow::writeSettings()
     settings.setValue("size", size());
 }
 
+void MainWindow::dropEvent(QDropEvent *) {
+    printf("We got a drop!\n");
+}

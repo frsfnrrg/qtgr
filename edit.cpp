@@ -2,8 +2,6 @@
 #include "mainwindow.h"
 #include "edit.h"
 #include "base/globals.h"
-#include "transform.h"
-#include "prop.h"
 
 EditMenu::EditMenu(MainWindow* mainWin)
 {  
@@ -17,8 +15,6 @@ EditMenu::EditMenu(MainWindow* mainWin)
 void EditMenu::createMenus()
 {
     this->setTearOffEnabled(true);
-    this->addMenu(new TransformMenu(this->mainWindow));
-    this->addSeparator();
     this->addAction(cutAct);
     this->addAction(copyAct);
     this->addAction(pasteAct);
@@ -43,12 +39,6 @@ void EditMenu::createActions()
     
     cutAct->setEnabled(false);
     copyAct->setEnabled(false);
-}
-
-void EditMenu::autoScale()
-{
-    autoscale_proc();
-    WorldDimProp::send();
 }
 
 

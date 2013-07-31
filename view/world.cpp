@@ -127,11 +127,5 @@ void ViewWorld::applyDialog()
 }
 
 void ViewWorld::updateWorldDimensions() {
-    int gno;
-    gno = cg; // current graph only
-
-    xMin->setText(QString::number(g[gno].w.xg1,'g',9));
-    xMax->setText(QString::number(g[gno].w.xg2,'g',9));
-    yMin->setText(QString::number(g[gno].w.yg1,'g',9));
-    yMax->setText(QString::number(g[gno].w.yg2,'g',9));
+    updateDialog();
 }

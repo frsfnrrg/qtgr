@@ -76,6 +76,8 @@ void ToolsMenu::finishRect(double x1, double x2, double y1, double y2) {
         default_axis(cg, g[cg].auto_type, ZY_AXIS);
         drawgraph();
     }
+
+    WorldDimProp::send();
 }
 
 
