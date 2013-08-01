@@ -10,7 +10,7 @@ class Dialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit Dialog(MainWindow* mainWin, QString title);
+    explicit Dialog(MainWindow* mainWin, const char* title);
     MainWindow* mainWindow;
 
     void setDialogLayout(QLayout* layout);

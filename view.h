@@ -11,18 +11,13 @@
 #include "view/viewport.h"
 #include "view/title.h"
 #include "view/frame.h"
+#include "menu.h"
 
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-QT_END_NAMESPACE
-
-class ViewMenu : public QMenu
+class ViewMenu : public Menu
 {
     Q_OBJECT
     
 public:
-    MainWindow *mainWindow;
     ViewMenu(MainWindow* );
     
     ViewSymbols* symbolsDialog;
@@ -34,15 +29,6 @@ public:
     ViewTitle* titleDialog;
     ViewFrame* frameDialog;
 
-    void updateSymbols();
-    void updateTicks();
-    void updateWorld();
-    void updateLegends();
-    void updateGraphTypes();
-    void updateView();
-    void updateTitle();
-    void updateFrame();
-
     void populateMenu(QMenu* q);
 
     void updateSymbolsLegend();
@@ -50,7 +36,6 @@ public:
 
     QToolBar* createToolBar();
 protected:
-  
   
 public slots:
     void world();
@@ -65,7 +50,6 @@ public slots:
 private slots:
    
 private:
-
     void createMenus();
     void createActions();
     

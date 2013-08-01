@@ -3,7 +3,7 @@
 #include "setcombobox.h"
 
 SetsEdit::SetsEdit(MainWindow* mwin) :
-    Dialog(mwin, tr("Edit Sets"))
+    Dialog(mwin, "Edit Sets")
 {
     setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));

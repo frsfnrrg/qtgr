@@ -1,10 +1,10 @@
 #include "dialog.h"
 #include "base/globals.h"
 
-Dialog::Dialog(MainWindow* mainWin, QString title) :
+Dialog::Dialog(MainWindow* mainWin, const char* title) :
     QDialog(mainWin)
 {
-    this->setWindowTitle("QTGR: " + title);
+    this->setWindowTitle(tr(title));
     this->mainWindow = mainWin;
     layout = new QVBoxLayout();
 

@@ -4,39 +4,40 @@
 #include "base/globals.h"
 #include "prop.h"
 
-ToolsMenu::ToolsMenu(MainWindow* mainWin)
-{  
-    this->mainWindow = mainWin;
-    this->setTitle(tr("Tools"));
+ToolsMenu::ToolsMenu(MainWindow* mainWin) :
+    Menu(mainWin, "Tools", true)
+{
     createActions();
-    createMenus();
+    populateMenu(this);
 }
 
 
-void ToolsMenu::createMenus()
-{
-    this->setTearOffEnabled(true);
-    this->addAction(autoScaleAct);
-    this->addAction(zoomRectAct);
+void ToolsMenu::populateMenu(QMenu* q) {
+    q->addAction(autoScaleAct);
+    q->addAction(zoomRectAct);
+    q->addSeparator();
+    q->addAction(optionsAct);
+
 }
 
 void ToolsMenu::createActions()
 {
-    autoScaleAct = createQAction(tr("Autoscale"),
-                                 tr("Rescale the displayed area of the graph to show all points."),
-                                 tr("Ctrl+a"),
-                                 this);
-    connect(autoScaleAct, SIGNAL(triggered()), this, SLOT(autoScale()));
-
-    zoomRectAct = createQAction(tr("Rect Zoom"),
-                                tr("Zoom the graph in."),
-                                tr("Ctrl+r"),
-                                this);
-    connect(zoomRectAct, SIGNAL(triggered()), this, SLOT(zoom()));
+    autoScaleAct = makeAction("Autoscale",
+                                 "Rescale the displayed area of the graph to show all points.",
+                                 "Ctrl+a",
+                                 SLOT(autoScale()));
+    zoomRectAct = makeAction("Rect Zoom",
+                             "Zoom the graph in.",
+                             "Ctrl+r",
+                             SLOT(zoom()));
+    optionsAct = makeAction("Options",
+                            "Configure the program settings",
+                            "",
+                            SLOT(options()));
 }
 
 QToolBar* ToolsMenu::createToolBar() {
-    QToolBar* foo = new QToolBar(tr("Tools"));
+    QToolBar* foo = new QToolBar(title());
     foo->addAction(autoScaleAct);
     foo->addAction(zoomRectAct);
     return foo;
@@ -78,6 +79,10 @@ void ToolsMenu::finishRect(double x1, double x2, double y1, double y2) {
     }
 
     WorldDimProp::send();
+}
+
+void ToolsMenu::options() {
+    printf("IMPLEMENT ME!!\n");
 }
 
 

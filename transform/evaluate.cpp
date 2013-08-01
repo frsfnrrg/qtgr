@@ -1,9 +1,10 @@
 #include "transform/evaluate.h"
 #include "base/globals.h"
 #include "setcombobox.h"
+#include "prop.h"
 
 TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Evaluate"))
+    Dialog(mainWin, "Evaluate")
 {
     // hmmm.. extract this into a static Dialog method?
     setNumber = new SetComboBox();
@@ -55,4 +56,6 @@ void TransformEvaluate::applyDialog() {
     fstr = formulaBox->text().toLocal8Bit().data();
 
     do_compute(setno, loadto, graphto, fstr);
+
+    SetsSender::send();
 }

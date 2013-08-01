@@ -13,6 +13,8 @@ public:
 
     MainWindow* mainWindow;
     
+    QToolBar* createToolBar();
+
 private:
     void createActions();
     void createMenus();

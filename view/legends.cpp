@@ -4,7 +4,7 @@
 #include "view.h"
 
 ViewLegends::ViewLegends(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Legends"))
+    Dialog(mainWin, "Legends")
 {
     //this->setWindowTitle(tr("QTGR: Legends"));
     legendsEditDialog = NULL;

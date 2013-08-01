@@ -13,7 +13,7 @@ inline QDoubleSpinBox* getUnitDoubleSpinBox() {
 }
 
 ViewView::ViewView(MainWindow *parent) :
-    Dialog(parent, tr("Viewport"))
+    Dialog(parent, "Viewport")
 {
     useRect = new QPushButton(tr("Rect Select"));
     connect(useRect, SIGNAL(clicked()), this, SLOT(doRect()));

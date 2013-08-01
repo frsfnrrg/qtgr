@@ -2,15 +2,16 @@
 #define SETS_H
 
 #include <QtGui>
-#include "mainwindow.h"
+#include "menu.h"
 #include "sets/kad.h"
 #include "sets/sedit.h"
+#include "sets/mcs.h"
 
 /*
  This menu contains all whole-set operations:
  Join, split, kill, activate, deactivate, etc.
  */
-class SetsMenu : public QMenu
+class SetsMenu : public Menu
 {
     Q_OBJECT
 public:
@@ -18,28 +19,29 @@ public:
 
     SetsEdit* editDialog;
     SetsKAD* kadDialog;
+    SetsMCS* mcsDialog;
+    void* joinDialog;
+    void* splitDialog;
 
     void populateMenu(QMenu* q);
     QToolBar* createToolBar();
 signals:
-    
+
 public slots:
-    void updateEdit();
-    void updateKAD();
 
 private slots:
     void edit();
     void kad();
-
+    void mcs();
+    void split();
+    void join();
 
 private:
     void createActions();
 
-    MainWindow *mainWindow;
     QAction* editAct;
     QAction* kadAct;
-    QAction* moveAct;
-    QAction* copyAct;
+    QAction* mcsAct;
     QAction* splitAct;
     QAction* joinAct;
 };

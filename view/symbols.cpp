@@ -5,7 +5,8 @@
 #include "setcombobox.h"
 #include "prop.h"
 
-ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin, tr("Symbols"))
+ViewSymbols::ViewSymbols(MainWindow* mainWin) :
+    Dialog(mainWin, "Symbols")
 {
     const int maxwidths = 9; //FIXME
     const int maxpatterns = 16; //FIXME

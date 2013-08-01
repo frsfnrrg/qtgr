@@ -354,6 +354,9 @@ extern void setcol(int gno, double *x, int setno, int len, int col);
 extern void updatesetminmax(int gno, int setno);
 extern void do_kill(int gno, int setno, int soft);
 extern void do_flush();
+extern void do_copyset(int gfrom, int j1, int gto, int j2);
+extern void do_moveset(int gfrom, int j1, int gto, int j2);
+extern void do_swapset(int gfrom, int j1, int gto, int j2);
 
 //computils
 

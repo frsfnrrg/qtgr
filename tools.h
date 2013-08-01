@@ -1,18 +1,10 @@
-/****************************************************************************
-
-****************************************************************************/
-
 #ifndef MENUTOOLS_H
 #define MENUTOOLS_H
 
 #include <QtGui>
 #include "mainwindow.h"
 #include "overlay.h"
-
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-QT_END_NAMESPACE
+#include "menu.h"
 
 /**
  * @brief The ToolsMenu class
@@ -22,7 +14,7 @@ QT_END_NAMESPACE
  * move right, move up, move down
  *
  */
-class ToolsMenu : public QMenu, public RectReceiver
+class ToolsMenu : public Menu, public RectReceiver
 {
     Q_OBJECT
 
@@ -32,10 +24,12 @@ public:
     void finishRect(double, double, double, double);
 
     QToolBar* createToolBar();
+    void populateMenu(QMenu*);
 
 public slots:
     void autoScale();
     void zoom();
+    void options();
 
 protected:
    
@@ -43,11 +37,10 @@ protected:
 private slots:
     
 private:
-    MainWindow *mainWindow;
-    void createMenus();
     void createActions();
     QAction *autoScaleAct;
     QAction *zoomRectAct;
+    QAction *optionsAct;
 };
 
 #endif

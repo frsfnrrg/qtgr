@@ -1,67 +1,57 @@
 #include "sets.h"
 
 SetsMenu::SetsMenu(MainWindow* mwin) :
-    QMenu(mwin)
+    Menu(mwin, "Sets", true)
 {
-    this->mainWindow = mwin;
-    this->setTitle(tr("Sets"));
-    this->setTearOffEnabled(true);
-
     kadDialog = NULL;
     editDialog = NULL;
+    mcsDialog = NULL;
+    joinDialog = NULL;
+    splitDialog = NULL;
 
     createActions();
+
     populateMenu(this);
 }
 
 void SetsMenu::createActions() {
-    kadAct = createQAction(tr("Kill/(De)Activate"),
-                           tr("Remove, enable, or disable a set"),
-                           tr(""),this);
-    connect(kadAct, SIGNAL(triggered()), this, SLOT(kad()));
+    kadAct = makeAction("Kill/(De)Activate",
+                        "Remove, enable, or disable a set",
+                        "", SLOT(kad()));
 
-    editAct = createQAction(tr("Edit"),
-                            tr("Edit the points, type, and more of a set"),
-                            tr(""), this);
-    connect(editAct, SIGNAL(triggered()), this, SLOT(edit()));
+    editAct = makeAction("Edit",
+                         "Edit the points, type, and more of a set",
+                         "", SLOT(edit()));
 
-    moveAct = createQAction(tr("Move"),
-                            tr("Move sets around"),
-                            tr(""), this);
+    mcsAct = makeAction("Reorder sets",
+                                 "Rearrange sets; move them; copy them; swap them",
+                                 "", SLOT(mcs()));
 
-    copyAct = createQAction(tr("Copy"),
-                            tr("Duplicate a set"),
-                            tr(""), this);
+    splitAct = makeAction("Split",
+                          "Divide set",
+                          "", SLOT(split()));
 
-    splitAct = createQAction(tr("Split"),
-                            tr("Divide set"),
-                            tr(""), this);
-
-    joinAct = createQAction(tr("Join"),
-                            tr("Join sets"),
-                            tr(""), this);
+    joinAct = makeAction("Join",
+                         "Join sets",
+                         "", SLOT(join()));
 }
-
 
 void SetsMenu::populateMenu(QMenu* q) {
     q->addAction(kadAct);
     q->addAction(editAct);
     q->addSeparator();
-    q->addAction(moveAct);
-    q->addAction(copyAct);
+    q->addAction(mcsAct);
     q->addSeparator();
     q->addAction(splitAct);
     q->addAction(joinAct);
 }
 
-
 QToolBar* SetsMenu::createToolBar() {
-    QToolBar* q = new QToolBar(tr("Sets"));
+    QToolBar* q = new QToolBar(title());
     q->addAction(kadAct);
     q->addAction(editAct);
     q->addSeparator();
-    q->addAction(moveAct);
-    q->addAction(copyAct);
+    q->addAction(mcsAct);
     q->addSeparator();
     q->addAction(splitAct);
     q->addAction(joinAct);
@@ -69,30 +59,27 @@ QToolBar* SetsMenu::createToolBar() {
 }
 
 void SetsMenu::edit() {
-    if (editDialog) {
-        editDialog->setVisible(true);
-    } else {
-        editDialog = new SetsEdit(this->mainWindow);
-        editDialog->show();
-    }
-    editDialog->updateDialog();
+    if (showDialog(editDialog)) return;
+    editDialog = new SetsEdit(mainWindow);
+    loadDialog(editDialog);
 }
-
-void SetsMenu::updateEdit() {
-    if (editDialog) editDialog->updateDialog();
-}
-
 
 void SetsMenu::kad() {
-    if (kadDialog) {
-        kadDialog->setVisible(true);
-    } else {
-        kadDialog = new SetsKAD(this->mainWindow);
-        kadDialog->show();
-    }
-    kadDialog->updateDialog();
+    if (showDialog(kadDialog)) return;
+    kadDialog = new SetsKAD(mainWindow);
+    loadDialog(kadDialog);
 }
 
-void SetsMenu::updateKAD() {
-    if (kadDialog) kadDialog->updateDialog();
+void SetsMenu::mcs() {
+    if (showDialog(mcsDialog)) return;
+    mcsDialog = new SetsMCS(mainWindow);
+    loadDialog(mcsDialog);
+}
+
+void SetsMenu::join() {
+    // FILL ME
+}
+
+void SetsMenu::split() {
+    // FILL ME
 }

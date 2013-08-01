@@ -849,61 +849,61 @@ void add_point(int gno, int setno, double px, double py, double tx, double ty, i
 /*
  * move a set to another set, in possibly another graph
  */
-// void do_moveset(int gfrom, int j1, int gto, int j2)
-// {
-//     int k;
-// 
-//     if (!isactive_graph(gto)) {
-// 	set_graph_active(gto);
-//     }
-//     if (!isactive(gfrom, j1)) {
-// 	return;
-//     }
-//     if (j1 == j2 && gto == gfrom) {
-// 	return;
-//     }
-//     if (isactive(gto, j2)) {
-// 	killset(gto, j2);
-//     }
-//     moveset(gfrom, j1, gto, j2);
-//     updatesymbols(gto, j2);
-//     updatesymbols(gfrom, j1);
-//     updatelegendstr(gto);
-//     updatesetminmax(gto, j2);
-//     //frsfnrrg update_set_status(gto, j2);
-//     killset(gfrom, j1);
-//     //frsfnrrg update_set_status(gfrom, j1);
-// }
-// 
-// /*
-//  * swap a set with another set
-//  */
-// void do_swapset(gfrom, j1, gto, j2)
-//     int gfrom, j1, j2, gto;
-// {
-//     plotarr p;
-// 
-//     if (j1 == j2 && gto == gfrom) {
-// 	errwin("Set from and set to are the same");
-// 	return;
-//     }
-//     memcpy(&p, &g[gto].p[j1], sizeof(plotarr));
-//     memcpy(&g[gto].p[j1], &g[gfrom].p[j2], sizeof(plotarr));
-//     memcpy(&g[gfrom].p[j2], &p, sizeof(plotarr));
-//     updatesetminmax(gfrom, j1);
-//     updatesymbols(gfrom, j1);
-//     updatelegendstr(gfrom);
-//     //frsfnrrg update_set_status(gfrom, j1);
-//     updatesetminmax(gto, j2);
-//     updatesymbols(gto, j2);
-//     updatelegendstr(gto);
-//     //frsfnrrg update_set_status(gto, j2);
-//     drawgraph();
-// }
-// 
-// /*
-//  * activate a set and set its length
-//  */
+ void do_moveset(int gfrom, int j1, int gto, int j2)
+ {
+     int k;
+
+     if (!isactive_graph(gto)) {
+    set_graph_active(gto);
+     }
+     if (!isactive(gfrom, j1)) {
+    return;
+     }
+     if (j1 == j2 && gto == gfrom) {
+    return;
+     }
+     if (isactive(gto, j2)) {
+    killset(gto, j2);
+     }
+     moveset(gfrom, j1, gto, j2);
+     //frsfnrrg updatesymbols(gto, j2);
+     //frsfnrrg updatesymbols(gfrom, j1);
+     //frsfnrrg updatelegendstr(gto);
+     updatesetminmax(gto, j2);
+     //frsfnrrg update_set_status(gto, j2);
+     killset(gfrom, j1);
+     //frsfnrrg update_set_status(gfrom, j1);
+ }
+
+ /*
+  * swap a set with another set
+  */
+ void do_swapset(gfrom, j1, gto, j2)
+     int gfrom, j1, j2, gto;
+ {
+     plotarr p;
+
+     if (j1 == j2 && gto == gfrom) {
+    errwin("Set from and set to are the same");
+    return;
+     }
+     memcpy(&p, &g[gto].p[j1], sizeof(plotarr));
+     memcpy(&g[gto].p[j1], &g[gfrom].p[j2], sizeof(plotarr));
+     memcpy(&g[gfrom].p[j2], &p, sizeof(plotarr));
+     updatesetminmax(gfrom, j1);
+     //frsfnrrg updatesymbols(gfrom, j1);
+     //frsfnrrg updatelegendstr(gfrom);
+     //frsfnrrg update_set_status(gfrom, j1);
+     updatesetminmax(gto, j2);
+     //frsfnrrg updatesymbols(gto, j2);
+     //frsfnrrg updatelegendstr(gto);
+     //frsfnrrg update_set_status(gto, j2);
+     drawgraph();
+ }
+
+ /*
+  * activate a set and set its length
+  */
 void do_activateset(gno, setno, len)
     int gno, setno, len;
 {
@@ -1355,26 +1355,26 @@ void do_activateset(gno, setno, len)
 //     drawgraph();
 // }
 // 
-// /*
-//  * swap a set with another set
-//  */
-// void do_swap(j1, gfrom, j2, gto)
-//     int j1, gfrom, j2, gto;
-// {
-//     gfrom--;
-//     if (gfrom == -1) {
-// 	gfrom = cg;
-//     }
-//     gto--;
-//     if (gto == -1) {
-// 	gto = cg;
-//     }
-//     if (j1 == j2 && gfrom == gto) {
-// 	errwin("Set from and set to are the same");
-// 	return;
-//     }
-//     do_swapset(gfrom, j1, gto, j2);
-// }
+ /*
+  * swap a set with another set
+  */
+ void do_swap(j1, gfrom, j2, gto)
+     int j1, gfrom, j2, gto;
+ {
+     gfrom--;
+     if (gfrom == -1) {
+    gfrom = cg;
+     }
+     gto--;
+     if (gto == -1) {
+    gto = cg;
+     }
+     if (j1 == j2 && gfrom == gto) {
+    errwin("Set from and set to are the same");
+    return;
+     }
+     do_swapset(gfrom, j1, gto, j2);
+ }
 // 
 // /*
 //  * drop points from an active set

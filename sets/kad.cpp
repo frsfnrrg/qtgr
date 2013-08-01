@@ -4,7 +4,7 @@
 #include "prop.h"
 
 SetsKAD::SetsKAD(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Kill/(De)Activate Sets"))
+    Dialog(mainWin, "Kill/(De)Activate Sets")
 {
     setNumber = new SetComboBox(true);
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
@@ -20,7 +20,7 @@ SetsKAD::SetsKAD(MainWindow* mainWin) :
 
     QGridLayout* layout = new QGridLayout();
 
-    layout->addWidget(new QLabel("Set:"), 0, 0);
+    layout->addWidget(new QLabel(tr("Set:")), 0, 0);
     layout->addWidget(setNumber, 0, 1);
 
     layout->setRowMinimumHeight(1, 8);
@@ -62,6 +62,9 @@ void SetsKAD::updateDialog() {
     }
 
     if (g[gno].p[cset].active == OFF && g[gno].p[cset].deact == 0) {
+        actChoice->setEnabled(false);
+        deactChoice->setEnabled(false);
+        killChoice->setEnabled(false);
         return;
     }
 

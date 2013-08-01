@@ -2,7 +2,7 @@
 #include "base/globals.h"
 
 ViewFrame::ViewFrame(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Frame"))
+    Dialog(mainWin, "Frame")
 {
     graphType = new QComboBox();
     graphType->addItem(tr("Full"));

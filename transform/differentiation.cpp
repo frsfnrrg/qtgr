@@ -1,9 +1,10 @@
 #include "transform/differentiation.h"
 #include "base/globals.h"
 #include "setcombobox.h"
+#include "prop.h"
 
 TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Differentiate"))
+    Dialog(mainWin, "Differentiate")
 {
     // hmmm.. extract this into a static Dialog method?
     setNumber = new SetComboBox();
@@ -64,5 +65,7 @@ void TransformDifferentiation::applyDialog() {
     }
 
     do_differ(setno, itype);
+
+    SetsSender::send();
 }
 

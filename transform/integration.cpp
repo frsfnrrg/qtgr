@@ -1,9 +1,10 @@
 #include "transform/integration.h"
 #include "base/globals.h"
 #include "setcombobox.h"
+#include "prop.h"
 
 TransformIntegration::TransformIntegration(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Integration"))
+    Dialog(mainWin, "Integration")
 {
     printf("creating integration dialog\n");
 
@@ -56,4 +57,6 @@ void TransformIntegration::applyDialog() {
     double result;
     result = do_int(setno, itype);
     resultL->setText(QString::number(result));
+
+    SetsSender::send();
 }

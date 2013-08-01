@@ -4,7 +4,9 @@
 #include "base/globals.h"
 #include "prop.h"
 
-ViewWorld::ViewWorld(MainWindow* mainWin) : Dialog(mainWin, tr("Define World")) {
+ViewWorld::ViewWorld(MainWindow* mainWin) :
+    Dialog(mainWin, "Define World")
+{
     WorldDimProp::add(this);
 
 	// make combo box
@@ -123,7 +125,7 @@ void ViewWorld::applyDialog()
     drawgraph();  
     
     ViewMenu* viewMenu = (ViewMenu*) mainWindow->viewMenu;  // FIXME hack  
-    viewMenu->updateTicks();
+    viewMenu->updateDialog(viewMenu->ticksDialog);
 }
 
 void ViewWorld::updateWorldDimensions() {

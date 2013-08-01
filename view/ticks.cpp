@@ -4,7 +4,8 @@
 #include "base/globals.h"
 
 
-ViewTicks::ViewTicks(MainWindow* mainWin) : Dialog(mainWin, tr("Ticks/Tick Labels"))
+ViewTicks::ViewTicks(MainWindow* mainWin) :
+    Dialog(mainWin, "Ticks/Tick Labels")
 {  
     // make input fields
     editAxis = new QComboBox(this);
@@ -23,7 +24,6 @@ ViewTicks::ViewTicks(MainWindow* mainWin) : Dialog(mainWin, tr("Ticks/Tick Label
     majTic = new QLineEdit();
     minTic = new QLineEdit();
     
-
     // make radio buttons
     QCheckBox* tickLabels = new QCheckBox("Tick labels");
     QCheckBox* tickMarks  = new QCheckBox("Tick marks");
@@ -115,7 +115,7 @@ void ViewTicks::applyDialog()
     drawgraph();  
     
     ViewMenu* viewMenu = (ViewMenu*) mainWindow->viewMenu;  // FIXME hack  
-    viewMenu->updateWorld();
+    viewMenu->updateDialog(viewMenu->worldDialog);
 }
 
 void ViewTicks::labelProps()

@@ -3,12 +3,9 @@
 #include "view.h"
 #include "base/globals.h"
 
-ViewMenu::ViewMenu(MainWindow* mainWin)
+ViewMenu::ViewMenu(MainWindow* mainWin) :
+    Menu(mainWin, "View", true)
 {  
-    this->mainWindow = mainWin;
-    this->setTitle(tr("View"));
-    createActions();
-    createMenus();
     worldDialog = NULL;
     symbolsDialog = NULL;
     ticksDialog = NULL;
@@ -17,6 +14,9 @@ ViewMenu::ViewMenu(MainWindow* mainWin)
     viewDialog = NULL;
     titleDialog = NULL;
     frameDialog = NULL;
+
+    createActions();
+    populateMenu(this);
 }
 
 void ViewMenu::populateMenu(QMenu* q) {
@@ -33,14 +33,8 @@ void ViewMenu::populateMenu(QMenu* q) {
     q->addAction(frameAct);
 }
 
-void ViewMenu::createMenus()
-{
-    this->setTearOffEnabled(true);
-    populateMenu(this);
-}
-
 QToolBar* ViewMenu::createToolBar() {
-    QToolBar* tl = new QToolBar(tr("View"));
+    QToolBar* tl = new QToolBar(Menu::title());
     tl->addAction(viewAct);
     tl->addAction(worldAct);
     tl->addSeparator();
@@ -104,54 +98,38 @@ public:
 } mouseDouble;
 
 void ViewMenu::createActions()
-{  
-    viewAct = createQAction(tr("Set viewport"),
-                            tr("Determine the onscreen boundaries of the graph."),
-                            tr("Ctrl+Shift+v"),
-                            this);
-    connect(viewAct, SIGNAL(triggered()), this, SLOT(view()));
-
-    worldAct = createQAction(tr("Set world"),
-                             tr("Determine the range of values displayed in the graph."),
-                             tr("Ctrl+w"),
-                             this);
-    connect(worldAct, SIGNAL(triggered()), this, SLOT(world()));
-
-    titleAct = createQAction(tr("Titling"),
-                             tr("Set the title and subtitle of the graph."),
-                             tr("Ctrl+Shift+t"),
-                             this);
-    connect(titleAct, SIGNAL(triggered()), this, SLOT(title()));
-
-    ticksAct = createQAction(tr("Ticks"),
-                             tr("Change spacing and labels for the graph axes."),
-                             tr("Ctrl+t"),
-                             this);
-    connect(ticksAct, SIGNAL(triggered()), this, SLOT(ticks()));
-
-    symbolsAct = createQAction(tr("Symbols"),
-                               tr("Change display of sets on the graph."),
-                               tr("Ctrl+s"),
-                               this);
-    connect(symbolsAct, SIGNAL(triggered()), this, SLOT(symbols()));
-
-    legendsAct = createQAction(tr("Legends"),
-                               tr("Give legends to sets on the graph."),
-                               tr("Ctrl+L"),
-                               this);
-    connect(legendsAct, SIGNAL(triggered()), this, SLOT(legends()));
-    
-    graphTypesAct = createQAction(tr("Graph Type"),
-                                  tr("Set the graph display metric."),
-                                  tr("Ctrl+g"),
-                                  this);
-    connect(graphTypesAct, SIGNAL(triggered()), this, SLOT(graphTypes()));
-
-    frameAct = createQAction(tr("Frame"),
-                             tr("Alter the look of the graph frame"),
-                             tr("Ctrl+f"),
-                             this);
-    connect(frameAct, SIGNAL(triggered()), this, SLOT(frame()));
+{
+    viewAct = makeAction("Set viewport",
+                         "Determine the onscreen boundaries of the graph.",
+                         "Ctrl+Shift+v", SLOT(view()));
+    worldAct = makeAction("Set world",
+                          "Determine the range of values displayed in the graph.",
+                          "Ctrl+w",
+                          SLOT(world()));
+    titleAct = makeAction("Titling",
+                          "Set the title and subtitle of the graph.",
+                          "Ctrl+Shift+t",
+                          SLOT(title()));
+    ticksAct = makeAction("Ticks",
+                          "Change spacing and labels for the graph axes.",
+                          "Ctrl+t",
+                          SLOT(ticks()));
+    symbolsAct = makeAction("Symbols",
+                            "Change display of sets on the graph.",
+                            "Ctrl+s",
+                            SLOT(symbols()));
+    legendsAct = makeAction("Legends",
+                            "Give legends to sets on the graph.",
+                            "Ctrl+L",
+                            SLOT(legends()));
+    graphTypesAct = makeAction("Graph Type",
+                               "Set the graph display metric.",
+                               "Ctrl+g",
+                               SLOT(graphTypes()));
+    frameAct = makeAction("Frame",
+                          "Alter the look of the graph frame",
+                          "Ctrl+f",
+                          SLOT(frame()));
 
     // setup double click handler
     mouseDouble.view = this;
@@ -160,159 +138,60 @@ void ViewMenu::createActions()
 
 
 void ViewMenu::updateSymbolsLegend() {
-    if (symbolsDialog) {
-        symbolsDialog->updateLegend();
-    }
+    if (symbolsDialog) symbolsDialog->updateLegend();
 }
 
 void ViewMenu::updateIndividualLegend(int cset) {
-    if (legendsDialog) {
-        legendsDialog->updateLegendsField(cset);
-    }
+    if (legendsDialog) legendsDialog->updateLegendsField(cset);
 }
 
 // Lots and lots of boilerplate here
 
-void ViewMenu::world()
-{
-    if (worldDialog) {
-        worldDialog->setVisible(true);
-    } else {
-        worldDialog = new ViewWorld(this->mainWindow);
-        worldDialog->show();
-    }
-    worldDialog->updateDialog();
+void ViewMenu::world() {
+    if (showDialog(worldDialog)) return;
+    worldDialog = new ViewWorld(mainWindow);
+    loadDialog(worldDialog);
 }
 
-void ViewMenu::updateWorld() 
-{
-    if (worldDialog) {
-        worldDialog->updateDialog();
-    }
+void ViewMenu::symbols() {
+    if (showDialog(symbolsDialog)) return;
+    symbolsDialog = new ViewSymbols(mainWindow);
+    loadDialog(symbolsDialog);
 }
 
-void ViewMenu::symbols()
-{
-    if (symbolsDialog) {
-        symbolsDialog->setVisible(true);
-    } else {
-        symbolsDialog = new ViewSymbols(this->mainWindow);
-        symbolsDialog->show();
-    }
-    symbolsDialog->updateDialog();
-}
-
-void ViewMenu::updateSymbols()
-{
-    if (symbolsDialog) {
-        symbolsDialog->updateDialog();
-    }
-}
-
-
-void ViewMenu::ticks()
-{   
-    if (ticksDialog) {
-        ticksDialog->setVisible(true);
-    } else {
-        ticksDialog = new ViewTicks(this->mainWindow);
-        ticksDialog->show();
-    }
-    ticksDialog->updateDialog();
-}
-
-void ViewMenu::updateTicks() 
-{
-    if (ticksDialog) {
-        ticksDialog->updateDialog();
-    }
+void ViewMenu::ticks() {
+    if (showDialog(ticksDialog)) return;
+    ticksDialog = new ViewTicks(mainWindow);
+    loadDialog(ticksDialog);
 }
 
 void ViewMenu::graphTypes() {
-    if (graphTypesDialog) {
-        graphTypesDialog->setVisible(true);
-    } else {
-        graphTypesDialog = new ViewGraphType(this->mainWindow);
-        graphTypesDialog->show();
-    }
-    graphTypesDialog->updateDialog();
+    if (showDialog(graphTypesDialog)) return;
+    graphTypesDialog = new ViewGraphType(mainWindow);
+    loadDialog(graphTypesDialog);
 }
 
-void ViewMenu::updateGraphTypes() {
-    if (graphTypesDialog) {
-        graphTypesDialog->updateDialog();
-    }
+void ViewMenu::legends() {
+    if (showDialog(legendsDialog)) return;
+    legendsDialog = new ViewLegends(mainWindow);
+    loadDialog(legendsDialog);
 }
 
-void ViewMenu::legends()
-{   
-    if (legendsDialog) {
-        legendsDialog->setVisible(true);
-    } else {
-        legendsDialog = new ViewLegends(this->mainWindow);
-        legendsDialog->show();
-    }
-    legendsDialog->updateDialog();
+void ViewMenu::view() {
+    if (showDialog(viewDialog)) return;
+    viewDialog = new ViewView(mainWindow);
+    loadDialog(viewDialog);
 }
 
-void ViewMenu::updateLegends()
-{
-    if (legendsDialog) {
-        legendsDialog->updateDialog();
-    }
+void ViewMenu::title() {
+    if (showDialog(titleDialog)) return;
+    titleDialog = new ViewTitle(mainWindow);
+    loadDialog(titleDialog);
 }
 
-void ViewMenu::view()
-{
-    if (viewDialog) {
-        viewDialog->setVisible(true);
-    } else {
-        viewDialog = new ViewView(this->mainWindow);
-        viewDialog->show();
-    }
-    viewDialog->updateDialog();
-}
-
-void ViewMenu::updateView()
-{
-    if (viewDialog) {
-        viewDialog->updateDialog();
-    }
-}
-
-void ViewMenu::title()
-{
-    if (titleDialog) {
-        titleDialog->setVisible(true);
-    } else {
-        titleDialog = new ViewTitle(this->mainWindow);
-        titleDialog->show();
-    }
-    titleDialog->updateDialog();
-}
-
-void ViewMenu::updateTitle()
-{
-    if (titleDialog) {
-        titleDialog->updateDialog();
-    }
-}
-
-void ViewMenu::frame()
-{
-    if (frameDialog) {
-        frameDialog->setVisible(true);
-    } else {
-        frameDialog = new ViewFrame(this->mainWindow);
-        frameDialog->show();
-    }
-    frameDialog->updateDialog();
-}
-
-void ViewMenu::updateFrame()
-{
-    if (frameDialog) {
-        frameDialog->updateDialog();
-    }
+void ViewMenu::frame() {
+    if (showDialog(frameDialog)) return;
+    frameDialog = new ViewFrame(mainWindow);
+    loadDialog(frameDialog);
 }
 

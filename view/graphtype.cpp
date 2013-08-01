@@ -13,7 +13,7 @@ const char* opts[] = {"X Linear, Y Linear",
                         "Horizontal Bar Stacked"};
 
 ViewGraphType::ViewGraphType(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Set Graph Type"))
+    Dialog(mainWin, "Set Graph Type")
 {
     printf("creating graph window");
 

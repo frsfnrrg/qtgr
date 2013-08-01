@@ -2,7 +2,7 @@
 #include "base/globals.h"
 
 ViewTitle::ViewTitle(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Title"))
+    Dialog(mainWin, "Title")
 {
     propertiesDialog = NULL;
 
