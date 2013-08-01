@@ -10,6 +10,7 @@ class SetsEdit : public Dialog
 public:
     explicit SetsEdit(MainWindow*);
 private:
+    QComboBox* setNumber;
 
 signals:
     
