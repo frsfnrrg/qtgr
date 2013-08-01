@@ -1,6 +1,6 @@
 #include "view/legends.h"
 #include "base/globals.h"
-#include "setcombobox.h"
+#include "prop.h"
 #include "view.h"
 
 ViewLegends::ViewLegends(MainWindow* mainWin) :
@@ -231,7 +231,7 @@ void ViewLegends::applyLegendsEdit()
     drawgraph();
 
     // send update to set selectors
-    SetComboBox::sendUpdate();
+    SetsSender::send();
 
     this->mainWindow->viewMenu->updateSymbolsLegend();
 }

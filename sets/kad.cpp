@@ -1,19 +1,22 @@
 #include "sets/kad.h"
 #include "base/globals.h"
 #include "setcombobox.h"
+#include "prop.h"
 
 SetsKAD::SetsKAD(MainWindow* mainWin) :
     Dialog(mainWin, tr("Kill/(De)Activate Sets"))
 {
-    setNumber = new SetComboBox();
+    setNumber = new SetComboBox(true);
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
     QButtonGroup* choices = new QButtonGroup();
-    adChoice = new QRadioButton(tr("Activate"));
+    actChoice = new QRadioButton(tr("Activate"));
+    deactChoice = new QRadioButton(tr("Deactivate"));
     killChoice = new QRadioButton(tr("Kill"));
-    choices->addButton(adChoice);
+    choices->addButton(actChoice);
+    choices->addButton(deactChoice);
     choices->addButton(killChoice);
-    adChoice->setChecked(true);
+    actChoice->setChecked(true);
 
     QGridLayout* layout = new QGridLayout();
 
@@ -22,56 +25,100 @@ SetsKAD::SetsKAD(MainWindow* mainWin) :
 
     layout->setRowMinimumHeight(1, 8);
 
-    layout->addWidget(adChoice, 2, 0, 1, 2);
+    layout->addWidget(actChoice, 2, 0, 1, 2);
     layout->setRowMinimumHeight(3, 2);
-    layout->addWidget(killChoice, 4, 0, 1, 2);
+    layout->addWidget(deactChoice, 4, 0, 1, 2);
+    layout->setRowMinimumHeight(5, 2);
+    layout->addWidget(killChoice, 6, 0, 1, 2);
 
     this->setDialogLayout(layout);
+
+    SetsSender::add(this);
+}
+
+void SetsKAD::updateSets() {
+    updateDialog();
+}
+
+void shift_to_first(QRadioButton* a, QRadioButton* b) {
+    if (b->isChecked()) {
+        b->setChecked(false);
+        a->setChecked(true);
+    }
+    b->setEnabled(false);
+    a->setEnabled(true);
 }
 
 void SetsKAD::updateDialog() {
     // TODO: update when a new set is read..
     int gno = cg;
-    int cset = setNumber->currentIndex();
-    printf("%i: %i %i\n", cset, g[gno].p[cset].deact, g[gno].p[cset].active);
-    if (isactive(gno, cset)) {
-        if (g[gno].p[cset].deact == 0) {
-            adChoice->setText(tr("Deactivate"));
-        } else {
-            adChoice->setText(tr("Activate"));
-        }
-        adChoice->setEnabled(true);
+    int cset = setNumber->currentIndex() - 1;
+
+    if (cset == -1) {
+        actChoice->setEnabled(true);
+        deactChoice->setEnabled(true);
         killChoice->setEnabled(true);
-    } else {
-        adChoice->setEnabled(false);
-        killChoice->setEnabled(false);
-    }
-}
-
-void SetsKAD::applyDialog() {
-    int gno = cg;
-    int cset = setNumber->currentIndex();
-
-    if (!isactive(gno,cset)) {
         return;
     }
 
-    if (adChoice->isChecked()) {
-        if (g[gno].p[cset].deact == 0) {
-            g[gno].p[cset].deact = 1;
-            set_prop(gno, SET, SETNUM, cset, ACTIVE, OFF, 0);
-            adChoice->setText(tr("Activate"));
+    if (g[gno].p[cset].active == OFF && g[gno].p[cset].deact == 0) {
+        return;
+    }
+
+    if (g[gno].p[cset].deact == 0) {
+        shift_to_first(deactChoice, actChoice);
+    } else {
+        shift_to_first(actChoice, deactChoice);
+    }
+    killChoice->setEnabled(true);
+}
+
+
+void SetsKAD::applyDialog() {
+    int gno = cg;
+    int cset = setNumber->currentIndex() - 1;
+    if (cset == -1) {
+        if (deactChoice->isChecked()) {
+            for (cset=0;cset<MAXPLOT;cset++) {
+                if (g[gno].p[cset].active == ON) {
+                    g[gno].p[cset].deact = 1;
+                    g[gno].p[cset].active = OFF;
+                }
+            }
+        } if (actChoice->isChecked()) {
+            for (cset=0;cset<MAXPLOT;cset++) {
+                if (g[gno].p[cset].active == OFF && g[gno].p[cset].deact == 1) {
+                    g[gno].p[cset].deact = 0;
+                    g[gno].p[cset].active = ON;
+                }
+            }
         } else {
-            g[gno].p[cset].deact = 0;
-            set_prop(gno, SET, SETNUM, cset, ACTIVE, ON, 0);
-            adChoice->setText(tr("Deactivate"));
+            // or iter and select kill mode?
+            do_flush();
+            SetsSender::send();
         }
+
+        drawgraph();
+        return;
+    }
+
+    if (g[gno].p[cset].active == OFF && g[gno].p[cset].deact == 0) {
+        return;
+    }
+
+    if (deactChoice->isChecked()) {
+        g[gno].p[cset].deact = 1;
+        g[gno].p[cset].active = OFF;
+        shift_to_first(actChoice, deactChoice);
+    } else if (actChoice->isChecked()) {
+        g[gno].p[cset].deact = 0;
+        g[gno].p[cset].active = ON;
+        shift_to_first(deactChoice, actChoice);
     } else {
         // default, hard kill; soft is 1
         do_kill(gno, cset, 0);
 
-        adChoice->setEnabled(false);
-        killChoice->setEnabled(false);
+        SetsSender::send();
     }
 
     drawgraph();

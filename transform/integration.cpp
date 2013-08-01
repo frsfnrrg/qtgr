@@ -3,7 +3,7 @@
 #include "setcombobox.h"
 
 TransformIntegration::TransformIntegration(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Transforms: Integration"))
+    Dialog(mainWin, tr("Integration"))
 {
     printf("creating integration dialog\n");
 

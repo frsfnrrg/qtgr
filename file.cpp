@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "file.h"
 #include "base/globals.h"
+#include "prop.h"
 
 FileMenu::FileMenu(MainWindow* mainWin)
 
@@ -130,6 +131,8 @@ void FileMenu::open()
     getdata(0,fileNames.at(0).toAscii().data(),DISK,XY);
 
     drawgraph();
+
+    SetsSender::send();
 }
 
 void FileMenu::clear() 
@@ -139,6 +142,8 @@ void FileMenu::clear()
     inwin = TRUE;
     set_graph_active(0);
     drawgraph();
+
+    SetsSender::send();
 }
 
 void FileMenu::print()

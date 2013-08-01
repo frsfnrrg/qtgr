@@ -32,4 +32,31 @@ signals:
 public slots:
 };
 
+
+/*
+ Requires an updateSets slot;
+ To be used whenever a
+ set is killed, added, or its
+ legend is changed
+ */
+class SetsSender : public QObject
+{
+    Q_OBJECT
+public:
+    static void send();
+    static void add(QObject* reciever);
+
+private:
+    explicit SetsSender();
+    static SetsSender* me;
+    void prop();
+
+signals:
+    void setsUpdate();
+
+public slots:
+
+};
+
+
 #endif // WORLDDIMPROP_H

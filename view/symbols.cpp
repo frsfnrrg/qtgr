@@ -3,6 +3,7 @@
 #include "view.h"
 #include "base/globals.h"
 #include "setcombobox.h"
+#include "prop.h"
 
 ViewSymbols::ViewSymbols(MainWindow* mainWin) : Dialog(mainWin, tr("Symbols"))
 {
@@ -228,6 +229,6 @@ void ViewSymbols::applyDialog()
     drawgraph();
 
     //update set selection dialogs
-    SetComboBox::sendUpdate();
+    SetsSender::send();
     mainWindow->viewMenu->updateIndividualLegend(cset);
 }

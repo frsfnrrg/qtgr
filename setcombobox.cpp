@@ -1,11 +1,6 @@
 #include "setcombobox.h"
 #include "base/globals.h"
-
-LegendSender* SetComboBox::legendSender = NULL;
-
-void LegendSender::sendUpdate() {
-    emit updateLegends();
-}
+#include "prop.h"
 
 /*
  Note: another level is to explicitly
@@ -14,30 +9,26 @@ void LegendSender::sendUpdate() {
  for the combobox, but that is fine...
  */
 
-SetComboBox::SetComboBox() :
+
+
+SetComboBox::SetComboBox(bool a) :
     QComboBox()
 {
+    add = a;
+    if (add) {
+        this->addItem("-- All live sets --");
+    }
     for (int i=0;i<MAXPLOT;i++) {
-        this->addItem(QString::number(i) + ": " + g[cg].l.str[i].s);
+        this->addItem("");
     }
+    updateSets();
 
-    if (!SetComboBox::legendSender) {
-        SetComboBox::legendSender = new LegendSender();
-    }
-    connect(SetComboBox::legendSender,SIGNAL(updateLegends()),
-            this, SLOT(updateSetChooserLabels()));
+    SetsSender::add(this);
     this->setMinimumWidth(100);
 }
 
-void SetComboBox::updateSetChooserLabels() {
+void SetComboBox::updateSets() {
     for (int i=0;i<MAXPLOT;i++) {
-        this->setItemText(i, QString::number(i) + ": " + g[cg].l.str[i].s);
+        this->setItemText(i+add, QString::number(i) + ": " + g[cg].l.str[i].s);
     }
-}
-
-void SetComboBox::sendUpdate() {
-    if (!SetComboBox::legendSender) {
-        SetComboBox::legendSender = new LegendSender();
-    }
-    SetComboBox::legendSender->sendUpdate();
 }

@@ -25,3 +25,29 @@ void WorldDimProp::prop() {
     emit dimensionUpdate();
 }
 
+
+
+SetsSender* SetsSender::me = NULL;
+
+SetsSender::SetsSender() :
+    QObject()
+{
+}
+
+void SetsSender::send() {
+    if (me == NULL) {
+        me = new SetsSender();
+    }
+    me->prop();
+}
+
+void SetsSender::add(QObject* receiver) {
+    if (me == NULL) {
+        me = new SetsSender();
+    }
+    connect(me, SIGNAL(setsUpdate()), receiver, SLOT(updateSets()));
+}
+
+void SetsSender::prop() {
+    emit setsUpdate();
+}

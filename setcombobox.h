@@ -3,35 +3,19 @@
 
 #include <QtGui>
 
-
-class LegendSender : public QObject
-{
-    Q_OBJECT
-public:
-    void sendUpdate();
-
-signals:
-    void updateLegends();
-
-public slots:
-
-};
-
 class SetComboBox : public QComboBox
 {
     Q_OBJECT
 public:
-    explicit SetComboBox();
-
-    static void sendUpdate();
+    explicit SetComboBox(bool and_all_active = false);
 
 signals:
 
 public slots:
-    void updateSetChooserLabels();
+    void updateSets();
 
 private:
-    static LegendSender* legendSender;
+    int add;
 };
 
 

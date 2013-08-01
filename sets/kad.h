@@ -11,12 +11,14 @@ public:
     explicit SetsKAD(MainWindow* mainWin);
 private:
     QComboBox* setNumber;
-    QRadioButton* adChoice;
+    QRadioButton* actChoice;
+    QRadioButton* deactChoice;
     QRadioButton* killChoice;
 
 signals:
     
 public slots:
+    void updateSets();
     void updateDialog();
 private slots:
     void applyDialog();

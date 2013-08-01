@@ -3,7 +3,7 @@
 #include "setcombobox.h"
 
 TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Transform: Evaluate"))
+    Dialog(mainWin, tr("Evaluate"))
 {
     // hmmm.. extract this into a static Dialog method?
     setNumber = new SetComboBox();

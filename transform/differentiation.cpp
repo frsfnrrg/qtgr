@@ -3,7 +3,7 @@
 #include "setcombobox.h"
 
 TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
-    Dialog(mainWin, tr("Transform: Differentiate"))
+    Dialog(mainWin, tr("Differentiate"))
 {
     // hmmm.. extract this into a static Dialog method?
     setNumber = new SetComboBox();
