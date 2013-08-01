@@ -1,5 +1,6 @@
 # Misc
 .directory
+qtgr.pro.user
 # C compile garbage
 *.o
 # QT autogen
