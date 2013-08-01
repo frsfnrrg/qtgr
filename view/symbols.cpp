@@ -133,7 +133,6 @@ void ViewSymbols::updateDialog()
     int gno,cset,iv; 
     gno = cg; // current graph only 
       
-//      printf("updateSymbols %i %i\n",g[gno].p[cset].linew,g[gno].p[cset].lines);
     cset = setNumber->currentIndex();
     
     iv = 100.0 * g[gno].p[cset].symsize;

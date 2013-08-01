@@ -25,6 +25,7 @@ public slots:
 
 private slots:
     void applyDialog();
+    void setFillOpt(int);
     
 };
 
