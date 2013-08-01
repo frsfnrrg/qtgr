@@ -352,6 +352,8 @@ extern int nextset(int);
 extern void activateset(int , int );
 extern void setcol(int gno, double *x, int setno, int len, int col);
 extern void updatesetminmax(int gno, int setno);
+extern void do_kill(int gno, int setno, int soft);
+extern void do_flush();
 
 //computils
 

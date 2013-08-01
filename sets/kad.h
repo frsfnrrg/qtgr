@@ -10,6 +10,9 @@ class SetsKAD : public Dialog
 public:
     explicit SetsKAD(MainWindow* mainWin);
 private:
+    QComboBox* setNumber;
+    QRadioButton* adChoice;
+    QRadioButton* killChoice;
 
 signals:
     

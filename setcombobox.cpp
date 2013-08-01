@@ -7,6 +7,13 @@ void LegendSender::sendUpdate() {
     emit updateLegends();
 }
 
+/*
+ Note: another level is to explicitly
+ show _dead_, not _disabled_, sets as disabled
+ on the combobox. This may lead to creating a model
+ for the combobox, but that is fine...
+ */
+
 SetComboBox::SetComboBox() :
     QComboBox()
 {
@@ -19,6 +26,7 @@ SetComboBox::SetComboBox() :
     }
     connect(SetComboBox::legendSender,SIGNAL(updateLegends()),
             this, SLOT(updateSetChooserLabels()));
+    this->setMinimumWidth(100);
 }
 
 void SetComboBox::updateSetChooserLabels() {

@@ -554,8 +554,8 @@ void copysetdata(int gnofrom, int setfrom, int gnoto, int setto)
 // 		    updatelegendstr(gno);
 // 		    updatesetminmax(gno, j);
 // 		    updatesetminmax(gno, i);
-// 		    update_set_status(gno, j);
-// 		    update_set_status(gno, i);
+// 		    //frsfnrrg update_set_status(gno, j);
+// 		    //frsfnrrg update_set_status(gno, i);
 // 		}
 // 		j++;
 // 	    }
@@ -594,9 +594,9 @@ int nextset(int gno)
  */
 void killset(int gno, int setno)
 {
-//     set_default_plotarr(&g[gno].p[setno]);
-//     g[gno].p[setno].active = OFF;
-//     g[gno].p[setno].deact = 0;	/* just in case */
+     set_default_plotarr(&g[gno].p[setno]);
+     g[gno].p[setno].active = OFF;
+     g[gno].p[setno].deact = 0;	/* just in case */
 }
 
 /*
@@ -843,7 +843,7 @@ void add_point(int gno, int setno, double px, double py, double tx, double ty, i
      sprintf(buf, "copy of set %d", j1);
      setcomment(gto, j2, buf);
      updatesetminmax(gto, j2);
-     //frsfnrrg update_set_status(gto, j2);
+     //frsfnrrg //frsfnrrg update_set_status(gto, j2);
  }
 
 /*
@@ -870,9 +870,9 @@ void add_point(int gno, int setno, double px, double py, double tx, double ty, i
 //     updatesymbols(gfrom, j1);
 //     updatelegendstr(gto);
 //     updatesetminmax(gto, j2);
-//     update_set_status(gto, j2);
+//     //frsfnrrg update_set_status(gto, j2);
 //     killset(gfrom, j1);
-//     update_set_status(gfrom, j1);
+//     //frsfnrrg update_set_status(gfrom, j1);
 // }
 // 
 // /*
@@ -893,11 +893,11 @@ void add_point(int gno, int setno, double px, double py, double tx, double ty, i
 //     updatesetminmax(gfrom, j1);
 //     updatesymbols(gfrom, j1);
 //     updatelegendstr(gfrom);
-//     update_set_status(gfrom, j1);
+//     //frsfnrrg update_set_status(gfrom, j1);
 //     updatesetminmax(gto, j2);
 //     updatesymbols(gto, j2);
 //     updatelegendstr(gto);
-//     update_set_status(gto, j2);
+//     //frsfnrrg update_set_status(gto, j2);
 //     drawgraph();
 // }
 // 
@@ -920,7 +920,7 @@ void do_activateset(gno, setno, len)
     activateset(gno, setno);
     setlength(gno, setno, len);
     updatesetminmax(gno, setno);
-    //update_set_status(gno, setno);
+    ////frsfnrrg update_set_status(gno, setno);
 }
 // 
 // /*
@@ -1025,7 +1025,7 @@ void do_activateset(gno, setno, len)
 // 	sprintf(s, "partition %d of set %d", i + 1, setno);
 // 	setcomment(gno, tmpset, s);
 // 	updatesetminmax(gno, tmpset);
-// 	update_set_status(gno, tmpset);
+// 	//frsfnrrg update_set_status(gno, tmpset);
 //     }
 //     if (nleft == 0) {
 // 	nleft = lpart;
@@ -1047,7 +1047,7 @@ void do_activateset(gno, setno, len)
 //     sprintf(s, "partition %d of set %d", i + 1, setno);
 //     setcomment(gno, tmpset, s);
 //     updatesetminmax(gno, tmpset);
-//     update_set_status(gno, tmpset);
+//     //frsfnrrg update_set_status(gno, tmpset);
 //     for (k = 0; k < ncols; k++) {
 // 	cfree(xtmp[k]);
 //     }
@@ -1193,7 +1193,7 @@ void do_activateset(gno, setno, len)
 //     settype(cg, setno, type);
 //     setlength(cg, setno, len);
 //     updatesetminmax(cg, setno);
-//     update_set_status(cg, setno);
+//     //frsfnrrg update_set_status(cg, setno);
 // }
 // 
 // /*
@@ -1204,7 +1204,7 @@ void do_activateset(gno, setno, len)
 // {
 //     set_prop(gno, SET, SETNUM, setno, ACTIVE, OFF, 0);
 //     g[gno].p[setno].deact = 1;
-//     update_set_status(gno, setno);
+//     //frsfnrrg update_set_status(gno, setno);
 //     drawgraph();
 // }
 // 
@@ -1216,7 +1216,7 @@ void do_activateset(gno, setno, len)
 // {
 //     set_prop(gno, SET, SETNUM, setno, ACTIVE, ON, 0);
 //     g[gno].p[setno].deact = 0;
-//     update_set_status(gno, setno);
+//     //frsfnrrg update_set_status(gno, setno);
 //     drawgraph();
 // }
 // 
@@ -1230,7 +1230,7 @@ void do_activateset(gno, setno, len)
 //     settype(cg, setno, type);
 //     setlength(cg, setno, getsetlength(cg, setno));
 //     updatesetminmax(cg, setno);
-//     update_set_status(cg, setno);
+//     //frsfnrrg update_set_status(cg, setno);
 // }
 // 
 // /*
@@ -1251,7 +1251,7 @@ void do_activateset(gno, setno, len)
 //     }
 //     setlength(cg, setno, len);
 //     updatesetminmax(cg, setno);
-//     update_set_status(cg, setno);
+//     //frsfnrrg update_set_status(cg, setno);
 // }
 // 
 // /*
@@ -1305,7 +1305,7 @@ void do_activateset(gno, setno, len)
 //     sprintf(buf, "copy of set %d", j1);
 //     setcomment(gto, j2, buf);
 //     updatesetminmax(gto, j2);
-//     update_set_status(gto, j2);
+//     //frsfnrrg update_set_status(gto, j2);
 //     drawgraph();
 // }
 // 
@@ -1349,9 +1349,9 @@ void do_activateset(gno, setno, len)
 //     updatesymbols(gfrom, j1);
 //     updatelegendstr(gto);
 //     updatesetminmax(gto, j2);
-//     update_set_status(gto, j2);
+//     //frsfnrrg update_set_status(gto, j2);
 //     killset(gfrom, j1);
-//     update_set_status(gfrom, j1);
+//     //frsfnrrg update_set_status(gfrom, j1);
 //     drawgraph();
 // }
 // 
@@ -1408,7 +1408,7 @@ void do_activateset(gno, setno, len)
 //     }
 //     droppoints(cg, setno, startno, endno, dist);
 //     updatesetminmax(cg, setno);
-//     update_set_status(cg, setno);
+//     //frsfnrrg update_set_status(cg, setno);
 //     drawgraph();
 // }
 // 
@@ -1429,7 +1429,7 @@ void do_activateset(gno, setno, len)
 // 	    if (isactive(gfrom, i) && i != j2) {
 // 		joinsets(gfrom, i, gfrom, j2);
 // 		killset(gfrom, i);
-// 		update_set_status(gfrom, i);
+// 		//frsfnrrg update_set_status(gfrom, i);
 // 	    }
 // 	}
 //     } else {
@@ -1445,10 +1445,10 @@ void do_activateset(gno, setno, len)
 // 	}
 // 	joinsets(gfrom, j1, gto, j2);
 // 	killset(gfrom, j1);
-// 	update_set_status(gfrom, j1);
+// 	//frsfnrrg update_set_status(gfrom, j1);
 //     }
 //     updatesetminmax(gto, j2);
-//     update_set_status(gto, j2);
+//     //frsfnrrg update_set_status(gto, j2);
 //     drawgraph();
 // }
 // 
@@ -1475,7 +1475,7 @@ void do_activateset(gno, setno, len)
 // 	    fswap(&x[i], &x[j]);
 // 	}
 //     }
-//     update_set_status(cg, setno);
+//     //frsfnrrg update_set_status(cg, setno);
 //     drawgraph();
 // }
 // 
@@ -1508,79 +1508,79 @@ void do_activateset(gno, setno, len)
 // 		    setlength(cg, setno, getsetlength(cg, i));
 // 		    copyset(cg, i, cg, setno);
 // 		    killset(cg, i);
-// 		    update_set_status(cg, i);
+// 		    //frsfnrrg update_set_status(cg, i);
 // 		} else {
 // 		    joinsets(cg, i, cg, setno);
 // 		    killset(cg, i);
-// 		    update_set_status(cg, i);
+// 		    //frsfnrrg update_set_status(cg, i);
 // 		}
 // 	    }
 // 	}
 //     }
 //     updatesetminmax(cg, setno);
-//     update_set_status(cg, setno);
+//     //frsfnrrg update_set_status(cg, setno);
 //     drawgraph();
 // }
 // 
-// /*
-//  * kill a set
-//  */
-// void do_kill(gno, setno, soft)
-//     int gno, setno, soft;
-// {
-//     int redraw = 0, i;
-// 
-//     if (setno == g[gno].maxplot || setno == -1) {
-// 	for (i = 0; i < g[gno].maxplot; i++) {
-// 	    if (isactive(gno, i)) {
-// 		if (soft) {
-// 		    softkillset(gno, i);
-// 		} else {
-// 		    killset(gno, i);
-// 		}
-// 		redraw = 1;
-// 		update_set_status(gno, i);
-// 	    }
-// 	}
-// 	if (redraw) {
-// 	    drawgraph();
-// 	} else {
-// 	    errwin("No sets to kill");
-// 	}
-//     } else {
-// 	if (!isactive(gno, setno)) {
-// 	    sprintf(buf, "Set %d already dead", setno);
-// 	    errwin(buf);
-// 	    return;
-// 	} else {
-// 	    if (soft) {
-// 		softkillset(gno, setno);
-// 	    } else {
-// 		killset(gno, setno);
-// 	    }
-// 	    update_set_status(gno, setno);
-// 	    drawgraph();
-// 	}
-//     }
-// }
-// 
-// /*
-//  * kill all active sets
-//  */
-// void do_flush()
-// {
-//     int i;
-// 
-//     if (yesno("Flush all active sets, are you sure? ", "", "YES", "NO")) {
-// 	for (i = 0; i < g[cg].maxplot; i++) {
-// 	    if (isactive(cg, i)) {
-// 		killset(cg, i);
-// 		update_set_status(cg, i);
-// 	    }
-// 	}
-// 	drawgraph();
-//     }
-// }
+ /*
+  * kill a set
+  */
+ void do_kill(gno, setno, soft)
+     int gno, setno, soft;
+ {
+     int redraw = 0, i;
+
+     if (setno == g[gno].maxplot || setno == -1) {
+    for (i = 0; i < g[gno].maxplot; i++) {
+        if (isactive(gno, i)) {
+        if (soft) {
+            softkillset(gno, i);
+        } else {
+            killset(gno, i);
+        }
+        redraw = 1;
+        //frsfnrrg update_set_status(gno, i);
+        }
+    }
+    if (redraw) {
+        drawgraph();
+    } else {
+        errwin("No sets to kill");
+    }
+     } else {
+    if (!isactive(gno, setno)) {
+        sprintf(buf, "Set %d already dead", setno);
+        errwin(buf);
+        return;
+    } else {
+        if (soft) {
+        softkillset(gno, setno);
+        } else {
+        killset(gno, setno);
+        }
+        //frsfnrrg update_set_status(gno, setno);
+        drawgraph();
+    }
+     }
+ }
+
+ /*
+  * kill all active sets
+  */
+ void do_flush()
+ {
+     int i;
+
+     if (yesno("Flush all active sets, are you sure? ", "", "YES", "NO")) {
+    for (i = 0; i < g[cg].maxplot; i++) {
+        if (isactive(cg, i)) {
+        killset(cg, i);
+        //frsfnrrg update_set_status(cg, i);
+        }
+    }
+    drawgraph();
+     }
+ }
 // 
 // /*
 //  * sort sets, only works on sets of type XY
