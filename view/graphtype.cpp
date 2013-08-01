@@ -34,7 +34,7 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) :
     primary->addWidget(setNumbers,0,1);
 
     // spacer
-    primary->addWidget(new QLabel(""),1,0,1,3);
+    primary->setRowMinimumHeight(1, 8);
 
     // if we really want to, use a nested, multilevel thingy.
     primary->addWidget(new QLabel(tr("Graph Type")), 2,0);

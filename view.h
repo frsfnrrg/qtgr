@@ -10,6 +10,7 @@
 #include "view/legends.h"
 #include "view/viewport.h"
 #include "view/title.h"
+#include "view/frame.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -31,6 +32,7 @@ public:
     ViewLegends* legendsDialog;
     ViewView* viewDialog;
     ViewTitle* titleDialog;
+    ViewFrame* frameDialog;
 
     void updateSymbols();
     void updateTicks();
@@ -39,6 +41,7 @@ public:
     void updateGraphTypes();
     void updateView();
     void updateTitle();
+    void updateFrame();
 
     void populateMenu(QMenu* q);
 
@@ -57,6 +60,7 @@ public slots:
     void graphTypes();
     void view();
     void title();
+    void frame();
 
 private slots:
    
@@ -64,8 +68,6 @@ private:
 
     void createMenus();
     void createActions();
-   
-    int set_mode; // not implemented yet
     
     QAction *viewAct;
     QAction *worldAct;

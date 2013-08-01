@@ -29,7 +29,8 @@ HEADERS       = edit.h \
     setcombobox.h \
     prop.h \
     overlay.h \
-    sets.h
+    sets.h \
+    view/frame.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -77,7 +78,8 @@ SOURCES       = edit.cpp \
     setcombobox.cpp \
     prop.cpp \
     overlay.cpp \
-    sets.cpp
+    sets.cpp \
+    view/frame.cpp
 
 RESOURCES     = qtgr.qrc
 

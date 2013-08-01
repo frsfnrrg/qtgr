@@ -16,8 +16,7 @@ ViewMenu::ViewMenu(MainWindow* mainWin)
     graphTypesDialog = NULL;
     viewDialog = NULL;
     titleDialog = NULL;
-
-    set_mode = 0 ; // 0 means act on one set; <>0 means all sets (FIXME not implemented);
+    frameDialog = NULL;
 }
 
 void ViewMenu::populateMenu(QMenu* q) {
@@ -141,11 +140,27 @@ void ViewMenu::createActions()
                              tr("Alter the look of the graph frame"),
                              tr("Ctrl+f"),
                              this);
+    connect(frameAct, SIGNAL(triggered()), this, SLOT(frame()));
 
     // setup double click handler
     mouseDouble.view = this;
     mainWindow->gwidget->mouseDoubleCall =  &mouseDouble;
 }
+
+
+void ViewMenu::updateSymbolsLegend() {
+    if (symbolsDialog) {
+        symbolsDialog->updateLegend();
+    }
+}
+
+void ViewMenu::updateIndividualLegend(int cset) {
+    if (legendsDialog) {
+        legendsDialog->updateLegendsField(cset);
+    }
+}
+
+// Lots and lots of boilerplate here
 
 void ViewMenu::world()
 {
@@ -272,14 +287,21 @@ void ViewMenu::updateTitle()
     }
 }
 
-void ViewMenu::updateSymbolsLegend() {
-    if (symbolsDialog) {
-        symbolsDialog->updateLegend();
+void ViewMenu::frame()
+{
+    if (frameDialog) {
+        frameDialog->setVisible(true);
+    } else {
+        frameDialog = new ViewFrame(this->mainWindow);
+        frameDialog->show();
+    }
+    frameDialog->updateDialog();
+}
+
+void ViewMenu::updateFrame()
+{
+    if (frameDialog) {
+        frameDialog->updateDialog();
     }
 }
 
-void ViewMenu::updateIndividualLegend(int cset) {
-    if (legendsDialog) {
-        legendsDialog->updateLegendsField(cset);
-    }
-}
