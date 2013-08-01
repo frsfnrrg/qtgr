@@ -162,6 +162,7 @@ void ViewSymbols::updateDialog()
 // 	updatelegendstr(gno);
 // 	updateerrbar(gno, value);
     
+
     update();
 }
   
@@ -202,6 +203,9 @@ void ViewSymbols::applyDialog()
 //     } else {
 // 	setno = -1;
 //     }
+
+    // Note: there is an apply-to-all-sets option
+    // in XVGR
 
     set_prop(cg, SET,
 	     SETNUM, cset,

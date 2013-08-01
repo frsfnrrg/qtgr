@@ -23,8 +23,12 @@ private slots:
 
 
 private:
+    void createMenus();
+    void createActions();
+
     MainWindow *mainWindow;
-    
+    QAction* editAct;
+    QAction* kadAct;
 };
 
 #endif // SETS_H

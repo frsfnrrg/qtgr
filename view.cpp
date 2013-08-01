@@ -63,31 +63,42 @@ public:
     
     void mouse( int x, int y, int w, int h ) {	
         double rx = double(x)/w;
-	double ry = 1.0-double(y)/h;
-	
-    if (rx < g[cg].v.xv1) { // y-axis props
-	    view->ticks();
-	    view->ticksDialog->editAxis->setCurrentIndex(1);
-        view->ticksDialog->updateDialog();
-	    return;
-	}
-	if (rx > g[cg].v.xv2) { // legend
-	    view->legends();
-	    return;
-	}
-	if (ry < g[cg].v.yv1) { // x-axis props
-	    view->ticks();
-	    view->ticksDialog->editAxis->setCurrentIndex(0);
-        view->ticksDialog->updateDialog();
-	    return;
-	}
-	if (ry > g[cg].v.yv2) { // title
-        view->title();
-	    return;
-	}
-	
-	// default: symbols
-	view->symbols();
+        double ry = 1.0-double(y)/h;
+
+        double x1,x2,y1,y2;
+        x1 = g[cg].v.xv1;
+        x2 = g[cg].v.xv2;
+        y1 = g[cg].v.yv1;
+        y2 = g[cg].v.yv2;
+
+        if (ry > y2 && (ry > 1.0 - rx * (1.0 - y2) / x1)
+                && (ry > 1.0 + (rx - 1.0) * (1.0 - y2) / (1.0 - x2))) {
+            view->title();
+            return;
+        }
+
+        if (ry < y1 && (ry < rx * y1 / x1)
+                && (ry > (1.0 - x) * y1 / (1.0 - x2))
+                ) {
+            view->ticks();
+            view->ticksDialog->editAxis->setCurrentIndex(X_AXIS);
+            view->ticksDialog->updateDialog();
+            return;
+        }
+
+        if (rx < x1) {
+            view->ticks();
+            view->ticksDialog->editAxis->setCurrentIndex(Y_AXIS);
+            view->ticksDialog->updateDialog();
+            return;
+        }
+
+        if (rx > x2) {
+            view->legends();
+            return;
+        }
+
+        view->symbols();
     }
     
 } mouseDouble;
