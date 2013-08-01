@@ -18,6 +18,12 @@ private:
     QCheckBox* fillBG;
     QComboBox* fillColor;
     
+    QLabel* lineColorLabel;
+    QLabel* lineWidthLabel;
+    QLabel* lineStyleLabel;
+    QLabel* fillBGLabel;
+    QLabel* fillColorLabel;
+
 signals:
     
 public slots:
@@ -26,7 +32,7 @@ public slots:
 private slots:
     void applyDialog();
     void setFillOpt(int);
-    
+    void setOOpts(int);
 };
 
 #endif // FRAME_H

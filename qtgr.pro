@@ -30,7 +30,9 @@ HEADERS       = edit.h \
     prop.h \
     overlay.h \
     sets.h \
-    view/frame.h
+    view/frame.h \
+    sets/kad.h \
+    sets/sedit.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -79,7 +81,9 @@ SOURCES       = edit.cpp \
     prop.cpp \
     overlay.cpp \
     sets.cpp \
-    view/frame.cpp
+    view/frame.cpp \
+    sets/kad.cpp \
+    sets/sedit.cpp
 
 RESOURCES     = qtgr.qrc
 
