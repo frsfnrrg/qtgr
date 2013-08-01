@@ -7,17 +7,16 @@
 ToolsMenu::ToolsMenu(MainWindow* mainWin) :
     Menu(mainWin, "Tools", true)
 {
+    optionsDialog = NULL;
     createActions();
     populateMenu(this);
 }
-
 
 void ToolsMenu::populateMenu(QMenu* q) {
     q->addAction(autoScaleAct);
     q->addAction(zoomRectAct);
     q->addSeparator();
     q->addAction(optionsAct);
-
 }
 
 void ToolsMenu::createActions()
@@ -81,8 +80,19 @@ void ToolsMenu::finishRect(double x1, double x2, double y1, double y2) {
     WorldDimProp::send();
 }
 
+ToolsOptions* ToolsMenu::getOptions() {
+    if (!optionsDialog) {
+        optionsDialog = new ToolsOptions(mainWindow);
+        optionsDialog->setVisible(false);
+        optionsDialog->show();
+    }
+    return optionsDialog;
+}
+
 void ToolsMenu::options() {
-    printf("IMPLEMENT ME!!\n");
+    if (showDialog(optionsDialog)) return;
+    optionsDialog = new ToolsOptions(mainWindow);
+    loadDialog(optionsDialog);
 }
 
 

@@ -36,6 +36,8 @@ public:
     TransformMenu* transformMenu;
     QMenu* helpMenu;
 
+private:
+
 protected:
     void closeEvent(QCloseEvent *);
 private slots:

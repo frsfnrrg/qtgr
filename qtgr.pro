@@ -34,7 +34,8 @@ HEADERS       = edit.h \
     sets/kad.h \
     sets/sedit.h \
     menu.h \
-    sets/mcs.h
+    sets/mcs.h \
+    tools/options.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -87,7 +88,8 @@ SOURCES       = edit.cpp \
     sets/kad.cpp \
     sets/sedit.cpp \
     menu.cpp \
-    sets/mcs.cpp
+    sets/mcs.cpp \
+    tools/options.cpp
 
 RESOURCES     = qtgr.qrc
 

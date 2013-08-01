@@ -12,9 +12,7 @@ public:
     
 private:
     QComboBox* setNumber;
-
     QComboBox* destination;
-
     QComboBox* diffType;
 
 signals:

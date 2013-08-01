@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include "overlay.h"
 #include "menu.h"
+#include "tools/options.h"
 
 /**
  * @brief The ToolsMenu class
@@ -26,6 +27,8 @@ public:
     QToolBar* createToolBar();
     void populateMenu(QMenu*);
 
+    ToolsOptions* getOptions();
+
 public slots:
     void autoScale();
     void zoom();
@@ -41,6 +44,7 @@ private:
     QAction *autoScaleAct;
     QAction *zoomRectAct;
     QAction *optionsAct;
+    ToolsOptions* optionsDialog;
 };
 
 #endif

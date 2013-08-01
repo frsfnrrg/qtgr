@@ -2,6 +2,8 @@
 #include "base/globals.h"
 #include "setcombobox.h"
 #include "prop.h"
+#include "tools.h"
+#include "tools/options.h"
 
 TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
     Dialog(mainWin, "Differentiate")
@@ -65,6 +67,11 @@ void TransformDifferentiation::applyDialog() {
     }
 
     do_differ(setno, itype);
+
+    // recognized double redraw: in both
+    if (mainWindow->toolsMenu->getOptions()->isRescaleOnTransform()) {
+        mainWindow->toolsMenu->autoScale();
+    }
 
     SetsSender::send();
 }

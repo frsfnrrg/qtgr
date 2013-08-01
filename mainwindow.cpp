@@ -39,9 +39,9 @@ MainWindow::MainWindow()
 
     setCentralWidget(gwidget);
 
-    createMenus();
-
     readSettings();
+
+    createMenus();
 
     setUnifiedTitleAndToolBarOnMac(true);
 

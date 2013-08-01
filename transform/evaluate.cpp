@@ -2,6 +2,8 @@
 #include "base/globals.h"
 #include "setcombobox.h"
 #include "prop.h"
+#include "tools.h"
+#include "tools/options.h"
 
 TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
     Dialog(mainWin, "Evaluate")
@@ -56,6 +58,11 @@ void TransformEvaluate::applyDialog() {
     fstr = formulaBox->text().toLocal8Bit().data();
 
     do_compute(setno, loadto, graphto, fstr);
+
+    // recognized double redraw: in both
+    if (mainWindow->toolsMenu->getOptions()->isRescaleOnTransform()) {
+        mainWindow->toolsMenu->autoScale();
+    }
 
     SetsSender::send();
 }

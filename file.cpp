@@ -3,6 +3,8 @@
 #include "file.h"
 #include "base/globals.h"
 #include "prop.h"
+#include "tools.h"
+#include "tools/options.h"
 
 FileMenu::FileMenu(MainWindow* mainWin)
 
@@ -130,7 +132,12 @@ void FileMenu::open()
 
     getdata(0,fileNames.at(0).toAscii().data(),DISK,XY);
 
-    drawgraph();
+    ToolsOptions* t = mainWindow->toolsMenu->getOptions();
+    if (t->isRescaleOnLoad()) {
+        mainWindow->toolsMenu->autoScale();
+    } else {
+        drawgraph();
+    }
 
     SetsSender::send();
 }

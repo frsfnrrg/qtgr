@@ -2,6 +2,8 @@
 #include "base/globals.h"
 #include "setcombobox.h"
 #include "prop.h"
+#include "tools.h"
+#include "tools/options.h"
 
 TransformIntegration::TransformIntegration(MainWindow* mainWin) :
     Dialog(mainWin, "Integration")
@@ -57,6 +59,11 @@ void TransformIntegration::applyDialog() {
     double result;
     result = do_int(setno, itype);
     resultL->setText(QString::number(result));
+
+    // recognized double redraw: in both
+    if (itype == 0 && mainWindow->toolsMenu->getOptions()->isRescaleOnTransform()) {
+        mainWindow->toolsMenu->autoScale();
+    }
 
     SetsSender::send();
 }
