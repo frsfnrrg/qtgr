@@ -27,8 +27,6 @@ public:
     QToolBar* createToolBar();
     void populateMenu(QMenu*);
 
-    ToolsOptions* getOptions();
-
 public slots:
     void autoScale();
     void zoom();

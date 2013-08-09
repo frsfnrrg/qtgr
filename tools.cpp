@@ -80,18 +80,9 @@ void ToolsMenu::finishRect(double x1, double x2, double y1, double y2) {
     WorldDimProp::send();
 }
 
-ToolsOptions* ToolsMenu::getOptions() {
-    if (!optionsDialog) {
-        optionsDialog = new ToolsOptions(mainWindow);
-        optionsDialog->setVisible(false);
-        optionsDialog->show();
-    }
-    return optionsDialog;
-}
-
 void ToolsMenu::options() {
     if (showDialog(optionsDialog)) return;
-    optionsDialog = new ToolsOptions(mainWindow);
+    optionsDialog = ToolsOptions::getOptionsDialog(mainWindow);
     loadDialog(optionsDialog);
 }
 

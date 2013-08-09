@@ -60,7 +60,7 @@ void TransformEvaluate::applyDialog() {
     do_compute(setno, loadto, graphto, fstr);
 
     // recognized double redraw: in both
-    if (mainWindow->toolsMenu->getOptions()->isRescaleOnTransform()) {
+    if (ToolsOptions::isRescaleOnTransform()) {
         mainWindow->toolsMenu->autoScale();
     }
 

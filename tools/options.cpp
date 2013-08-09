@@ -1,13 +1,17 @@
 #include "tools/options.h"
 
-/*
- Best would be to make this subclass QDialog,
- and automatically register its changes. _Apply_ is
- a slow way of doing things.
- */
+ToolsOptions* ToolsOptions::me = NULL;
+QSettings* ToolsOptions::settings = NULL;
+
+ToolsOptions* ToolsOptions::getOptionsDialog(MainWindow* mainWin) {
+    if (me == NULL) {
+        me = new ToolsOptions(mainWin);
+    }
+    return me;
+}
+
 ToolsOptions::ToolsOptions(MainWindow* mwin) :
-    Dialog(mwin, "Options"),
-    settings("QTGR", "QTGR")
+    Dialog(mwin, "Options")
 {
     rescaleOnLoad = new QCheckBox();
     rescaleOnTransform = new QCheckBox();
@@ -24,14 +28,22 @@ ToolsOptions::ToolsOptions(MainWindow* mwin) :
     layout->setColumnMinimumWidth(1, 150);
 
     this->setDialogLayout(layout);
+
+    if (settings == NULL) {
+        settings = new QSettings("QTGR","QTGR");
+    }
 }
 
 bool ToolsOptions::isRescaleOnLoad() {
-    return settings.value("rescale_on_load", QVariant(true)).toBool();
+    if (settings == NULL) {
+        settings = new QSettings("QTGR","QTGR");
+    }
+
+    return settings->value("rescale_on_load", QVariant(true)).toBool();
 }
 
 bool ToolsOptions::isRescaleOnTransform() {
-    return settings.value("rescale_on_transform", QVariant(false)).toBool();
+    return settings->value("rescale_on_transform", QVariant(false)).toBool();
 }
 
 void ToolsOptions::updateDialog() {
@@ -40,8 +52,8 @@ void ToolsOptions::updateDialog() {
 }
 
 void ToolsOptions::applyDialog() {
-    settings.setValue("rescale_on_load",
+    settings->setValue("rescale_on_load",
                       QVariant(rescaleOnLoad->isChecked()));
-    settings.setValue("rescale_on_transform",
+    settings->setValue("rescale_on_transform",
                       QVariant(rescaleOnTransform->isChecked()));
 }

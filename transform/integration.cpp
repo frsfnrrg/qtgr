@@ -61,7 +61,7 @@ void TransformIntegration::applyDialog() {
     resultL->setText(QString::number(result));
 
     // recognized double redraw: in both
-    if (itype == 0 && mainWindow->toolsMenu->getOptions()->isRescaleOnTransform()) {
+    if (itype == 0 && ToolsOptions::isRescaleOnTransform()) {
         mainWindow->toolsMenu->autoScale();
     }
 

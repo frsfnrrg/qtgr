@@ -2,19 +2,21 @@
 #define MENUFILE_H
 
 #include <QtGui>
-#include "mainwindow.h"
+#include "menu.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
 class QMenu;
 QT_END_NAMESPACE
 
-class FileMenu : public QMenu
+class FileMenu : public Menu
 {
     Q_OBJECT
 
 public:
     FileMenu(MainWindow* );
+
+    void populateMenu(QMenu*);
 
 public slots:
     void open();
@@ -28,8 +30,6 @@ private slots:
     void exportProc();
 
 private:
-    MainWindow *mainWindow;
-    void createMenus();
     void createActions();
     QAction *readSetAct;
     QAction *readParaAct;

@@ -6,42 +6,40 @@
 #include "tools.h"
 #include "tools/options.h"
 
-FileMenu::FileMenu(MainWindow* mainWin)
+FileMenu::FileMenu(MainWindow* mainWin) :
+    Menu(mainWin, "File", true)
 
 {  
-    this->mainWindow = mainWin;
-    this->setTitle(tr("&File"));
     createActions();
-    createMenus();
+    populateMenu(this);
 }
 
 
-void FileMenu::createMenus()
+void FileMenu::populateMenu(QMenu* q)
 {
-    this->setTearOffEnabled(true);
-    this->addAction(readSetAct);
-    this->addAction(readParaAct);
-    this->addAction(readBlockAct);
-    this->addSeparator();
-    this->addAction(writeSetAct);
-    this->addAction(writeParaAct);
-    this->addAction(saveAllAct);
-    this->addSeparator();
-    this->addAction(clearAct);
-    this->addSeparator();
-    this->addAction(printAct);
-    this->addAction(exportAct);
-    this->addSeparator();
-    this->addAction(exitAct);
+    q->setTearOffEnabled(true);
+    q->addAction(readSetAct);
+    q->addAction(readParaAct);
+    q->addAction(readBlockAct);
+    q->addSeparator();
+    q->addAction(writeSetAct);
+    q->addAction(writeParaAct);
+    q->addAction(saveAllAct);
+    q->addSeparator();
+    q->addAction(clearAct);
+    q->addSeparator();
+    q->addAction(printAct);
+    q->addAction(exportAct);
+    q->addSeparator();
+    q->addAction(exitAct);
 }
 
 void FileMenu::createActions()
 {
-    readSetAct = createQAction(tr("Read sets"),
-                               tr("Load a set from file or pipe onto the graph"),
-                               tr("Ctrl+O"),
-                               this);
-    connect(readSetAct, SIGNAL(triggered()), this, SLOT(open()));
+    readSetAct = makeAction("Read sets",
+                            "Load a set from file or pipe onto the graph",
+                            "Ctrl+O",
+                            SLOT(open()));
 
     readParaAct = new QAction(tr("Read parameters..."), this);
 //     connect(readParaAct, SIGNAL(triggered()), this, SLOT(newFile()));
@@ -58,23 +56,20 @@ void FileMenu::createActions()
     saveAllAct = new QAction(tr("Save all..."), this);
 //     connect(saveAllAct, SIGNAL(triggered()), this, SLOT(newFile()));
     
-    clearAct = createQAction(tr("Clear all"),
-                             tr("Reset the graph to its original state"),
-                             tr("Ctrl+Shift+d"),
-                             this);
-    connect(clearAct, SIGNAL(triggered()), this, SLOT(clear()));
+    clearAct = makeAction("Clear all",
+                          "Reset the graph to its original state",
+                          "Ctrl+Shift+d",
+                          SLOT(clear()));
 	
-    printAct = createQAction(tr("&Print"),
-                             tr("Print the current view to file or printer."),
-                             tr("Ctrl+p"),
-                             this);
-    connect(printAct, SIGNAL(triggered()), this, SLOT(print()));
+    printAct = makeAction("Print",
+                          "Print the current view to file or printer.",
+                          "Ctrl+p",
+                          SLOT(print()));
     
-    exportAct = createQAction(tr("Export"),
-                              tr("Export display to an image"),
-                              tr("Ctrl+E"),
-                              this);
-    connect(exportAct, SIGNAL(triggered()), this, SLOT(exportProc()));
+    exportAct = makeAction("Export",
+                           "Export display to an image",
+                           "Ctrl+E",
+                           SLOT(exportProc()));
     
     printSetupAct = new QAction(tr("&Printer setup..."), this);
 		
@@ -132,8 +127,7 @@ void FileMenu::open()
 
     getdata(0,fileNames.at(0).toAscii().data(),DISK,XY);
 
-    ToolsOptions* t = mainWindow->toolsMenu->getOptions();
-    if (t->isRescaleOnLoad()) {
+    if (ToolsOptions::isRescaleOnLoad()) {
         mainWindow->toolsMenu->autoScale();
     } else {
         drawgraph();

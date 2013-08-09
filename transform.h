@@ -2,22 +2,20 @@
 #define TRANSFORM_H
 
 #include <QtGui>
-#include "mainwindow.h"
 #include "dialog.h"
+#include "menu.h"
 
-class TransformMenu : public QMenu
+class TransformMenu : public Menu
 {
     Q_OBJECT
 public:
     explicit TransformMenu(MainWindow* mainWin);
 
-    MainWindow* mainWindow;
-    
+    void populateMenu(QMenu* q);
     QToolBar* createToolBar();
 
 private:
     void createActions();
-    void createMenus();
     QAction* integrateAct;
     QAction* differentiateAct;
     QAction* evaluateAct;

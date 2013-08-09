@@ -8,12 +8,15 @@ class ToolsOptions : public Dialog
 {
     Q_OBJECT
 public:
-    explicit ToolsOptions(MainWindow* mainWin);
+    static ToolsOptions* getOptionsDialog(MainWindow*);
 
-    bool isRescaleOnLoad();
-    bool isRescaleOnTransform();
+    static bool isRescaleOnLoad();
+    static bool isRescaleOnTransform();
 private:
-    QSettings settings;
+    static ToolsOptions* me;
+    static QSettings* settings;
+
+    explicit ToolsOptions(MainWindow* mainWin);
     QCheckBox* rescaleOnLoad;
     QCheckBox* rescaleOnTransform;
 
