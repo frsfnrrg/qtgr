@@ -15,7 +15,7 @@ private:
     QLineEdit* subtitleField;
     QPushButton* propertiesButton;
 
-    QDialog* propertiesDialog;
+    Dialog* propertiesDialog;
 
 signals:
 
@@ -26,9 +26,29 @@ private slots:
     void applyDialog();
 
     void properties();
-    void updateProperties();
-    void applyProperties();
-    void doneProperties();
 };
+
+class ViewTitleProperties : public Dialog {
+
+Q_OBJECT
+public:
+    explicit ViewTitleProperties(MainWindow* mw);
+
+private:
+    QDoubleSpinBox* ssize;
+    QComboBox* sfont;
+    QComboBox* scolor;
+
+    QDoubleSpinBox* tsize;
+    QComboBox* tfont;
+    QComboBox* tcolor;
+
+public slots:
+    void updateDialog();
+
+private slots:
+    void applyDialog();
+};
+
 
 #endif // TITLE_H

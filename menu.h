@@ -4,6 +4,10 @@
 #include <QtGui>
 #include "dialog.h"
 
+// todo: move to a seperate file
+void loadDialog(Dialog*);
+bool showDialog(Dialog*);
+
 class Menu : public QMenu
 {
     Q_OBJECT
@@ -19,8 +23,6 @@ public:
 
     virtual QToolBar* createToolBar() {return new QToolBar();}
 protected:
-    void loadDialog(Dialog*);
-    bool showDialog(Dialog*);
     // is this the problem
     QAction* makeAction(const char* name, const char* desc, const char* shortcut,
               const char* slot);

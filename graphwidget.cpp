@@ -256,9 +256,13 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     
     //texconvert(s,strlen(s));
-    
+
+    if (charsize == 0.0) {
+        return;
+    }
+
     QFont font;
-    font.setPointSize(fontsize);
+    font.setPointSizeF(14.0 * charsize);
     
     QGraphicsTextItem* text = scene->addText("");
     text->setHtml(texconvert(s,strlen(s)));

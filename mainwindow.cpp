@@ -108,10 +108,7 @@ void MainWindow::createHelpMenu()
     aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
     connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
-    QAction* optionsAct = new QAction(tr("Options"), this);
-
     helpMenu = this->menuBar()->addMenu(tr("&Help"));
-    helpMenu->addAction(optionsAct);
     helpMenu->addSeparator();
     helpMenu->addAction(aboutAct);
     helpMenu->addAction(aboutQtAct);

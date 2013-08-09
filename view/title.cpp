@@ -1,5 +1,6 @@
 #include "view/title.h"
 #include "base/globals.h"
+#include "menu.h"
 
 ViewTitle::ViewTitle(MainWindow* mainWin) :
     Dialog(mainWin, "Title")
@@ -48,17 +49,83 @@ void ViewTitle::applyDialog() {
 }
 
 void ViewTitle::properties() {
-
+    if (showDialog(propertiesDialog)) return;
+    propertiesDialog = new ViewTitleProperties(mainWindow);
+    loadDialog(propertiesDialog);
 }
 
-void ViewTitle::updateProperties() {
+ViewTitleProperties::ViewTitleProperties(MainWindow* mw) :
+    Dialog(mw, "Titling Properties")
+{
+    QHBoxLayout* layout = new QHBoxLayout();
 
+    {
+        tsize = new QDoubleSpinBox();
+        tsize->setMinimum(0.0);
+        tsize->setDecimals(3);
+        tsize->setSingleStep(0.1);
+        tfont = new QComboBox();
+        tcolor = new QComboBox();
+
+        QGridLayout* tl = new QGridLayout();
+
+        tl->addWidget(new QLabel(tr("Title")), 0, 0, 1, 2);
+
+        tl->setRowMinimumHeight(1, 12);
+        tl->addWidget(new QLabel(tr("Font")), 2, 0);
+        tl->addWidget(tfont, 2, 1);
+
+        tl->setRowMinimumHeight(3, 5);
+        tl->addWidget(new QLabel(tr("Size")), 4, 0);
+        tl->addWidget(tsize, 4, 1);
+
+        tl->setRowMinimumHeight(5, 5);
+        tl->addWidget(new QLabel(tr("Color")), 6, 0);
+        tl->addWidget(tcolor, 6, 1);
+
+        layout->addLayout(tl);
+    }
+    layout->addSpacing(10);
+    {
+        ssize = new QDoubleSpinBox();
+        ssize->setMinimum(0.0);
+        ssize->setDecimals(3);
+        ssize->setSingleStep(0.1);
+        sfont = new QComboBox();
+        scolor = new QComboBox();
+
+        QGridLayout* sl = new QGridLayout();
+
+        sl->addWidget(new QLabel(tr("Subtitle")), 0, 0, 1, 2);
+
+        sl->setRowMinimumHeight(1, 12);
+        sl->addWidget(new QLabel(tr("Font")), 2, 0);
+        sl->addWidget(sfont, 2, 1);
+
+        sl->setRowMinimumHeight(3, 5);
+        sl->addWidget(new QLabel(tr("Size")), 4, 0);
+        sl->addWidget(ssize, 4, 1);
+
+        sl->setRowMinimumHeight(5, 5);
+        sl->addWidget(new QLabel(tr("Color")), 6, 0);
+        sl->addWidget(scolor, 6, 1);
+
+        layout->addLayout(sl);
+    }
+    layout->addStretch();
+
+    setDialogLayout(layout);
 }
 
-void ViewTitle::applyProperties() {
-
+void ViewTitleProperties::updateDialog() {
+    tsize->setValue(g[cg].labs.title.charsize);
+    ssize->setValue(g[cg].labs.stitle.charsize);
 }
 
-void ViewTitle::doneProperties() {
 
+void ViewTitleProperties::applyDialog() {
+    g[cg].labs.title.charsize = tsize->value();
+    g[cg].labs.stitle.charsize = ssize->value();
+
+    drawgraph();
 }

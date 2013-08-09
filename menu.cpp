@@ -12,12 +12,12 @@ void Menu::updateDialog(Dialog* d) {
     if (d) d->updateDialog();
 }
 
-void Menu::loadDialog(Dialog* d) {
+void loadDialog(Dialog* d) {
     d->show();
     d->updateDialog();
 }
 
-bool Menu::showDialog(Dialog* d) {
+bool showDialog(Dialog* d) {
     if (d) {
         d->setVisible(true);
         d->updateDialog();
