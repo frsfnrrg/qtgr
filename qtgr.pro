@@ -49,7 +49,6 @@ SOURCES       = edit.cpp \
     view/world.cpp \
     base/alerts.c \
     base/checkon.c \
-    base/chersh.c \
     base/defaults.c \
     base/draw.c \
     base/drawticks.c \
