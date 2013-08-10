@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include "base/globals.h"
 #include "view.h"
+#include "base/patterns.h"
 
 const double FONT_BASE_SIZE = 14.0;
 
@@ -327,6 +328,27 @@ void GraphWidget::fillcolor(int n, int px[], int py[])
     scene->addPolygon(QPolygonF(path),*pen,brush);
 }
 
+void GraphWidget::fill(int n, int px[], int py[]) {
+    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
+    QPen* pen = GraphWidget::myGraphWidget->pen;
+    QBrush brush = QBrush();
+    QVector<QPointF> path;
+
+    for (int i = 0; i < n; i++) {
+      path.append(QPointF(px[i],py[i]));
+    }
+
+    scene->addPolygon(QPolygonF(path),*pen,brush);
+}
+
+void GraphWidget::ellipse(int x, int y, int xm, int ym) {
+    // TODO
+}
+
+void GraphWidget::fillellipse(int x, int y, int xm, int ym) {
+    // TODO
+}
+
 int GraphWidget::stringextentx(double scale, char* str) {
     QFont font;
     font.setPointSizeF(FONT_BASE_SIZE * scale);
@@ -341,6 +363,10 @@ int GraphWidget::stringextenty(double scale, char*) {
     QFontMetrics metric(font);
     // or use bounding box?
     return metric.height();
+}
+
+int GraphWidget::setpattern(int num) {
+    return 0;
 }
 
 void GraphWidget::clear()
@@ -482,6 +508,11 @@ extern "C"
     GraphWidget::fillcolor(n,px,py);
   }
   
+  void qtview_fill(int n, int px[], int py[])
+  {
+      GraphWidget::fill(n,px,py);
+  }
+
   void qtview_clear() 
   {
      GraphWidget::clear();
@@ -499,6 +530,17 @@ extern "C"
   int qtview_stringextenty(double scale, char* str) {
       return GraphWidget::stringextenty(scale, str);
   }
-  
+
+  int qtview_setpattern(int num) {
+      return GraphWidget::setpattern(num);
+  }
+
+  int qtview_drawellipse(int x, int y, int xm, int ym) {
+      GraphWidget::ellipse(x,y,xm,ym);
+  }
+
+  int qtview_fillellipse(int x, int y, int xm, int ym) {
+      GraphWidget::fillellipse(x,y,xm,ym);
+  }
 }
 

@@ -5,9 +5,7 @@
  */
 
 #include <stdio.h>
-
 #include "externs.h"
-#include "patterns.h"
 
 //qtview interface methods
 #include "graphwidget.h"
@@ -59,12 +57,12 @@ int win_h, win_w;
 //  * need to be adjusted
 //  */
 #ifdef HIRES
-  double qtlibcharsize = 0.80;
+double qtlibcharsize = 0.80;
 #else
-  double qtlibcharsize = 0.60;
+double qtlibcharsize = 0.60;
 #endif
-  
-  
+
+
 //imported from draw FIXME
 double xconv(), yconv();
 
@@ -75,21 +73,21 @@ static void qtlibinit()
     extern int invert, overlay, doclear, bgcolor;
     
     qtview_getcanvas(&win_w,&win_h);
-//   printf("qtlibinit %i %i\n",win_w,win_h);
+    //   printf("qtlibinit %i %i\n",win_w,win_h);
 
     
     devwidth = win_w;
     devheight = win_h;
     qtview_clear();
 
-// 	xlibinit_tiles();
-//     if (doclear && !overlay) {
-// 	xlibsetcolor(bgcolor);
-// 	XFillRectangle(disp, displaybuff, gc, 0, 0, win_w, win_h);
-// 	if (backingstore) {
-// 	    XFillRectangle(disp, backpix, gc, 0, 0, win_w, win_h);
-// 	}
-//     }
+    // 	xlibinit_tiles();
+    //     if (doclear && !overlay) {
+    // 	xlibsetcolor(bgcolor);
+    // 	XFillRectangle(disp, displaybuff, gc, 0, 0, win_w, win_h);
+    // 	if (backingstore) {
+    // 	    XFillRectangle(disp, backpix, gc, 0, 0, win_w, win_h);
+    // 	}
+    //     }
 }
 
 
@@ -151,9 +149,9 @@ void drawqtlib(int x, int y, int mode)
 {
     //printf("drawxlib %i %i %i\n",x,y,mode);
     // mode == 1 -> draw; mode == 0 -> move
-    if (mode) {			
-	qtview_paint(x1,win_h-y1,x,win_h-y);
-    } 
+    if (mode) {
+        qtview_paint(x1,win_h-y1,x,win_h-y);
+    }
     x1 = x;
     y1 = y;
 }
@@ -161,14 +159,14 @@ void drawqtlib(int x, int y, int mode)
 // should be moved somewhere else depends on xconv in draw.c //FIXME
 int qtlibconvx(double x) 
 {
-//     printf("qtlibconvx %f %i %f\n",x,win_w,xconv(x));
+    //     printf("qtlibconvx %f %i %f\n",x,win_w,xconv(x));
     return ((int) (win_w * xconv(x)));
 }
 
 // should be moved somewhere else depends on yconv in draw.c //FIXME
 int qtlibconvy(double y) // should be moved somewhere else
 {
-//     printf("qtlibconvy %f %i %f\n",y,win_h,yconv(y));
+    //     printf("qtlibconvy %f %i %f\n",y,win_h,yconv(y));
     return ((int) (win_h * yconv(y)));
 }
 
@@ -176,7 +174,7 @@ int qtlibconvy(double y) // should be moved somewhere else
 void qtlibsetfont(int n)
 {
     x1 = y1 = 99999;
-   // hselectfont(qtlibfont = n);
+    // TODO
 }
 
 
@@ -260,39 +258,39 @@ void qtlibsetfont(int n)
 // 
 int qtlibsetlinewidth(int width)
 {
-//      printf("qtlibsetlinewidth %i\n",w);
+    //      printf("qtlibsetlinewidth %i\n",w);
     x1 = y1 = 99999;
     if (width) {
-	width = width % MAXLINEW;
-	if (width == 0)
-	    width = 1;
-	if (qtliblinestyle == 1) {
-	    qtview_linew(width);
-	} else {
-	    //XSetLineAttributes(disp, gc, c - 1 == 0 ? 0 : c, LineOnOffDash, CapButt, JoinRound);
-	}
+        width = width % MAXLINEW;
+        if (width == 0)
+            width = 1;
+        if (qtliblinestyle == 1) {
+            qtview_linew(width);
+        } else {
+            //XSetLineAttributes(disp, gc, c - 1 == 0 ? 0 : c, LineOnOffDash, CapButt, JoinRound);
+        }
     }
     return (qtliblinewidth = width);
 }
 // 
 int qtlibsetlinestyle(int style)
 {
-//      printf("qtlibsetlinestyle %i\n",style);
+    //      printf("qtlibsetlinestyle %i\n",style);
     x1 = y1 = 99999;
     if (style > 1 && qtliblinewidth) {
-// 	XSetLineAttributes(disp, gc, xliblinewidth - 1 ? 0 : xliblinewidth, LineOnOffDash, CapButt, JoinRound);
-// 	XSetDashes(disp, gc, 0, dash_list[style - 1], dash_list_length[style - 1]);
-	qtview_lines(style);
+        // 	XSetLineAttributes(disp, gc, xliblinewidth - 1 ? 0 : xliblinewidth, LineOnOffDash, CapButt, JoinRound);
+        // 	XSetDashes(disp, gc, 0, dash_list[style - 1], dash_list_length[style - 1]);
+        qtview_lines(style);
     } else if (style == 1 && qtliblinewidth) {
-// 	XSetLineAttributes(disp, gc, xliblinewidth - 1 ? 0 : xliblinewidth, LineSolid, CapButt, JoinRound);
-	qtview_lines(style);
+        // 	XSetLineAttributes(disp, gc, xliblinewidth - 1 ? 0 : xliblinewidth, LineSolid, CapButt, JoinRound);
+        qtview_lines(style);
     }
     return (qtliblinestyle = style);
 }
 // 
 int qtlibsetcolor(int color)
 {
-//     printf("qtlibsetcolor %i\n",color);
+    //     printf("qtlibsetcolor %i\n",color);
     x1 = y1 = 99999;
     color = color % maxcolors;
     qtview_linec(color);
@@ -304,35 +302,35 @@ void qtlibdrawtic(int x, int y, int dir, int updown)
 {
     switch (dir) {
     case 0:
-	switch (updown) {
-	case 0:
-	    drawqtlib(x, y, 0);
-	    drawqtlib(x, y + devxticl, 1);
-	    break;
-	case 1:
-	    drawqtlib(x, y, 0);
-	    drawqtlib(x, y - devxticl, 1);
-	    break;
-	}
-	break;
+        switch (updown) {
+        case 0:
+            drawqtlib(x, y, 0);
+            drawqtlib(x, y + devxticl, 1);
+            break;
+        case 1:
+            drawqtlib(x, y, 0);
+            drawqtlib(x, y - devxticl, 1);
+            break;
+        }
+        break;
     case 1:
-	switch (updown) {
-	case 0:
-	    drawqtlib(x, y, 0);
-	    drawqtlib(x + devyticl, y, 1);
-	    break;
-	case 1:
-	    drawqtlib(x, y, 0);
-	    drawqtlib(x - devyticl, y, 1);
-	    break;
-	}
-	break;
+        switch (updown) {
+        case 0:
+            drawqtlib(x, y, 0);
+            drawqtlib(x + devyticl, y, 1);
+            break;
+        case 1:
+            drawqtlib(x, y, 0);
+            drawqtlib(x - devyticl, y, 1);
+            break;
+        }
+        break;
     }
 }
 
 void qtlibwritestr(int x, int y, int rot, char *s, int just, int fudge)
 {//csto 
-//     printf("qtlibwritestr %i %i %i %s %i \n",x, y, rot, s, just);
+    //     printf("qtlibwritestr %i %i %i %s %i \n",x, y, rot, s, just);
     x1 = y1 = 99999;
     //puthersh(x, y, qtlibcharsize * charsize, rot, just, qtlibcolor, drawqtlib, s);
     qtview_text(x,win_h-y,rot,s,just);
@@ -416,6 +414,12 @@ void qtlibwritestr(int x, int y, int rot, char *s, int just, int fudge)
 //     curtile = tiles[0];
 // }
 // 
+
+int qtlibsetpat(int pattern) {
+    qtview_setpattern(pattern);
+    return 0;// no idea why this is an int
+}
+
 // int xlibsetpat(k)
 //     int k;
 // {
@@ -427,7 +431,11 @@ void qtlibwritestr(int x, int y, int rot, char *s, int just, int fudge)
 // 	curtile = tiles[k - 1];
 //     }
 // }
-// 
+
+void qtlibfill(int n, int px[], int py[]) {
+    qtview_fill(n, px, py);
+}
+
 // void xlibfill(n, px, py)
 //     int n;
 //     int px[], py[];
@@ -461,42 +469,32 @@ void qtlibfillcolor(int n, int px[], int py[])
 {
     int i;
 
-//     printf("qtlibfillcolor %i %i %i \n",n, px[0], py[0]);
+    //     printf("qtlibfillcolor %i %i %i \n",n, px[0], py[0]);
     for (i = 0; i < n; i++) {
-	py[i] = win_h - py[i];
+        py[i] = win_h - py[i];
     }
     qtview_fillcolor(n, px, py);
 }
 
 void qtlibdrawarc(int x, int y, int r)
 {
-//     printf("qtlibdrawarc %i %i %i \n",x, y, r);
+    //     printf("qtlibdrawarc %i %i %i \n",x, y, r);
     qtview_arc(x,win_h-y,r,0);
 }
 
 void qtlibfillarc(int x, int y, int r)
 {
-//     printf("qtlibfillarc %i %i %i \n",x, y, r);
+    //     printf("qtlibfillarc %i %i %i \n",x, y, r);
     qtview_arc(x,win_h-y,r,1);
 }
-// 
-// void xlibdrawellipse(x, y, xm, ym)
-//     int x, y, xm, ym;
-// {
-//     XDrawArc(disp, displaybuff, gc, x - xm, win_h - (y + ym), 2 * xm, 2 * ym, 0, 360 * 64);
-//     if (backingstore) {
-// 	XDrawArc(disp, backpix, gc, x - xm, win_h - (y + ym), 2 * xm, 2 * ym, 0, 360 * 64);
-//     }
-// }
-// 
-// void xlibfillellipse(x, y, xm, ym)
-//     int x, y, xm, ym;
-// {
-//     XFillArc(disp, displaybuff, gc, x - xm, win_h - (y + ym), 2 * xm, 2 * ym, 0, 360 * 64);
-//     if (backingstore) {
-// 	XFillArc(disp, backpix, gc, x - xm, win_h - (y + ym), 2 * xm, 2 * ym, 0, 360 * 64);
-//     }
-// }
+
+void qtlibdrawellipse(int x, int y, int xm, int ym) {
+    qtview_drawellipse(x,y,xm,ym);
+}
+
+void qtlibfillellipse(int x, int y, int xm, int ym) {
+    qtview_fillellipse(x,y,xm,ym);
+}
 
 int stringextentx(double scale, char* str) {
     return qtview_stringextentx(scale, str);
@@ -509,7 +507,7 @@ int stringextenty(double scale, char* str) {
 
 void qtlibleavegraphics()
 {   
-//     printf("leavegraphics: start\n");
+    //     printf("leavegraphics: start\n");
     x1 = y1 = 99999;
     save_images = 0;
     qtview_update();
@@ -518,13 +516,13 @@ void qtlibleavegraphics()
 
 int qtlibinitgraphics(int dmode)
 {
-//     printf("initgraphics: start\n");
+    //     printf("initgraphics: start\n");
     npending = 0;
     x1 = 99999;
     y1 = 99999;
     if (dmode > 1) {
-	save_images = 1;
-	dmode = 0;
+        save_images = 1;
+        dmode = 0;
     }
     qtlibdmode = dmode;
     qtlibinit();
@@ -539,12 +537,12 @@ int qtlibinitgraphics(int dmode)
     devsetline = qtlibsetlinestyle;
     devsetlinew = qtlibsetlinewidth;
     devdrawtic = qtlibdrawtic;
-//     devsetpat = xlibsetpat;
+    devsetpat = qtlibsetpat;
     devdrawarc = qtlibdrawarc;
     devfillarc = qtlibfillarc;
-//     devdrawellipse = xlibdrawellipse;
-//     devfillellipse = xlibfillellipse;
-//     devfill = xlibfill;
+    devdrawellipse = qtlibdrawellipse;
+    devfillellipse = qtlibfillellipse;
+    devfill = qtlibfill;
     devfillcolor = qtlibfillcolor;
     devleavegraphics = qtlibleavegraphics;
     devxticl = 12;
@@ -552,9 +550,9 @@ int qtlibinitgraphics(int dmode)
     devarrowlength = 12;
     devsymsize = 6;
     devcharsize = qtlibcharsize;
-//    (*devsetcolor) (1);
+    //    (*devsetcolor) (1);
     //xlibsetlinestyle(1);
-//     printf("initgraphics: end\n");
+    //     printf("initgraphics: end\n");
     npending = 0;
     return 0;
 }

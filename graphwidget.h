@@ -26,18 +26,22 @@ class GraphWidget : public QGraphicsView
 
 public:
     GraphWidget(QGraphicsScene *, QWidget *parent = 0);
-    static void paint(int x1, int y1, int x2, int y2); 
+    static void paint(int x1, int y1, int x2, int y2);
     static void linew(int w);
     static void lines(int s);
     static void linec(int s);
     static void text(int x, int y, int rot, char* c, int just);
     static void arc(int x, int y, int r, int fill);
     static void fillcolor (int n, int px[], int py[]);
+    static void fill(int n, int px[], int py[]);
     static void clear();
     static void update();
     static void getcanvas(int* win_w, int* win_h);
     static int stringextentx(double scale, char* str);
     static int stringextenty(double scale, char* str);
+    static int setpattern(int num);
+    static void ellipse(int x, int y, int xm, int ym);
+    static void fillellipse(int x, int y, int xm, int ym);
     QColor cmscolors[16];
     MouseCallBack *mouseClickCall;
     MouseCallBack *mouseDoubleCall;
@@ -48,17 +52,18 @@ public:
 public slots:
 
 protected:
-  void mouseMoveEvent(QMouseEvent *event);
-  void mousePressEvent(QMouseEvent *event);
-  void mouseDoubleClickEvent(QMouseEvent *event);
-  void resizeEvent(QResizeEvent* r);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
+    void resizeEvent(QResizeEvent* r);
 
 private slots:
 
 private:
-   QPen *pen;
-   void initialize_cms_data();  
-   
+    QPen *pen;
+
+    void initialize_cms_data();
+
 };
 
 #endif // __cplusplus
@@ -67,19 +72,23 @@ private:
 extern "C"
 {
 #endif // __cplusplus
-  void qtview_paint(int x1, int y1, int x2, int y2);
-  void qtview_linew(int w);
-  void qtview_lines(int s);
-  void qtview_linec(int c);
-  void qtview_text (int x, int y, int rot, char* c, int just);
-  void qtview_arc (int x, int y, int r, int fill);
-  void qtview_fillcolor (int n, int px[], int py[]);
-  void qtview_clear();
-  void qtview_update();
-  void qtview_getcanvas(int* win_w, int* win_h);
-  int qtview_stringextentx(double scale, char* str);
-  int qtview_stringextenty(double scale, char* str);
-  
+
+void qtview_paint(int x1, int y1, int x2, int y2);
+void qtview_linew(int w);
+void qtview_lines(int s);
+void qtview_linec(int c);
+void qtview_text (int x, int y, int rot, char* c, int just);
+void qtview_arc (int x, int y, int r, int fill);
+void qtview_fillcolor (int n, int px[], int py[]);
+void qtview_fill(int n, int px[], int py[]);
+void qtview_clear();
+void qtview_update();
+void qtview_getcanvas(int* win_w, int* win_h);
+int qtview_stringextentx(double scale, char* str);
+int qtview_stringextenty(double scale, char* str);
+int qtview_drawellipse(int x, int y, int xm, int ym);
+int qtview_drawellipse(int x, int y, int xm, int ym);
+
 
 # ifdef __cplusplus 
 }
