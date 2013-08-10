@@ -3,10 +3,7 @@
 
 #include <QtGui>
 #include "dialog.h"
-
-// todo: move to a seperate file
-void loadDialog(Dialog*);
-bool showDialog(Dialog*);
+#include "util.h"
 
 class Menu : public QMenu
 {

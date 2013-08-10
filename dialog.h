@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include "mainwindow.h"
+#include "util.h"
 
 // TODO: wrap in a legend list generator, that hooks things up well.
 // Or, subclass again!
@@ -16,6 +17,9 @@ public:
     void setDialogLayout(QLayout* layout);
 // we could abstract these out, so only the main pane
 // gets changed
+
+protected:
+    QLabel* makeLabel(const char* text, Qt::Alignment align = Qt::AlignCenter);
 
 private:
     QVBoxLayout* layout;

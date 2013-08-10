@@ -16,11 +16,15 @@ public:
     explicit ViewTitle(MainWindow* mainWin);
 
 private:
-    QLineEdit* titleField;
-    QLineEdit* subtitleField;
-    QPushButton* propertiesButton;
+    QLineEdit* stext;
+    QDoubleSpinBox* ssize;
+    QComboBox* sfont;
+    QComboBox* scolor;
 
-    Dialog* propertiesDialog;
+    QLineEdit* ttext;
+    QDoubleSpinBox* tsize;
+    QComboBox* tfont;
+    QComboBox* tcolor;
 
 signals:
 
@@ -29,31 +33,6 @@ public slots:
 
 private slots:
     void applyDialog();
-
-    void properties();
 };
-
-class ViewTitleProperties : public Dialog {
-
-Q_OBJECT
-public:
-    explicit ViewTitleProperties(MainWindow* mw);
-
-private:
-    QDoubleSpinBox* ssize;
-    QComboBox* sfont;
-    QComboBox* scolor;
-
-    QDoubleSpinBox* tsize;
-    QComboBox* tfont;
-    QComboBox* tcolor;
-
-public slots:
-    void updateDialog();
-
-private slots:
-    void applyDialog();
-};
-
 
 #endif // TITLE_H

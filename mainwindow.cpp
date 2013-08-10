@@ -11,16 +11,6 @@
 #include "base/globals.h"
 #include "prop.h"
 
-QAction* createQAction(const QString &name, const QString &explained, const QString &shortcut, QObject* parent)
-{
-   QAction* f = new QAction(name, parent);
-   f->setToolTip(explained);
-   f->setStatusTip(explained);
-   f->setWhatsThis(explained);
-   f->setShortcut(QKeySequence(shortcut));
-   f->setShortcutContext(Qt::ApplicationShortcut);
-   return f;
-}
 
 MainWindow::MainWindow()
 {

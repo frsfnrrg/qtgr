@@ -4,9 +4,6 @@
 #include <QtGui>
 #include "graphwidget.h"
 
-// where should this utility function go? create a util.cpp?
-QAction* createQAction(const QString &name, const QString &explained, const QString &shortcut, QObject* parent);
-
 class ViewMenu;
 class FileMenu;
 class EditMenu;

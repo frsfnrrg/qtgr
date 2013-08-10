@@ -51,3 +51,7 @@ void Dialog::doneDialog() {
 void Dialog::cancelDialog() {
     this->setVisible(false);
 }
+
+QLabel* Dialog::makeLabel(const char* text, Qt::Alignment align) {
+    return makeQLabel(this, text, align);
+}

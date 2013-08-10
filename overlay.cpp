@@ -1,5 +1,6 @@
 #include "overlay.h"
 #include "mainwindow.h"
+#include "util.h"
 
 const int offset = 3;
 
