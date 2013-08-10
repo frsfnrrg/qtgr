@@ -5,9 +5,7 @@ HEADERS       = edit.h \
     base/defines.h \
     base/pars.h \
     base/externs.h \
-    base/hersh.h \
     base/patterns.h \
-    base/special.h \
     base/symdefs.h \
     base/f2c.h \
     mainwindow.h \
