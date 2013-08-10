@@ -1,6 +1,7 @@
 #include "view/title.h"
 #include "base/globals.h"
 #include "menu.h"
+#include "choosers.h"
 
 ViewTitle::ViewTitle(MainWindow* mainWin) :
     Dialog(mainWin, "Title")
@@ -12,7 +13,7 @@ ViewTitle::ViewTitle(MainWindow* mainWin) :
     tsize->setDecimals(2);
     tsize->setSingleStep(0.1);
     tfont = new FontComboBox();
-    tcolor = new QComboBox();
+    tcolor = new ColorComboBox();
 
     stext = new QLineEdit();
     ssize = new QDoubleSpinBox();
@@ -20,7 +21,9 @@ ViewTitle::ViewTitle(MainWindow* mainWin) :
     ssize->setDecimals(2);
     ssize->setSingleStep(0.1);
     sfont = new FontComboBox();
-    scolor = new QComboBox();
+    scolor = new ColorComboBox();
+
+    // divide using QFrame magic??
 
     QGridLayout* layout = new QGridLayout();
 
@@ -59,6 +62,9 @@ void ViewTitle::updateDialog() {
 
     tfont->setCurrentIndex(g[gno].labs.title.font);
     sfont->setCurrentIndex(g[gno].labs.stitle.font);
+
+    tcolor->setCurrentIndex(g[gno].labs.title.color);
+    scolor->setCurrentIndex(g[gno].labs.stitle.color);
 }
 
 void ViewTitle::applyDialog() {
@@ -72,6 +78,9 @@ void ViewTitle::applyDialog() {
 
     g[gno].labs.title.font = tfont->currentIndex();
     g[gno].labs.stitle.font = sfont->currentIndex();
+
+    g[gno].labs.title.color = tcolor->currentIndex();
+    g[gno].labs.stitle.color = scolor->currentIndex();
 
     drawgraph();
 }

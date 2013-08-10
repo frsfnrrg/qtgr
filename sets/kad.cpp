@@ -1,6 +1,6 @@
 #include "sets/kad.h"
 #include "base/globals.h"
-#include "setcombobox.h"
+#include "choosers.h"
 #include "prop.h"
 
 SetsKAD::SetsKAD(MainWindow* mainWin) :

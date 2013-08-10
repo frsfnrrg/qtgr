@@ -1,5 +1,5 @@
 #include "sets/mcs.h"
-#include "setcombobox.h"
+#include "choosers.h"
 #include "prop.h"
 #include "base/globals.h"
 

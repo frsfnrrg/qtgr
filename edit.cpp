@@ -1,23 +1,26 @@
-#include <QtGui>
-#include "mainwindow.h"
 #include "edit.h"
-#include "base/globals.h"
 
-EditMenu::EditMenu(MainWindow* mainWin)
-{  
-    this->mainWindow = mainWin;
-    this->setTitle(tr("Edit"));
+EditMenu::EditMenu(MainWindow* mainWin) :
+    Menu(mainWin,"Edit",true)
+{
     createActions();
-    createMenus();
+    populateMenu(this);
 }
 
 
-void EditMenu::createMenus()
+QToolBar* EditMenu::createToolBar() {
+    QToolBar* q = new QToolBar(title());
+    q->addAction(cutAct);
+    q->addAction(copyAct);
+    q->addAction(pasteAct);
+    return q;
+}
+
+void EditMenu::populateMenu(QMenu* q)
 {
-    this->setTearOffEnabled(true);
-    this->addAction(cutAct);
-    this->addAction(copyAct);
-    this->addAction(pasteAct);
+    q->addAction(cutAct);
+    q->addAction(copyAct);
+    q->addAction(pasteAct);
 }
 
 void EditMenu::createActions()

@@ -23,7 +23,7 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) :
     connect(setNumbers, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
     graphTypes = new QComboBox();
-    for (int k=0;k<4;k++) {// FIXME: find out why bar charts fail (and others are skewed)
+    for (int k=0;k<8;k++) {
         graphTypes->addItem(tr(opts[k]));
     }
 

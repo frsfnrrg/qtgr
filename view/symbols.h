@@ -21,6 +21,9 @@ class ViewSymbols : public Dialog
     QComboBox* lineStyle;
     QComboBox* lineColor;
     QLineEdit* legendS;
+    QComboBox* fillFill;
+    QComboBox* fillColor;
+    QComboBox* fillPattern;
     
   public slots:
     void updateDialog();

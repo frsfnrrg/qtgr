@@ -4,8 +4,7 @@
 #include "mainwindow.h"
 #include "base/globals.h"
 #include "view.h"
-#include "base/patterns.h"
-#include "fontcombobox.h"
+#include "choosers.h"
 
 const double FONT_BASE_SIZE = 14.0;
 
@@ -31,13 +30,16 @@ void GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     menu.exec(event->screenPos());
 }
 
-GraphWidget::GraphWidget(QGraphicsScene *s, QWidget *parent)
-    : QGraphicsView(s,parent)
+GraphWidget::GraphWidget(QGraphicsScene *s, MainWindow *mwin)
+    : QGraphicsView(s,mwin)
 {
-    GraphWidget::myGraphWidget = this; 
-    pen = new QPen();
-    mainWindow = (MainWindow *) parent;
-    initialize_cms_data();
+    GraphWidget::myGraphWidget = this;
+    GraphWidget::pen = new QPen();
+    GraphWidget::patnum = 0;
+    GraphWidget::fontnum = 0;
+
+    mainWindow = mwin;
+    PatternComboBox::initializePatterns();
     FontComboBox::initializeFonts();
     mouseClickCall = NULL;
     mouseDoubleCall = NULL;
@@ -91,7 +93,6 @@ void GraphWidget::mousePressEvent(QMouseEvent *event)
     event->accept();
 }
 
-
 void GraphWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
@@ -142,7 +143,7 @@ void GraphWidget::lines(int s)
 void GraphWidget::linec(int c)
 {
      QPen* pen = GraphWidget::myGraphWidget->pen;
-     pen->setColor(GraphWidget::myGraphWidget->cmscolors[c]);
+     pen->setColor(  ColorComboBox::getColor(c));
 }
 
 QMap<QString, QString> tex2html;
@@ -254,8 +255,6 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
     int xoff=0,yoff=0;
     
 //     printf("GraphWidget: text %i %i %i %s %i\n",x,y,rot,s,just);
-  
-    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     
     //texconvert(s,strlen(s));
 
@@ -267,8 +266,8 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
 
     QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
     font.setPointSizeF(fontsize);
-    
-    QGraphicsTextItem* text = scene->addText("");
+
+    QGraphicsTextItem* text = GraphWidget::myGraphWidget->scene()->addText("");
     text->setHtml(texconvert(s,strlen(s)));
     text->setFont(font);
     QRectF bRect = text->boundingRect();
@@ -323,6 +322,12 @@ void GraphWidget::fillcolor(int n, int px[], int py[])
     QBrush brush = QBrush(pen->color());
     QVector<QPointF> path;  
     
+    int patnum = GraphWidget::myGraphWidget->patnum;
+
+    if (patnum != 0) {
+        brush.setTexture(PatternComboBox::getPattern(patnum));
+    }
+
     for (int i = 0; i < n; i++) {
       path.append(QPointF(px[i],py[i]));
     }
@@ -331,16 +336,11 @@ void GraphWidget::fillcolor(int n, int px[], int py[])
 }
 
 void GraphWidget::fill(int n, int px[], int py[]) {
-    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
-    QPen* pen = GraphWidget::myGraphWidget->pen;
-    QBrush brush = QBrush();
-    QVector<QPointF> path;
-
-    for (int i = 0; i < n; i++) {
-      path.append(QPointF(px[i],py[i]));
-    }
-
-    scene->addPolygon(QPolygonF(path),*pen,brush);
+    QColor color = GraphWidget::myGraphWidget->pen->color();
+    QColor q(0,0,0);
+    GraphWidget::myGraphWidget->pen->setColor(q);
+    fillcolor(n, px, py);
+    GraphWidget::myGraphWidget->pen->setColor(color);
 }
 
 void GraphWidget::ellipse(int x, int y, int xm, int ym) {
@@ -368,6 +368,7 @@ int GraphWidget::stringextenty(double scale, char*) {
 }
 
 int GraphWidget::setpattern(int num) {
+    GraphWidget::myGraphWidget->patnum = num;
     return 0;
 }
 
@@ -383,92 +384,10 @@ void GraphWidget::update()
      scene->update();
 }
 
-void GraphWidget::initialize_cms_data()
-{
-    int i;
-    int red[MAXCOLORS],green[MAXCOLORS],blue[MAXCOLORS];
-
-    /* white  */
-    red[0] = 255;
-    green[0] = 255;
-    blue[0] = 255;
-    /* black    */
-    red[1] = 0;
-    green[1] = 0;
-    blue[1] = 0;
-    /* red    */
-    red[2] = 255;
-    green[2] = 0;
-    blue[2] = 0;
-    /* green  */
-    red[3] = 0;
-    green[3] = 255;
-    blue[3] = 0;
-    /* blue   */
-    red[4] = 0;
-    green[4] = 0;
-    blue[4] = 255;
-    /* yellow */
-    red[5] = 255;
-    green[5] = 255;
-    blue[5] = 0;
-    /* brown  */
-    red[6] = 188;
-    green[6] = 143;
-    blue[6] = 143;
-    /* gray   */
-    red[7] = 220;
-    green[7] = 220;
-    blue[7] = 220;
-    /* violet  */
-    red[8] = 148;
-    green[8] = 0;
-    blue[8] = 211;
-    /* cyan  */
-    red[9] = 0;
-    green[9] = 255;
-    blue[9] = 255;
-    /* magenta  */
-    red[10] = 255;
-    green[10] = 0;
-    blue[10] = 211;
-    /* orange  */
-    red[11] = 255;
-    green[11] = 138;
-    blue[11] = 0;
-    /* blue violet  */
-    red[12] = 114;
-    green[12] = 33;
-    blue[12] = 188;
-    /* maroon  */
-    red[13] = 103;
-    green[13] = 7;
-    blue[13] = 72;
-    /* turquoise  */
-    red[14] = 72;
-    green[14] = 209;
-    blue[14] = 204;
-    /* forest green  */
-    red[15] = 85;
-    green[15] = 192;
-    blue[15] = 52;
-
-    for (i = 16; i < MAXCOLORS; i++) {
-	red[i] = i;
-	green[i] = i;
-	blue[i] = i;
-    }
-
-    for (i = 0; i < MAXCOLORS; i++) {
-// 	printf("setcolor %i,%i,%i \n",red[i],green[i],blue[i]);
-	cmscolors[i].setRgb(red[i],green[i],blue[i]);
-    }
-}
-
 void GraphWidget::setfont(int num) {
     GraphWidget::myGraphWidget->fontnum = num;
 }
- 
+
 extern "C"
 {
   

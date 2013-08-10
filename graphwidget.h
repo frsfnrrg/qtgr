@@ -25,7 +25,7 @@ class GraphWidget : public QGraphicsView
     static GraphWidget *myGraphWidget;
 
 public:
-    GraphWidget(QGraphicsScene *, QWidget *parent = 0);
+    GraphWidget(QGraphicsScene *, MainWindow *);
     static void paint(int x1, int y1, int x2, int y2);
     static void linew(int w);
     static void lines(int s);
@@ -63,9 +63,7 @@ private slots:
 private:
     QPen *pen;
     int fontnum;
-
-    void initialize_cms_data();
-
+    int patnum;
 };
 
 #endif // __cplusplus
@@ -79,9 +77,9 @@ void qtview_paint(int x1, int y1, int x2, int y2);
 void qtview_linew(int w);
 void qtview_lines(int s);
 void qtview_linec(int c);
-void qtview_text (int x, int y, int rot, char* c, int just);
-void qtview_arc (int x, int y, int r, int fill);
-void qtview_fillcolor (int n, int px[], int py[]);
+void qtview_text(int x, int y, int rot, char* c, int just);
+void qtview_arc(int x, int y, int r, int fill);
+void qtview_fillcolor(int n, int px[], int py[]);
 void qtview_fill(int n, int px[], int py[]);
 void qtview_clear();
 void qtview_update();

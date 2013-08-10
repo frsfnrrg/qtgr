@@ -24,7 +24,6 @@ HEADERS       = edit.h \
     transform/differentiation.h \
     transform/evaluate.h \
     view/title.h \
-    setcombobox.h \
     prop.h \
     overlay.h \
     sets.h \
@@ -35,7 +34,7 @@ HEADERS       = edit.h \
     sets/mcs.h \
     tools/options.h \
     util.h \
-    fontcombobox.h
+    choosers.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -79,7 +78,6 @@ SOURCES       = edit.cpp \
     transform/differentiation.cpp \
     transform/evaluate.cpp \
     view/title.cpp \
-    setcombobox.cpp \
     prop.cpp \
     overlay.cpp \
     sets.cpp \
@@ -90,7 +88,7 @@ SOURCES       = edit.cpp \
     sets/mcs.cpp \
     tools/options.cpp \
     util.cpp \
-    fontcombobox.cpp
+    choosers.cpp
 
 RESOURCES     = qtgr.qrc
 

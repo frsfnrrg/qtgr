@@ -14,10 +14,28 @@ FileMenu::FileMenu(MainWindow* mainWin) :
     populateMenu(this);
 }
 
+QToolBar* FileMenu::createToolBar() {
+    QToolBar* q = new QToolBar(title());
+    q->addAction(readSetAct);
+    q->addAction(readParaAct);
+    q->addAction(readBlockAct);
+    q->addSeparator();
+    q->addAction(writeSetAct);
+    q->addAction(writeParaAct);
+    q->addAction(saveAllAct);
+    q->addSeparator();
+    q->addAction(clearAct);
+    q->addSeparator();
+    q->addAction(printAct);
+    q->addAction(exportAct);
+    q->addSeparator();
+    q->addAction(exitAct);
+    return q;
+}
+
 
 void FileMenu::populateMenu(QMenu* q)
 {
-    q->setTearOffEnabled(true);
     q->addAction(readSetAct);
     q->addAction(readParaAct);
     q->addAction(readBlockAct);

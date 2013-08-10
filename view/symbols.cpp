@@ -2,7 +2,7 @@
 #include "view/symbols.h"
 #include "view.h"
 #include "base/globals.h"
-#include "setcombobox.h"
+#include "choosers.h"
 #include "prop.h"
 
 ViewSymbols::ViewSymbols(MainWindow* mainWin) :
@@ -17,7 +17,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
     
     // symbols inputs
-    symbolSymbol = new QComboBox;
+    symbolSymbol = new QComboBox();
     symbolSymbol->addItem("None");
     symbolSymbol->addItem("Dot");
     symbolSymbol->addItem("Circle");
@@ -30,44 +30,39 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     symbolSymbol->addItem("Plus");
     symbolSymbol->addItem("X");
     symbolSymbol->addItem("Star");
-    symbolFill = new QComboBox;
+    symbolFill = new QComboBox();
     symbolFill->addItem("None");
     symbolFill->addItem("Filled");
     
     // line inputs
-    lineStyle = new QComboBox;
+    lineStyle = new QComboBox();
     lineStyle->addItem("None");
     lineStyle->addItem("Solid");
     lineStyle->addItem("Dashed");
     lineStyle->addItem("Dotted");
     lineStyle->addItem("Dash-Dot");
     lineStyle->addItem("Dash-DotDot");
-    lineWidth = new QComboBox;
+    lineWidth = new QComboBox();
     for (int i=1; i<=maxwidths; i++) {
       lineWidth->addItem(QString::number(i));
     }
-    
-    QIcon colorIcon;
-    QPixmap colorPix = QPixmap(20,20);
-    colorPix.fill(this->mainWindow->gwidget->cmscolors[0]);
-    colorIcon.addPixmap(colorPix);
-    
-    lineColor = new QComboBox;
-    for (int i=0; i<maxcolors; i++) {
-      colorPix.fill(this->mainWindow->gwidget->cmscolors[i]);
-      colorIcon.addPixmap(colorPix);
-      lineColor->addItem(colorIcon,"");
-    }
+
+    lineColor = new ColorComboBox();
 
     // fill inputs
-    QComboBox* fillFill = new QComboBox;
-    QComboBox* fillStyle = new QComboBox;
-    QComboBox* fillColor = new QComboBox;
+    fillFill = new QComboBox();
+    fillFill->addItem(tr("None"));
+    fillFill->addItem(tr("As polygon"));
+    fillFill->addItem(tr("To Y=0"));
+    fillFill->addItem(tr("To X=0"));
+    fillFill->addItem(tr("To X-min"));
+    fillFill->addItem(tr("To X-max"));
+    fillFill->addItem(tr("To Y-max"));
+    fillFill->addItem(tr("To Y-min"));
+
+    fillColor = new ColorComboBox();
     
-    QComboBox* fillPattern = new QComboBox;
-    for (int i=0; i<maxpatterns; i++) {
-      fillPattern->addItem(QString::number(i));
-    }
+    fillPattern = new PatternComboBox();
     
     legendS = new QLineEdit();
     legendS->setMaximumWidth(300); 
@@ -112,13 +107,11 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     
     //fills details
     layout->addWidget(new QLabel("Fill"),3,6);
-    layout->addWidget(new QLabel("Style"),4,6);
-    layout->addWidget(new QLabel("Color"),5,6);
-    layout->addWidget(new QLabel("Pattern"),6,6);
+    layout->addWidget(new QLabel("Color"),4,6);
+    layout->addWidget(new QLabel("Pattern"),5,6);
     layout->addWidget(fillFill,3,7);
-    layout->addWidget(fillStyle,4,7);
-    layout->addWidget(fillColor,5,7);
-    layout->addWidget(fillPattern,6,7);
+    layout->addWidget(fillColor,4,7);
+    layout->addWidget(fillPattern,5,7);
 
     this->setDialogLayout(layout);
   
@@ -157,6 +150,15 @@ void ViewSymbols::updateDialog()
     lineColor->setCurrentIndex(g[gno].p[cset].color);
     
     legendS->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));
+
+    fillFill->setCurrentIndex(g[gno].p[cset].fill);
+    if (g[gno].p[cset].fillusing == COLOR) {
+        fillPattern->setCurrentIndex(0);
+    } else {
+        fillPattern->setCurrentIndex(g[gno].p[cset].fillpattern);
+    }
+    fillColor->setCurrentIndex(g[gno].p[cset].fillcolor);
+
 // 	xv_set(toggle_fill_item, PANEL_VALUE, g[gno].p[value].fill, NULL);
 // 	xv_set(toggle_fillusing_item, PANEL_VALUE, g[gno].p[value].fillusing == COLOR ? 0 : 1, NULL);
 // 	xv_set(toggle_fillcol_item, PANEL_VALUE, g[gno].p[value].fillcolor, NULL);
@@ -192,6 +194,15 @@ void ViewSymbols::applyDialog()
     wid   = lineWidth->currentIndex()+1;
     style = lineStyle->currentIndex();
     color = lineColor->currentIndex();
+
+    fill = fillFill->currentIndex();
+    fillpat = fillPattern->currentIndex();
+    if (fillpat == 0) {
+        fillusing = COLOR;
+    } else {
+        fillusing = PATTERN;
+    }
+    fillcol = fillColor->currentIndex();
 //     fill = (int) xv_get(toggle_fill_item, PANEL_VALUE);
 //     fillusing = (int) xv_get(toggle_fillusing_item, PANEL_VALUE) ? PATTERN : COLOR;
 //     fillpat = (int) xv_get(toggle_fillpat_item, PANEL_VALUE);
@@ -209,6 +220,8 @@ void ViewSymbols::applyDialog()
     // Note: there is an apply-to-all-sets option
     // in XVGR
 
+    printf("fill %i %i %i %i\n", fill, fillusing, fillcol, fillpat);
+
     set_prop(cg, SET,
 	     SETNUM, cset,
 	     SYMBOL, TYPE, sym,
@@ -219,10 +232,10 @@ void ViewSymbols::applyDialog()
 	     LINESTYLE, style,
 	     LINEWIDTH, wid,
 	     COLOR, color,
-// 	     FILL, TYPE, fill,
-// 	     FILL, WITH, fillusing,
-// 	     FILL, COLOR, fillcol,
-// 	     FILL, PATTERN, fillpat,
+         FILL, TYPE, fill,
+         FILL, WITH, fillusing,
+         FILL, COLOR, fillcol,
+         FILL, PATTERN, fillpat,
 	     0);
    // updatesymbols(cg, cset);
     

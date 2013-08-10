@@ -1,5 +1,6 @@
 #include "view/frame.h"
 #include "base/globals.h"
+#include "choosers.h"
 
 ViewFrame::ViewFrame(MainWindow* mainWin) :
     Dialog(mainWin, "Frame")
@@ -10,17 +11,8 @@ ViewFrame::ViewFrame(MainWindow* mainWin) :
     graphType->addItem(tr("None"));
     connect(graphType, SIGNAL(currentIndexChanged(int)), this, SLOT(setOOpts(int)));
 
-    QIcon colorIcon;
-    QPixmap colorPix = QPixmap(20,20);
-
-    lineColor = new QComboBox;
-    fillColor = new QComboBox();
-    for (int i=0; i<MAXCOLORS; i++) {
-      colorPix.fill(this->mainWindow->gwidget->cmscolors[i]);
-      colorIcon.addPixmap(colorPix);
-      lineColor->addItem(colorIcon,"");
-      fillColor->addItem(colorIcon,"");
-    }
+    lineColor = new ColorComboBox();
+    fillColor = new ColorComboBox();
 
     lineStyle = new QComboBox;
     lineStyle->addItem("None");

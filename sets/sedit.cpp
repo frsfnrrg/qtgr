@@ -1,6 +1,6 @@
 #include "sets/sedit.h"
 #include "base/globals.h"
-#include "setcombobox.h"
+#include "choosers.h"
 
 SetsEdit::SetsEdit(MainWindow* mwin) :
     Dialog(mwin, "Edit Sets")

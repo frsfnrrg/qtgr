@@ -433,6 +433,10 @@ int qtlibsetpat(int pattern) {
 // }
 
 void qtlibfill(int n, int px[], int py[]) {
+    int i;
+    for (i = 0; i < n; i++) {
+        py[i] = win_h - py[i];
+    }
     qtview_fill(n, px, py);
 }
 
@@ -468,8 +472,6 @@ void qtlibfill(int n, int px[], int py[]) {
 void qtlibfillcolor(int n, int px[], int py[])
 {
     int i;
-
-    //     printf("qtlibfillcolor %i %i %i \n",n, px[0], py[0]);
     for (i = 0; i < n; i++) {
         py[i] = win_h - py[i];
     }
@@ -478,13 +480,11 @@ void qtlibfillcolor(int n, int px[], int py[])
 
 void qtlibdrawarc(int x, int y, int r)
 {
-    //     printf("qtlibdrawarc %i %i %i \n",x, y, r);
     qtview_arc(x,win_h-y,r,0);
 }
 
 void qtlibfillarc(int x, int y, int r)
 {
-    //     printf("qtlibfillarc %i %i %i \n",x, y, r);
     qtview_arc(x,win_h-y,r,1);
 }
 
@@ -507,7 +507,6 @@ int stringextenty(double scale, char* str) {
 
 void qtlibleavegraphics()
 {   
-    //     printf("leavegraphics: start\n");
     x1 = y1 = 99999;
     save_images = 0;
     qtview_update();
@@ -516,7 +515,6 @@ void qtlibleavegraphics()
 
 int qtlibinitgraphics(int dmode)
 {
-    //     printf("initgraphics: start\n");
     npending = 0;
     x1 = 99999;
     y1 = 99999;
@@ -550,9 +548,11 @@ int qtlibinitgraphics(int dmode)
     devarrowlength = 12;
     devsymsize = 6;
     devcharsize = qtlibcharsize;
-    //    (*devsetcolor) (1);
-    //xlibsetlinestyle(1);
-    //     printf("initgraphics: end\n");
+
+    // default values.
+    qtlibsetcolor (1);
+    qtlibsetlinestyle(1);
+
     npending = 0;
     return 0;
 }

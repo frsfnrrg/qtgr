@@ -3,7 +3,7 @@
 
 #include <QtGui>
 #include "dialog.h"
-#include "fontcombobox.h"
+#include "choosers.h"
 
 // TODO:
 //

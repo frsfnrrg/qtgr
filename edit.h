@@ -2,21 +2,9 @@
 #define MENUEDIT_H
 
 #include <QtGui>
-#include "mainwindow.h"
+#include "menu.h"
 
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-QT_END_NAMESPACE
-
-/*
- This menu holds modification stuff,
- as well as copy-to-clipboard and paste-from-clipboard
-
- Adding points, deleting points, and changing set points are done from
- here
- */
-class EditMenu : public QMenu
+class EditMenu : public Menu
 {
     Q_OBJECT
 
@@ -26,18 +14,16 @@ public:
     QAction *copyAct;
     QAction *pasteAct;
 
+    void populateMenu(QMenu*);
+    QToolBar* createToolBar();
+
 protected:
    
 
 private slots:
 
 private:
-    MainWindow *mainWindow;
-    void createMenus();
     void createActions();
-
-
-   
 };
 
 #endif

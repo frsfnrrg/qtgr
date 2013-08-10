@@ -85,6 +85,10 @@ void MainWindow::createMenus()
     // for some odd reason, these must be added _after_ the menus
     this->addToolBar(toolsMenu->createToolBar());
     this->addToolBar(viewMenu->createToolBar());
+    this->addToolBar(fileMenu->createToolBar());
+    this->addToolBar(editMenu->createToolBar());
+    this->addToolBar(setMenu->createToolBar());
+    this->addToolBar(transformMenu->createToolBar());
 }
 
 
