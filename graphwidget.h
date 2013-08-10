@@ -42,6 +42,7 @@ public:
     static int setpattern(int num);
     static void ellipse(int x, int y, int xm, int ym);
     static void fillellipse(int x, int y, int xm, int ym);
+    static void setfont(int num);
     QColor cmscolors[16];
     MouseCallBack *mouseClickCall;
     MouseCallBack *mouseDoubleCall;
@@ -61,6 +62,7 @@ private slots:
 
 private:
     QPen *pen;
+    int fontnum;
 
     void initialize_cms_data();
 
@@ -88,7 +90,7 @@ int qtview_stringextentx(double scale, char* str);
 int qtview_stringextenty(double scale, char* str);
 int qtview_drawellipse(int x, int y, int xm, int ym);
 int qtview_drawellipse(int x, int y, int xm, int ym);
-
+void qtview_setfont(int n);
 
 # ifdef __cplusplus 
 }

@@ -174,7 +174,7 @@ int qtlibconvy(double y) // should be moved somewhere else
 void qtlibsetfont(int n)
 {
     x1 = y1 = 99999;
-    // TODO
+    qtview_setfont(n);
 }
 
 

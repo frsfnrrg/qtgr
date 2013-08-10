@@ -11,7 +11,7 @@ ViewTitle::ViewTitle(MainWindow* mainWin) :
     tsize->setMinimum(0.0);
     tsize->setDecimals(2);
     tsize->setSingleStep(0.1);
-    tfont = new QComboBox();
+    tfont = new FontComboBox();
     tcolor = new QComboBox();
 
     stext = new QLineEdit();
@@ -19,7 +19,7 @@ ViewTitle::ViewTitle(MainWindow* mainWin) :
     ssize->setMinimum(0.0);
     ssize->setDecimals(2);
     ssize->setSingleStep(0.1);
-    sfont = new QComboBox();
+    sfont = new FontComboBox();
     scolor = new QComboBox();
 
     QGridLayout* layout = new QGridLayout();
@@ -56,6 +56,9 @@ void ViewTitle::updateDialog() {
 
     tsize->setValue(g[gno].labs.title.charsize);
     ssize->setValue(g[gno].labs.stitle.charsize);
+
+    tfont->setCurrentIndex(g[gno].labs.title.font);
+    sfont->setCurrentIndex(g[gno].labs.stitle.font);
 }
 
 void ViewTitle::applyDialog() {
@@ -66,6 +69,9 @@ void ViewTitle::applyDialog() {
 
     g[gno].labs.title.charsize = tsize->value();
     g[gno].labs.stitle.charsize = ssize->value();
+
+    g[gno].labs.title.font = tfont->currentIndex();
+    g[gno].labs.stitle.font = sfont->currentIndex();
 
     drawgraph();
 }

@@ -5,6 +5,7 @@
 #include "base/globals.h"
 #include "view.h"
 #include "base/patterns.h"
+#include "fontcombobox.h"
 
 const double FONT_BASE_SIZE = 14.0;
 
@@ -37,6 +38,7 @@ GraphWidget::GraphWidget(QGraphicsScene *s, QWidget *parent)
     pen = new QPen();
     mainWindow = (MainWindow *) parent;
     initialize_cms_data();
+    FontComboBox::initializeFonts();
     mouseClickCall = NULL;
     mouseDoubleCall = NULL;
     overlay = new Overlay(this);
@@ -263,7 +265,7 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
 
     double fontsize = FONT_BASE_SIZE * charsize;
 
-    QFont font;
+    QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
     font.setPointSizeF(fontsize);
     
     QGraphicsTextItem* text = scene->addText("");
@@ -350,7 +352,7 @@ void GraphWidget::fillellipse(int x, int y, int xm, int ym) {
 }
 
 int GraphWidget::stringextentx(double scale, char* str) {
-    QFont font;
+    QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
     font.setPointSizeF(FONT_BASE_SIZE * scale);
     QFontMetrics metric(font);
     // or use bounding box?
@@ -358,7 +360,7 @@ int GraphWidget::stringextentx(double scale, char* str) {
 }
 
 int GraphWidget::stringextenty(double scale, char*) {
-    QFont font;
+    QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
     font.setPointSizeF(FONT_BASE_SIZE * scale);
     QFontMetrics metric(font);
     // or use bounding box?
@@ -463,6 +465,9 @@ void GraphWidget::initialize_cms_data()
     }
 }
 
+void GraphWidget::setfont(int num) {
+    GraphWidget::myGraphWidget->fontnum = num;
+}
  
 extern "C"
 {
@@ -541,6 +546,10 @@ extern "C"
 
   int qtview_fillellipse(int x, int y, int xm, int ym) {
       GraphWidget::fillellipse(x,y,xm,ym);
+  }
+
+  void qtview_setfont(int n) {
+      GraphWidget::setfont(n);
   }
 }
 

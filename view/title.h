@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include "dialog.h"
+#include "fontcombobox.h"
 
 // TODO:
 //
@@ -18,12 +19,12 @@ public:
 private:
     QLineEdit* stext;
     QDoubleSpinBox* ssize;
-    QComboBox* sfont;
+    FontComboBox* sfont;
     QComboBox* scolor;
 
     QLineEdit* ttext;
     QDoubleSpinBox* tsize;
-    QComboBox* tfont;
+    FontComboBox* tfont;
     QComboBox* tcolor;
 
 signals:

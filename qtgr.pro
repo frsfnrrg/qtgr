@@ -34,7 +34,8 @@ HEADERS       = edit.h \
     menu.h \
     sets/mcs.h \
     tools/options.h \
-    util.h
+    util.h \
+    fontcombobox.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -88,7 +89,8 @@ SOURCES       = edit.cpp \
     menu.cpp \
     sets/mcs.cpp \
     tools/options.cpp \
-    util.cpp
+    util.cpp \
+    fontcombobox.cpp
 
 RESOURCES     = qtgr.qrc
 
