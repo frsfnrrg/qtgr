@@ -14,8 +14,7 @@ FileMenu::FileMenu(MainWindow* mainWin) :
     populateMenu(this);
 }
 
-QToolBar* FileMenu::createToolBar() {
-    QToolBar* q = new QToolBar(title());
+void FileMenu::populateToolBar(QToolBar* q) {
     q->addAction(readSetAct);
     q->addAction(readParaAct);
     q->addAction(readBlockAct);
@@ -30,7 +29,6 @@ QToolBar* FileMenu::createToolBar() {
     q->addAction(exportAct);
     q->addSeparator();
     q->addAction(exitAct);
-    return q;
 }
 
 

@@ -46,8 +46,7 @@ void SetsMenu::populateMenu(QMenu* q) {
     q->addAction(joinAct);
 }
 
-QToolBar* SetsMenu::createToolBar() {
-    QToolBar* q = new QToolBar(title());
+void SetsMenu::populateToolBar(QToolBar* q) {
     q->addAction(kadAct);
     q->addAction(editAct);
     q->addSeparator();
@@ -55,7 +54,6 @@ QToolBar* SetsMenu::createToolBar() {
     q->addSeparator();
     q->addAction(splitAct);
     q->addAction(joinAct);
-    return q;
 }
 
 void SetsMenu::edit() {

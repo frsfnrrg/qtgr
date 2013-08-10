@@ -35,11 +35,9 @@ void ToolsMenu::createActions()
                             SLOT(options()));
 }
 
-QToolBar* ToolsMenu::createToolBar() {
-    QToolBar* foo = new QToolBar(title());
+void ToolsMenu::populateToolBar(QToolBar* foo) {
     foo->addAction(autoScaleAct);
     foo->addAction(zoomRectAct);
-    return foo;
 }
 
 void ToolsMenu::autoScale()

@@ -33,9 +33,8 @@ public:
 
     void updateSymbolsLegend();
     void updateIndividualLegend(int cset);
-
-    QToolBar* createToolBar();
 protected:
+    void populateToolBar(QToolBar*);
   
 public slots:
     void world();

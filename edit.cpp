@@ -7,13 +7,10 @@ EditMenu::EditMenu(MainWindow* mainWin) :
     populateMenu(this);
 }
 
-
-QToolBar* EditMenu::createToolBar() {
-    QToolBar* q = new QToolBar(title());
+void EditMenu::populateToolBar(QToolBar* q) {
     q->addAction(cutAct);
     q->addAction(copyAct);
     q->addAction(pasteAct);
-    return q;
 }
 
 void EditMenu::populateMenu(QMenu* q)

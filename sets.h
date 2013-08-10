@@ -23,11 +23,10 @@ public:
     void* joinDialog;
     void* splitDialog;
 
-    void populateMenu(QMenu* q);
-    QToolBar* createToolBar();
-signals:
+    void populateMenu(QMenu*);
 
-public slots:
+protected:
+    void populateToolBar(QToolBar*);
 
 private slots:
     void edit();

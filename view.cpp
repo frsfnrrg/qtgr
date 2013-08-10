@@ -33,20 +33,18 @@ void ViewMenu::populateMenu(QMenu* q) {
     q->addAction(frameAct);
 }
 
-QToolBar* ViewMenu::createToolBar() {
-    QToolBar* tl = new QToolBar(Menu::title());
-    tl->addAction(viewAct);
-    tl->addAction(worldAct);
-    tl->addSeparator();
-    tl->addAction(graphTypesAct);
-    tl->addSeparator();
-    tl->addAction(titleAct);
-    tl->addAction(legendsAct);
-    tl->addSeparator();
-    tl->addAction(ticksAct);
-    tl->addAction(symbolsAct);
-    tl->addAction(frameAct);
-    return tl;
+void ViewMenu::populateToolBar(QToolBar* q) {
+    q->addAction(viewAct);
+    q->addAction(worldAct);
+    q->addSeparator();
+    q->addAction(graphTypesAct);
+    q->addSeparator();
+    q->addAction(titleAct);
+    q->addAction(legendsAct);
+    q->addSeparator();
+    q->addAction(ticksAct);
+    q->addAction(symbolsAct);
+    q->addAction(frameAct);
 }
 
 class MouseDoubleCall : public MouseCallBack

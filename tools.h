@@ -24,8 +24,10 @@ public:
 
     void finishRect(double, double, double, double);
 
-    QToolBar* createToolBar();
     void populateMenu(QMenu*);
+
+protected:
+    void populateToolBar(QToolBar*);
 
 public slots:
     void autoScale();

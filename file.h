@@ -17,7 +17,6 @@ public:
     FileMenu(MainWindow* );
 
     void populateMenu(QMenu*);
-    QToolBar* createToolBar();
 
 public slots:
     void open();
@@ -25,7 +24,7 @@ public slots:
     void print();
 
 protected:
-   
+    void populateToolBar(QToolBar*);
 
 private slots:
     void exportProc();

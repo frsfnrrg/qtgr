@@ -34,12 +34,10 @@ void TransformMenu::populateMenu(QMenu* q) {
     q->addAction(differentiateAct);
 }
 
-QToolBar*  TransformMenu::createToolBar() {
-    QToolBar* q = new QToolBar(title());
+void TransformMenu::populateToolBar(QToolBar* q) {
     q->addAction(evaluateAct);
     q->addAction(integrateAct);
     q->addAction(differentiateAct);
-    return q;
 }
 
 void TransformMenu::integrate() {

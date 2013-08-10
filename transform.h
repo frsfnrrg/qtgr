@@ -12,7 +12,9 @@ public:
     explicit TransformMenu(MainWindow* mainWin);
 
     void populateMenu(QMenu* q);
-    QToolBar* createToolBar();
+
+protected:
+    void populateToolBar(QToolBar*);
 
 private:
     void createActions();

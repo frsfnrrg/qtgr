@@ -18,12 +18,13 @@ public:
      */
     void updateDialog(Dialog*);
 
-    virtual QToolBar* createToolBar() {return new QToolBar();}
+    QToolBar* createToolBar(bool show=false);
+
 protected:
     // is this the problem
     QAction* makeAction(const char* name, const char* desc, const char* shortcut,
               const char* slot);
-
+    virtual void populateToolBar(QToolBar*) {printf("YOU SHOULD NOT BE CALLING THIS\n");}
 signals:
     
 public slots:

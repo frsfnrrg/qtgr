@@ -15,10 +15,9 @@ public:
     QAction *pasteAct;
 
     void populateMenu(QMenu*);
-    QToolBar* createToolBar();
 
 protected:
-   
+   void populateToolBar(QToolBar*);
 
 private slots:
 
