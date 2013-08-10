@@ -29,6 +29,10 @@ SetComboBox::SetComboBox(bool a) :
 
 void SetComboBox::updateSets() {
     for (int i=0;i<MAXPLOT;i++) {
-        this->setItemText(i+add, QString::number(i) + ": " + g[cg].l.str[i].s);
+        if (g[cg].p[i].active == OFF && g[cg].p[i].deact == 0) {
+            this->setItemText(i+add, QString("~: ") + g[cg].l.str[i].s);
+        } else {
+            this->setItemText(i+add, QString::number(i) + ": " + g[cg].l.str[i].s);
+        }
     }
 }

@@ -5,6 +5,8 @@
 #include "base/globals.h"
 #include "view.h"
 
+const double FONT_BASE_SIZE = 14.0;
+
 MainWindow *mainWindow;
 
 GraphWidget* GraphWidget::myGraphWidget;
@@ -244,11 +246,8 @@ QString texconvert(char* s, int slen)
     return s_html;
 }
 
-
 void GraphWidget::text(int x, int y, int rot, char* s, int just)
 {
-  
-    const int fontsize = 14;
     int xoff=0,yoff=0;
     
 //     printf("GraphWidget: text %i %i %i %s %i\n",x,y,rot,s,just);
@@ -261,8 +260,10 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
         return;
     }
 
+    double fontsize = FONT_BASE_SIZE * charsize;
+
     QFont font;
-    font.setPointSizeF(14.0 * charsize);
+    font.setPointSizeF(fontsize);
     
     QGraphicsTextItem* text = scene->addText("");
     text->setHtml(texconvert(s,strlen(s)));
@@ -324,6 +325,22 @@ void GraphWidget::fillcolor(int n, int px[], int py[])
     }
 
     scene->addPolygon(QPolygonF(path),*pen,brush);
+}
+
+int GraphWidget::stringextentx(double scale, char* str) {
+    QFont font;
+    font.setPointSizeF(FONT_BASE_SIZE * scale);
+    QFontMetrics metric(font);
+    // or use bounding box?
+    return metric.width(str);
+}
+
+int GraphWidget::stringextenty(double scale, char*) {
+    QFont font;
+    font.setPointSizeF(FONT_BASE_SIZE * scale);
+    QFontMetrics metric(font);
+    // or use bounding box?
+    return metric.height();
 }
 
 void GraphWidget::clear()
@@ -473,6 +490,14 @@ extern "C"
   void qtview_update() 
   {
      GraphWidget::update();
+  }
+
+  int qtview_stringextentx(double scale, char* str) {
+      return GraphWidget::stringextentx(scale, str);
+  }
+
+  int qtview_stringextenty(double scale, char* str) {
+      return GraphWidget::stringextenty(scale, str);
   }
   
 }

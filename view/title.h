@@ -4,6 +4,11 @@
 #include <QtGui>
 #include "dialog.h"
 
+// TODO:
+//
+//  title ----------------------
+//  size ## color XX font ======
+// dual dialog sucks.
 class ViewTitle : public Dialog
 {
     Q_OBJECT

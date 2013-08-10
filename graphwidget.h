@@ -36,6 +36,8 @@ public:
     static void clear();
     static void update();
     static void getcanvas(int* win_w, int* win_h);
+    static int stringextentx(double scale, char* str);
+    static int stringextenty(double scale, char* str);
     QColor cmscolors[16];
     MouseCallBack *mouseClickCall;
     MouseCallBack *mouseDoubleCall;
@@ -75,6 +77,8 @@ extern "C"
   void qtview_clear();
   void qtview_update();
   void qtview_getcanvas(int* win_w, int* win_h);
+  int qtview_stringextentx(double scale, char* str);
+  int qtview_stringextenty(double scale, char* str);
   
 
 # ifdef __cplusplus 

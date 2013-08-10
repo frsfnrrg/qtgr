@@ -96,8 +96,11 @@ void SetsKAD::applyDialog() {
                 }
             }
         } else {
-            // or iter and select kill mode?
-            do_flush();
+            for (cset=0;cset<MAXPLOT;cset++) {
+                if (g[gno].p[cset].active == ON || g[gno].p[cset].deact == 1) {
+                    do_kill(gno, cset, 0);
+                }
+            }
             SetsSender::send();
         }
 

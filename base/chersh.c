@@ -360,115 +360,115 @@ void puthersh(xpos, ypos, scale, dir, just, color, vector, s)
     hselectfont(sfont);
 }
 
-/*
-	get the x extent of the string in hershey coordinates given size
-*/
-int stringextentx(scale, s)
-    double scale;
-    char *s;
-{
-    int i, ind, xpos = 0, it1, it2, sfont = curfont, slen = strlen(s);
-    double charw, x, y, dxpos, saves = scale, slastx = 0.0;
+///*
+//	get the x extent of the string in hershey coordinates given size
+//*/
+//int stringextentx(scale, s)
+//    double scale;
+//    char *s;
+//{
+//    int i, ind, xpos = 0, it1, it2, sfont = curfont, slen = strlen(s);
+//    double charw, x, y, dxpos, saves = scale, slastx = 0.0;
 
-    dxpos = xpos;
+//    dxpos = xpos;
 
-    for (i = 0; i < slen; i++) {
-	if (s[i] < 32) {
-	    continue;
-	}
-	if (s[i] == '\\' && isdigit(s[i + 1])) {
-	    hselectfont(s[i + 1] - '0');
-	    i++;
-	    continue;
-	} else if (s[i] == '\\' && s[i + 1] == '\\') {
-	    continue;
-	} else if (s[i] == '\\' && (isalpha(s[i + 1]) || s[i + 1] == '+' || s[i + 1] == '-')) {
-	    switch (s[i + 1]) {
-	    case 'x':
-		hselectfont(10);
-		i++;
-		break;
-	    case 's':
-		scale = 0.6 * saves;
-		i++;
-		break;
-	    case 'S':
-		scale = 0.6 * saves;
-		i++;
-		break;
-	    case 'N':
-		scale = saves;
-		i++;
-		break;
-	    case 'b':
-		xpos = dxpos = dxpos - slastx;
-		i++;
-		break;
-	    case 'c':
-		i++;
-		break;
-	    case 'C':
-		i++;
-		break;
-	    case '-':
-		scale -= 0.2;
-		i++;
-		break;
-	    case '+':
-		scale += 0.2;
-		i++;
-		break;
-	    }
-	    continue;
-	}
-	ind = s[i] - ' ';
+//    for (i = 0; i < slen; i++) {
+//	if (s[i] < 32) {
+//	    continue;
+//	}
+//	if (s[i] == '\\' && isdigit(s[i + 1])) {
+//	    hselectfont(s[i + 1] - '0');
+//	    i++;
+//	    continue;
+//	} else if (s[i] == '\\' && s[i + 1] == '\\') {
+//	    continue;
+//	} else if (s[i] == '\\' && (isalpha(s[i + 1]) || s[i + 1] == '+' || s[i + 1] == '-')) {
+//	    switch (s[i + 1]) {
+//	    case 'x':
+//		hselectfont(10);
+//		i++;
+//		break;
+//	    case 's':
+//		scale = 0.6 * saves;
+//		i++;
+//		break;
+//	    case 'S':
+//		scale = 0.6 * saves;
+//		i++;
+//		break;
+//	    case 'N':
+//		scale = saves;
+//		i++;
+//		break;
+//	    case 'b':
+//		xpos = dxpos = dxpos - slastx;
+//		i++;
+//		break;
+//	    case 'c':
+//		i++;
+//		break;
+//	    case 'C':
+//		i++;
+//		break;
+//	    case '-':
+//		scale -= 0.2;
+//		i++;
+//		break;
+//	    case '+':
+//		scale += 0.2;
+//		i++;
+//		break;
+//	    }
+//	    continue;
+//	}
+//	ind = s[i] - ' ';
 
-	it1 = chartable[2 * indices[ind]];
-	it2 = chartable[2 * indices[ind] + 1];
-	x = it1 - 'R';
-	y = it2 - 'R';
-	charw = y - x;
-	xpos = dxpos = dxpos + (slastx = hscale * scale * charw);
-    }
-    hselectfont(sfont);
-    return xpos;
-}
+//	it1 = chartable[2 * indices[ind]];
+//	it2 = chartable[2 * indices[ind] + 1];
+//	x = it1 - 'R';
+//	y = it2 - 'R';
+//	charw = y - x;
+//	xpos = dxpos = dxpos + (slastx = hscale * scale * charw);
+//    }
+//    hselectfont(sfont);
+//    return xpos;
+//}
 
-/*
-	get the y extent of the string in hershey coordinates given size
-*/
-int stringextenty(scale, s)
-    double scale;
-    char *s;
-{
-    int i, j, len = 0, ind, it2;
-    char charx, chary;
-    double ytmp, ymin = 0, ymax = 0;
+///*
+//	get the y extent of the string in hershey coordinates given size
+//*/
+//int stringextenty(scale, s)
+//    double scale;
+//    char *s;
+//{
+//    int i, j, len = 0, ind, it2;
+//    char charx, chary;
+//    double ytmp, ymin = 0, ymax = 0;
 
-    for (i = 0; i < strlen(s); i++) {
-	if (s[i] < 32) {
-	    continue;
-	}
-	ind = s[i] - ' ';
-	len = indices[ind + 1] - indices[ind];
+//    for (i = 0; i < strlen(s); i++) {
+//	if (s[i] < 32) {
+//	    continue;
+//	}
+//	ind = s[i] - ' ';
+//	len = indices[ind + 1] - indices[ind];
 
-	for (j = 1; j < len; j++) {
-	    charx = chartable[2 * indices[ind] + 2 * j];
-	    chary = chartable[2 * indices[ind] + 2 * j + 1];
-	    if (charx & 128) {
-		charx &= 127;
-		it2 = chary;
-		ytmp = (-scale * (it2 - 'R'));
-	    } else {
-		it2 = chary;
-		ytmp = (-scale * (it2 - 'R'));
-	    }
-	    if (ymax < ytmp)
-		ymax = ytmp;
-	    if (ymin > ytmp)
-		ymin = ytmp;
-	}
-    }
-    return ymax - ymin;
-}
+//	for (j = 1; j < len; j++) {
+//	    charx = chartable[2 * indices[ind] + 2 * j];
+//	    chary = chartable[2 * indices[ind] + 2 * j + 1];
+//	    if (charx & 128) {
+//		charx &= 127;
+//		it2 = chary;
+//		ytmp = (-scale * (it2 - 'R'));
+//	    } else {
+//		it2 = chary;
+//		ytmp = (-scale * (it2 - 'R'));
+//	    }
+//	    if (ymax < ytmp)
+//		ymax = ytmp;
+//	    if (ymin > ytmp)
+//		ymin = ytmp;
+//	}
+//    }
+//    return ymax - ymin;
+//}
 

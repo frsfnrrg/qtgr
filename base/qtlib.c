@@ -498,6 +498,15 @@ void qtlibfillarc(int x, int y, int r)
 //     }
 // }
 
+int stringextentx(double scale, char* str) {
+    return qtview_stringextentx(scale, str);
+}
+
+
+int stringextenty(double scale, char* str) {
+    return qtview_stringextenty(scale, str);
+}
+
 void qtlibleavegraphics()
 {   
 //     printf("leavegraphics: start\n");
