@@ -115,9 +115,16 @@ void FileExport::accept() {
         if (target.endsWith(ending, Qt::CaseInsensitive)) {
             index = i;
             break;
-        } else if (type.endsWith(ending, Qt::CaseInsensitive)) {
-            index = i;
-            target += ending;
+        }
+    }
+    if (index == -1) {
+        for (int i=0;i<MATCH_TYPES;i++) {
+            QString ending = matchtype[i];
+            if (type.endsWith(ending, Qt::CaseInsensitive)) {
+                index = i;
+                target += ending;
+                break;
+            }
         }
     }
     //printf("type found: %i\n", index);
