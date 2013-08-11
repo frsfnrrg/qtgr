@@ -294,6 +294,7 @@ int qtlibsetcolor(int color)
     x1 = y1 = 99999;
     color = color % maxcolors;
     qtview_linec(color);
+    // needed
     qtlibcolor = color;
     return color;
 }

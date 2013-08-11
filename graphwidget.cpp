@@ -270,6 +270,7 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
     QGraphicsTextItem* text = GraphWidget::myGraphWidget->scene()->addText("");
     text->setHtml(texconvert(s,strlen(s)));
     text->setFont(font);
+    text->setDefaultTextColor(GraphWidget::myGraphWidget->pen->color());
     QRectF bRect = text->boundingRect();
 
     switch (just) {

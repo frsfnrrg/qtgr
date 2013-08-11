@@ -64,6 +64,7 @@ private:
     QPen *pen;
     int fontnum;
     int patnum;
+    int colornum;
 };
 
 #endif // __cplusplus
@@ -88,7 +89,7 @@ int qtview_stringextentx(double scale, char* str);
 int qtview_stringextenty(double scale, char* str);
 int qtview_drawellipse(int x, int y, int xm, int ym);
 int qtview_drawellipse(int x, int y, int xm, int ym);
-void qtview_setfont(int n);
+void qtview_setfont(int k);
 
 # ifdef __cplusplus 
 }

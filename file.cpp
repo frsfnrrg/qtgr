@@ -14,92 +14,82 @@ FileMenu::FileMenu(MainWindow* mainWin) :
     populateMenu(this);
 }
 
-void FileMenu::populateToolBar(QToolBar* q) {
-    q->addAction(readSetAct);
-    q->addAction(readParaAct);
-    q->addAction(readBlockAct);
-    q->addSeparator();
-    q->addAction(writeSetAct);
-    q->addAction(writeParaAct);
-    q->addAction(saveAllAct);
-    q->addSeparator();
-    q->addAction(clearAct);
-    q->addSeparator();
-    q->addAction(printAct);
-    q->addAction(exportAct);
-    q->addSeparator();
-    q->addAction(exitAct);
+void FileMenu::populateToolBar(QToolBar* t) {
+    t->addAction(readSetAct);
+    t->addAction(resetAct);
+    t->addSeparator();
+    t->addAction(printAct);
+    t->addAction(exportAct);
+    t->addSeparator();
+    t->addAction(exitAct);
 }
 
 
-void FileMenu::populateMenu(QMenu* q)
+void FileMenu::populateMenu(QMenu* m)
 {
-    q->addAction(readSetAct);
-    q->addAction(readParaAct);
-    q->addAction(readBlockAct);
-    q->addSeparator();
-    q->addAction(writeSetAct);
-    q->addAction(writeParaAct);
-    q->addAction(saveAllAct);
-    q->addSeparator();
-    q->addAction(clearAct);
-    q->addSeparator();
-    q->addAction(printAct);
-    q->addAction(exportAct);
-    q->addSeparator();
-    q->addAction(exitAct);
+    m->addAction(readSetAct);
+    m->addAction(readParaAct);
+    m->addAction(readBlockAct);
+    m->addSeparator();
+    m->addAction(writeSetAct);
+    m->addAction(writeParaAct);
+    m->addAction(writeBlockAct);
+    m->addSeparator();
+    m->addAction(resetAct);
+    m->addSeparator();
+    m->addAction(printAct);
+    m->addAction(exportAct);
+    m->addSeparator();
+    m->addAction(exitAct);
 }
 
 void FileMenu::createActions()
 {
     readSetAct = makeAction("Read sets",
                             "Load a set from file or pipe onto the graph",
-                            "Ctrl+O",
-                            SLOT(open()));
+                            "Ctrl+O", SLOT(open_set()));
 
-    readParaAct = new QAction(tr("Read parameters..."), this);
-//     connect(readParaAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    readParaAct = makeAction("Read parameters",
+                             "Read instructions to create a graph",
+                             "", SLOT(open_param()));
     
-    readBlockAct = new QAction(tr("Read block data..."), this);
-//     connect(readBlockAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    readBlockAct = makeAction("Read block data",
+                              "Read block data",
+                              "", SLOT(open_block()));
     
-    writeSetAct = new QAction(tr("Write sets..."), this);
-//     connect(writeSetAct, SIGNAL(triggered()), this, SLOT(newFile()));
-    
-    writeParaAct = new QAction(tr("Write parameters..."), this);
-//     connect(writeParaAct, SIGNAL(triggered()), this, SLOT(newFile()));
-    
-    saveAllAct = new QAction(tr("Save all..."), this);
-//     connect(saveAllAct, SIGNAL(triggered()), this, SLOT(newFile()));
-    
-    clearAct = makeAction("Clear all",
+    writeSetAct = makeAction("Write sets",
+                             "Write sets",
+                             "", SLOT(write_set()));
+
+    writeParaAct = makeAction("Write parameters",
+                              "Write parameters",
+                              "", SLOT(write_param()));
+
+    writeBlockAct = makeAction("Write block data",
+                               "Write block data",
+                               "", SLOT(write_block()));
+
+    resetAct = makeAction("Clear all",
                           "Reset the graph to its original state",
-                          "Ctrl+Shift+d",
-                          SLOT(clear()));
+                          "Ctrl+Shift+d", SLOT(reset()));
 	
     printAct = makeAction("Print",
                           "Print the current view to file or printer.",
-                          "Ctrl+p",
-                          SLOT(print()));
-    
+                          "Ctrl+p", SLOT(print()));
+
     exportAct = makeAction("Export",
                            "Export display to an image",
-                           "Ctrl+E",
-                           SLOT(exportProc()));
-    
-    printSetupAct = new QAction(tr("&Printer setup..."), this);
-		
-//     connect(saveAllAct, SIGNAL(triggered()), this, SLOT(newFile()));
-    
+                           "Ctrl+E", SLOT(save_as()));
+
     exitAct = new QAction(tr("Exit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
     exitAct->setStatusTip(tr("Exit the application"));
     connect(exitAct, SIGNAL(triggered()), this->mainWindow, SLOT(close()));
 }
 
-void FileMenu::open()
+// WARNING LEAKS: make a dialog
+void FileMenu::open_set()
 {
-  
     QComboBox* fileType = new QComboBox;
     fileType->addItem("X Y");
     fileType->addItem("X Y1 Y2");
@@ -152,7 +142,27 @@ void FileMenu::open()
     SetsSender::send();
 }
 
-void FileMenu::clear() 
+void FileMenu::open_param() {
+    // TODO
+}
+
+void FileMenu::open_block() {
+    // TODO
+}
+
+void FileMenu::write_set() {
+    // TODO
+}
+
+void FileMenu::write_param() {
+    // TODO
+}
+
+void FileMenu::write_block() {
+    // TODO
+}
+
+void FileMenu::reset()
 {
     wipeout(0);
  
@@ -163,6 +173,7 @@ void FileMenu::clear()
     SetsSender::send();
 }
 
+// WARNING LEAKS: make a dialog
 void FileMenu::print()
 {
     QPrinter *printer = new QPrinter();
@@ -183,7 +194,8 @@ void FileMenu::print()
     painter->end();   
 }
 
-void FileMenu::exportProc()
+// WARNING LEAKS: make a dialog
+void FileMenu::save_as()
 {
     QPixmap* image = new QPixmap(800*3,600*3);
     QPainter *pngPainter = new QPainter(image);

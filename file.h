@@ -4,11 +4,6 @@
 #include <QtGui>
 #include "menu.h"
 
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-QT_END_NAMESPACE
-
 class FileMenu : public Menu
 {
     Q_OBJECT
@@ -19,15 +14,20 @@ public:
     void populateMenu(QMenu*);
 
 public slots:
-    void open();
-    void clear();
+    void open_set();
+    void open_param();
+    void open_block();
+
+    void write_set();
+    void write_param();
+    void write_block();
+
+    void reset();
     void print();
+    void save_as();
 
 protected:
     void populateToolBar(QToolBar*);
-
-private slots:
-    void exportProc();
 
 private:
     void createActions();
@@ -36,11 +36,10 @@ private:
     QAction *readBlockAct;
     QAction *writeSetAct;
     QAction *writeParaAct;
-    QAction *saveAllAct;
-    QAction *clearAct;
+    QAction *writeBlockAct;
+    QAction *resetAct;
     QAction *printAct;
     QAction *exportAct;
-    QAction *printSetupAct;
     QAction *exitAct;
 };
 
