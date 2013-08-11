@@ -107,7 +107,6 @@ void MainWindow::addToolBar(Menu* m, bool showdef) {
 void MainWindow::writeToolBarSettings(bool on) {
     QToolBar* changed = (QToolBar*)QObject::sender();
     settings.setValue(QString("TB-") + changed->windowTitle(), on);
-    printf("%s \n", changed->windowTitle().toAscii().constData());
 }
 
 

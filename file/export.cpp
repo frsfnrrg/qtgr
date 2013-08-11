@@ -115,12 +115,12 @@ void FileExport::accept() {
         if (target.endsWith(ending, Qt::CaseInsensitive)) {
             index = i;
             break;
-        }
-        if (type.endsWith(ending, Qt::CaseInsensitive)) {
+        } else if (type.endsWith(ending, Qt::CaseInsensitive)) {
             index = i;
+            target += ending;
         }
     }
-    printf("type found: %i\n", index);
+    //printf("type found: %i\n", index);
 
     QGraphicsScene* scene = this->mainWindow->gwidget->scene();
 
@@ -140,7 +140,7 @@ void FileExport::accept() {
         save_pdf(scene, target, width, height);
         break;
     default:
-        printf("Save type not implemented yet\n");
+        //printf("Save type not implemented yet\n");
         return;
     }
 }
