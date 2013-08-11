@@ -43,6 +43,7 @@ private:
     QAction *exitAct;
 
     QDialog* opensetDialog;
+    QDialog* exportDialog;
 };
 
 #endif

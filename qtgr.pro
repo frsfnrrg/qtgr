@@ -35,7 +35,8 @@ HEADERS       = edit.h \
     tools/options.h \
     util.h \
     choosers.h \
-    file/openset.h
+    file/openset.h \
+    file/export.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -90,10 +91,12 @@ SOURCES       = edit.cpp \
     tools/options.cpp \
     util.cpp \
     choosers.cpp \
-    file/openset.cpp
+    file/openset.cpp \
+    file/export.cpp
 
 RESOURCES     = qtgr.qrc
 
+QT += svg
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/mainwindows/qtgr

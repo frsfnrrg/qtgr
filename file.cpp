@@ -6,6 +6,7 @@
 #include "tools.h"
 #include "tools/options.h"
 #include "file/openset.h"
+#include "file/export.h"
 
 FileMenu::FileMenu(MainWindow* mainWin) :
     Menu(mainWin, "File", true)
@@ -13,6 +14,7 @@ FileMenu::FileMenu(MainWindow* mainWin) :
     createActions();
 
     opensetDialog = NULL;
+    exportDialog = NULL;
 
     populateMenu(this);
 }
@@ -154,16 +156,10 @@ void FileMenu::print()
 // WARNING LEAKS: make a dialog
 void FileMenu::save_as()
 {
-    QPixmap* image = new QPixmap(800*3,600*3);
-    QPainter *pngPainter = new QPainter(image);
-    
-    printf("Export\n");
-    
-//     pngPainter->setRenderHint(QPainter::Antialiasing);
-    this->mainWindow->gwidget->scene()->render(pngPainter);
-    pngPainter->end();
-    image->save("qtgr.png");
-    delete pngPainter;
-    delete image;
-    
+    if (exportDialog) {
+        exportDialog->setVisible(true);
+    } else {
+        exportDialog = new FileExport(mainWindow);
+        exportDialog->show();
+    }
 }
