@@ -41,10 +41,7 @@ extern double charsize;
 #define maxcolors 256;
 // 
 // double devtoworldx(), devtoworldy();
-// 
-// static void flush_pending();
-// 
-static int qtlibcolor = 1;
+
 static int qtliblinewidth = 0;
 static int qtlibdmode;
 static int qtlibfont = 0;
@@ -63,7 +60,7 @@ double qtlibcharsize = 0.60;
 #endif
 
 
-//imported from draw FIXME
+//imported from draw.c FIXME?
 double xconv(), yconv();
 
 static void qtlibinit()
@@ -73,21 +70,10 @@ static void qtlibinit()
     extern int invert, overlay, doclear, bgcolor;
     
     qtview_getcanvas(&win_w,&win_h);
-    //   printf("qtlibinit %i %i\n",win_w,win_h);
-
     
     devwidth = win_w;
     devheight = win_h;
     qtview_clear();
-
-    // 	xlibinit_tiles();
-    //     if (doclear && !overlay) {
-    // 	xlibsetcolor(bgcolor);
-    // 	XFillRectangle(disp, displaybuff, gc, 0, 0, win_w, win_h);
-    // 	if (backingstore) {
-    // 	    XFillRectangle(disp, backpix, gc, 0, 0, win_w, win_h);
-    // 	}
-    //     }
 }
 
 
@@ -113,41 +99,11 @@ static int npending;
 // };
 // 
 // static int dash_list_length[] = {1, 2, 2, 2, 4};
-// 
-// /* scrunch the array of XPoints */
-// static void xlib_scrunch(p, n)
-//     XPoint *p;
-//     int *n;
-// {
-//     int i, cnt = 0;
-//     if (*n > 3) {
-// 	cnt = 0;
-// 	for (i = 1; i < *n; i++) {
-// 	    if (p[cnt].x == p[i].x && p[cnt].y == p[i].y) {
-// 	    } else {
-// 		cnt++;
-// 		p[cnt] = p[i];
-// 	    }
-// 	}
-// 	cnt++;
-// 	p[cnt] = p[*n - 1];
-// 	if (cnt <= 2) {
-// 	    cnt = 2;
-// 	    p[1] = p[*n - 1];
-// 	}
-//     } else {
-// 	cnt = *n;
-//     }
-//     *n = cnt;
-// }
-// 
-
 
 static int x1, y1;
 // 
 void drawqtlib(int x, int y, int mode)
 {
-    //printf("drawxlib %i %i %i\n",x,y,mode);
     // mode == 1 -> draw; mode == 0 -> move
     if (mode) {
         qtview_paint(x1,win_h-y1,x,win_h-y);
@@ -159,14 +115,12 @@ void drawqtlib(int x, int y, int mode)
 // should be moved somewhere else depends on xconv in draw.c //FIXME
 int qtlibconvx(double x) 
 {
-    //     printf("qtlibconvx %f %i %f\n",x,win_w,xconv(x));
     return ((int) (win_w * xconv(x)));
 }
 
 // should be moved somewhere else depends on yconv in draw.c //FIXME
 int qtlibconvy(double y) // should be moved somewhere else
 {
-    //     printf("qtlibconvy %f %i %f\n",y,win_h,yconv(y));
     return ((int) (win_h * yconv(y)));
 }
 
@@ -177,88 +131,8 @@ void qtlibsetfont(int n)
     qtview_setfont(n);
 }
 
-
-// 
-// /* NOTE: not called by xvgr */
-// void xlibinitcmap()
-// {
-//     int i;
-// 
-//     ncolors = DisplayCells(disp, DefaultScreen(disp));
-//     if (ncolors > 256) {
-// 	ncolors = 256;
-//     }
-//     if (ncolors > 16) {
-// 	cmap = DefaultColormap(disp, DefaultScreen(disp));
-// 	for (i = 0; i < ncolors; i++) {
-// 	    xc[i].pixel = i;
-// 	    xc[i].flags = DoRed | DoGreen | DoBlue;
-// 	}
-// 	if (!use_defaultcmap) {
-// 	    XQueryColors(disp, cmap, xc, ncolors);
-// 	    mycmap = XCreateColormap(disp, xwin, DefaultVisual(disp, DefaultScreen(disp)), AllocAll);
-// 	} else {
-// 	    mycmap = cmap;
-// 	}
-// 	for (i = 2; i < maxcolors; i++) {
-// 	    xc[i].red = red[i] << 8;
-// 	    xc[i].green = green[i] << 8;
-// 	    xc[i].blue = blue[i] << 8;
-// 	    if (use_defaultcmap) {
-// 		if (!XAllocColor(disp, cmap, &xc[i])) {
-// 		    fprintf(stderr, " Can't allocate color\n");
-// 		}
-// 	    }
-// 	    colors[i] = xc[i].pixel;
-// 	}
-// 	if (!use_defaultcmap) {
-// 	    XStoreColors(disp, mycmap, xc, ncolors);
-// 	}
-//     }x
-//     if (revflag) {
-// 	colors[1] = WhitePixel(disp, DefaultScreen(disp));
-// 	colors[0] = BlackPixel(disp, DefaultScreen(disp));
-//     } else {
-// 	colors[0] = WhitePixel(disp, DefaultScreen(disp));
-// 	colors[1] = BlackPixel(disp, DefaultScreen(disp));
-//     }
-// }
-// 
-// void xlibsetcmap(i, r, g, b)
-//     int i, r, g, b;
-// {
-//     XColor xct;
-// 
-//     red[i] = r;
-//     green[i] = g;
-//     blue[i] = b;
-//     cmscolors[i].red = red[i];
-//     cmscolors[i].green = green[i];
-//     cmscolors[i].blue = blue[i];
-//     if (inwin && use_colors > 4 && i >= 2) {
-// 	xct.green = g << 8;
-// 	xct.blue = b << 8;
-// 	xct.red = r << 8;
-// 	xct.flags = DoRed | DoGreen | DoBlue;
-// 	xct.pixel = colors[i];
-// 	xct.pad = 0;
-// 
-// #ifdef XVIEW
-// 	xv_set(cms,
-// 	       CMS_COLOR_COUNT, 1,
-// 	       CMS_INDEX, i,
-// 	       CMS_X_COLORS, &xct,
-// 	       NULL);
-// #endif
-// #ifdef MOTIF
-// 	XStoreColor(disp, mycmap, &xct);
-// #endif
-//     }
-// }
-// 
 int qtlibsetlinewidth(int width)
 {
-    //      printf("qtlibsetlinewidth %i\n",w);
     x1 = y1 = 99999;
     if (width) {
         width = width % MAXLINEW;
@@ -272,10 +146,9 @@ int qtlibsetlinewidth(int width)
     }
     return (qtliblinewidth = width);
 }
-// 
+
 int qtlibsetlinestyle(int style)
 {
-    //      printf("qtlibsetlinestyle %i\n",style);
     x1 = y1 = 99999;
     if (style > 1 && qtliblinewidth) {
         // 	XSetLineAttributes(disp, gc, xliblinewidth - 1 ? 0 : xliblinewidth, LineOnOffDash, CapButt, JoinRound);
@@ -287,15 +160,12 @@ int qtlibsetlinestyle(int style)
     }
     return (qtliblinestyle = style);
 }
-// 
+
 int qtlibsetcolor(int color)
 {
-    //     printf("qtlibsetcolor %i\n",color);
     x1 = y1 = 99999;
     color = color % maxcolors;
     qtview_linec(color);
-    // needed
-    qtlibcolor = color;
     return color;
 }
 
@@ -330,10 +200,8 @@ void qtlibdrawtic(int x, int y, int dir, int updown)
 }
 
 void qtlibwritestr(int x, int y, int rot, char *s, int just, int fudge)
-{//csto 
-    //     printf("qtlibwritestr %i %i %i %s %i \n",x, y, rot, s, just);
+{
     x1 = y1 = 99999;
-    //puthersh(x, y, qtlibcharsize * charsize, rot, just, qtlibcolor, drawqtlib, s);
     qtview_text(x,win_h-y,rot,s,just);
     x1 = y1 = 99999;
 }
@@ -421,18 +289,6 @@ int qtlibsetpat(int pattern) {
     return 0;// no idea why this is an int
 }
 
-// int xlibsetpat(k)
-//     int k;
-// {
-//     patno = k;
-//     if (k > MAXPATTERNS) {
-// 	k = 1;
-//     }
-//     if (patno != 0) {
-// 	curtile = tiles[k - 1];
-//     }
-// }
-
 void qtlibfill(int n, int px[], int py[]) {
     int i;
     for (i = 0; i < n; i++) {
@@ -441,35 +297,6 @@ void qtlibfill(int n, int px[], int py[]) {
     qtview_fill(n, px, py);
 }
 
-// void xlibfill(n, px, py)
-//     int n;
-//     int px[], py[];
-// 
-// {
-//     int i, x, y;
-//     XPoint *p;
-// 
-//     p = (XPoint *) calloc(n, sizeof(XPoint));
-//     if (p == NULL) {
-// 	return;
-//     }
-//     if (patno == 0) {
-// 	return;
-//     }
-//     XSetFillStyle(disp, gc, FillTiled);
-//     XSetTile(disp, gc, curtile);
-//     for (i = 0; i < n; i++) {
-// 	p[i].x = px[i];
-// 	p[i].y = win_h - py[i];
-//     }
-//     XFillPolygon(disp, displaybuff, gc, p, n, Nonconvex, CoordModeOrigin);
-//     if (backingstore) {
-// 	XFillPolygon(disp, backpix, gc, p, n, Nonconvex, CoordModeOrigin);
-//     }
-//     XSetFillStyle(disp, gc, FillSolid);
-//     cfree(p);
-// }
-// 
 void qtlibfillcolor(int n, int px[], int py[])
 {
     int i;

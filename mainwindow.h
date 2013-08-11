@@ -4,18 +4,13 @@
 #include <QtGui>
 #include "graphwidget.h"
 
+class Menu;
 class ViewMenu;
 class FileMenu;
 class EditMenu;
 class ToolsMenu;
 class TransformMenu;
 class SetsMenu;
-
-QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-class QPlainTextEdit;
-QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
@@ -34,13 +29,16 @@ public:
     QMenu* helpMenu;
 
 private:
+    QSettings settings;
 
 protected:
     void closeEvent(QCloseEvent *);
 private slots:
     void about();
     void dropEvent(QDropEvent *);
+    void writeToolBarSettings(bool);
 private:
+    void addToolBar(Menu* m, bool showdef);
     void readSettings();
     void writeSettings();
     void createMenus();

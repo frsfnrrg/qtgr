@@ -87,8 +87,9 @@ void qtview_update();
 void qtview_getcanvas(int* win_w, int* win_h);
 int qtview_stringextentx(double scale, char* str);
 int qtview_stringextenty(double scale, char* str);
-int qtview_drawellipse(int x, int y, int xm, int ym);
-int qtview_drawellipse(int x, int y, int xm, int ym);
+int qtview_setpattern(int n);
+void qtview_drawellipse(int x, int y, int xm, int ym);
+void qtview_drawellipse(int x, int y, int xm, int ym);
 void qtview_setfont(int k);
 
 # ifdef __cplusplus 

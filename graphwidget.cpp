@@ -460,11 +460,11 @@ extern "C"
       return GraphWidget::setpattern(num);
   }
 
-  int qtview_drawellipse(int x, int y, int xm, int ym) {
+  void qtview_drawellipse(int x, int y, int xm, int ym) {
       GraphWidget::ellipse(x,y,xm,ym);
   }
 
-  int qtview_fillellipse(int x, int y, int xm, int ym) {
+  void qtview_fillellipse(int x, int y, int xm, int ym) {
       GraphWidget::fillellipse(x,y,xm,ym);
   }
 

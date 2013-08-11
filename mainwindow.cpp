@@ -11,8 +11,9 @@
 #include "base/globals.h"
 #include "prop.h"
 
-
-MainWindow::MainWindow()
+MainWindow::MainWindow() :
+    QMainWindow(),
+    settings("QTGR","QTGR")
 {
     this->setWindowTitle(tr("QTGR"));
 
@@ -29,7 +30,10 @@ MainWindow::MainWindow()
 
     setCentralWidget(gwidget);
 
-    readSettings();
+    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
+    QSize size = settings.value("size", QSize(400, 400)).toSize();
+    resize(size);
+    move(pos);
 
     createMenus();
 
@@ -54,7 +58,8 @@ void MainWindow::about()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    writeSettings();
+    settings.setValue("pos", pos());
+    settings.setValue("size", size());
     event->accept();
 }
 
@@ -84,12 +89,25 @@ void MainWindow::createMenus()
 
     // for some odd reason, these must be added _after_ the menus
 
-    this->addToolBar(toolsMenu->createToolBar(true));
-    this->addToolBar(viewMenu->createToolBar(true));
-    this->addToolBar(fileMenu->createToolBar(false));
-    this->addToolBar(editMenu->createToolBar(false));
-    this->addToolBar(setMenu->createToolBar(false));
-    this->addToolBar(transformMenu->createToolBar(false));
+    addToolBar(toolsMenu,true);
+    addToolBar(viewMenu,true);
+    addToolBar(fileMenu,false);
+    addToolBar(editMenu,false);
+    addToolBar(setMenu,false);
+    addToolBar(transformMenu,false);
+}
+
+void MainWindow::addToolBar(Menu* m, bool showdef) {
+    bool visible = settings.value(QString("TB-") + m->title(), showdef).toBool();
+    QToolBar* t = m->createToolBar(visible);
+    connect(t, SIGNAL(visibilityChanged(bool)), this, SLOT(writeToolBarSettings(bool)));
+    QMainWindow::addToolBar(t);
+}
+
+void MainWindow::writeToolBarSettings(bool on) {
+    QToolBar* changed = (QToolBar*)QObject::sender();
+    settings.setValue(QString("TB-") + changed->windowTitle(), on);
+    printf("%s \n", changed->windowTitle().toAscii().constData());
 }
 
 
@@ -109,21 +127,6 @@ void MainWindow::createHelpMenu()
     helpMenu->addAction(aboutQtAct);
 }
 
-void MainWindow::readSettings()
-{
-    QSettings settings("QTGR", "QTGR");
-    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
-    QSize size = settings.value("size", QSize(400, 400)).toSize();
-    resize(size);
-    move(pos);
-}
-
-void MainWindow::writeSettings()
-{
-    QSettings settings("QTGR", "QTGR");
-    settings.setValue("pos", pos());
-    settings.setValue("size", size());
-}
 
 void MainWindow::dropEvent(QDropEvent *) {
     printf("We got a drop!\n");
