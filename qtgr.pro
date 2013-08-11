@@ -34,7 +34,8 @@ HEADERS       = edit.h \
     sets/mcs.h \
     tools/options.h \
     util.h \
-    choosers.h
+    choosers.h \
+    file/openset.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -88,7 +89,8 @@ SOURCES       = edit.cpp \
     sets/mcs.cpp \
     tools/options.cpp \
     util.cpp \
-    choosers.cpp
+    choosers.cpp \
+    file/openset.cpp
 
 RESOURCES     = qtgr.qrc
 

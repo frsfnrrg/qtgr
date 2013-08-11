@@ -5,12 +5,15 @@
 #include "prop.h"
 #include "tools.h"
 #include "tools/options.h"
+#include "file/openset.h"
 
 FileMenu::FileMenu(MainWindow* mainWin) :
     Menu(mainWin, "File", true)
-
 {  
     createActions();
+
+    opensetDialog = NULL;
+
     populateMenu(this);
 }
 
@@ -87,59 +90,13 @@ void FileMenu::createActions()
     connect(exitAct, SIGNAL(triggered()), this->mainWindow, SLOT(close()));
 }
 
-// WARNING LEAKS: make a dialog
-void FileMenu::open_set()
-{
-    QComboBox* fileType = new QComboBox;
-    fileType->addItem("X Y");
-    fileType->addItem("X Y1 Y2");
-    QComboBox* graphNum = new QComboBox;
-    graphNum->addItem("0");
-    graphNum->addItem("1");
-    
-    QWidget* fromButtons = new QWidget();
-    QHBoxLayout* fromButtonsLayout = new QHBoxLayout();
-    fromButtonsLayout->addWidget(new QRadioButton("File"));
-    fromButtonsLayout->addWidget(new QRadioButton("Pipe"));
-    fromButtonsLayout->addStretch(1);
-    fromButtons->setLayout(fromButtonsLayout);
-    
-    QFileDialog::Options options = QFileDialog::DontUseNativeDialog;
-
-    QFileDialog* fd = new QFileDialog(this, tr("Read Sets"), QDir::homePath(), "*");
-    fd->setOptions(options);
-    QLayout* layout = fd->layout();
-    QGridLayout* gridbox = qobject_cast<QGridLayout*>(layout);
-    
-    if (gridbox) {
-	    gridbox->addWidget(new QLabel("File type:"),4,0);
-	    gridbox->addWidget(fileType,4,1);
-	    gridbox->addWidget(new QLabel("Read from:"),5,0);
-	    gridbox->addWidget(fromButtons,5,1);
-	    gridbox->addWidget(new QLabel("Read to graph:"),6,0);
-	    gridbox->addWidget(graphNum,6,1);
-    }
-
-    fd->setLayout(gridbox);
-    QStringList fileNames;
-    if (fd->exec())
-	fileNames = fd->selectedFiles();
-    
-//  nothing selected      
-    if (fileNames.size() == 0) return; 
-      
-    for (int i = 0; i < fileNames.size(); ++i)
-	  printf("%s \n",fileNames.at(i).toAscii().constData());
-
-    getdata(0,fileNames.at(0).toAscii().data(),DISK,XY);
-
-    if (ToolsOptions::isRescaleOnLoad()) {
-        mainWindow->toolsMenu->autoScale();
+void FileMenu::open_set() {
+    if (opensetDialog) {
+        opensetDialog->setVisible(true);
     } else {
-        drawgraph();
+       opensetDialog = new FileOpenSet(this->mainWindow);
+       opensetDialog->show();
     }
-
-    SetsSender::send();
 }
 
 void FileMenu::open_param() {

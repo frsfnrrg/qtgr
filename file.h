@@ -41,6 +41,8 @@ private:
     QAction *printAct;
     QAction *exportAct;
     QAction *exitAct;
+
+    QDialog* opensetDialog;
 };
 
 #endif
