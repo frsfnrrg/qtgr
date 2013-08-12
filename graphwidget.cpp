@@ -246,7 +246,7 @@ QString texconvert(char* s, int slen)
 	
 	s_html += s[i];
     }
-    printf("texconvert: %s|%s\n",s,s_html.toAscii().data()); 
+    //printf("texconvert: %s|%s\n",s,s_html.toAscii().data()); 
     return s_html;
 }
 
@@ -274,26 +274,28 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
     QRectF bRect = text->boundingRect();
 
     switch (just) {
-        case 0:
+        case 0: // left
 	    xoff = 0;
-	    yoff = bRect.height() / 2 + 1;
+	    yoff = bRect.height() / 2;
 	    break;
 	case 1:
-	    xoff = bRect.width() + fontsize/2;
-	    yoff = bRect.height() / 2 + 1;
+	    xoff = bRect.width();
+	    yoff = bRect.height() / 2;
 	    break;
-	case 2:
-	    xoff = bRect.width()  / 2 + 1;
-	    yoff = bRect.height() / 2 - fontsize/4;
+	case 2: // centered
+	    xoff = bRect.width()  / 2;
+	    yoff = bRect.height() / 2;
 	    break;
     }
+    
+   // printf("just %i xoff %i yoff %i rot %i txt %s \n",just, xoff,yoff,rot,s);
     
     if (rot == 0) {
 	x = x - xoff;
 	y = y - yoff;	
     }
     if (rot == 90) {
-        x = x - yoff*2;
+        x = x - yoff*3;
 	y = y + xoff;
     }
     
