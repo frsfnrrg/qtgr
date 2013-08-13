@@ -5,7 +5,7 @@
 #include "tools.h"
 
 FileOpenSet::FileOpenSet(MainWindow *mwin) :
-    QFileDialog(mwin, tr("Read Sets"), QDir::homePath(), "*")
+    QFileDialog(mwin, tr("Read Sets"), QDir::currentPath(), "*")
 {
     mainWindow = mwin;
 
@@ -49,13 +49,19 @@ FileOpenSet::FileOpenSet(MainWindow *mwin) :
 void FileOpenSet::accept() {
     QFileDialog::accept();
     QStringList files = this->selectedFiles();
+    int type;
 
     if (files.size() == 0) return;
+
+    if ( fileType->currentIndex() == 0)
+        type = XY;
+    if ( fileType->currentIndex() == 1)
+        type = NXY;
 
     for (int i = 0; i < files.size(); ++i) {
         QByteArray v = files.at(i).toAscii();
         printf("%s \n",v.constData());
-        getdata(0,v.data(),DISK,XY);
+        getdata(0,v.data(),DISK,type);
     }
 
     if (ToolsOptions::isRescaleOnLoad()) {

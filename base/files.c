@@ -24,8 +24,11 @@ static int cur_type;		/* current set type */
  */
 #define BUFSIZE  512
 
+
+// forward declarations
 static int readerror = 0;
 int readxy(int gno, char *fn, FILE *fp, int readone);
+int readnxy(int gno, char *fn, FILE * fp);
 
 int getdata(int gno, char* fn, int src, int type)
 {
@@ -71,7 +74,7 @@ int getdata(int gno, char* fn, int src, int type)
 	    retval = readxy(cur_gno, fn, fp, 0);
 	    break;
 	case NXY:
-	    //csto retval = readnxy(cur_gno, fn, fp);
+        retval = readnxy(cur_gno, fn, fp);
 	    break;
 	case IHL:
 	    //csto retval = readihl(cur_gno, fn, fp);
@@ -157,7 +160,7 @@ int getdata_step(int gno, char* fn, int src, int type)
 	    retval = readxy(cur_gno, fn, fp, 1);
 	    break;
 	case NXY:
-	    //csto retval = readnxy(cur_gno, fn, fp);
+        retval = readnxy(cur_gno, fn, fp);
 	    break;
 	case IHL:
 	    //csto retval = readihl(cur_gno, fn, fp);
@@ -376,167 +379,167 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
 //     return 1;
 // }
 // 
-// /*
-//  * read x1 y1 y2 ... y30 formatted files
-//  * note that the maximum number of sets is 30
-//  */
-// #define MAXSETN 30
-// 
-// int readnxy(int gno, char *fn, FILE * fp)
-// {
-//     int i, j, pstat, rcnt, cnt, scnt[MAXSETN], setn[MAXSETN], ptype, retval = 0;
-//     double /* atof(), */ *x[MAXSETN], *y[MAXSETN], xval, yr[MAXSETN];
-//     char *s, *strtok(), buf[1024], tmpbuf[1024];
-//     int readerror = 0;
-//     int do_restart = 0;
-// 
-// /* if more than one set of nxy data is in the file,
-//  * leap to here after each is read - the goto is at the
-//  * bottom of this module.
-//  */
-// restart:;
-// 
-//     i = 0;
-//     pstat = 0;
-//     cnt = 0;
-//     while ((fgets(buf, MAX_LINE_LEN, fp) != NULL) && ((buf[0] == '#') || (buf[0] == '@'))) {
-// 	if (buf[0] == '@') {
-// 	    read_param(buf + 1);
-// 	}
-//     }
-//     convertchar(buf);
-// 
-//     /*
-//      * count the columns 
-//      */
-//     strcpy(tmpbuf, buf);
-//     s = tmpbuf;
-//     while ((s = strtok(s, " \t\n")) != NULL) {
-// 	cnt++;
-// 	s = NULL;
-//     }
-//     if (cnt > MAXPLOT) {
-// 	errwin("Maximum number of columns exceeded, reading first 31");
-// 	cnt = 31;
-//     }
-//     s = buf;
-//     s = strtok(s, " \t\n");
-//     if (s == NULL) {
-// 	errwin("Read ended by a blank line at or near the beginning of file");
-// 	return 0;
-//     }
-//     pstat = sscanf(s, "%lf", &xval);
-//     if (pstat == 0) {
-// 	errwin("Read ended, non-numeric found on line at or near beginning of file");
-// 	return 0;
-//     }
-//     s = NULL;
-//     for (j = 0; j < cnt - 1; j++) {
-// 	s = strtok(s, " \t\n");
-// 	if (s == NULL) {
-// 	    yr[j] = 0.0;
-// 	    errwin("Number of items in column incorrect");
-// 	} else {
-// 	    yr[j] = atof(s);
-// 	}
-// 	s = NULL;
-//     }
-//     if (cnt > 1) {
-// 	for (i = 0; i < cnt - 1; i++) {
-// 	    if ((setn[i] = nextset(gno)) == -1) {
-// 		for (j = 0; j < i; j++) {
-// 		    killset(gno, setn[j]);
-// 		}
-// 		return 0;
-// 	    }
-// 	    activateset(gno, setn[i]);
-// 	    settype(gno, setn[i], XY);
-// 	    x[i] = (double *) calloc(BUFSIZE, sizeof(double));
-// 	    y[i] = (double *) calloc(BUFSIZE, sizeof(double));
-// 	    if (x[i] == NULL || y[i] == NULL) {
-// 		errwin("Insufficient memory for set");
-// 		cxfree(x[i]);
-// 		cxfree(y[i]);
-// 		for (j = 0; j < i + 1; j++) {
-// 		    killset(gno, setn[j]);
-// 		}
-// 		return (0);
-// 	    }
-// 	    *(x[i]) = xval;
-// 	    *(y[i]) = yr[i];
-// 	    scnt[i] = 1;
-// 	}
-// 	while (!do_restart && (fgets(buf, MAX_LINE_LEN, fp) != NULL)) {
-// 	    if (buf[0] == '#') {
-// 		continue;
-// 	    }
-// 	    if (buf[0] == '@') {
-// 		change_gno = -1;
-// 		change_type = cur_type;
-// 		read_param(buf + 1);
-// 		if (change_gno >= 0) {
-// 		    cur_gno = gno = change_gno;
-// 		}
-// 		if (change_type != cur_type) {
-// 		    cur_type = change_type;
-// 		    retval = -1;
-// 		    break;	/* exit this module and store any set */
-// 		}
-// 		continue;
-// 	    }
-// 	    convertchar(buf);
-// 	    s = buf;
-// 	    s = strtok(s, " \t\n");
-// 	    if (s == NULL) {
-// 		continue;
-// 	    }
-// /* check for set separator */
-// 	    pstat = sscanf(s, "%lf", &xval);
-// 	    if (pstat == 0) {
-// 		do_restart = 1;
-// 		continue;
-// 	    } else {
-// 		s = NULL;
-// 		for (j = 0; j < cnt - 1; j++) {
-// 		    s = strtok(s, " \t\n");
-// 		    if (s == NULL) {
-// 			yr[j] = 0.0;
-// 			errwin("Number of items in column incorrect");
-// 		    } else {
-// 			yr[j] = atof(s);
-// 		    }
-// 		    s = NULL;
-// 		}
-// 		for (i = 0; i < cnt - 1; i++) {
-// 		    *(x[i] + scnt[i]) = xval;
-// 		    *(y[i] + scnt[i]) = yr[i];
-// 		    scnt[i]++;
-// 		    if (scnt[i] % BUFSIZE == 0) {
-// 			x[i] = (double *) realloc(x[i], (scnt[i] + BUFSIZE) * sizeof(double));
-// 			y[i] = (double *) realloc(y[i], (scnt[i] + BUFSIZE) * sizeof(double));
-// 		    }
-// 		}
-// 	    }
-// 	}
-// 	for (i = 0; i < cnt - 1; i++) {
-// 	    setcol(gno, x[i], setn[i], scnt[i], 0);
-// 	    setcol(gno, y[i], setn[i], scnt[i], 1);
-// 	    setcomment(gno, setn[i], fn);
-// 	    updatesetminmax(gno, setn[i]);
-// 	}
-// 	if (!do_restart) {
-// 	    if (retval == -1) {
-// 		return retval;
-// 	    } else {
-// 		return 1;
-// 	    }
-// 	} else {
-// 	    do_restart = 0;
-// 	    goto restart;
-// 	}
-//     }
-//     return 0;
-// }
+ /*
+  * read x1 y1 y2 ... y30 formatted files
+  * note that the maximum number of sets is 30
+  */
+ #define MAXSETN 30
+
+ int readnxy(int gno, char *fn, FILE * fp)
+ {
+     int i, j, pstat, rcnt, cnt, scnt[MAXSETN], setn[MAXSETN], ptype, retval = 0;
+     double /* atof(), */ *x[MAXSETN], *y[MAXSETN], xval, yr[MAXSETN];
+     char *s, *strtok(), buf[1024], tmpbuf[1024];
+     int readerror = 0;
+     int do_restart = 0;
+
+ /* if more than one set of nxy data is in the file,
+  * leap to here after each is read - the goto is at the
+  * bottom of this module.
+  */
+ restart:;
+
+     i = 0;
+     pstat = 0;
+     cnt = 0;
+     while ((fgets(buf, MAX_LINE_LEN, fp) != NULL) && ((buf[0] == '#') || (buf[0] == '@'))) {
+    if (buf[0] == '@') {
+        read_param(buf + 1);
+    }
+     }
+     convertchar(buf);
+
+     /*
+      * count the columns
+      */
+     strcpy(tmpbuf, buf);
+     s = tmpbuf;
+     while ((s = strtok(s, " \t\n")) != NULL) {
+    cnt++;
+    s = NULL;
+     }
+     if (cnt > MAXPLOT) {
+    errwin("Maximum number of columns exceeded, reading first 31");
+    cnt = 31;
+     }
+     s = buf;
+     s = strtok(s, " \t\n");
+     if (s == NULL) {
+    errwin("Read ended by a blank line at or near the beginning of file");
+    return 0;
+     }
+     pstat = sscanf(s, "%lf", &xval);
+     if (pstat == 0) {
+    errwin("Read ended, non-numeric found on line at or near beginning of file");
+    return 0;
+     }
+     s = NULL;
+     for (j = 0; j < cnt - 1; j++) {
+    s = strtok(s, " \t\n");
+    if (s == NULL) {
+        yr[j] = 0.0;
+        errwin("Number of items in column incorrect");
+    } else {
+        yr[j] = atof(s);
+    }
+    s = NULL;
+     }
+     if (cnt > 1) {
+    for (i = 0; i < cnt - 1; i++) {
+        if ((setn[i] = nextset(gno)) == -1) {
+        for (j = 0; j < i; j++) {
+            killset(gno, setn[j]);
+        }
+        return 0;
+        }
+        activateset(gno, setn[i]);
+        settype(gno, setn[i], XY);
+        x[i] = (double *) calloc(BUFSIZE, sizeof(double));
+        y[i] = (double *) calloc(BUFSIZE, sizeof(double));
+        if (x[i] == NULL || y[i] == NULL) {
+        errwin("Insufficient memory for set");
+        cxfree(x[i]);
+        cxfree(y[i]);
+        for (j = 0; j < i + 1; j++) {
+            killset(gno, setn[j]);
+        }
+        return (0);
+        }
+        *(x[i]) = xval;
+        *(y[i]) = yr[i];
+        scnt[i] = 1;
+    }
+    while (!do_restart && (fgets(buf, MAX_LINE_LEN, fp) != NULL)) {
+        if (buf[0] == '#') {
+        continue;
+        }
+        if (buf[0] == '@') {
+        change_gno = -1;
+        change_type = cur_type;
+        read_param(buf + 1);
+        if (change_gno >= 0) {
+            cur_gno = gno = change_gno;
+        }
+        if (change_type != cur_type) {
+            cur_type = change_type;
+            retval = -1;
+            break;	/* exit this module and store any set */
+        }
+        continue;
+        }
+        convertchar(buf);
+        s = buf;
+        s = strtok(s, " \t\n");
+        if (s == NULL) {
+        continue;
+        }
+ /* check for set separator */
+        pstat = sscanf(s, "%lf", &xval);
+        if (pstat == 0) {
+        do_restart = 1;
+        continue;
+        } else {
+        s = NULL;
+        for (j = 0; j < cnt - 1; j++) {
+            s = strtok(s, " \t\n");
+            if (s == NULL) {
+            yr[j] = 0.0;
+            errwin("Number of items in column incorrect");
+            } else {
+            yr[j] = atof(s);
+            }
+            s = NULL;
+        }
+        for (i = 0; i < cnt - 1; i++) {
+            *(x[i] + scnt[i]) = xval;
+            *(y[i] + scnt[i]) = yr[i];
+            scnt[i]++;
+            if (scnt[i] % BUFSIZE == 0) {
+            x[i] = (double *) realloc(x[i], (scnt[i] + BUFSIZE) * sizeof(double));
+            y[i] = (double *) realloc(y[i], (scnt[i] + BUFSIZE) * sizeof(double));
+            }
+        }
+        }
+    }
+    for (i = 0; i < cnt - 1; i++) {
+        setcol(gno, x[i], setn[i], scnt[i], 0);
+        setcol(gno, y[i], setn[i], scnt[i], 1);
+        setcomment(gno, setn[i], fn);
+        updatesetminmax(gno, setn[i]);
+    }
+    if (!do_restart) {
+        if (retval == -1) {
+        return retval;
+        } else {
+        return 1;
+        }
+    } else {
+        do_restart = 0;
+        goto restart;
+    }
+     }
+     return 0;
+ }
 // 
 // int readbinary(int gno, char* fn, FILE *fp)
 // {
