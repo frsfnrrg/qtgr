@@ -12,6 +12,7 @@ public:
 
     static bool isRescaleOnLoad();
     static bool isRescaleOnTransform();
+    static bool isAutoUpdate();
 private:
     static ToolsOptions* me;
     static QSettings* settings;
@@ -19,6 +20,7 @@ private:
     explicit ToolsOptions(MainWindow* mainWin);
     QCheckBox* rescaleOnLoad;
     QCheckBox* rescaleOnTransform;
+    QCheckBox* autoUpdate;
 
 signals:
     

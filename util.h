@@ -2,7 +2,6 @@
 #define UTIL_H
 
 #include <QtGui>
-#include "dialog.h"
 
 class Dialog;
 

@@ -1,5 +1,3 @@
-#include <iostream>
-#include "view.h"
 #include "view/world.h"
 #include "base/globals.h"
 #include "prop.h"
@@ -123,9 +121,8 @@ void ViewWorld::applyDialog()
 	}
     }
     drawgraph();  
-    
-    ViewMenu* viewMenu = (ViewMenu*) mainWindow->viewMenu;  // FIXME hack  
-    viewMenu->updateDialog(viewMenu->ticksDialog);
+
+    WorldDimProp::send();
 }
 
 void ViewWorld::updateWorldDimensions() {

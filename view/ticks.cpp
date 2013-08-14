@@ -1,7 +1,6 @@
-//#include <iostream>
-#include "view.h"
 #include "view/ticks.h"
 #include "base/globals.h"
+#include "choosers.h"
 #include "prop.h"
 
 QComboBox* makeEditAxis() {
@@ -18,6 +17,8 @@ QComboBox* makeEditAxis() {
 ViewTicks::ViewTicks(MainWindow* mainWin) :
     Dialog(mainWin, "Ticks/Tick Labels")
 {  
+    WorldDimProp::add(this);
+
     labelPropsDialog = NULL;
     axisLabelDialog = NULL;
     ticksDialog = NULL;
@@ -116,8 +117,6 @@ void ViewTicks::updateDialog()
     gno = cg; // current graph only 
     axis = editAxis->currentIndex();
    
-    majTic->setText(QString::number(g[gno].t[axis].tmajor,'g',9));
-    minTic->setText(QString::number(g[gno].t[axis].tminor,'g',9));
     axisLabel->setText(QString::fromLocal8Bit(g[gno].t[axis].label.s));
     
     majGrid->setChecked(g[gno].t[axis].t_gridflag == ON);
@@ -129,7 +128,17 @@ void ViewTicks::updateDialog()
 
     axisBar->setChecked(g[gno].t[axis].t_drawbar == ON);
 
+    updateWorldDimensions();
+
     this->update();
+}
+
+void ViewTicks::updateWorldDimensions()
+{
+    int gno = cg;
+    int axis = editAxis->currentIndex();
+    majTic->setText(QString::number(g[gno].t[axis].tmajor,'g',9));
+    minTic->setText(QString::number(g[gno].t[axis].tminor,'g',9));
 }
   
 void ViewTicks::applyDialog()

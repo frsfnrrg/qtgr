@@ -1,17 +1,17 @@
 #ifndef MENUVIEW_H
 #define MENUVIEW_H
 
-#include <QtGui>
 #include "mainwindow.h"
-#include "view/symbols.h"
-#include "view/ticks.h"
-#include "view/world.h"
-#include "view/graphtype.h"
-#include "view/legends.h"
-#include "view/viewport.h"
-#include "view/title.h"
-#include "view/frame.h"
 #include "menu.h"
+
+class ViewTicks;
+class ViewWorld;
+class ViewGraphType;
+class ViewLegends;
+class ViewView;
+class ViewTitle;
+class ViewFrame;
+class ViewSymbols;
 
 class ViewMenu : public Menu
 {
@@ -19,15 +19,8 @@ class ViewMenu : public Menu
     
 public:
     ViewMenu(MainWindow* );
-    
-    ViewSymbols* symbolsDialog;
+
     ViewTicks*   ticksDialog;
-    ViewWorld*   worldDialog;
-    ViewGraphType* graphTypesDialog;
-    ViewLegends* legendsDialog;
-    ViewView* viewDialog;
-    ViewTitle* titleDialog;
-    ViewFrame* frameDialog;
 
     void populateMenu(QMenu* q);
 
@@ -60,6 +53,14 @@ private:
     QAction *legendsAct;
     QAction *graphTypesAct;
     QAction *frameAct;
+
+    ViewWorld*   worldDialog;
+    ViewGraphType* graphTypesDialog;
+    ViewLegends* legendsDialog;
+    ViewView* viewDialog;
+    ViewTitle* titleDialog;
+    ViewFrame* frameDialog;
+    ViewSymbols* symbolsDialog;
 };
 
 #endif

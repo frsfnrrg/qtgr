@@ -29,6 +29,7 @@ class ViewTicks : public Dialog
 
   public slots:
     void updateDialog();
+    void updateWorldDimensions();
     
   private:
     

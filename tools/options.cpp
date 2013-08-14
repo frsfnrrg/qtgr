@@ -15,6 +15,7 @@ ToolsOptions::ToolsOptions(MainWindow* mwin) :
 {
     rescaleOnLoad = new QCheckBox();
     rescaleOnTransform = new QCheckBox();
+    autoUpdate = new QCheckBox();
     QGridLayout* layout = new QGridLayout();
 
     layout->addWidget(new QLabel(tr("Autoscale on load")), 0,0);
@@ -24,6 +25,10 @@ ToolsOptions::ToolsOptions(MainWindow* mwin) :
 
     layout->addWidget(new QLabel(tr("Autoscale on transforms")), 2,0);
     layout->addWidget(rescaleOnTransform, 2, 1);
+
+    layout->setRowMinimumHeight(3, 8);
+
+    layout->addWidget(autoUpdate, 2, 1);
 
     layout->setColumnMinimumWidth(1, 150);
 
@@ -46,9 +51,14 @@ bool ToolsOptions::isRescaleOnTransform() {
     return settings->value("rescale_on_transform", QVariant(false)).toBool();
 }
 
+bool ToolsOptions::isAutoUpdate() {
+    return settings->value("auto_update", QVariant(true)).toBool();
+}
+
 void ToolsOptions::updateDialog() {
     rescaleOnLoad->setChecked(isRescaleOnLoad());
     rescaleOnTransform->setChecked(isRescaleOnTransform());
+    autoUpdate->setChecked(isAutoUpdate());
 }
 
 void ToolsOptions::applyDialog() {
@@ -56,4 +66,6 @@ void ToolsOptions::applyDialog() {
                       QVariant(rescaleOnLoad->isChecked()));
     settings->setValue("rescale_on_transform",
                       QVariant(rescaleOnTransform->isChecked()));
+    settings->setValue("auto_update",
+                       QVariant(autoUpdate->isChecked()));
 }

@@ -1,4 +1,5 @@
 #include "util.h"
+#include "dialog.h"
 
 void loadDialog(Dialog* d) {
     d->show();

@@ -1,6 +1,14 @@
 #include <QtGui>
 #include "mainwindow.h"
 #include "view.h"
+#include "view/symbols.h"
+#include "view/ticks.h"
+#include "view/world.h"
+#include "view/graphtype.h"
+#include "view/legends.h"
+#include "view/viewport.h"
+#include "view/title.h"
+#include "view/frame.h"
 #include "base/globals.h"
 
 ViewMenu::ViewMenu(MainWindow* mainWin) :

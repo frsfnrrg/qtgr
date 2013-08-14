@@ -1,6 +1,5 @@
 #include "view/title.h"
 #include "base/globals.h"
-#include "menu.h"
 #include "choosers.h"
 
 ViewTitle::ViewTitle(MainWindow* mainWin) :
