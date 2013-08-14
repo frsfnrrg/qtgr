@@ -20,7 +20,7 @@ public slots:
 
     void write_set();
     void write_param();
-    void write_block();
+    void save_all();
 
     void reset();
     void print();
@@ -44,6 +44,7 @@ private:
 
     QDialog* opensetDialog;
     QDialog* exportDialog;
+    QDialog* saveallDialog;
 };
 
 #endif

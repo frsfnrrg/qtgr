@@ -4,8 +4,6 @@
 
 bool Dialog::auto_update = false;
 
-// todo: hide/disable all cancel/apply buttons
-
 Dialog::Dialog(MainWindow* mainWin, const char* title, bool autoen) :
     QDialog(mainWin)
 {

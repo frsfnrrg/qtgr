@@ -7,6 +7,7 @@
 #include "tools/options.h"
 #include "file/openset.h"
 #include "file/export.h"
+#include "file/saveall.h"
 
 FileMenu::FileMenu(MainWindow* mainWin) :
     Menu(mainWin, "File", true)
@@ -15,6 +16,7 @@ FileMenu::FileMenu(MainWindow* mainWin) :
 
     opensetDialog = NULL;
     exportDialog = NULL;
+    saveallDialog = NULL;
 
     populateMenu(this);
 }
@@ -50,8 +52,8 @@ void FileMenu::populateMenu(QMenu* m)
 
 void FileMenu::createActions()
 {
-    readSetAct = makeAction("Read sets",
-                            "Load a set from file or pipe onto the graph",
+    readSetAct = makeAction("Open",
+                            "Load a set or graph from file or pipe onto the graph",
                             "Ctrl+O", SLOT(open_set()));
 
     readParaAct = makeAction("Read parameters",
@@ -70,9 +72,9 @@ void FileMenu::createActions()
                               "Write parameters",
                               "", SLOT(write_param()));
 
-    writeBlockAct = makeAction("Write block data",
-                               "Write block data",
-                               "", SLOT(write_block()));
+    writeBlockAct = makeAction("Save graph",
+                               "Save graph to a file",
+                               "", SLOT(save_all()));
 
     resetAct = makeAction("Clear all",
                           "Reset the graph to its original state",
@@ -117,8 +119,13 @@ void FileMenu::write_param() {
     // TODO
 }
 
-void FileMenu::write_block() {
-    // TODO
+void FileMenu::save_all() {
+    if (saveallDialog) {
+        saveallDialog->setVisible(true);
+    } else {
+       saveallDialog = new FileSaveAll(this->mainWindow);
+       saveallDialog->show();
+    }
 }
 
 void FileMenu::reset()
