@@ -1055,122 +1055,122 @@ void do_activateset(gno, setno, len)
 //     drawgraph();
 // }
 // 
-// /*
-//  * write out a set
-//  */
-// void do_writesets(gno, setno, imbed, fn, format)
-//     int gno, setno, imbed;
-//     char *fn, *format;
-// {
-//     int i, j, k, n, which_graph = gno, save_cg = cg, start, stop, set_start, set_stop;
-//     FILE *cp;
-//     double *x, *y, *dx, *dy, *dz;
-// 
-//     if (!fn[0]) {
-// 	errwin("Define file name first");
-// 	return;
-//     }
-//     if (fexists(fn)) {
-// 	return;
-//     }
-//     if ((cp = fopen(fn, "w")) == NULL) {
-// 	char s[192];
-// 
-// 	sprintf(s, "Unable to open file %s", fn);
-// 	errwin(s);
-// 	return;
-//     }
-//     if (which_graph == MAXGRAPH) {
-// 	start = 0;
-// 	stop = maxgraph - 1;
-//     } else if (which_graph == -1) {
-// 	start = cg;
-// 	stop = cg;
-//     } else {
-// 	start = which_graph;
-// 	stop = which_graph;
-//     }
-//     if (imbed) {
-// 	if (start != stop) {
-// 	    putparms(-1, cp, imbed);
-// 	} else {
-// 	    putparms(start, cp, imbed);
-// 	}
-//     }
-//     for (k = start; k <= stop; k++) {
-// 	if (isactive_graph(k)) {
-// 	    if (start != stop) {
-// 		fprintf(cp, "@WITH G%1d\n", k);
-// 		fprintf(cp, "@G%1d ON\n", k);
-// 	    }
-// 	    if (setno == -1) {
-// 		set_start = 0;
-// 		set_stop = g[cg].maxplot - 1;
-// 	    } else {
-// 		set_start = setno;
-// 		set_stop = setno;
-// 	    }
-// 	    for (j = set_start; j <= set_stop; j++) {
-// 		if (isactive(k, j)) {
-// 		    fprintf(cp, "@TYPE %s\n", set_types(dataset_type(k, j)));
-// 		    x = getx(k, j);
-// 		    y = gety(k, j);
-// 		    n = getsetlength(k, j);
-// 		    switch (dataset_type(k, j)) {
-// 		    case XY:
-// 			for (i = 0; i < n; i++) {
-// 			    fprintf(cp, format, x[i], y[i]);
-// 			    fputc('\n', cp);
-// 			}
-// 			break;
-// 		    case XYDX:
-// 		    case XYDY:
-// 		    case XYZ:
-// 		    case XYRT:
-// 			dx = getcol(k, j, 2);
-// 			for (i = 0; i < n; i++) {
-// 			    fprintf(cp, "%lg %lg %lg", x[i], y[i], dx[i]);
-// 			    fputc('\n', cp);
-// 			}
-// 			break;
-// 		    case XYDXDX:
-// 		    case XYDYDY:
-// 		    case XYDXDY:
-// 		    case XYUV:
-// 			dx = getcol(k, j, 2);
-// 			dy = getcol(k, j, 3);
-// 			for (i = 0; i < n; i++) {
-// 			    fprintf(cp, "%lg %lg %lg %lg", x[i], y[i], dx[i], dy[i]);
-// 			    fputc('\n', cp);
-// 			}
-// 			break;
-// 		    case XYHILO:
-// 			dx = getcol(k, j, 2);
-// 			dy = getcol(k, j, 3);
-// 			dz = getcol(k, j, 4);
-// 			for (i = 0; i < n; i++) {
-// 			    fprintf(cp, "%lg %lg %lg %lg %lg", x[i], y[i], dx[i], dy[i], dz[i]);
-// 			    fputc('\n', cp);
-// 			}
-// 			break;
-// 		    case XYBOX:
-// 			dx = getcol(k, j, 2);
-// 			dy = getcol(k, j, 3);
-// 			dz = getcol(k, j, 4);
-// 			for (i = 0; i < n; i++) {
-// 			    fprintf(cp, "%lg %lg %lg %lg %d", x[i], y[i], dx[i], dy[i], (int) dz[i]);
-// 			    fputc('\n', cp);
-// 			}
-// 			break;
-// 		    }
-// 		    fprintf(cp, "&\n");
-// 		}
-// 	    }
-// 	}
-//     }
-//     fclose(cp);
-//     cg = save_cg;
-// }
+    /*
+      * write out a set
+      */
+void do_writesets(gno, setno, imbed, fn, format)
+    int gno, setno, imbed;
+    char *fn, *format;
+{
+    int i, j, k, n, which_graph = gno, save_cg = cg, start, stop, set_start, set_stop;
+    FILE *cp;
+    double *x, *y, *dx, *dy, *dz;
+
+    if (!fn[0]) {
+        errwin("Define file name first");
+        return;
+    }
+//    if (fexists(fn)) {
+//        return;
+//    }
+    if ((cp = fopen(fn, "w")) == NULL) {
+        char s[192];
+
+        sprintf(s, "Unable to open file %s", fn);
+        errwin(s);
+        return;
+    }
+    if (which_graph == MAXGRAPH) {
+        start = 0;
+        stop = maxgraph - 1;
+    } else if (which_graph == -1) {
+        start = cg;
+        stop = cg;
+    } else {
+    start = which_graph;
+    stop = which_graph;
+    }
+    if (imbed) {
+        if (start != stop) {
+            putparms(-1, cp, imbed);
+        } else {
+            putparms(start, cp, imbed);
+        }
+    }
+    for (k = start; k <= stop; k++) {
+        if (isactive_graph(k)) {
+            if (start != stop) {
+                fprintf(cp, "@WITH G%1d\n", k);
+                fprintf(cp, "@G%1d ON\n", k);
+            }
+            if (setno == -1) {
+                set_start = 0;
+                set_stop = g[cg].maxplot - 1;
+            } else {
+                set_start = setno;
+                set_stop = setno;
+            }
+            for (j = set_start; j <= set_stop; j++) {
+                if (isactive(k, j)) {
+                    fprintf(cp, "@TYPE %s\n", set_types(dataset_type(k, j)));
+                    x = getx(k, j);
+                    y = gety(k, j);
+                    n = getsetlength(k, j);
+                    switch (dataset_type(k, j)) {
+                    case XY:
+                        for (i = 0; i < n; i++) {
+                            fprintf(cp, format, x[i], y[i]);
+                            fputc('\n', cp);
+                        }
+                        break;
+                    case XYDX:
+                    case XYDY:
+                    case XYZ:
+                    case XYRT:
+                        dx = getcol(k, j, 2);
+                        for (i = 0; i < n; i++) {
+                            fprintf(cp, "%lg %lg %lg", x[i], y[i], dx[i]);
+                            fputc('\n', cp);
+                        }
+                        break;
+                    case XYDXDX:
+                    case XYDYDY:
+                    case XYDXDY:
+                    case XYUV:
+                        dx = getcol(k, j, 2);
+                        dy = getcol(k, j, 3);
+                        for (i = 0; i < n; i++) {
+                            fprintf(cp, "%lg %lg %lg %lg", x[i], y[i], dx[i], dy[i]);
+                            fputc('\n', cp);
+                        }
+                        break;
+                    case XYHILO:
+                        dx = getcol(k, j, 2);
+                        dy = getcol(k, j, 3);
+                        dz = getcol(k, j, 4);
+                        for (i = 0; i < n; i++) {
+                            fprintf(cp, "%lg %lg %lg %lg %lg", x[i], y[i], dx[i], dy[i], dz[i]);
+                            fputc('\n', cp);
+                        }
+                        break;
+                    case XYBOX:
+                        dx = getcol(k, j, 2);
+                        dy = getcol(k, j, 3);
+                        dz = getcol(k, j, 4);
+                        for (i = 0; i < n; i++) {
+                            fprintf(cp, "%lg %lg %lg %lg %d", x[i], y[i], dx[i], dy[i], (int) dz[i]);
+                            fputc('\n', cp);
+                        }
+                        break;
+                    }
+                    fprintf(cp, "&\n");
+                }
+            }
+        }
+    }
+    fclose(cp);
+    cg = save_cg;
+    }
 // 
 // /*
 //  * activate a set and set its length

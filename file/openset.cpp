@@ -5,7 +5,7 @@
 #include "tools.h"
 
 FileOpenSet::FileOpenSet(MainWindow *mwin) :
-    QFileDialog(mwin, tr("Read Sets"), QDir::currentPath(), "*")
+    QFileDialog(mwin, tr("Read Sets"), QDir::homePath(), "*")
 {
     mainWindow = mwin;
 

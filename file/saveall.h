@@ -6,6 +6,7 @@
 
 class FileSaveAll : public QFileDialog
 {
+    Q_OBJECT
 public:
     explicit FileSaveAll(MainWindow *mwin);
     MainWindow* mainWindow;

@@ -357,6 +357,7 @@ extern void do_flush();
 extern void do_copyset(int gfrom, int j1, int gto, int j2);
 extern void do_moveset(int gfrom, int j1, int gto, int j2);
 extern void do_swapset(int gfrom, int j1, int gto, int j2);
+extern void do_writesets(int gno, int setno,int  imbed, char * fn, char * format);
 
 //computils
 
