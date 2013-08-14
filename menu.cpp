@@ -1,4 +1,6 @@
 #include "menu.h"
+#include "dialog.h"
+#include "util.h"
 
 Menu::Menu(MainWindow* mainWin, const char* title, bool tearoff) :
     QMenu(mainWin)

@@ -10,6 +10,7 @@
 #include "graphwidget.h"
 #include "base/globals.h"
 #include "prop.h"
+#include "dialog.h"
 
 MainWindow::MainWindow() :
     QMainWindow(),
@@ -34,6 +35,8 @@ MainWindow::MainWindow() :
     QSize size = settings.value("size", QSize(400, 400)).toSize();
     resize(size);
     move(pos);
+    bool autoup = settings.value("auto_update", QVariant(true)).toBool();
+    Dialog::setAutoUpdate(autoup);
 
     createMenus();
 

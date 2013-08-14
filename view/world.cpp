@@ -3,7 +3,7 @@
 #include "prop.h"
 
 ViewWorld::ViewWorld(MainWindow* mainWin) :
-    Dialog(mainWin, "Define World")
+    Dialog(mainWin, "Define World", true)
 {
     WorldDimProp::add(this);
 
@@ -29,6 +29,15 @@ ViewWorld::ViewWorld(MainWindow* mainWin) :
 	xMinTic->setMaximumWidth(100); 
 	yMajTic->setMaximumWidth(100); 
 	yMinTic->setMaximumWidth(100); 
+
+    autoHook(xMin);
+    autoHook(xMax);
+    autoHook(yMin);
+    autoHook(yMax);
+    autoHook(xMajTic);
+    autoHook(xMajTic);
+    autoHook(yMajTic);
+    autoHook(yMinTic);
 
 	QGridLayout* layout = new QGridLayout();
 	    

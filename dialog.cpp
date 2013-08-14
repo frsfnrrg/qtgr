@@ -1,7 +1,12 @@
 #include "dialog.h"
 #include "base/globals.h"
+#include "prop.h"
 
-Dialog::Dialog(MainWindow* mainWin, const char* title) :
+bool Dialog::auto_update = false;
+
+// todo: hide/disable all cancel/apply buttons
+
+Dialog::Dialog(MainWindow* mainWin, const char* title, bool autoen) :
     QDialog(mainWin)
 {
     this->setWindowTitle(tr(title));
@@ -32,6 +37,15 @@ Dialog::Dialog(MainWindow* mainWin, const char* title) :
     layout->addLayout(base);
 
     this->setLayout(layout);
+
+    if (autoen) {
+        AutoDisabler::add(apply);
+        AutoDisabler::add(cancel);
+        if (auto_update) {
+            apply->hide();
+            cancel->hide();
+        }
+    }
 }
 
 QPushButton* Dialog::makeButton(const char* text, const char* slot) {
@@ -58,6 +72,41 @@ void Dialog::cancelDialog() {
     this->setVisible(false);
 }
 
+void Dialog::autoUpdate() {
+    if (auto_update) {
+        applyDialog();
+    }
+}
+
+void Dialog::autoHook(QComboBox* q) {
+    connect(q, SIGNAL(currentIndexChanged(int)), this, SLOT(autoUpdate()));
+}
+
+void Dialog::autoHook(QLineEdit* q) {
+    connect(q, SIGNAL(editingFinished()), this, SLOT(autoUpdate()));
+}
+
+void Dialog::autoHook(QAbstractSpinBox* q) {
+    connect(q, SIGNAL(editingFinished()), this, SLOT(autoUpdate()));
+}
+
+void Dialog::autoHook(QCheckBox* q) {
+    connect(q, SIGNAL(toggled(bool)), this, SLOT(autoUpdate()));
+}
+
+void Dialog::autoHook(QRadioButton* q) {
+    connect(q, SIGNAL(toggled(bool)), this, SLOT(autoUpdate()));
+}
+
+void Dialog::autoHook(QSlider* q) {
+    connect(q, SIGNAL(valueChanged(int)), this, SLOT(autoUpdate()));
+}
+
 QLabel* Dialog::makeLabel(const char* text, Qt::Alignment align) {
     return makeQLabel(this, text, align);
+}
+
+void Dialog::setAutoUpdate(bool on) {
+    auto_update = on;
+    AutoDisabler::send(on);
 }

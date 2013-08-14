@@ -2,8 +2,9 @@
 #define MENU_H
 
 #include <QtGui>
-#include "dialog.h"
-#include "util.h"
+
+class MainWindow;
+class Dialog;
 
 class Menu : public QMenu
 {

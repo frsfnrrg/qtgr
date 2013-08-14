@@ -58,5 +58,22 @@ public slots:
 
 };
 
+class AutoDisabler : public QObject
+{
+    Q_OBJECT
+public:
+    static void send(bool on);
+    static void add(QWidget* reciever);
+
+private:
+    explicit AutoDisabler();
+    static AutoDisabler* me;
+    void prop(bool);
+
+signals:
+    void autoChangeDisable();
+    void autoChangeEnable();
+
+};
 
 #endif // WORLDDIMPROP_H

@@ -51,3 +51,33 @@ void SetsSender::add(QObject* receiver) {
 void SetsSender::prop() {
     emit setsUpdate();
 }
+
+AutoDisabler* AutoDisabler::me = NULL;
+
+AutoDisabler::AutoDisabler() :
+    QObject()
+{
+}
+
+void AutoDisabler::send(bool e) {
+    if (me == NULL) {
+        me = new AutoDisabler();
+    }
+    me->prop(e);
+}
+
+void AutoDisabler::add(QWidget* receiver) {
+    if (me == NULL) {
+        me = new AutoDisabler();
+    }
+    connect((QObject*)me, SIGNAL(autoChangeDisable()), (QObject*)receiver, SLOT(hide()));
+    connect((QObject*)me, SIGNAL(autoChangeEnable()), (QObject*)receiver, SLOT(show()));
+}
+
+void AutoDisabler::prop(bool on) {
+    if (on) {
+        emit autoChangeDisable();
+    } else {
+        emit autoChangeEnable();
+    }
+}

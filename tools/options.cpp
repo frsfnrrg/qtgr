@@ -1,4 +1,5 @@
 #include "tools/options.h"
+#include "choosers.h"
 
 ToolsOptions* ToolsOptions::me = NULL;
 QSettings* ToolsOptions::settings = NULL;
@@ -69,4 +70,5 @@ void ToolsOptions::applyDialog() {
                       QVariant(rescaleOnTransform->isChecked()));
     settings->setValue("auto_update",
                        QVariant(autoUpdate->isChecked()));
+    Dialog::setAutoUpdate(autoUpdate->isChecked());
 }
