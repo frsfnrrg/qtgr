@@ -3,7 +3,7 @@
 #include "choosers.h"
 
 ViewTitle::ViewTitle(MainWindow* mainWin) :
-    Dialog(mainWin, "Title")
+    Dialog(mainWin, "Title", true)
 {
 
     ttext = new QLineEdit();
@@ -15,6 +15,15 @@ ViewTitle::ViewTitle(MainWindow* mainWin) :
     ssize = makeTextSizer();
     sfont = new FontComboBox();
     scolor = new ColorComboBox();
+
+    autoHook(ttext);
+    autoHook(tsize);
+    autoHook(tfont);
+    autoHook(tcolor);
+    autoHook(stext);
+    autoHook(ssize);
+    autoHook(sfont);
+    autoHook(scolor);
 
     // divide using QFrame magic??
 

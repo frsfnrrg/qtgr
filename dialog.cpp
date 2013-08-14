@@ -81,7 +81,7 @@ void Dialog::autoHook(QComboBox* q) {
 }
 
 void Dialog::autoHook(QLineEdit* q) {
-    connect(q, SIGNAL(editingFinished()), this, SLOT(autoUpdate()));
+    connect(q, SIGNAL(textEdited(QString)), this, SLOT(autoUpdate()));
 }
 
 void Dialog::autoHook(QAbstractSpinBox* q) {

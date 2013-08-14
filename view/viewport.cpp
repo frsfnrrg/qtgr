@@ -13,11 +13,10 @@ inline QDoubleSpinBox* getUnitDoubleSpinBox() {
 }
 
 ViewView::ViewView(MainWindow *parent) :
-    Dialog(parent, "Viewport")
+    Dialog(parent, "Viewport", true)
 {
     useRect = new QPushButton(tr("Rect Select"));
     connect(useRect, SIGNAL(clicked()), this, SLOT(doRect()));
-
 
     QVBoxLayout* over = new QVBoxLayout();
 
@@ -28,6 +27,10 @@ ViewView::ViewView(MainWindow *parent) :
     xx = getUnitDoubleSpinBox();
     yn = getUnitDoubleSpinBox();
     yx = getUnitDoubleSpinBox();
+    autoHook(xn);
+    autoHook(xx);
+    autoHook(yn);
+    autoHook(yx);
 
     layout->addWidget(new QLabel(tr("Viewport settings (from 0.0 to 1.0)")), 0,0,2,0);
 

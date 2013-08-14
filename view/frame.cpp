@@ -3,7 +3,7 @@
 #include "choosers.h"
 
 ViewFrame::ViewFrame(MainWindow* mainWin) :
-    Dialog(mainWin, "Frame")
+    Dialog(mainWin, "Frame", true)
 {
     graphType = new QComboBox();
     graphType->addItem(tr("Full"));
@@ -37,6 +37,13 @@ ViewFrame::ViewFrame(MainWindow* mainWin) :
     fillColorLabel = new QLabel(tr("Background color:"));
     fillColorLabel->setEnabled(false);
     QGridLayout* layout = new QGridLayout();
+
+    autoHook(graphType);
+    autoHook(lineColor);
+    autoHook(lineWidth);
+    autoHook(lineStyle);
+    autoHook(fillBG);
+    autoHook(fillColor);
 
     layout->addWidget(new QLabel(tr("Type:")),0,0);
     layout->addWidget(graphType,0,1);
