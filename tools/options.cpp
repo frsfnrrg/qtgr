@@ -28,7 +28,8 @@ ToolsOptions::ToolsOptions(MainWindow* mwin) :
 
     layout->setRowMinimumHeight(3, 8);
 
-    layout->addWidget(autoUpdate, 2, 1);
+    layout->addWidget(makeLabel("Automatically apply updates"), 4, 0);
+    layout->addWidget(autoUpdate, 4, 1);
 
     layout->setColumnMinimumWidth(1, 150);
 
