@@ -34,6 +34,12 @@ Dialog::Dialog(MainWindow* mainWin, const char* title) :
     this->setLayout(layout);
 }
 
+QPushButton* Dialog::makeButton(const char* text, const char* slot) {
+    QPushButton* f = new QPushButton(tr(text));
+    connect(f, SIGNAL(clicked()), this, slot);
+    return f;
+}
+
 /**
  * Please don't call this more than once;
  * @brief Dialog::setDialogLayout

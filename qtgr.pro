@@ -103,6 +103,8 @@ OBJECTS_DIR = build/obj
 RCC_DIR = build/rcc
 UI_DIR = build/ui
 
+QMAKE_CXXFLAGS += -pipe
+
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/mainwindows/qtgr
 sources.files = $$SOURCES $$HEADERS $$RESOURCES $$FORMS qtgr.pro images

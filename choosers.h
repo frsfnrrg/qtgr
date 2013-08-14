@@ -67,4 +67,6 @@ public:
     static QColor getColor(int index);
 };
 
+QDoubleSpinBox* makeTextSizer();
+
 #endif // CHOOSERS_H

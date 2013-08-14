@@ -8,18 +8,12 @@ ViewTitle::ViewTitle(MainWindow* mainWin) :
 {
 
     ttext = new QLineEdit();
-    tsize = new QDoubleSpinBox();
-    tsize->setMinimum(0.0);
-    tsize->setDecimals(2);
-    tsize->setSingleStep(0.1);
+    tsize = makeTextSizer();
     tfont = new FontComboBox();
     tcolor = new ColorComboBox();
 
     stext = new QLineEdit();
-    ssize = new QDoubleSpinBox();
-    ssize->setMinimum(0.0);
-    ssize->setDecimals(2);
-    ssize->setSingleStep(0.1);
+    ssize = makeTextSizer();
     sfont = new FontComboBox();
     scolor = new ColorComboBox();
 

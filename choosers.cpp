@@ -225,3 +225,13 @@ ColorComboBox::ColorComboBox() {
 QColor ColorComboBox::getColor(int index) {
     return colors[index].color;
 }
+
+// MISC
+
+QDoubleSpinBox* makeTextSizer() {
+    QDoubleSpinBox* f = new QDoubleSpinBox();
+    f->setMinimum(0.0);
+    f->setDecimals(2);
+    f->setSingleStep(0.1);
+    return f;
+}

@@ -19,8 +19,8 @@ public:
 // gets changed
 
 protected:
-    QLabel* makeLabel(const char* text, Qt::Alignment align = Qt::AlignCenter);
-
+    QLabel* makeLabel(const char* text, Qt::Alignment align = Qt::AlignLeft | Qt::AlignVCenter);
+    QPushButton* makeButton(const char* text, const char* slot);
 private:
     QVBoxLayout* layout;
 signals:
