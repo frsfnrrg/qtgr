@@ -98,6 +98,11 @@ RESOURCES     = qtgr.qrc
 
 QT += svg
 
+MOC_DIR = build/moc
+OBJECTS_DIR = build/obj
+RCC_DIR = build/rcc
+UI_DIR = build/ui
+
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/mainwindows/qtgr
 sources.files = $$SOURCES $$HEADERS $$RESOURCES $$FORMS qtgr.pro images

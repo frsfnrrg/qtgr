@@ -4,6 +4,7 @@ qtgr.pro.user
 # C compile garbage
 *.o
 # QT autogen
+Makefile
 moc_*
 qrc_*
 # The executable
