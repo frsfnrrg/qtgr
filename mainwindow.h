@@ -37,6 +37,8 @@ private slots:
     void about();
     void dropEvent(QDropEvent *);
     void writeToolBarSettings(bool);
+    void initialize();
+
 private:
     void addToolBar(Menu* m, bool showdef);
     void readSettings();

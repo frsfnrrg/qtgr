@@ -133,3 +133,24 @@ void MainWindow::createHelpMenu()
 void MainWindow::dropEvent(QDropEvent *) {
     printf("We got a drop!\n");
 }
+
+void MainWindow::initialize()
+{
+    QStringList arguments = QCoreApplication::arguments();
+    // Now you can parse the arguments *after* the main window has been created.
+
+    // only accept one argument so far: a file to be loaded
+    if (arguments.length() == 2) {
+        int type=XY;
+
+        QByteArray v = arguments[1].toAscii();
+        getdata(0,v.data(),DISK,type);
+
+        if (ToolsOptions::isRescaleOnLoad()) {
+            this->toolsMenu->autoScale();
+        } else {
+            drawgraph();
+        }
+    }
+}
+
