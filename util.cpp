@@ -33,3 +33,9 @@ QAction* createQAction(const QString &name, const QString &explained, const QStr
    return f;
 }
 
+bool leVal(QLineEdit* l, double* d) {
+    bool ok;
+    double v = l->text().toDouble(&ok);
+    if (ok) *d = v;
+    return ok;
+}

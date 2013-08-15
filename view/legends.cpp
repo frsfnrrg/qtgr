@@ -4,9 +4,8 @@
 #include "view.h"
 
 ViewLegends::ViewLegends(MainWindow* mainWin) :
-    Dialog(mainWin, "Legends")
+    Dialog(mainWin, "Legends", this)
 {
-    //this->setWindowTitle(tr("QTGR: Legends"));
     legendsEditDialog = NULL;
 
 
@@ -14,16 +13,18 @@ ViewLegends::ViewLegends(MainWindow* mainWin) :
     locType = new QComboBox;
     locType->addItem(tr("Viewport coordinates"));
     locType->addItem(tr("World coordinates"));
-//	connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTicks()));
 
-// 	// make line edits
     legendX = new QLineEdit();
     legendY = new QLineEdit();
     legendX->setMaximumWidth(100);
     legendY->setMaximumWidth(100);
 
     showLegend = new QCheckBox("Show Legend");
-    //connect(apply, SIGNAL(clicked()), this, SLOT(applyTicks()));
+
+    autoHook(showLegend);
+    autoHook(legendX);
+    autoHook(legendY);
+    autoHook(locType);
 
     QPushButton* editLegend = new QPushButton("Edit...");
     connect(editLegend, SIGNAL(clicked()), this, SLOT(legendsEdit()));
@@ -45,8 +46,6 @@ ViewLegends::ViewLegends(MainWindow* mainWin) :
 
     layout->addWidget(new QLabel("Color:"),4,0);
     layout->addWidget(new QLabel("Char size:"),5,0);
-// 	layout->addWidget(majTic,4,1);
-// 	layout->addWidget(minTic,5,1);
 
     layout->addWidget(new QLabel(""),6,0);
 
@@ -132,6 +131,8 @@ public:
     view->mainWindow->gwidget->unsetCursor();
     view->mainWindow->statusBar()->clearMessage();
 
+    // TODO: make this depend on world coords/view coords
+    // based on the options
     view->legendX->setText(QString::number(double(x)/w,'g',3));
     view->legendY->setText(QString::number(1.0-double(y)/h,'g',3));
     view->applyDialog();
@@ -147,63 +148,59 @@ void ViewLegends::placeLegends()
     mainWindow->statusBar()->showMessage(tr("Click to place legend"));
 }
 
-void ViewLegends::legendsEdit()
-{
+void ViewLegends::updateLegendsField(int cset) {
     if (legendsEditDialog) {
-        legendsEditDialog->setVisible(true);
-    } else {
-        // TODO: eventually, abstract this out..
-        legendsEditDialog = new QDialog(this->mainWindow);
-        legendsEditDialog->setWindowTitle("QTGR: Edit legend labels");
-        legendsEditDialog->setMaximumHeight(300);
-        legendsEditDialog->setMinimumWidth(400);
-
-        // buttons
-        QPushButton* apply = new QPushButton("Apply");
-        connect(apply, SIGNAL(clicked()), this, SLOT(applyLegendsEdit()));
-
-        QPushButton* done  = new QPushButton("Done");
-        connect(done, SIGNAL(clicked()), this, SLOT(doneLegendsEdit()));
-
-        // central widget for legend labels
-        QScrollArea* scrollArea = new QScrollArea;
-        QWidget* widget = new QWidget();
-        QGridLayout* layout = new QGridLayout();
-
-        for (int i=0; i<MAXPLOT; i++) {
-            setLabels[i] = new QLineEdit();
-            setLabels[i]->setMinimumWidth(240);
-            layout->addWidget(new QLabel(QString("Set ")+QString::number(i)),i,0);
-            layout->addWidget(setLabels[i],i,1);
-        }
-
-        widget->setLayout(layout);
-        scrollArea->setWidget(widget);
-
-        // put everything together
-        QGridLayout* lay = new QGridLayout();
-        lay->addWidget(scrollArea,0,0,1,5);
-
-        layout->addWidget(new QLabel(""),1,0);
-
-        lay->addWidget(apply,2,1);
-        lay->addWidget(done,2,3);
-
-        layout->setColumnMinimumWidth(0,80);
-        layout->setColumnMinimumWidth(1,80);
-        layout->setColumnMinimumWidth(2,80);
-        layout->setColumnMinimumWidth(3,80);
-        layout->setColumnMinimumWidth(4,80);
-
-        legendsEditDialog->setLayout(lay);
-
-        legendsEditDialog->show();
+        int gno = cg;
+        legendsEditDialog->setLabels[cset]->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));
     }
-
-    updateLegendsEdit();
 }
 
-void ViewLegends::updateLegendsEdit()
+
+void ViewLegends::legendsEdit()
+{
+    if (showDialog(legendsEditDialog)) return;
+    legendsEditDialog = new ViewLegendsEdit(mainWindow);
+    loadDialog(legendsEditDialog);
+}
+
+ViewLegendsEdit::ViewLegendsEdit(MainWindow *mainWin) :
+    Dialog(mainWin, "Edit legend labels", true)
+{
+    this->setMaximumHeight(300);
+    this->setMinimumWidth(400);
+
+    // central widget for legend labels
+    QScrollArea* scrollArea = new QScrollArea;
+    QWidget* widget = new QWidget();
+    QGridLayout* layout = new QGridLayout();
+
+    for (int i=0; i<MAXPLOT; i++) {
+        setLabels[i] = new QLineEdit();
+        setLabels[i]->setMinimumWidth(240);
+        layout->addWidget(new QLabel(QString("Set ")+QString::number(i)),i,0);
+        layout->addWidget(setLabels[i],i,1);
+        autoHook(setLabels[i]);
+    }
+
+    widget->setLayout(layout);
+    scrollArea->setWidget(widget);
+
+    // put everything together
+    QGridLayout* lay = new QGridLayout();
+    lay->addWidget(scrollArea,0,0,1,5);
+
+    layout->addWidget(new QLabel(""),1,0);
+
+    layout->setColumnMinimumWidth(0,80);
+    layout->setColumnMinimumWidth(1,80);
+    layout->setColumnMinimumWidth(2,80);
+    layout->setColumnMinimumWidth(3,80);
+    layout->setColumnMinimumWidth(4,80);
+
+    this->setDialogLayout(lay);
+}
+
+void ViewLegendsEdit::updateDialog()
 {
     int gno;
 
@@ -215,10 +212,9 @@ void ViewLegends::updateLegendsEdit()
 //        printf("updateLegendEdit   %i s %s\n",i,g[gno].l.str[i].s);
        setLabels[i]->setText(QString::fromLocal8Bit(g[gno].l.str[i].s));
     }
-    legendsEditDialog->update();
 }
 
-void ViewLegends::applyLegendsEdit()
+void ViewLegendsEdit::applyDialog()
 {
     int gno;
 
@@ -234,19 +230,6 @@ void ViewLegends::applyLegendsEdit()
     SetsSender::send();
 
     this->mainWindow->viewMenu->updateSymbolsLegend();
-}
-
-void ViewLegends::doneLegendsEdit()
-{
-    this->applyLegendsEdit();
-    this->legendsEditDialog->setVisible(false);
-}
-
-void ViewLegends::updateLegendsField(int cset) {
-    if (legendsEditDialog) {
-        int gno = cg;
-        setLabels[cset]->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));
-    }
 }
 
 

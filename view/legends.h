@@ -5,6 +5,8 @@
 #include "dialog.h"
 #include "base/globals.h"
 
+class ViewLegendsEdit;
+
 class ViewLegends : public Dialog
 {
     Q_OBJECT
@@ -17,9 +19,7 @@ public:
 private:
     QComboBox* locType;
     QCheckBox* showLegend;
-    QDialog* legendsEditDialog;
-
-    QLineEdit* setLabels[MAXPLOT];
+    ViewLegendsEdit* legendsEditDialog;
 signals:
 
 public slots:
@@ -29,9 +29,26 @@ public slots:
 private slots:
     void placeLegends();
     void legendsEdit();
-    void updateLegendsEdit();
-    void applyLegendsEdit();
-    void doneLegendsEdit();
 };
+
+class ViewLegendsEdit : public Dialog
+{
+    Q_OBJECT
+public:
+    explicit ViewLegendsEdit(MainWindow* mainWin);
+
+    QLineEdit* setLabels[MAXPLOT];
+private:
+
+signals:
+
+public slots:
+    void updateDialog();
+    void applyDialog();
+
+private slots:
+};
+
+
 
 #endif // VIEW_LEGENDS_H

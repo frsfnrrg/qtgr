@@ -23,7 +23,7 @@ class ViewWorld : public Dialog
     QLineEdit *yMinTic;  
     
  public slots:
-    void updateWorldDimensions();
+    void updateWorldDimensions(QObject*);
     void updateDialog();
    
  private slots:

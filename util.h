@@ -14,4 +14,6 @@ QLabel* makeQLabel(QWidget* parent, const char* text, Qt::Alignment align = Qt::
 
 QAction* createQAction(const QString &name, const QString &explained, const QString &shortcut, QObject* parent);
 
+bool leVal(QLineEdit* l, double* d);
+
 #endif // UTIL_H

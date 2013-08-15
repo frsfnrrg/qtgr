@@ -17,17 +17,17 @@ class WorldDimProp : public QObject
 {
     Q_OBJECT
 public:
-    static void send();
+    static void send(QObject* sender);
 
     static void add(QObject* reciever);
 
 private:
     explicit WorldDimProp();
     static WorldDimProp* me;
-    void prop();
+    void prop(QObject* sender);
 
 signals:
-    void dimensionUpdate();
+    void dimensionUpdate(QObject* sender);
 
 public slots:
 };

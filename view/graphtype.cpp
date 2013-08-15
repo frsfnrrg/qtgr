@@ -12,7 +12,7 @@ const char* opts[] = {"X Linear, Y Linear",
                         "Horizontal Bar Stacked"};
 
 ViewGraphType::ViewGraphType(MainWindow* mainWin) :
-    Dialog(mainWin, "Set Graph Type")
+    Dialog(mainWin, "Set Graph Type", true)
 {
     printf("creating graph window");
 
@@ -25,6 +25,8 @@ ViewGraphType::ViewGraphType(MainWindow* mainWin) :
     for (int k=0;k<8;k++) {
         graphTypes->addItem(tr(opts[k]));
     }
+
+    autoHook(graphTypes);
 
     // layouting
     QGridLayout* primary = new QGridLayout();
