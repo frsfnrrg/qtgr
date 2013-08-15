@@ -235,3 +235,22 @@ QDoubleSpinBox* makeTextSizer() {
     f->setSingleStep(0.1);
     return f;
 }
+
+QComboBox* makeWidthSelector() {
+    QComboBox* f = new QComboBox();
+    for (int i=0;i<MAX_LINEWIDTH;i++) {
+        f->addItem(QString::number(i+1));
+    }
+    return f;
+}
+
+QComboBox* makeLineStyler() {
+    QComboBox* f = new QComboBox();
+    f->addItem("None");
+    f->addItem("Solid");
+    f->addItem("Dashed");
+    f->addItem("Dotted");
+    f->addItem("Dash-Dot");
+    f->addItem("Dash-DotDot");
+    return f;
+}

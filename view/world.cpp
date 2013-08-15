@@ -97,7 +97,7 @@ void ViewWorld::updateDialog()
     update();
 
 }
-  
+
 void ViewWorld::applyDialog()
 {
     int i, which, ming, maxg;
@@ -113,27 +113,29 @@ void ViewWorld::applyDialog()
             return;
         }
     }
+    double val;
     for (i = ming; i <= maxg; i++) {
-	if (isactive_graph(i)) {
-	    if (which <= 1 || which == 2) {
-		g[i].w.xg1 = xMin->text().toDouble();
-		g[i].w.xg2 = xMax->text().toDouble();
-		g[i].t[0].tmajor = xMajTic->text().toDouble();
-		g[i].t[0].tminor = xMinTic->text().toDouble();
-	    }
-	    if (which <= 1 || which == 3) {
-		g[i].w.yg1 = yMin->text().toDouble();
-		g[i].w.yg2 = yMax->text().toDouble();
-		g[i].t[1].tmajor = yMajTic->text().toDouble();
-		g[i].t[1].tminor = yMinTic->text().toDouble();
-	    }
-	}
+        if (isactive_graph(i)) {
+            if (which <= 1 || which == 2) {
+                if (leVal(xMin, &val)) g[i].w.xg1 = val;
+                if (leVal(xMax, &val)) g[i].w.xg2 = val;
+                if (leVal(xMajTic, &val)) g[i].t[X_AXIS].tmajor = val;
+                if (leVal(xMinTic, &val)) g[i].t[X_AXIS].tminor = val;
+            }
+            if (which <= 1 || which == 3) {
+                if (leVal(yMin, &val)) g[i].w.yg1 = val;
+                if (leVal(yMax, &val)) g[i].w.yg2 = val;
+                if (leVal(yMajTic, &val)) g[i].t[Y_AXIS].tmajor = val;
+                if (leVal(yMinTic, &val)) g[i].t[Y_AXIS].tminor = val;
+            }
+        }
     }
     drawgraph();  
 
-    WorldDimProp::send();
+    WorldDimProp::send(this);
 }
 
-void ViewWorld::updateWorldDimensions() {
+void ViewWorld::updateWorldDimensions(QObject* sender) {
+    if (sender == this) return;
     updateDialog();
 }

@@ -69,4 +69,8 @@ public:
 
 QDoubleSpinBox* makeTextSizer();
 
+QComboBox* makeWidthSelector();
+
+QComboBox* makeLineStyler();
+
 #endif // CHOOSERS_H

@@ -12,11 +12,24 @@ ToolsOptions* ToolsOptions::getOptionsDialog(MainWindow* mainWin) {
 }
 
 ToolsOptions::ToolsOptions(MainWindow* mwin) :
-    Dialog(mwin, "Options")
+    Dialog(mwin, "Options", true)
 {
+    if (settings == NULL) {
+        settings = new QSettings("QTGR","QTGR");
+    }
+
     rescaleOnLoad = new QCheckBox();
     rescaleOnTransform = new QCheckBox();
     autoUpdate = new QCheckBox();
+
+    rescaleOnLoad->setChecked(isRescaleOnLoad());
+    rescaleOnTransform->setChecked(isRescaleOnTransform());
+    autoUpdate->setChecked(isAutoUpdate());
+
+    autoHook(rescaleOnLoad);
+    autoHook(rescaleOnTransform);
+    autoHook(autoUpdate);
+
     QGridLayout* layout = new QGridLayout();
 
     layout->addWidget(new QLabel(tr("Autoscale on load")), 0,0);
@@ -36,9 +49,7 @@ ToolsOptions::ToolsOptions(MainWindow* mwin) :
 
     this->setDialogLayout(layout);
 
-    if (settings == NULL) {
-        settings = new QSettings("QTGR","QTGR");
-    }
+
 }
 
 bool ToolsOptions::isRescaleOnLoad() {

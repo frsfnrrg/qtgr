@@ -7,22 +7,22 @@ WorldDimProp::WorldDimProp() :
 {
 }
 
-void WorldDimProp::send() {
+void WorldDimProp::send(QObject* sender) {
     if (me == NULL) {
         me = new WorldDimProp();
     }
-    me->prop();
+    me->prop(sender);
 }
 
 void WorldDimProp::add(QObject* receiver) {
     if (me == NULL) {
         me = new WorldDimProp();
     }
-    connect(me, SIGNAL(dimensionUpdate()), receiver, SLOT(updateWorldDimensions()));
+    connect(me, SIGNAL(dimensionUpdate(QObject*)), receiver, SLOT(updateWorldDimensions(QObject*)));
 }
 
-void WorldDimProp::prop() {
-    emit dimensionUpdate();
+void WorldDimProp::prop(QObject* sender) {
+    emit dimensionUpdate(sender);
 }
 
 

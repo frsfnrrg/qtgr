@@ -29,7 +29,7 @@ class ViewTicks : public Dialog
 
   public slots:
     void updateDialog();
-    void updateWorldDimensions();
+    void updateWorldDimensions(QObject*);
     
   private:
     
@@ -47,7 +47,6 @@ class ViewTicks : public Dialog
     QLabel* axisName;
     
  private slots:
-    void forceMaj();
     void applyDialog();
 
     void labelProps();

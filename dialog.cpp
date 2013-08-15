@@ -77,7 +77,10 @@ void Dialog::autoUpdate() {
 }
 
 void Dialog::autoHook(QComboBox* q) {
-    connect(q, SIGNAL(currentIndexChanged(int)), this, SLOT(autoUpdate()));
+    // this still sends when the value is the same, but that makes little
+    // difference. The problem with value-changed is that it triggers
+    // on programmatic setting. This is a ridiculously minor issue.
+    connect(q, SIGNAL(activated(int)), this, SLOT(autoUpdate()));
 }
 
 void Dialog::autoHook(QLineEdit* q) {
@@ -89,11 +92,11 @@ void Dialog::autoHook(QAbstractSpinBox* q) {
 }
 
 void Dialog::autoHook(QCheckBox* q) {
-    connect(q, SIGNAL(toggled(bool)), this, SLOT(autoUpdate()));
+    connect(q, SIGNAL(stateChanged(int)), this, SLOT(autoUpdate()));
 }
 
 void Dialog::autoHook(QRadioButton* q) {
-    connect(q, SIGNAL(toggled(bool)), this, SLOT(autoUpdate()));
+    connect(q, SIGNAL(stateChanged(int)), this, SLOT(autoUpdate()));
 }
 
 void Dialog::autoHook(QSlider* q) {

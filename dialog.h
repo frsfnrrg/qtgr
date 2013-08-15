@@ -15,10 +15,8 @@ public:
     MainWindow* mainWindow;
 
     void setDialogLayout(QLayout* layout);
-// we could abstract these out, so only the main pane
-// gets changed
-    static void setAutoUpdate(bool on);
 
+    static void setAutoUpdate(bool on);
 protected:
     QLabel* makeLabel(const char* text, Qt::Alignment align = Qt::AlignLeft | Qt::AlignVCenter);
     QPushButton* makeButton(const char* text, const char* slot);

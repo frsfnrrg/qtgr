@@ -6,12 +6,8 @@
 #include "prop.h"
 
 ViewSymbols::ViewSymbols(MainWindow* mainWin) :
-    Dialog(mainWin, "Symbols")
+    Dialog(mainWin, "Symbols", true)
 {
-    const int maxwidths = 9; //FIXME
-    const int maxpatterns = 16; //FIXME
-    const int maxcolors = 16; //FIXME
-	       
     //make input fields
     setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
@@ -35,17 +31,9 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     symbolFill->addItem("Filled");
     
     // line inputs
-    lineStyle = new QComboBox();
-    lineStyle->addItem("None");
-    lineStyle->addItem("Solid");
-    lineStyle->addItem("Dashed");
-    lineStyle->addItem("Dotted");
-    lineStyle->addItem("Dash-Dot");
-    lineStyle->addItem("Dash-DotDot");
-    lineWidth = new QComboBox();
-    for (int i=1; i<=maxwidths; i++) {
-      lineWidth->addItem(QString::number(i));
-    }
+    lineStyle = makeLineStyler();
+
+    lineWidth = makeWidthSelector();
 
     lineColor = new ColorComboBox();
 
@@ -66,6 +54,16 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     
     legendS = new QLineEdit();
     legendS->setMaximumWidth(300); 
+
+    autoHook(fillColor);
+    autoHook(legendS);
+    autoHook(fillColor);
+    autoHook(fillFill);
+    autoHook(lineColor);
+    autoHook(lineWidth);
+    autoHook(lineStyle);
+    autoHook(symbolFill);
+    autoHook(symbolSymbol);
 
     QGridLayout* layout = new QGridLayout();
 	

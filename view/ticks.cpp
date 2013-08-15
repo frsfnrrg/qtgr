@@ -2,6 +2,7 @@
 #include "base/globals.h"
 #include "choosers.h"
 #include "prop.h"
+#include "util.h"
 
 QComboBox* makeEditAxis() {
     QComboBox* editAxis = new QComboBox();
@@ -15,7 +16,7 @@ QComboBox* makeEditAxis() {
 }
 
 ViewTicks::ViewTicks(MainWindow* mainWin) :
-    Dialog(mainWin, "Ticks/Tick Labels")
+    Dialog(mainWin, "Ticks/Tick Labels", true)
 {  
     WorldDimProp::add(this);
 
@@ -39,12 +40,20 @@ ViewTicks::ViewTicks(MainWindow* mainWin) :
 
     majGrid = new QCheckBox("Major grid");
     minGrid = new QCheckBox("Minor grid");
-    connect(minGrid, SIGNAL(toggled(bool)), this, SLOT(forceMaj()));
     
     // make radio buttons
     tickLabels = new QCheckBox("Tick labels");
     tickMarks  = new QCheckBox("Tick marks");
     axisBar = new QCheckBox("Axis bar");
+
+    autoHook(axisLabel);
+    autoHook(majTic);
+    autoHook(minTic);
+    autoHook(majGrid);
+    autoHook(minGrid);
+    autoHook(tickLabels);
+    autoHook(tickMarks);
+    autoHook(axisBar);
 
     QPushButton* labelPropsButton = makeButton(
                 "Label props", SLOT(labelProps()));
@@ -100,25 +109,27 @@ ViewTicks::ViewTicks(MainWindow* mainWin) :
     this->setDialogLayout(layout);
 }
 
-void ViewTicks::forceMaj() {
-    if (minGrid->isChecked()) {
-        majGrid->setChecked(true);
-        majGrid->setEnabled(false);
-    } else {
-        majGrid->setEnabled(true);
-    }
-}
-
-  
 void ViewTicks::updateDialog()
 {
     int gno,axis; 
     
     gno = cg; // current graph only 
     axis = editAxis->currentIndex();
-   
+    //printf("UPDATE %d\n", axis);
+
+    //printf("U1 %d %d %d %d %d %d\n", g[gno].t[axis].t_gridflag, g[gno].t[axis].t_mgridflag,g[gno].t[axis].t_mflag,g[gno].t[axis].t_flag,g[gno].t[axis].tl_flag,g[gno].t[axis].t_drawbar);
+
     axisLabel->setText(QString::fromLocal8Bit(g[gno].t[axis].label.s));
     
+
+
+    // voodoo code
+    // these two (tm, tl) checkboxes trigger an applyDialog via an autoHook. How??
+    tickMarks->blockSignals(true);
+    tickLabels->blockSignals(true);
+    majGrid->blockSignals(true);
+    minGrid->blockSignals(true);
+
     majGrid->setChecked(g[gno].t[axis].t_gridflag == ON);
     minGrid->setChecked(g[gno].t[axis].t_mgridflag == ON);
 
@@ -128,13 +139,20 @@ void ViewTicks::updateDialog()
 
     axisBar->setChecked(g[gno].t[axis].t_drawbar == ON);
 
-    updateWorldDimensions();
+    // voodoo code
+    tickMarks->blockSignals(false);
+    tickLabels->blockSignals(false);
+    majGrid->blockSignals(false);
+    minGrid->blockSignals(false);
 
-    this->update();
+    //printf("U2 %d %d %d %d %d %d\n", g[gno].t[axis].t_gridflag, g[gno].t[axis].t_mgridflag,g[gno].t[axis].t_mflag,g[gno].t[axis].t_flag,g[gno].t[axis].tl_flag,g[gno].t[axis].t_drawbar);
+
+    updateWorldDimensions(NULL);
 }
 
-void ViewTicks::updateWorldDimensions()
+void ViewTicks::updateWorldDimensions(QObject* sender)
 {
+    if (sender == this) return;
     int gno = cg;
     int axis = editAxis->currentIndex();
     majTic->setText(QString::number(g[gno].t[axis].tmajor,'g',9));
@@ -148,27 +166,32 @@ void ViewTicks::applyDialog()
     
     gno = cg; // current graph only 
     axis = editAxis->currentIndex();
+    //printf("APPLY %d\n", axis);
+
+    //printf("A1 %d %d %d %d %d %d\n", g[gno].t[axis].t_gridflag, g[gno].t[axis].t_mgridflag,g[gno].t[axis].t_mflag,g[gno].t[axis].t_flag,g[gno].t[axis].tl_flag,g[gno].t[axis].t_drawbar);
 
     label = axisLabel->text().toAscii().data();
 
-    strcpy(g[cg].t[axis].label.s, label);
-    g[cg].t[axis].tmajor = majTic->text().toDouble();
-    g[cg].t[axis].tminor = minTic->text().toDouble();
+    strcpy(g[gno].t[axis].label.s, label);
+    g[gno].t[axis].tmajor = majTic->text().toDouble();
+    g[gno].t[axis].tminor = minTic->text().toDouble();
 
-    g[cg].t[axis].t_gridflag = majGrid->isChecked() ? ON : OFF;
-    g[cg].t[axis].t_mgridflag = minGrid->isChecked() ? ON : OFF;
+    g[gno].t[axis].t_gridflag = majGrid->isChecked() ? ON : OFF;
+    g[gno].t[axis].t_mgridflag = minGrid->isChecked() ? ON : OFF;
     
     int tm = tickMarks->isChecked() ? ON : OFF;
-    g[cg].t[axis].t_mflag = tm;
-    g[cg].t[axis].t_flag = tm;
+    g[gno].t[axis].t_mflag = tm;
+    g[gno].t[axis].t_flag = tm;
 
-    g[cg].t[axis].tl_flag = tickLabels->isChecked() ? ON : OFF;
+    g[gno].t[axis].tl_flag = tickLabels->isChecked() ? ON : OFF;
 
-    g[cg].t[axis].t_drawbar = axisBar->isChecked() ? ON : OFF;
+    g[gno].t[axis].t_drawbar = axisBar->isChecked() ? ON : OFF;
+
+    //printf("A2 %d %d %d %d %d %d\n", g[gno].t[axis].t_gridflag, g[gno].t[axis].t_mgridflag,g[gno].t[axis].t_mflag,g[gno].t[axis].t_flag,g[gno].t[axis].tl_flag,g[gno].t[axis].t_drawbar);
 
     drawgraph();  
     
-    WorldDimProp::send();
+    WorldDimProp::send(this);
 }
 
 void ViewTicks::labelProps()
@@ -245,7 +268,7 @@ void ViewTicks::minGridProps()
 
 
 ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
-    Dialog(mwin, "Edit tick labels")
+    Dialog(mwin, "Edit tick labels", true)
 {
     editAxis = makeEditAxis();
     connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
@@ -320,6 +343,21 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     drawSide->addItem(tr("Normal"));
     drawSide->addItem(tr("Opposite"));
     drawSide->addItem(tr("Both"));
+
+    autoHook(labelFormat);
+    autoHook(labelPrecision);
+    autoHook(textFont);
+    autoHook(textColor);
+    autoHook(textSize);
+    autoHook(stagger);
+    autoHook(skipEvery);
+    autoHook(startType);
+    autoHook(stopType);
+    autoHook(layoutType);
+    autoHook(editStartAt);
+    autoHook(editStopAt);
+    autoHook(layoutAngle);
+    autoHook(drawSide);
 
     // LAYOUT
 
@@ -450,53 +488,43 @@ void ViewTicksLabels::applyDialog()
     gno = cg; // current graph only 
     axis = editAxis->currentIndex();
 
-    g[cg].t[axis].tl_format = format_types[labelFormat->currentIndex()];
-    g[cg].t[axis].tl_prec   = labelPrecision->currentIndex();
-    g[cg].t[axis].tl_color = textColor->currentIndex();
-    g[cg].t[axis].tl_font = textFont->currentIndex();
-    g[cg].t[axis].tl_charsize = textSize->value();
-    g[cg].t[axis].tl_staggered = stagger->value();
-    g[cg].t[axis].tl_starttype = startType->currentIndex() == 0 ? AUTO : SPEC;
-    g[cg].t[axis].tl_stoptype = stopType->currentIndex() == 0 ? AUTO : SPEC;
-    bool ok;
-    double v;
-    v = editStartAt->text().toDouble(&ok);
-    if (ok) {
-        g[cg].t[axis].tl_start = v;
-    } else {
-        editStartAt->setText(QString::number(g[cg].t[axis].tl_start, 'g',9));
-    }
-    v = editStopAt->text().toDouble(&ok);
-    if (ok) {
-        g[cg].t[axis].tl_stop = v;
-    } else {
-        editStopAt->setText(QString::number(g[cg].t[axis].tl_stop, 'g',9));
-    }
+    g[gno].t[axis].tl_format = format_types[labelFormat->currentIndex()];
+    g[gno].t[axis].tl_prec   = labelPrecision->currentIndex();
+    g[gno].t[axis].tl_color = textColor->currentIndex();
+    g[gno].t[axis].tl_font = textFont->currentIndex();
+    g[gno].t[axis].tl_charsize = textSize->value();
+    g[gno].t[axis].tl_staggered = stagger->value();
+    g[gno].t[axis].tl_starttype = startType->currentIndex() == 0 ? AUTO : SPEC;
+    g[gno].t[axis].tl_stoptype = stopType->currentIndex() == 0 ? AUTO : SPEC;
 
-    g[cg].t[axis].tl_skip = skipEvery->value();
+    double v;
+    if (leVal(editStartAt, &v)) g[gno].t[axis].tl_start = v;
+    if (leVal(editStopAt, &v)) g[gno].t[axis].tl_stop = v;
+
+    g[gno].t[axis].tl_skip = skipEvery->value();
 
     int indx = drawSide->currentIndex();
     if (indx == 2) {
-        g[cg].t[axis].tl_op = BOTH;
+        g[gno].t[axis].tl_op = BOTH;
     } else if (axis % 2 == Y_AXIS) {
-        g[cg].t[axis].tl_op = indx == 0 ? LEFT : RIGHT;
+        g[gno].t[axis].tl_op = indx == 0 ? LEFT : RIGHT;
     } else {
-        g[cg].t[axis].tl_op = indx == 0 ? BOTTOM : TOP;
+        g[gno].t[axis].tl_op = indx == 0 ? BOTTOM : TOP;
     }
 
     if (layoutType->currentIndex() == 2) {
-        g[cg].t[axis].tl_layout = SPEC;
+        g[gno].t[axis].tl_layout = SPEC;
     } else {
-        g[cg].t[axis].tl_layout = layoutType->currentIndex() == 0 ? HORIZONTAL : VERTICAL;
+        g[gno].t[axis].tl_layout = layoutType->currentIndex() == 0 ? HORIZONTAL : VERTICAL;
     }
-    g[cg].t[axis].tl_angle = layoutAngle->value();
+    g[gno].t[axis].tl_angle = layoutAngle->value();
 
     drawgraph();  
 }
 
 
 ViewTicksAxisLabel::ViewTicksAxisLabel(MainWindow* mainWin) :
-    Dialog(mainWin, "Axis Label")
+    Dialog(mainWin, "Axis Label", true)
 {
     editAxis = makeEditAxis();
     connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
@@ -508,6 +536,11 @@ ViewTicksAxisLabel::ViewTicksAxisLabel(MainWindow* mainWin) :
     textFont = new FontComboBox();
     textColor = new ColorComboBox();
     textSize = makeTextSizer();
+
+    autoHook(direction);
+    autoHook(textFont);
+    autoHook(textColor);
+    autoHook(textSize);
 
     QGridLayout* layout = new QGridLayout();
 
@@ -562,7 +595,7 @@ void ViewTicksAxisLabel::applyDialog() {
 
 
 ViewTicksMarks::ViewTicksMarks(MainWindow* mainWin) :
-    Dialog(mainWin, "Tick Marks")
+    Dialog(mainWin, "Tick Marks", true)
 {
     editAxis = makeEditAxis();
     connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
@@ -599,6 +632,11 @@ ViewTicksMarks::ViewTicksMarks(MainWindow* mainWin) :
 
     majReadout = new QLabel("0.0");
     minReadout = new QLabel("0.0");
+
+    autoHook(majLength);
+    autoHook(minLength);
+    autoHook(direction);
+    autoHook(location);
 
     QGridLayout* layout = new QGridLayout();
 
@@ -685,25 +723,20 @@ void ViewTicksMarks::applyDialog() {
 }
 
 LineStyleDialog::LineStyleDialog(MainWindow* mainWin, const char* title)
-    : Dialog(mainWin, title)
+    : Dialog(mainWin, title, true)
 {
     editAxis = makeEditAxis();
     connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
-    widthB = new QComboBox();
-    for (int i=0;i<9;i++) {
-        widthB->addItem(QString::number(i + 1));
-    }
+    widthB = makeWidthSelector();
 
     colorB = new ColorComboBox();
 
-    styleB = new QComboBox();
-    styleB->addItem("None");
-    styleB->addItem("Solid");
-    styleB->addItem("Dashed");
-    styleB->addItem("Dotted");
-    styleB->addItem("Dash-Dot");
-    styleB->addItem("Dash-DotDot");
+    styleB = makeLineStyler();
+
+    autoHook(widthB);
+    autoHook(colorB);
+    autoHook(styleB);
 
     QGridLayout* layout = new QGridLayout();
 
