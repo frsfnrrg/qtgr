@@ -85,7 +85,7 @@ void GraphWidget::mousePressEvent(QMouseEvent *event)
     }
 
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
-    printf("mouseClick %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
+//    printf("mouseClick %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
     if (mouseClickCall != NULL) {
        mouseClickCall->mouse(event->x(),event->y(),scene->width(),scene->height());
     }
@@ -96,7 +96,7 @@ void GraphWidget::mousePressEvent(QMouseEvent *event)
 void GraphWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
-    printf("mouseDoubleClick %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
+//    printf("mouseDoubleClick %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
     if (mouseDoubleCall != NULL) {
         mouseDoubleCall->mouse(event->x(),event->y(),scene->width(),scene->height());
     }
@@ -165,9 +165,9 @@ QString texconvert(char* s, int slen)
          "\\phi"   ,"\\chi","\\psi"   ,"\\omega" ,     ""};
    const char *htmlsym[] = 
         {"&alpha;","&beta;","&gamma;","&delta;","&epsilon;", 
-         "&zeta;" ,"&eta;" ,"&theta;","&iota;","&kappa", 
+         "&zeta;" ,"&eta;" ,"&theta;","&iota;","&kappa;",
          "&lambda;","&mu;" ,"&nu;"   ,"&xi;"  ,"&omicron;","&pi;"  , 
-	 "&rho;" ,"&sigma;","&tau;"   ,"&upsilon;",
+         "&rho;" ,"&sigma;","&tau;"   ,"&upsilon;",
          "&phi;"  ,"&chi;" ,"&psi;"   ,"&omega;"   ,""        };
 	 
    // initialize tex2html map
@@ -202,7 +202,7 @@ QString texconvert(char* s, int slen)
 	if (s[i] == '^') {
 	    s_html += "<sup>";
 	    i += 1;
-	    if (s[i+1]=='{')  {
+        if (s[i]=='{')  {
 	      sup = true;
 	    } else {
 	      s_html += s[i];
@@ -215,7 +215,7 @@ QString texconvert(char* s, int slen)
 	if (s[i] == '_') {
 	    s_html += "<sub>";
 	    i += 1;
-	    if (s[i+1]=='{')  {
+        if (s[i]=='{')  {
 	      sub = true;
 	    } else {
 	      s_html += s[i];
@@ -237,7 +237,7 @@ QString texconvert(char* s, int slen)
 	    if (tex2html.contains(s_tmp)) {
   // 	      printf("test %s ",tex2html.value(s_tmp).toAscii().data());
 	      s_html += tex2html.value(s_tmp);
-	      i = l-1;
+          i = l;
 	    } else {
 	      s_html += s[i];
 	    }
