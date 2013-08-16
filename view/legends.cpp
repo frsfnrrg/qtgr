@@ -2,17 +2,18 @@
 #include "base/globals.h"
 #include "prop.h"
 #include "view.h"
+#include "choosers.h"
 
 ViewLegends::ViewLegends(MainWindow* mainWin) :
     Dialog(mainWin, "Legends", this)
 {
     legendsEditDialog = NULL;
-
+    legendsFrameDialog = NULL;
 
     // make input fields
     locType = new QComboBox;
-    locType->addItem(tr("Viewport coordinates"));
-    locType->addItem(tr("World coordinates"));
+    locType->addItem(tr("Viewport"));
+    locType->addItem(tr("World"));
 
     legendX = new QLineEdit();
     legendY = new QLineEdit();
@@ -21,49 +22,95 @@ ViewLegends::ViewLegends(MainWindow* mainWin) :
 
     showLegend = new QCheckBox("Show Legend");
 
+    styleFont = new FontComboBox();
+    styleColor = new ColorComboBox();
+    styleSize = makeTextSizer();
+    // abstract: makeNumberedComboBox
+    styleWidth = new QComboBox();
+    for (int i=0;i<8;i++) {
+        styleWidth->addItem(QString::number(i+1));
+    }
+    styleSpacing = new QComboBox();
+    for (int i=0;i<4;i++) {
+        styleSpacing->addItem(QString::number(i+1));
+    }
+    styleFrame = new QComboBox();
+    styleFrame->addItem("None");
+    styleFrame->addItem("Enabled");
+
     autoHook(showLegend);
     autoHook(legendX);
     autoHook(legendY);
     autoHook(locType);
 
-    QPushButton* editLegend = new QPushButton("Edit...");
-    connect(editLegend, SIGNAL(clicked()), this, SLOT(legendsEdit()));
+    autoHook(styleFont);
+    autoHook(styleColor);
+    autoHook(styleSize);
+    autoHook(styleWidth);
+    autoHook(styleSpacing);
+    autoHook(styleFrame);
 
-    QPushButton* place  = new QPushButton("Place");
-    connect(place, SIGNAL(clicked()), this, SLOT(placeLegends()));
+    QPushButton* editLegend = makeButton("Edit Legend Text", SLOT(legendsEdit()));
+
+    QPushButton* place  = makeButton("Place", SLOT(placeLegends()));
+
+    QPushButton* frame = makeButton("Frame Props", SLOT(legendsFrame()));
 
     QGridLayout* layout = new QGridLayout();
 
-    layout->addWidget(showLegend,0,0,1,2,Qt::AlignLeft);
-    layout->addWidget(editLegend,0,4,1,1);
+    QHBoxLayout* top = new QHBoxLayout();
+    top->addWidget(showLegend);
+    top->addSpacing(4);
+    top->addWidget(editLegend);
 
-    layout->addWidget(new QLabel(""),1,0);
-
-    layout->addWidget(new QLabel("Legend location: "),2,0);
-    layout->addWidget(locType,2,1,1,3);
-
-    layout->addWidget(new QLabel(""),3,0);
-
-    layout->addWidget(new QLabel("Color:"),4,0);
-    layout->addWidget(new QLabel("Char size:"),5,0);
-
-    layout->addWidget(new QLabel(""),6,0);
-
-    layout->addWidget(new QLabel("Legend x:"),7,0);
-    layout->addWidget(new QLabel("Legend y:"),8,0);
-    layout->addWidget(legendX,7,1);
-    layout->addWidget(legendY,8,1);
-
-    layout->addWidget(place,7,3,Qt::AlignHCenter);
+    layout->addLayout(top, 0, 0, 1, 4, Qt::AlignLeft);
 
 
-    layout->addWidget(new QLabel(""),10,0);
+    // box for main settings??
+    layout->setRowMinimumHeight(1, 12);
 
-    layout->setColumnMinimumWidth(0,80);
-    layout->setColumnMinimumWidth(1,80);
-    layout->setColumnMinimumWidth(2,80);
-    layout->setColumnMinimumWidth(3,80);
-    layout->setColumnMinimumWidth(4,80);
+    const int sp = 0;
+    const int sm = sp+1;
+
+    const int pp = 3;
+    const int pm = pp+1;
+
+
+    layout->addWidget(makeLabel("Location"), 2, pp, 1, 2, Qt::AlignHCenter);
+    layout->addWidget(makeLabel("Coord Type"), 3, pp);
+    layout->addWidget(locType, 3, pm);
+    layout->addWidget(makeLabel("X Pos"), 4, pp);
+    layout->addWidget(legendX, 4, pm);
+    layout->addWidget(makeLabel("Y Pos"), 5, pp);
+    layout->addWidget(legendY, 5, pm);
+    place->setMinimumWidth(80);
+    layout->addWidget(place, 6, pm, Qt::AlignHCenter);
+
+    layout->setColumnMinimumWidth(2, 20);
+
+    layout->addWidget(makeLabel("Style"), 2, sp, 1, 2, Qt::AlignHCenter);
+    layout->addWidget(makeLabel("Font"), 3, sp);
+    layout->addWidget(styleFont, 3, sm);
+    layout->addWidget(makeLabel("Text Color"), 4, sp);
+    layout->addWidget(styleColor, 4, sm);
+    layout->addWidget(makeLabel("Text Size"), 5, sp);
+    layout->addWidget(styleSize, 5, sm);
+    layout->addWidget(makeLabel("Width"), 6, sp);
+    layout->addWidget(styleWidth, 6, sm);
+    layout->addWidget(makeLabel("Spacing"), 7, sp);
+    layout->addWidget(styleSpacing, 7, sm);
+    layout->addWidget(makeLabel("Frame"), 8, sp);
+    layout->addWidget(styleFrame, 8, sm);
+    frame->setMinimumWidth(80);
+    layout->addWidget(frame, 9, sm, Qt::AlignHCenter);
+
+    layout->setColumnMinimumWidth(0, 80);
+    layout->setColumnMinimumWidth(1, 100);
+
+    layout->setColumnMinimumWidth(3, 80);
+    layout->setColumnMinimumWidth(4, 100);
+
+    layout->setColumnStretch(5, 0);
 
     this->setDialogLayout(layout);
 }
@@ -76,8 +123,6 @@ void ViewLegends::updateDialog() {
 
     get_graph_legend(gno,&leg);
 
-//     printf("UpdateLegends %i %f %f %i\n",leg.active == ON, leg.legx, leg.legy, leg.loctype);
-
     showLegend->setChecked(g[gno].l.active == ON);
     if (g[gno].l.loctype == VIEW) {
         locType->setCurrentIndex(0);
@@ -87,7 +132,12 @@ void ViewLegends::updateDialog() {
     legendX->setText(QString::number(g[gno].l.legx,'g',9));
     legendY->setText(QString::number(g[gno].l.legy,'g',9));
 
-    update();
+    styleFont->setCurrentIndex(g[gno].l.font);
+    styleColor->setCurrentIndex(g[gno].l.color);
+    styleSize->setValue(g[gno].l.charsize);
+    styleSpacing->setCurrentIndex(g[gno].l.vgap - 1);
+    styleWidth->setCurrentIndex(g[gno].l.hgap - 1);
+    styleFrame->setCurrentIndex(g[gno].l.box == ON ? 1 : 0);
 }
 
 void ViewLegends::applyDialog() {
@@ -114,6 +164,13 @@ void ViewLegends::applyDialog() {
 
     g[gno].l.legx = legendX->text().toDouble();
     g[gno].l.legy = legendY->text().toDouble();
+
+    g[gno].l.font = styleFont->currentIndex();
+    g[gno].l.color = styleColor->currentIndex();
+    g[gno].l.charsize = styleSize->value();
+    g[gno].l.vgap = styleSpacing->currentIndex() + 1;
+    g[gno].l.hgap = styleWidth->currentIndex() + 1;
+    g[gno].l.box = styleFrame->currentIndex() == 0 ? OFF : ON;
 
     drawgraph();
 }
@@ -163,6 +220,13 @@ void ViewLegends::legendsEdit()
     loadDialog(legendsEditDialog);
 }
 
+void ViewLegends::legendsFrame()
+{
+    if (showDialog(legendsFrameDialog)) return;
+    legendsFrameDialog = new ViewLegendsFrame(mainWindow);
+    loadDialog(legendsFrameDialog);
+}
+
 ViewLegendsEdit::ViewLegendsEdit(MainWindow *mainWin) :
     Dialog(mainWin, "Edit legend labels", true)
 {
@@ -206,10 +270,7 @@ void ViewLegendsEdit::updateDialog()
 
     gno = cg; // current graph only
 
-//     printf("updateLegendEdit  max %i s %s\n",g[gno].maxplot,g[gno].l.str[0].s);
-
     for (int i=0; i<MAXPLOT; i++) {
-//        printf("updateLegendEdit   %i s %s\n",i,g[gno].l.str[i].s);
        setLabels[i]->setText(QString::fromLocal8Bit(g[gno].l.str[i].s));
     }
 }
@@ -232,4 +293,77 @@ void ViewLegendsEdit::applyDialog()
     this->mainWindow->viewMenu->updateSymbolsLegend();
 }
 
+void addPair(QGridLayout* layout, int line, QWidget* f, QWidget* s) {
+    layout->addWidget(f, line, 0);
+    layout->addWidget(s, line, 1);
+}
+
+ViewLegendsFrame::ViewLegendsFrame(MainWindow *mainWin) :
+    Dialog(mainWin, "Legend Frame", true)
+{
+    frameColor = new ColorComboBox();
+    frameWidth = makeWidthSelector();
+    frameStyle = makeLineStyler();
+
+    frameFill = new QCheckBox(tr("Fill frame"));
+    connect(frameFill, SIGNAL(toggled(bool)), this, SLOT(resetFill()));
+
+    frameFillColor = new ColorComboBox();
+    frameFillPattern = new PatternComboBox();
+    frameFillColorLabel = makeLabel("Fill Color");
+    frameFillPatternLabel = makeLabel("Fill Pattern");
+    resetFill();
+
+    autoHook(frameColor);
+    autoHook(frameWidth);
+    autoHook(frameStyle);
+    autoHook(frameFill);
+    autoHook(frameFillColor);
+    autoHook(frameFillPattern);
+
+    QGridLayout* layout = new QGridLayout();
+    addPair(layout, 0, makeLabel("Line Color"), frameColor);
+    addPair(layout, 1, makeLabel("Line Width"), frameWidth);
+    addPair(layout, 2, makeLabel("Line Style"), frameStyle);
+    layout->addWidget(frameFill, 3, 0, 1, 2, Qt::AlignRight);
+    addPair(layout, 4, frameFillColorLabel, frameFillColor);
+    addPair(layout, 5, frameFillPatternLabel, frameFillPattern);
+
+    setDialogLayout(layout);
+}
+
+void ViewLegendsFrame::resetFill() {
+    bool on = frameFill->isChecked();
+    frameFillColor->setEnabled(on);
+    frameFillPattern->setEnabled(on);
+    frameFillColorLabel->setEnabled(on);
+    frameFillPatternLabel->setEnabled(on);
+}
+
+void ViewLegendsFrame::updateDialog() {
+    int gno = cg;
+    frameColor->setCurrentIndex(g[gno].l.boxlcolor);
+    frameWidth->setCurrentIndex(g[gno].l.boxlinew);
+    frameStyle->setCurrentIndex(g[gno].l.boxlines);
+
+    frameFill->setChecked(g[gno].l.boxfill == ON);
+    frameFillColor->setCurrentIndex(g[gno].l.boxfillcolor);
+    frameFillPattern->setCurrentIndex(g[gno].l.boxfillpat);
+}
+
+
+void ViewLegendsFrame::applyDialog() {
+    int gno = cg;
+
+    g[gno].l.boxlcolor = frameColor->currentIndex();
+    g[gno].l.boxlinew = frameWidth->currentIndex();
+    g[gno].l.boxlines = frameStyle->currentIndex();
+
+    g[gno].l.boxfill = frameFill->isChecked() ? ON : OFF;
+    g[gno].l.boxfillcolor = frameFillColor->currentIndex();
+    g[gno].l.boxfillpat = frameFillPattern->currentIndex();
+    g[gno].l.boxfillusing = frameFillPattern->currentIndex() == 0 ? COLOR : PATTERN;
+
+    drawgraph();
+}
 
