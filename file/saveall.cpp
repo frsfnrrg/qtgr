@@ -3,7 +3,7 @@
 
 
 FileSaveAll::FileSaveAll(MainWindow *mwin) :
-    QFileDialog(mwin, tr("Save all data"), QDir::homePath(), "*")
+    QFileDialog(mwin, tr("Save all data"), QDir::currentPath(), "*")
 {
     mainWindow = mwin;
 

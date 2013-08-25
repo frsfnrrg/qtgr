@@ -24,7 +24,7 @@ QString matchtype[MATCH_TYPES] = {
 };
 
 FileExport::FileExport(MainWindow *mwin) :
-    QFileDialog(mwin, tr("Export"), QDir::homePath())
+    QFileDialog(mwin, tr("Export"), QDir::currentPath())
 {
     mainWindow = mwin;
 
