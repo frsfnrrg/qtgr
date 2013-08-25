@@ -39,6 +39,7 @@ void EditMenu::createActions()
     
     cutAct->setEnabled(false);
     copyAct->setEnabled(false);
+    pasteAct->setEnabled(false);
 }
 
 

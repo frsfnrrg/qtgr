@@ -22,6 +22,7 @@ void SetsMenu::createActions() {
     editAct = makeAction("Edit",
                          "Edit the points, type, and more of a set",
                          "", SLOT(edit()));
+    editAct->setEnabled(false);
 
     mcsAct = makeAction("Reorder sets",
                                  "Rearrange sets; move them; copy them; swap them",
@@ -30,10 +31,12 @@ void SetsMenu::createActions() {
     splitAct = makeAction("Split",
                           "Divide set",
                           "", SLOT(split()));
+    splitAct->setEnabled(false);
 
     joinAct = makeAction("Join",
                          "Join sets",
                          "", SLOT(join()));
+    joinAct->setEnabled(false);
 }
 
 void SetsMenu::populateMenu(QMenu* q) {

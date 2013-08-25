@@ -252,12 +252,8 @@ QString texconvert(char* s, int slen)
 
 void GraphWidget::text(int x, int y, int rot, char* s, int just)
 {
-    int xoff=0,yoff=0;
-    
-//     printf("GraphWidget: text %i %i %i %s %i\n",x,y,rot,s,just);
-    
-    //texconvert(s,strlen(s));
-
+    //printf("GraphWidget: text %i %i %i %s %i\n",x,y,rot,s,just);
+      
     if (charsize == 0.0) {
         return;
     }
@@ -267,40 +263,35 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
     QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
     font.setPointSizeF(fontsize);
 
-    QGraphicsTextItem* text = GraphWidget::myGraphWidget->scene()->addText("");
+    QGraphicsScene* gscene = GraphWidget::myGraphWidget->scene();
+    QGraphicsTextItem* text = gscene->addText("");
     text->setHtml(texconvert(s,strlen(s)));
     text->setFont(font);
     text->setDefaultTextColor(GraphWidget::myGraphWidget->pen->color());
     QRectF bRect = text->boundingRect();
 
+    qreal width,height,xoff, yoff;
+    width = bRect.width();
+    height = bRect.height();
+
     switch (just) {
-        case 0: // left
-	    xoff = 0;
-	    yoff = bRect.height() / 2;
-	    break;
-	case 1:
-	    xoff = bRect.width();
-	    yoff = bRect.height() / 2;
-	    break;
-	case 2: // centered
-	    xoff = bRect.width()  / 2;
-	    yoff = bRect.height() / 2;
-	    break;
+    case 0: // left
+        xoff = 0;
+        yoff = height / 2;
+        break;
+    case 1: // right
+        xoff = width;
+        yoff = height / 2;
+        break;
+    case 2: // centered
+        xoff = width  / 2;
+        yoff = height / 2;
+        break;
     }
-    
-   // printf("just %i xoff %i yoff %i rot %i txt %s \n",just, xoff,yoff,rot,s);
-    
-    if (rot == 0) {
-	x = x - xoff;
-	y = y - yoff;	
-    }
-    if (rot == 90) {
-        x = x - yoff*3;
-	y = y + xoff;
-    }
-    
+
+    text->setTransformOriginPoint(xoff,yoff);
+    text->setPos(x-xoff,y-yoff);
     text->setRotation(-rot);
-    text->setPos(x,y);  
 }
 
 void GraphWidget::arc(int x, int y, int r, int fill)

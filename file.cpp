@@ -59,18 +59,22 @@ void FileMenu::createActions()
     readParaAct = makeAction("Read parameters",
                              "Read instructions to create a graph",
                              "", SLOT(open_param()));
+    readParaAct->setEnabled(false);
     
     readBlockAct = makeAction("Read block data",
                               "Read block data",
                               "", SLOT(open_block()));
+    readBlockAct->setEnabled(false);
     
     writeSetAct = makeAction("Write sets",
                              "Write sets",
                              "", SLOT(write_set()));
+    writeSetAct->setEnabled(false);
 
     writeParaAct = makeAction("Write parameters",
                               "Write parameters",
                               "", SLOT(write_param()));
+    writeParaAct->setEnabled(false);
 
     writeBlockAct = makeAction("Save graph",
                                "Save graph to a file",

@@ -320,7 +320,7 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
 
     layoutAngle = new QSlider(Qt::Horizontal);
     layoutAngle->setEnabled(false);
-    layoutAngle->setRange(-180, 180);
+    layoutAngle->setRange(0, 360);
     layoutAngle->setTickInterval(30);
     layoutAngle->setValue(0);
     layoutAngle->setTickPosition(QSlider::TicksAbove);
@@ -477,7 +477,6 @@ void ViewTicksLabels::updateDialog()
     } else {
         layoutType->setCurrentIndex(t.tl_layout == HORIZONTAL ? 0 : 1);
     }
-    printf("tl_angle %d\n",t.tl_angle);
     layoutAngle->setValue(t.tl_angle);
 }
 
