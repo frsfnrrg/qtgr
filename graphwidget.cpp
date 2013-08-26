@@ -286,6 +286,10 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
     case 2: // centered
         xoff = width  / 2;
         yoff = height / 2;
+        // hack
+//        if (rot == 90) {
+//            x -= height * 0.25;
+//        }
         break;
     }
 
@@ -339,26 +343,31 @@ void GraphWidget::fill(int n, int px[], int py[]) {
 
 void GraphWidget::ellipse(int x, int y, int xm, int ym) {
     // TODO
+    printf("ELLIPSE DRAW CALLED: %d %d %d %d\n",x,y,xm,ym);
 }
 
 void GraphWidget::fillellipse(int x, int y, int xm, int ym) {
-    // TODO
+    printf("ELLIPSE FILL CALLED: %d %d %d %d\n",x,y,xm,ym);
 }
 
 int GraphWidget::stringextentx(double scale, char* str) {
     QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
     font.setPointSizeF(FONT_BASE_SIZE * scale);
     QFontMetrics metric(font);
-    // or use bounding box?
-    return metric.width(str);
+    int w = metric.boundingRect(str).width();
+    // fudge factor.... (y axis labels)
+    // could also be linked to devcharsize as exported by the driver.
+    //
+    return w * 2;
+
 }
 
-int GraphWidget::stringextenty(double scale, char*) {
+int GraphWidget::stringextenty(double scale, char* str) {
     QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
     font.setPointSizeF(FONT_BASE_SIZE * scale);
     QFontMetrics metric(font);
-    // or use bounding box?
-    return metric.height();
+    int h = metric.boundingRect(str).height();
+    return h;
 }
 
 int GraphWidget::setpattern(int num) {
