@@ -590,7 +590,7 @@ void drawxticklabels(int gno, int caxis)
             if (iy > xlabpos) {
                 xlabpos = iy;
             }
-            (*devwritestr) ((*devconvx) (x), (*devconvy) (bot - delt) + ifudge, tang, s, bjust, 1);
+            (*devwritestr) ((*devconvx) (x), (*devconvy) (top + delt) + ifudge, tang, s, tjust, 0);
         }
 
 
