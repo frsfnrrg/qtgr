@@ -270,26 +270,31 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
     text->setDefaultTextColor(GraphWidget::myGraphWidget->pen->color());
     QRectF bRect = text->boundingRect();
 
-    qreal width,height,xoff, yoff;
+    qreal width,height,xoff=0.0, yoff=0.0;
     width = bRect.width();
     height = bRect.height();
+    
+    //printf("%s %i %i %i %i %f %f\n",s,x,y,rot,just, width, height);
 
     switch (just) {
     case 0: // left
-        xoff = 0;
-        yoff = height / 2;
+        xoff = height/4;
+        yoff = height/2;
         break;
     case 1: // right
-        xoff = width;
-        yoff = height / 2;
+        xoff = width-height/4;
+        yoff = height/2;
         break;
     case 2: // centered
-        xoff = width  / 2;
-        yoff = height / 2;
+        xoff = width/2;
+        yoff = height/2;
         break;
     }
+    
+    // hack to get the x-axis look better
+    if (y > 520) yoff = yoff-height/6;
 
-    text->setTransformOriginPoint(xoff,yoff);
+    text->setTransformOriginPoint(width/2,height/2);
     text->setPos(x-xoff,y-yoff);
     text->setRotation(-rot);
 }
