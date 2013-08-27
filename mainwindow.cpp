@@ -53,10 +53,10 @@ MainWindow::MainWindow() :
 
 void MainWindow::about()
 {
-   QMessageBox::about(this, tr("About Application"),
-            tr("QTGR is a port to QT of the graphing program XVGR.\n"
-               "Formula transformation format is complicated:\n"
-               "x = (index < 10)*y + (index >= 10)*(- x*x)"));
+    QMessageBox::about(this, tr("About Application"),
+                       tr("QTGR is a port to QT of the graphing program XVGR.\n"
+                          "Formula transformation format is complicated:\n"
+                          "x = (index < 10)*y + (index >= 10)*(- x*x)"));
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
