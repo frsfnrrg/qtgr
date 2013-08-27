@@ -397,8 +397,7 @@ void create_ticklabel(form, prec, loc, s)
     }
 }
 
-void drawxticklabels(gno, caxis)
-    int gno, caxis;
+void drawxticklabels(int gno, int caxis)
 {
     tickmarks t;
     world w;
@@ -406,7 +405,7 @@ void drawxticklabels(gno, caxis)
     char s[256];
     double loc, x, y, top, bot;
     int i = 0, ifudge, iy, nticks, bjust = 2, tjust = 2;
-    int tang;
+    int tang, xlabpos = 0;
     double delb = 0.0, delt = 0.0, vyb, vyt, vx, ofx, ofb, oft;
     double start, stop;
     double dx, dt, ttmp;	/* for alternate mapping */
@@ -458,6 +457,8 @@ void drawxticklabels(gno, caxis)
     } else {
 	nticks = (int) fabs((stop - start) / ttmp) + 1;
     }
+    //frsfnrrg: ??
+    t.tmajor = fabs(t.tmajor);
 
     /* if offsx or offsy != 0.0 then adjust */
     vyb = v.yv1;
@@ -543,7 +544,7 @@ void drawxticklabels(gno, caxis)
 	    strcpy(s, t.t_speclab[i].s);
 	} else {
 	    switch (t.tl_sign) {
-	    case NORMAL:
+        case NORMAL:
 		break;
 	    case ABSOLUTE:
 		loc = fabs(loc);
@@ -564,16 +565,36 @@ void drawxticklabels(gno, caxis)
 	if (t.tl_appstr[0]) {
 	    strcat(s, t.tl_appstr);
 	}
-/*
+///*
 	iy = ifudge * ((t.t_inout == BOTH || t.t_inout == OUT) ? 2 : 1);
-*/
-	iy = ifudge;
+//*/
+//	iy = ifudge;
 	if (t.tl_op == BOTTOM || t.tl_op == BOTH) {
-	    (*devwritestr) ((*devconvx) (x), (*devconvy) (bot - delb) - iy * (1 + i % (t.tl_staggered + 1)), tang, s, bjust, 1);
-	}
-	if (t.tl_op == TOP || t.tl_op == BOTH) {
-	    (*devwritestr) ((*devconvx) (x), (*devconvy) (top + delt) + iy * (1 + i % (t.tl_staggered + 1)), tang, s, tjust, 0);
-	}
+        if (tang == 0) {
+            xlabpos = 2 * iy;
+            (*devwritestr) ((*devconvx) (x), (*devconvy) (bot - delb) - iy, tang, s, bjust, 1);
+        } else {
+            iy = ifudge + stringextentx(t.tl_charsize * devcharsize, s);
+            if (iy > xlabpos) {
+                xlabpos = iy;
+            }
+            (*devwritestr) ((*devconvx) (x), (*devconvy) (bot - delb) - ifudge, tang, s, bjust, 1);
+        }
+    }
+    if (t.tl_op == TOP || t.tl_op == BOTH) {
+        if (tang == 0) {
+            xlabpos = 2 * iy;
+            (*devwritestr) ((*devconvx) (x), (*devconvy) (top + delt) + iy, tang, s, tjust, 0);
+        } else {
+            iy = ifudge + stringextentx(t.tl_charsize * devcharsize, s);
+            if (iy > xlabpos) {
+                xlabpos = iy;
+            }
+            (*devwritestr) ((*devconvx) (x), (*devconvy) (bot - delt) + ifudge, tang, s, bjust, 1);
+        }
+
+
+    }
     }
 
 /* TODO axis label layout */
@@ -611,10 +632,10 @@ void drawxticklabels(gno, caxis)
 	setlinestyle(1);
 	setlinewidth(t.label.linew);
 	if (t.tl_op == BOTTOM || t.tl_op == BOTH) {
-	    (*devwritestr) ((int) (tmp), (*devconvy) (g[gno].w.yg1 - delb) - 3 * iy, lang1, t.label.s, ljust1, 0);
+        (*devwritestr) ((int) (tmp), (*devconvy) (g[gno].w.yg1 - delb) - (int) (1.4 * xlabpos), lang1, t.label.s, ljust1, 0);
 	}
 	if (t.tl_op == TOP || t.tl_op == BOTH) {
-	    (*devwritestr) ((int) (tmp), (*devconvy) (g[gno].w.yg2 + delt) + 3 * iy, lang2, t.label.s, ljust2, 0);
+        (*devwritestr) ((int) (tmp), (*devconvy) (g[gno].w.yg2 + delt) + (int) (1.4 * xlabpos), lang2, t.label.s, ljust2, 0);
 	}
     }
 }
