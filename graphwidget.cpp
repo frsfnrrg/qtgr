@@ -354,7 +354,7 @@ int GraphWidget::stringextentx(double scale, char* str) {
     // fudge factor.... (y axis labels)
     // could also be linked to devcharsize as exported by the driver.
     //
-    return w * 2;
+    return (int)((double)w * 1.9);
 
 }
 
@@ -363,7 +363,7 @@ int GraphWidget::stringextenty(double scale, char* str) {
     font.setPointSizeF(FONT_BASE_SIZE * scale);
     QFontMetrics metric(font);
     int h = metric.boundingRect(str).height();
-    return h;
+    return (int)((double)h * 1.1);
 }
 
 int GraphWidget::setpattern(int num) {
