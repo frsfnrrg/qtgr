@@ -125,13 +125,9 @@ void FileMenu::write_param() {
 }
 
 void FileMenu::save_all() {
-    if (saveallDialog) {
-        saveallDialog->setVisible(true);
-        opensetDialog->raise();
-    } else {
-       saveallDialog = new FileSaveAll(this->mainWindow);
-       saveallDialog->show();
-    }
+       saveallDialog = new FileSaveAll(this->mainWindow);   
+       saveallDialog->exec();
+       delete saveallDialog;
 }
 
 void FileMenu::reset()
