@@ -9,3 +9,5 @@ moc_*
 qrc_*
 # The executable
 qtgr
+# Tools
+callgrind.*
