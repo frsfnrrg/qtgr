@@ -3,7 +3,7 @@
 
 
 FileSaveAll::FileSaveAll(MainWindow *mwin) :
-    QFileDialog(mwin, tr("Save all data"), QDir::currentPath(), "*")
+    QFileDialog(mwin, tr("Save graph"), QDir::currentPath(), "*")
 {
     mainWindow = mwin;
 
@@ -20,6 +20,9 @@ void FileSaveAll::accept() {
     QString outformat("%g %g");
 
     QString file = files.at(0);
+    if (!file.contains(QChar('.'))) {
+        file.append(".gr");
+    }
 
     do_writesets(MAXGRAPH, -1, -1, file.toAscii().data(), outformat.toAscii().data());
 }
