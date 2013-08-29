@@ -16,7 +16,7 @@ FileMenu::FileMenu(MainWindow* mainWin) :
 
     opensetDialog = NULL;
     exportDialog = NULL;
-    saveallDialog = NULL;
+    saveallDialog = new FileSaveAll(this->mainWindow);   
 
     populateMenu(this);
 }
@@ -125,9 +125,8 @@ void FileMenu::write_param() {
 }
 
 void FileMenu::save_all() {
-       saveallDialog = new FileSaveAll(this->mainWindow);   
+
        saveallDialog->exec();
-       delete saveallDialog;
 }
 
 void FileMenu::reset()
