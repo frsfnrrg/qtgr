@@ -318,6 +318,13 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     editStopLabel = makeLabel("Value:");
     editStopLabel->setEnabled(false);
 
+    layoutAngleBox = new QSpinBox();
+    layoutAngleBox->setSingleStep(15);
+    layoutAngleBox->setMaximum(360);
+    layoutAngleBox->setMinimum(0);
+    layoutAngleBox->setEnabled(false);
+    connect(layoutAngleBox, SIGNAL(editingFinished()), this, SLOT(updateAngleSlider()));
+
     layoutAngle = new QSlider(Qt::Horizontal);
     layoutAngle->setEnabled(false);
     layoutAngle->setRange(0, 360);
@@ -326,9 +333,13 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     layoutAngle->setTickPosition(QSlider::TicksAbove);
     layoutAngle->setSingleStep(5);
     layoutAngle->setPageStep(30);
-    connect(layoutAngle, SIGNAL(valueChanged(int)), this, SLOT(updateAngle()));
+    connect(layoutAngle, SIGNAL(valueChanged(int)), this, SLOT(updateAngleBox()));
 
-    layoutAngleLabel = makeLabel("Angle: 0");
+    QHBoxLayout* layoutEdit = new QHBoxLayout();
+    layoutEdit->addWidget(layoutAngleBox);
+    layoutEdit->addWidget(layoutAngle);
+
+    layoutAngleLabel = makeLabel("Angle");
     layoutAngleLabel->setEnabled(false);
 
     stagger = new QSpinBox();
@@ -408,7 +419,7 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     layout->addWidget(makeLabel("Layout:"), 16, 0);
     layout->addWidget(layoutType, 16, 1);
     layout->addWidget(layoutAngleLabel, 17, 0);
-    layout->addWidget(layoutAngle, 17, 1);
+    layout->addLayout(layoutEdit, 17, 1);
 
     layout->addWidget(makeLabel("Draw side:"), 18, 0);
     layout->addWidget(drawSide, 18, 1);
@@ -433,11 +444,16 @@ void ViewTicksLabels::resetStop() {
 void ViewTicksLabels::resetLayout() {
     bool on = (layoutType->currentIndex() == 2);
     layoutAngle->setEnabled(on);
+    layoutAngleBox->setEnabled(on);
     layoutAngleLabel->setEnabled(on);
 }
 
-void ViewTicksLabels::updateAngle() {
-    layoutAngleLabel->setText(tr("Angle: ") + QString::number(layoutAngle->value()));
+void ViewTicksLabels::updateAngleBox() {
+    layoutAngleBox->setValue(layoutAngle->value());
+}
+
+void ViewTicksLabels::updateAngleSlider() {
+    layoutAngle->setValue(layoutAngleBox->value());
 }
 
 void ViewTicksLabels::updateDialog()
@@ -516,7 +532,7 @@ void ViewTicksLabels::applyDialog()
     } else {
         g[gno].t[axis].tl_layout = layoutType->currentIndex() == 0 ? HORIZONTAL : VERTICAL;
     }
-    g[gno].t[axis].tl_angle = layoutAngle->value();
+    g[gno].t[axis].tl_angle = layoutAngle->value() % 360;
 
     drawgraph();  
 }

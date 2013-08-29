@@ -72,7 +72,8 @@ private slots:
     void resetStart();
     void resetStop();
     void resetLayout();
-    void updateAngle();
+    void updateAngleBox();
+    void updateAngleSlider();
 
 private:
     QComboBox* labelFormat;
@@ -95,6 +96,7 @@ private:
     QLineEdit *editStopAt;
 
     QSlider* layoutAngle;
+    QSpinBox* layoutAngleBox;
     QLabel* layoutAngleLabel;
 
     QComboBox* drawSide;
