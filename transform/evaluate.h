@@ -11,12 +11,11 @@ public:
     explicit TransformEvaluate(MainWindow* mainWin);
     
 private:
-
     QComboBox* setNumber;
     QComboBox* destination;
+    QLabel* formulaBoxLabel;
+    QLabel* destinationLabel;
     QLineEdit* formulaBox;
-
-
 signals:
     
 public slots:

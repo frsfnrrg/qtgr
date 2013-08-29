@@ -8,7 +8,6 @@
 TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
     Dialog(mainWin, "Evaluate")
 {
-    // hmmm.. extract this into a static Dialog method?
     setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
@@ -17,28 +16,36 @@ TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
     destination->addItem(tr("Same"));
     destination->setCurrentIndex(0);
 
+    formulaBoxLabel = makeLabel("Formula");
+    destinationLabel = makeLabel("Target");
+
     formulaBox = new QLineEdit();
 
     QGridLayout* layout = new QGridLayout();
 
-    layout->addWidget(new QLabel(tr("Set")), 0,0);
+    layout->addWidget(makeLabel("Set"), 0,0);
     layout->addWidget(setNumber, 0, 1);
 
     layout->setRowMinimumHeight(1, 8);
 
-    layout->addWidget(new QLabel(tr("Target")), 2,0);
+    layout->addWidget(destinationLabel, 2,0);
     layout->addWidget(destination, 2, 1);
 
     layout->setRowMinimumHeight(3, 8);
 
-    layout->addWidget(new QLabel("Formula"), 4,0);
+    layout->addWidget(formulaBoxLabel, 4,0);
     layout->addWidget(formulaBox, 4, 1);
 
     this->setDialogLayout(layout);
 }
 
 void TransformEvaluate::updateDialog() {
-
+    int setno = setNumber->currentIndex();
+    bool null = g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0;
+    formulaBox->setDisabled(null);
+    destination->setDisabled(null);
+    formulaBoxLabel->setDisabled(null);
+    destinationLabel->setDisabled(null);
 }
 
 void TransformEvaluate::applyDialog() {
@@ -46,6 +53,10 @@ void TransformEvaluate::applyDialog() {
     char* fstr;
 
     setno = this->setNumber->currentIndex();
+
+    if (g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0) {
+        return;
+    }
 
     graphto = cg;
 

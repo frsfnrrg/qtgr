@@ -14,6 +14,8 @@ private:
     QComboBox* setNumber;
     QComboBox* integrationType;
     QLabel* resultL;
+    QLabel* resultLabel;
+    QLabel* typeLabel;
 
 signals:
     

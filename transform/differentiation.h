@@ -14,6 +14,8 @@ private:
     QComboBox* setNumber;
     QComboBox* destination;
     QComboBox* diffType;
+    QLabel* diffTypeLabel;
+    QLabel* destinationLabel;
 
 signals:
     

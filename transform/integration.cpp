@@ -8,10 +8,7 @@
 TransformIntegration::TransformIntegration(MainWindow* mainWin) :
     Dialog(mainWin, "Integration")
 {
-    printf("creating integration dialog\n");
-
-    resultL = new QLabel("Volia!");
-    resultL->setText(".....");
+    resultL = new QLabel(".....");
 
     setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
@@ -20,19 +17,22 @@ TransformIntegration::TransformIntegration(MainWindow* mainWin) :
     integrationType->addItem(tr("Result"));
     integrationType->addItem(tr("Result and plot"));
 
+    resultLabel = makeLabel("Result");
+    typeLabel = makeLabel("Type:");
+
     // layout
     QGridLayout* layout = new QGridLayout();
-    layout->addWidget(new QLabel(tr("Select Set:")),0,0);
+    layout->addWidget(makeLabel("Set:"),0,0);
     layout->addWidget(setNumber,0,1);
 
-    layout->addWidget(new QLabel(""),1,0,1,3);
+    layout->setRowMinimumHeight(1, 8);
 
-    layout->addWidget(new QLabel(tr("Select Type:")),2,0);
+    layout->addWidget(typeLabel,2,0);
     layout->addWidget(integrationType,2,1);
 
-    layout->addWidget(new QLabel(""),3,0,1,3);
+    layout->setRowMinimumHeight(3, 8);
 
-    layout->addWidget(new QLabel(tr("Result")), 4,0);
+    layout->addWidget(resultLabel, 4,0);
     layout->addWidget(resultL, 4, 1);
 
     this->setDialogLayout(layout);
@@ -40,14 +40,21 @@ TransformIntegration::TransformIntegration(MainWindow* mainWin) :
 
 void TransformIntegration::updateDialog() {
     resultL->setText(".....");
+    int setno = setNumber->currentIndex();
+    bool null = g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0;
+    integrationType->setDisabled(null);
+    resultL->setDisabled(null);
+    resultLabel->setDisabled(null);
+    typeLabel->setDisabled(null);
 }
 
 void TransformIntegration::applyDialog() {
-    printf("applying integration dialog\n");
-
     int setno, itype;
 
     setno = setNumber->currentIndex();
+    if (g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0) {
+        return;
+    }
 
     // like so
     if (integrationType->currentIndex() == 0) {

@@ -8,7 +8,6 @@
 TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
     Dialog(mainWin, "Differentiate")
 {
-    // hmmm.. extract this into a static Dialog method?
     setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
@@ -23,19 +22,22 @@ TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
     diffType->addItem(tr("Backward"));
     diffType->setCurrentIndex(0);
 
+    diffTypeLabel = makeLabel("Difference");
+    destinationLabel = makeLabel("Target");
+
     QGridLayout* layout = new QGridLayout();
 
-    layout->addWidget(new QLabel(tr("Set")), 0,0);
+    layout->addWidget(makeLabel("Set"), 0,0);
     layout->addWidget(setNumber, 0, 1);
 
     layout->setRowMinimumHeight(1, 8);
 
-    layout->addWidget(new QLabel(tr("Target")), 2,0);
+    layout->addWidget(destinationLabel, 2,0);
     layout->addWidget(destination, 2, 1);
 
     layout->setRowMinimumHeight(3, 8);
 
-    layout->addWidget(new QLabel(tr("Difference Type")), 4,0);
+    layout->addWidget(diffTypeLabel, 4,0);
     layout->addWidget(diffType, 4, 1);
 
     layout->setColumnMinimumWidth(1, 150);
@@ -44,14 +46,22 @@ TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
 }
 
 void TransformDifferentiation::updateDialog() {
-    printf("updating diff dialog\n");
+    int setno = setNumber->currentIndex();
+    bool null = g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0;
+    diffType->setDisabled(null);
+    destination->setDisabled(null);
+    diffTypeLabel->setDisabled(null);
+    destinationLabel->setDisabled(null);
 }
 
 void TransformDifferentiation::applyDialog() {
-    printf("applying diff dialog\n");
-
     int setno, itype;
     setno = setNumber->currentIndex();
+
+    if (g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0) {
+        return;
+    }
+
     switch (diffType->currentIndex()) {
     case 0:
         itype = 2;
