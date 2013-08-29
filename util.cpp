@@ -3,12 +3,14 @@
 
 void loadDialog(Dialog* d) {
     d->show();
+    d->raise();
     d->updateDialog();
 }
 
 bool showDialog(Dialog* d) {
     if (d) {
         d->setVisible(true);
+        d->raise();
         d->updateDialog();
         return true;
     } else {

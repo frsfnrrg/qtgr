@@ -101,6 +101,7 @@ void FileMenu::createActions()
 void FileMenu::open_set() {
     if (opensetDialog) {
         opensetDialog->setVisible(true);
+        opensetDialog->raise();
     } else {
        opensetDialog = new FileOpenSet(this->mainWindow);
        opensetDialog->show();
@@ -126,6 +127,7 @@ void FileMenu::write_param() {
 void FileMenu::save_all() {
     if (saveallDialog) {
         saveallDialog->setVisible(true);
+        opensetDialog->raise();
     } else {
        saveallDialog = new FileSaveAll(this->mainWindow);
        saveallDialog->show();
@@ -169,6 +171,7 @@ void FileMenu::save_as()
 {
     if (exportDialog) {
         exportDialog->setVisible(true);
+        opensetDialog->raise();
     } else {
         exportDialog = new FileExport(mainWindow);
         exportDialog->show();

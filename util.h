@@ -5,7 +5,6 @@
 
 class Dialog;
 
-// todo: move to a seperate file
 void loadDialog(Dialog*);
 
 bool showDialog(Dialog*);
