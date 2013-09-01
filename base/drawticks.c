@@ -408,9 +408,18 @@ void drawxticklabels(int gno, int caxis)
     get_graph_tickmarks(gno, &t, caxis);
     get_graph_world(gno, &w);
     get_graph_view(gno, &v);
+
+    setcharsize(t.tl_charsize);
+    setfont(t.tl_font);
+    setcolor(t.tl_color);
+    setlinestyle(1);
+    setlinewidth(t.tl_linew);
     t.tl_skip++;
-    ifudge = (int) (t.tl_vgap * stringextenty(t.tl_charsize * devcharsize, "Ny"));
-    ifudge *= ((t.t_inout == BOTH || t.t_inout == OUT) ? 2 : 1);
+
+    txth = stringextenty(t.tl_charsize * devcharsize, "Ny");
+    ifudge = (int) (t.tl_vgap * txth) *
+            ((t.t_inout == BOTH || t.t_inout == OUT) ? 2 : 1);
+
     /* set start and end for ticks */
     start = w.xg1;
     stop = w.xg2;
@@ -471,12 +480,6 @@ void drawxticklabels(int gno, int caxis)
         view2world(vx, vyt, &ofx, &oft);
         delt = oft - top;
     }
-    setcharsize(t.tl_charsize);
-    setfont(t.tl_font);
-    setcolor(t.tl_color);
-    setlinestyle(1);
-    setlinewidth(t.tl_linew);
-    txth = stringextenty(t.tl_charsize * devcharsize, "N");
 
     if (t.tl_type == SPEC) {
         nticks = t.t_spec;
@@ -564,15 +567,15 @@ void drawxticklabels(int gno, int caxis)
 
         if (tang == 0 || tang == 180) {
             iy = ifudge;
-            yoff = (int) (1.5 * iy);
+            yoff = ifudge + (int) (0.5 * txth);
             xlabpos = yoff + txth;
         } else {
             if (tang == 90 || tang == 270) {
-                iy = ifudge + stringextentx(t.tl_charsize * devcharsize, s) - (int)(txth * 0.5);
-                yoff = ifudge - txth;
-            } else {
-                iy = ifudge + stringextentx(t.tl_charsize * devcharsize, s);
                 yoff = ifudge;
+                iy = ifudge + stringextentx(t.tl_charsize * devcharsize, s) + (int)(txth * 0.3);
+            } else {
+                yoff = ifudge;
+                iy = ifudge + stringextentx(t.tl_charsize * devcharsize, s);
             }
             if (iy > xlabpos) {
                 xlabpos = iy;
@@ -648,10 +651,16 @@ void drawyticklabels(int gno, int caxis)
     get_graph_tickmarks(gno, &t, caxis);
     get_graph_world(gno, &w);
     get_graph_view(gno, &v);
+
+    setcharsize(t.tl_charsize);
+    setfont(t.tl_font);
+    setcolor(t.tl_color);
+    setlinestyle(1);
+    setlinewidth(t.tl_linew);
     t.tl_skip++;
-    ifudge = (int) (t.tl_hgap * stringextentx(t.tl_charsize * devcharsize, "M"));
-    ifudge *= ((t.t_inout == BOTH || t.t_inout == OUT) ? 2 : 1);
-    txth = stringextenty(t.tl_charsize * devcharsize, "N");
+    txth = stringextenty(t.tl_charsize * devcharsize, "Ny");
+    ifudge = (int) (t.tl_hgap * txth) *
+            ((t.t_inout == BOTH || t.t_inout == OUT) ? 2 : 1);
     /* set start and end for ticks */
     start = w.yg1;
     stop = w.yg2;
@@ -711,11 +720,6 @@ void drawyticklabels(int gno, int caxis)
         view2world(vxr, vy, &ofr, &ofy);
         delr = ofr - top;
     }
-    setcharsize(t.tl_charsize);
-    setfont(t.tl_font);
-    setcolor(t.tl_color);
-    setlinestyle(1);
-    setlinewidth(t.tl_linew);
 
     if (t.tl_type == SPEC) {
         nticks = t.t_spec;
@@ -808,16 +812,16 @@ void drawyticklabels(int gno, int caxis)
 
         if (tang == 90 || tang == 270) {
             ix = ifudge;
-            xoff = (int) (1.5 * ix);
+            xoff = ifudge + (int) (0.5 * txth);
             ylabpos = xoff + txth;
         } else {
             if (tang == 0 || tang == 180) {
-                ix = ifudge + stringextentx(t.tl_charsize * devcharsize, s) - (int)(txth * 0.5);
-                xoff = ifudge - txth;
+                xoff = ifudge - (int)(txth * 0.5);
             } else {
-                ix = ifudge + stringextentx(t.tl_charsize * devcharsize, s);
                 xoff = ifudge;
             }
+            ix = xoff + stringextentx(t.tl_charsize * devcharsize, s) + (int)(txth*0.5);
+
             if (ix > ylabpos) {
                 ylabpos = ix;
             }
