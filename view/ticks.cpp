@@ -355,6 +355,26 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     drawSide->addItem(tr("Opposite"));
     drawSide->addItem(tr("Both"));
 
+    labelSpacing = new QSlider(Qt::Horizontal);
+    labelSpacing->setRange(0, 20);
+    labelSpacing->setValue(10);
+    labelSpacing->setTickInterval(4);
+    labelSpacing->setSingleStep(2);
+    labelSpacing->setPageStep(4);
+    labelSpacing->setTickPosition(QSlider::TicksAbove);
+    connect(labelSpacing, SIGNAL(valueChanged(int)), this, SLOT(updateSpacingBox()));
+
+    labelSpacingBox = new QDoubleSpinBox();
+    labelSpacingBox->setSingleStep(0.2);
+    labelSpacingBox->setMaximum(2.0);
+    labelSpacingBox->setMinimum(0.0);
+    labelSpacingBox->setDecimals(1);
+    connect(labelSpacingBox, SIGNAL(editingFinished()), this, SLOT(updateSpacingSlider()));
+
+    QHBoxLayout* labelSpacingEdit = new QHBoxLayout();
+    labelSpacingEdit->addWidget(labelSpacingBox);
+    labelSpacingEdit->addWidget(labelSpacing);
+
     autoHook(labelFormat);
     autoHook(labelPrecision);
     autoHook(textFont);
@@ -369,6 +389,7 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     autoHook(editStopAt);
     autoHook(layoutAngle);
     autoHook(drawSide);
+    autoHook(labelSpacing);
 
     // LAYOUT
 
@@ -424,6 +445,9 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     layout->addWidget(makeLabel("Draw side:"), 18, 0);
     layout->addWidget(drawSide, 18, 1);
 
+    layout->addWidget(makeLabel("Spacing"), 19, 0);
+    layout->addLayout(labelSpacingEdit, 19, 1);
+
     layout->setColumnMinimumWidth(1, 200);
 
     this->setDialogLayout(layout);
@@ -454,6 +478,14 @@ void ViewTicksLabels::updateAngleBox() {
 
 void ViewTicksLabels::updateAngleSlider() {
     layoutAngle->setValue(layoutAngleBox->value());
+}
+
+void ViewTicksLabels::updateSpacingBox() {
+    labelSpacingBox->setValue(labelSpacing->value() * 0.1);
+}
+
+void ViewTicksLabels::updateSpacingSlider() {
+    labelSpacing->setValue((int)(labelSpacingBox->value() * 10.0 + 0.5));
 }
 
 void ViewTicksLabels::updateDialog()
@@ -494,6 +526,14 @@ void ViewTicksLabels::updateDialog()
         layoutType->setCurrentIndex(t.tl_layout == HORIZONTAL ? 0 : 1);
     }
     layoutAngle->setValue(t.tl_angle);
+
+    if (axis % 2 == Y_AXIS) {
+        labelSpacing->setValue((int)(10.0 * t.tl_hgap + 0.5));
+        labelSpacingBox->setValue(t.tl_hgap);
+    } else {
+        labelSpacing->setValue((int)(10.0 * t.tl_vgap + 0.5));
+        labelSpacingBox->setValue(t.tl_vgap);
+    }
 }
 
 void ViewTicksLabels::applyDialog()
@@ -533,6 +573,12 @@ void ViewTicksLabels::applyDialog()
         g[gno].t[axis].tl_layout = layoutType->currentIndex() == 0 ? HORIZONTAL : VERTICAL;
     }
     g[gno].t[axis].tl_angle = layoutAngle->value() % 360;
+
+    if (axis % 2 == Y_AXIS) {
+        g[gno].t[axis].tl_hgap = labelSpacingBox->value();
+    } else {
+        g[gno].t[axis].tl_vgap = labelSpacingBox->value();
+    }
 
     drawgraph();  
 }

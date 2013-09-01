@@ -74,6 +74,8 @@ private slots:
     void resetLayout();
     void updateAngleBox();
     void updateAngleSlider();
+    void updateSpacingBox();
+    void updateSpacingSlider();
 
 private:
     QComboBox* labelFormat;
@@ -100,6 +102,8 @@ private:
     QLabel* layoutAngleLabel;
 
     QComboBox* drawSide;
+    QSlider* labelSpacing;
+    QDoubleSpinBox* labelSpacingBox;
 };
 
 class ViewTicksAxisLabel : public Dialog {

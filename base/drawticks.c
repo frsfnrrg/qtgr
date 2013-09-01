@@ -391,6 +391,10 @@ void create_ticklabel(int form, int prec, double loc, char* s)
     }
 }
 
+const double paraf = 0.5;
+const double perpf = 0.4;
+const double labsp = 0.5;
+
 void drawxticklabels(int gno, int caxis)
 {
     tickmarks t;
@@ -567,16 +571,16 @@ void drawxticklabels(int gno, int caxis)
 
         if (tang == 0 || tang == 180) {
             iy = ifudge;
-            yoff = ifudge + (int) (0.5 * txth);
+            yoff = ifudge + (int) (paraf * txth);
             xlabpos = yoff + txth;
         } else {
             if (tang == 90 || tang == 270) {
-                yoff = ifudge;
-                iy = ifudge + stringextentx(t.tl_charsize * devcharsize, s) + (int)(txth * 0.3);
+                yoff = ifudge - (int)(txth * perpf);
             } else {
                 yoff = ifudge;
-                iy = ifudge + stringextentx(t.tl_charsize * devcharsize, s);
             }
+            iy = yoff + stringextentx(t.tl_charsize * devcharsize, s) + (int)(txth*labsp);
+
             if (iy > xlabpos) {
                 xlabpos = iy;
             }
@@ -812,15 +816,15 @@ void drawyticklabels(int gno, int caxis)
 
         if (tang == 90 || tang == 270) {
             ix = ifudge;
-            xoff = ifudge + (int) (0.5 * txth);
+            xoff = ifudge + (int) (paraf * txth);
             ylabpos = xoff + txth;
         } else {
             if (tang == 0 || tang == 180) {
-                xoff = ifudge - (int)(txth * 0.5);
+                xoff = ifudge - (int)(txth * perpf);
             } else {
                 xoff = ifudge;
             }
-            ix = xoff + stringextentx(t.tl_charsize * devcharsize, s) + (int)(txth*0.5);
+            ix = xoff + stringextentx(t.tl_charsize * devcharsize, s) + (int)(txth*labsp);
 
             if (ix > ylabpos) {
                 ylabpos = ix;

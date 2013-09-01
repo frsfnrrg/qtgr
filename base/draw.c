@@ -115,9 +115,7 @@ void device2view(), view2world();
  * device2world - given (x,y) in screen coordinates, return the world coordinates
  *             in (wx,wy) used for the display only
  */
-void device2world(x, y, wx, wy)
-    int x, y;
-    double *wx, *wy;
+void device2world(int x,  int y, double* wx, double* wy)
 {
     double vx, vy;
 
@@ -128,9 +126,7 @@ void device2world(x, y, wx, wy)
 /*
  * device2view - given (x,y) in screen coordinates, return the viewport coordinates
  */
-void device2view(x, y, vx, vy)
-    int x, y;
-    double *vx, *vy;
+void device2view(int x, int y, double* vx, double* vy)
 {
     if (devwidth == 0) {
 	*vx = (double) 0.0;
@@ -162,9 +158,7 @@ void device2view(x, y, vx, vy)
  * view2world - given (vx,vy) in viewport coordinates, return world coordinates
  *            in (x,y)
  */
-void view2world(vx, vy, x, y)
-    double vx, vy;
-    double *x, *y;
+void view2world(double vx, double vy, double* x, double* y)
 {
     *x = (vx - crx) / rx;
     if (scaletypex == LOG) {
@@ -180,9 +174,7 @@ void view2world(vx, vy, x, y)
  * world2deviceabs - given world coordinates (wx,wy) return the device coordinates,
  *              for the display only
  */
-int world2deviceabs(wx, wy, x, y)
-    double wx, wy;
-    int *x, *y;
+int world2deviceabs(double wx, double wy, int* x, int* y)
 {
     if (scaletypex == LOG) {
 	if (wx > 0.0) {
@@ -211,9 +203,7 @@ int world2deviceabs(wx, wy, x, y)
  * world2device - given world coordinates (wx,wy) return the device coordinates,
  *              for the display only
  */
-int world2device(wx, wy, x, y)
-    double wx, wy;
-    int *x, *y;
+int world2device(double wx,double wy,int* x,int* y)
 {
     if (scaletypex == LOG) {
 	if (wx > 0.0) {
@@ -234,8 +224,7 @@ int world2device(wx, wy, x, y)
     return 1;
 }
 
-int world2view(x, y, vx, vy)
-    double x, y, *vx, *vy;
+int world2view(double x, double y,double* vx,double* vy)
 {
     if (scaletypex == LOG) {
 	if (x > 0.0) {
@@ -283,16 +272,13 @@ double yconv(double y)
     return (ry * y + cry);
 }
 
-int set_coordmap(mapx, mapy)
-    int mapx, mapy;
+int set_coordmap(int mapx,int mapy)
 {
     scaletypex = mapx;
     scaletypey = mapy;
 }
 
-void setfixedscale(xv1, yv1, xv2, yv2, xg1, yg1, xg2, yg2)
-    double xv1, yv1, xv2, yv2;
-    double *xg1, *yg1, *xg2, *yg2;
+void setfixedscale(double xv1, double yv1, double xv2, double yv2, double* xg1, double* yg1, double* xg2, double* yg2)
 {
     double dx, dy, dxv, dyv, dxi, dyi, scalex, scaley;
 
@@ -305,9 +291,9 @@ void setfixedscale(xv1, yv1, xv2, yv2, xg1, yg1, xg2, yg2)
     scalex = dx / dxi;
     scaley = dy / dyi;
     if (scalex > scaley) {
-	*yg2 = *yg1 + scalex * dyi;
+        *yg2 = *yg1 + scalex * dyi;
     } else {
-	*xg2 = *xg1 + scaley * dxi;
+        *xg2 = *xg1 + scaley * dxi;
     }
 }
 
@@ -315,9 +301,7 @@ void setfixedscale(xv1, yv1, xv2, yv2, xg1, yg1, xg2, yg2)
  * defineworld - really should be called definewindow, defines the scaling
  *               of the plotting rectangle to be used for clipping
  */
-void defineworld(x1, y1, x2, y2, mapx, mapy)
-    double x1, y1, x2, y2;
-    int mapx, mapy;
+void defineworld(double x1, double y1, double x2, double y2, int mapx, int mapy)
 {
     rxg1 = x1;
     ryg1 = y1;
@@ -358,8 +342,7 @@ void defineworld(x1, y1, x2, y2, mapx, mapy)
  * viewport - define the location of the clipping rectangle defined by
  *            defineworld on the display device
  */
-void viewport(x1, y1, x2, y2)
-    double x1, x2, y1, y2;
+void viewport(double x1, double y1, double x2, double y2)
 {
     xv1 = x1;
     xv2 = x2;
@@ -384,8 +367,7 @@ void setclipping(fl)
 /*
  * clip lines within rectangle defined in world coordinates
  */
-static int region(xend, yend)
-    double xend, yend;
+static int region(double xend, double yend)
 {
     int endpoint;
 
@@ -408,9 +390,7 @@ static int region(xend, yend)
 /*
  * liang-barsky line clipping, the default as of v2.05
  */
-int clipt(d, n, te, tl)
-    double d, n;
-    double *te, *tl;
+int clipt(double d, double n, double* te, double* tl)
 {
     double t;
     int ac = 1;
@@ -437,14 +417,12 @@ int clipt(d, n, te, tl)
     return ac;
 }
 
-static int goodpointxy(x, y)
-    double x, y;
+static int goodpointxy(double x, double y)
 {
     return ((x >= xg1) && (x <= xg2) && (y >= yg1) && (y <= yg2));
 }
 
-static int clip2d(x0, y0, x1, y1)
-    double *x0, *y0, *x1, *y1;
+static int clip2d(double* x0, double* y0, double* x1, double* y1)
 {
     double te = 0.0, tl = 1.0, dx = (*x1 - *x0), dy = (*y1 - *y0);
 
@@ -633,9 +611,7 @@ void my_move2(double x, double y)
 #define EDGE_ABOVE      2
 #define EDGE_BELOW      3
 
-static int inside(x, y, which)
-    double x, y;
-    int which;
+static int inside(double x, double y, int which)
 {
     switch (which) {
     case EDGE_ABOVE:
@@ -649,10 +625,7 @@ static int inside(x, y, which)
     }
 }
 
-static void intersect(px, py, x1, y1, x2, y2, which)
-    double *px, *py;
-    double x1, x2, y1, y2;
-    int which;
+static void intersect(double* px, double* py, double x1, double y1, double x2, double y2, int which)
 {
     double m = (x2 - x1), b = 0.0;
 
@@ -688,11 +661,7 @@ static void intersect(px, py, x1, y1, x2, y2, which)
     }
 }
 
-static void clip_edge(px1, py1, px2, py2, n1, n2, which)
-    double px1[], py1[], px2[], py2[];
-    int n1, *n2;
-    int which;
-
+static void clip_edge(double px1[], double py1[], double px2[], double py2[], int n1, int* n2, int which)
 {
     int i, k, n = n1;
     double px, py, pxprev, pyprev;
@@ -731,10 +700,7 @@ static void clip_edge(px1, py1, px2, py2, n1, n2, which)
     *n2 = k;
 }
 
-static void polygon_clip(px1, py1, n)
-    double px1[], py1[];
-    int *n;
-
+static void polygon_clip(double px1[], double py1[], int* n)
 {
     int n1 = *n, n2, i;
     double px2[MAX_POLY], py2[MAX_POLY];
@@ -746,8 +712,7 @@ static void polygon_clip(px1, py1, n)
     *n = n1;
 }
 
-int setpattern(k)
-    int k;
+int setpattern(int k)
 {
     int savepat = current_pattern;
 
@@ -755,10 +720,7 @@ int setpattern(k)
     return (savepat);
 }
 
-void fillpattern(n, px, py)
-    int n;
-    double px[], py[];
-
+void fillpattern(int n, double px[], double py[])
 {
     int i;
     int ipx[MAX_POLY], ipy[MAX_POLY];
@@ -784,10 +746,7 @@ void fillpattern(n, px, py)
     (*devfill) (n, ipx, ipy);
 }
 
-void fillcolor(n, px, py)
-    int n;
-    double px[], py[];
-
+void fillcolor(int n, double px[], double py[])
 {
     int i;
     int ipx[MAX_POLY], ipy[MAX_POLY];
@@ -821,8 +780,7 @@ void fillcolor(n, px, py)
     }
 }
 
-void fillrectcolor(x1, y1, x2, y2)
-    double x1, y1, x2, y2;
+void fillrectcolor(double x1, double y1, double x2, double y2)
 
 {
     int i, n = 4;
@@ -854,9 +812,7 @@ void fillrectcolor(x1, y1, x2, y2)
     (*devfillcolor) (n, ipx, ipy);
 }
 
-void fillrectpat(x1, y1, x2, y2)
-    double x1, y1, x2, y2;
-
+void fillrectpat(double x1, double y1, double x2, double y2)
 {
     int i, n = 4;
     int ipx[5], ipy[5];
@@ -890,8 +846,7 @@ void fillrectpat(x1, y1, x2, y2)
 /*
  * setfont - make f the current font to use for writing strings
  */
-int setfont(f)
-    int f;
+int setfont(int f)
 {
     int itmp = curfontd;
 
@@ -918,8 +873,7 @@ void rect(double x1, double y1, double x2, double y2)
  *         world coordinates. used to clip symbols that bypass the clipping
  *         done in my_draw2.
  */
-int symok(x, y)
-    double x, y;
+int symok(double x, double y)
 {
     if (clipflag) {
 	return ((x >= rxg1) && (x <= rxg2) && (y >= ryg1) && (y <= ryg2));
@@ -932,8 +886,7 @@ int symok(x, y)
  * histbox - draw a box of width 2*hdelta centered at x with height y starting
  *           from y = 0.0
  */
-static void xhistbox(x, y)
-    double x, y;
+static void xhistbox(double x, double y)
 {
     double tmpx[4];
     double tmpy[4];
@@ -971,8 +924,7 @@ static void xhistbox(x, y)
  * histbox3 - draw a box of width 2*hdelta centered at y with length x starting
  *           from x = 0.0
  */
-static void yhistbox(x, y)
-    double x, y;
+static void yhistbox(double x, double y)
 {
     int i;
 
@@ -1009,9 +961,7 @@ static void yhistbox(x, y)
 /*
  * lengthpoly - return the length of a polyline in device coords
  */
-int lengthpoly(x, y, n)
-    double x[], y[];
-    int n;
+int lengthpoly(double x[], double y[], int n)
 
 {
     int i;
@@ -1029,10 +979,7 @@ int lengthpoly(x, y, n)
  * drawpoly - draw a connected line in the current color and linestyle
  *            with nodes given by (x[],y[])
  */
-void drawpoly(x, y, n)
-    double x[], y[];
-    int n;
-
+void drawpoly(double x[], double y[], int n)
 {
     int i;
 
@@ -1046,10 +993,7 @@ void drawpoly(x, y, n)
  * drawpolyseg - draw segments, treating each successive pairs of points
  *               as a line segment
  */
-void drawpolyseg(x, y, n)
-    double x[], y[];
-    int n;
-
+void drawpolyseg(double x[], double y[], int n)
 {
     int i, itmp;
 
@@ -1060,9 +1004,7 @@ void drawpolyseg(x, y, n)
     }
 }
 
-void openclose(x, y1, y2, ebarlen, xy)
-    double x, y1, y2, ebarlen;
-    int xy;
+void openclose(double x, double y1, double y2, double ebarlen, int xy)
 {
     int ilen;
 
@@ -1089,9 +1031,7 @@ void openclose(x, y1, y2, ebarlen, xy)
     }
 }
 
-void errorbar(x, y, ebarlen, xy)
-    double x, y, ebarlen;
-    int xy;
+void errorbar(double x, double y, double ebarlen, int xy)
 {
     int ilen;
 
@@ -1111,8 +1051,7 @@ void errorbar(x, y, ebarlen, xy)
 /*
  * make the current color col
  */
-int setcolor(col)
-    int col;
+int setcolor(int col)
 {
     int scol = color;
 
@@ -1123,8 +1062,7 @@ int setcolor(col)
 /*
  * make the current linestyle style
  */
-int setlinestyle(style)
-    int style;
+int setlinestyle(int style)
 {
     int slin = lines;
 
@@ -1135,8 +1073,7 @@ int setlinestyle(style)
 /*
  * make the current line width wid
  */
-int setlinewidth(wid)
-    int wid;
+int setlinewidth(int wid)
 {
     int slinw = linew;
 
@@ -1154,9 +1091,7 @@ int setlinewidth(wid)
  *      dir = 0 = draw in up (for x-axis) or right (for y-axis)
  *      axis = 0 = draw x-axis tic,   1 = y-axis
  */
-void drawtic(x, y, dir, axis)
-    double x, y;
-    int dir, axis;
+void drawtic(double x, double y, int dir, int axis)
 {
     (*devdrawtic) ((*devconvx) (x), (*devconvy) (y), dir, axis);
 }
@@ -1164,8 +1099,7 @@ void drawtic(x, y, dir, axis)
 /*
  * set the current character size to size
  */
-double setcharsize(size)
-    double size;
+double setcharsize(double size)
 {
     double s = charsize;
 
@@ -1184,8 +1118,7 @@ double setcharsize(size)
  * set the current length of the tick marks
  */
 
-void setticksize(sizex, sizey)
-    double sizex, sizey;
+void setticksize(double sizex, double sizey)
 {
     devxticl = (int) savexticl *sizex;
     devyticl = (int) saveyticl *sizey;
@@ -1194,10 +1127,7 @@ void setticksize(sizex, sizey)
 /*
  * writestr - user interface to the current device text drawing routine
  */
-void writestr(x, y, dir, just, s)
-    double x, y;
-    int dir, just;
-    char *s;
+void writestr(double x, double y, int dir, int just, char* s)
 {
     if (s == NULL) {
 	return;
@@ -1211,39 +1141,84 @@ void writestr(x, y, dir, just, s)
 /*
  * draw the title, subtitle
  */
-void drawtitle(title, which)
-    char *title;
-    int which;
-
+void drawtitle(char* title, int* which)
 {
     int fudge, ix, iy;
     int tmp;
 
     fudge = 4;
     tmp = ((*devconvx) (rxg2) + (*devconvx) (rxg1)) / 2;	/* center x-axis label
-								 * and title */
+                                 * and title */
     if (title[0] && !which) {
-	iy = (int) (3.0 * stringextenty(charsize * devcharsize, "X"));
+        iy = (int) (3.0 * stringextenty(charsize * devcharsize, "X"));
     } else {
-	iy = stringextenty(charsize * devcharsize, "Xy");
+        iy = stringextenty(charsize * devcharsize, "Xy");
     }
     ix = stringextentx(charsize * devcharsize, title);
     (*devwritestr) (tmp, (*devconvy) (ryg2) + iy, 0, title, 2, 0);
-/*
+    /*
     if (hardcopyflag) {
-	(*devwritestr) (tmp, (*devconvy) (ryg2) + iy, 0, title, 2, 0);
+    (*devwritestr) (tmp, (*devconvy) (ryg2) + iy, 0, title, 2, 0);
     } else {
-	(*devwritestr) (tmp - ix / 2, (*devconvy) (ryg2) + iy, 0, title);
+    (*devwritestr) (tmp - ix / 2, (*devconvy) (ryg2) + iy, 0, title);
     }
 */
 }
 
 /*
+ * draw the title, subtitle
+ */
+void drawtitles(char* title, double tsize, int tcolor, int tlinewidth, int tfont,
+                char* stitle, double ssize, int scolor, int slinewidth, int sfont) {
+    int th,sh;
+    int x,soff,toff;
+
+    x = ((*devconvx) (rxg2) + (*devconvx) (rxg1)) / 2;
+
+    if (debuglevel == 5) {
+        printf("subtitle\n");
+    }
+
+    setlinewidth(slinewidth);
+    setcolor(scolor);
+    setcharsize(ssize);
+    setfont(sfont);
+    sh = stringextenty(ssize * devcharsize, "X");
+
+    if (stitle[0]) {
+        soff = (int)(sh * 1.4);
+
+        if (debuglevel == 5) {
+            printf("draw subtitle\n");
+        }
+        (*devwritestr) (x, (*devconvy) (ryg2) + soff, 0, stitle, 2, 0);
+    }
+
+    if (debuglevel == 5) {
+        printf("title\n");
+    }
+    if (title[0]) {
+        setlinewidth(tlinewidth);
+        setcolor(tcolor);
+        setcharsize(tsize);
+        setfont(tfont);
+
+        th = stringextenty(tsize * devcharsize, "X");
+
+        toff = (int)(th*0.8 + sh*2.5);
+
+        if (debuglevel == 5) {
+            printf("draw title\n");
+        }
+        (*devwritestr) (x, (*devconvy) (ryg2) + toff, 0, title, 2, 0);
+    }
+}
+
+/*
         draw grid lines rather than ticmarks
 */
-void drawgrid(dir, start, end, y1, y2, step, cy, ly, wy)
-    int dir, ly, cy, wy;
-    double start, end, y1, y2, step;
+void drawgrid(int dir,  double start, double end, double y1,
+              double y2, double step, int cy, int ly, int wy)
 {
     int slin, swid, scol;
 
@@ -1272,9 +1247,7 @@ void drawgrid(dir, start, end, y1, y2, step, cy, ly, wy)
 /*
  * draw a circle
  */
-void drawcircle(xc, yc, s, f)
-    double xc, yc, s;
-    int f;
+void drawcircle(double xc, double yc, double s, int f)
 {
     int x = (*devconvx) (xc), y = (*devconvy) (yc), xm, ym, cs;
 
@@ -1282,20 +1255,20 @@ void drawcircle(xc, yc, s, f)
     ym = fabs((double) (y - (*devconvy) (yc + s)));
     switch (f) {
     case 0:
-	(*devdrawellipse) (x, y, xm, ym);
-	break;
+        (*devdrawellipse) (x, y, xm, ym);
+        break;
     case 1:
-	(*devfillellipse) (x, y, xm, ym);
-	if (devtype == 0) {
-	    (*devdrawellipse) (x, y, xm, ym);
-	}
-	break;
+        (*devfillellipse) (x, y, xm, ym);
+        if (devtype == 0) {
+            (*devdrawellipse) (x, y, xm, ym);
+        }
+        break;
     case 2:
-	cs = setcolor(0);
-	(*devfillellipse) (x, y, xm, ym);
-	setcolor(cs);
-	(*devdrawellipse) (x, y, xm, ym);
-	break;
+        cs = setcolor(0);
+        (*devfillellipse) (x, y, xm, ym);
+        setcolor(cs);
+        (*devdrawellipse) (x, y, xm, ym);
+        break;
     }
 }
 
@@ -1305,9 +1278,7 @@ void drawcircle(xc, yc, s, f)
 
 double barwid = 0.01;
 
-void symcircle(x, y, s, f)
-    int x, y, f;
-    double s;
+void symcircle(int x, int y, double s, int f)
 {
     int cs;
     int side = (int) devsymsize * s;
@@ -1331,9 +1302,7 @@ void symcircle(x, y, s, f)
     }
 }
 
-void symsquare(x, y, s, f)
-    int x, y, f;
-    double s;
+void symsquare(int x, int y, double s, int f)
 {
     int side = (int) devsymsize * s * 0.85;
     int sx[4], sy[4], sc;
@@ -1384,9 +1353,7 @@ void symsquare(x, y, s, f)
     }
 }
 
-void symtriangle1(x, y, s, f)
-    int x, y, f;
-    double s;
+void symtriangle1(int x, int y, double s, int f)
 {
     int side = (int) devsymsize * s;
     int sx[3], sy[3], sc;
@@ -1430,9 +1397,7 @@ void symtriangle1(x, y, s, f)
     }
 }
 
-void symtriangle2(x, y, s, f)
-    int x, y, f;
-    double s;
+void symtriangle2(int x, int y, double s, int f)
 {
     int side = (int) devsymsize * s;
     int sx[3], sy[3], sc;
@@ -1476,9 +1441,7 @@ void symtriangle2(x, y, s, f)
     }
 }
 
-void symtriangle3(x, y, s, f)
-    int x, y, f;
-    double s;
+void symtriangle3(int x, int y, double s, int f)
 {
     int side = (int) devsymsize * s;
     int sx[3], sy[3], sc;
@@ -1522,9 +1485,7 @@ void symtriangle3(x, y, s, f)
     }
 }
 
-void symtriangle4(x, y, s, f)
-    int x, y, f;
-    double s;
+void symtriangle4(int x, int y, double s, int f)
 {
     int side = (int) devsymsize * s;
     int sx[3], sy[3], sc;
@@ -1568,9 +1529,7 @@ void symtriangle4(x, y, s, f)
     }
 }
 
-void symdiamond(x, y, s, f)
-    int x, y, f;
-    double s;
+void symdiamond(int x, int y, double s, int f)
 {
     int side = (int) devsymsize * s;
     int sx[4], sy[4], sc;
@@ -1620,9 +1579,7 @@ void symdiamond(x, y, s, f)
     }
 }
 
-void symplus(x, y, s, f)
-    int x, y, f;
-    double s;
+void symplus(int x, int y, double s, int f)
 {
     int side = (int) devsymsize * s;
 
@@ -1632,9 +1589,7 @@ void symplus(x, y, s, f)
     (*vector) (x, y - side, 1);
 }
 
-void symx(x, y, s, f)
-    int x, y, f;
-    double s;
+void symx(int x, int y, double s, int f)
 {
     int side = (int) (devsymsize * s * 0.707);
 
@@ -1644,15 +1599,11 @@ void symx(x, y, s, f)
     (*vector) (x + side, y - side, 1);
 }
 
-void symstar(x, y, s, f)
-    int x, y, f;
-    double s;
+void symstar(int x, int y, double s, int f)
 {
 }
 
-void symsplat(x, y, s, f)
-    int x, y, f;
-    double s;
+void symsplat(int x, int y, double s, int f)
 {
     symplus(x, y, s, f);
     symx(x, y, s, f);
@@ -1673,10 +1624,7 @@ case SYM_ERRORX2:
 case SYM_ERRORY2:
 case SYM_ERRORXY:
 */
-void drawpolysym(x, y, len, sym, skip, fill, size)
-    double x[], y[], size;
-    int len, sym, skip, fill;
-
+void drawpolysym(double x[], double y[], int len, int sym, int skip, int fill, double size)
 {
     int i;
     char s[10];
@@ -1846,8 +1794,7 @@ void drawpolysym(x, y, len, sym, skip, fill, size)
 /*
  * draw the head of an arrow
  */
-void draw_head(ix1, iy1, ix2, iy2, sa, type)
-    int ix1, iy1, ix2, iy2, sa, type;
+void draw_head(int ix1, int iy1,int  ix2, int iy2, int sa,int  type)
 {
     double dist, ang, dx, dy;
     int xr, yr, xl, yl, s1, s2;
@@ -1894,10 +1841,10 @@ void draw_head(ix1, iy1, ix2, iy2, sa, type)
 /*
  * draw an arrow
  */
-void draw_arrow(x1, y1, x2, y2, end, asize, type)
-    double x1, y1, x2, y2, asize;
-    int end;			/* 0 = none 1 = arrow at x1, y1  2 = arrow at
-				 * x2, y2 3 arrow at both ends */
+void draw_arrow(double x1, double y1, double x2, double y2, int end, double asize, int type)
+    /* end codes
+     * 0 = none 1 = arrow at x1, y1  2 = arrow at
+     * x2, y2 3 arrow at both ends */
 {
     int ix1, iy1, ix2, iy2;
 
@@ -1931,10 +1878,7 @@ void draw_arrow(x1, y1, x2, y2, end, asize, type)
 
 #define ADJ  (8.0*M_PI/180.0)
 
-void velplt(xx, yy, u, v, vscale, type)
-    double u, v, vscale;
-    double xx, yy;
-    int type;
+void velplt(double xx, double yy, double u, double v, double vscale, int type)
 {
     double x, y, s, xl, yl, xr, yr, adj;
     double theta, i1, i2;
@@ -1982,9 +1926,7 @@ void velplt(xx, yy, u, v, vscale, type)
     }
 }
 
-void drawsym(x, y, sym, size, fill)
-    int x, y, sym, fill;
-    double size;
+void drawsym(int x, int y, int sym, double size, int fill)
 {
     switch (sym) {
     case SYM_DOT:
@@ -2029,10 +1971,8 @@ static int xm1, xm2, ym1, ym2;
 /*
  * draw the legend at world coordinates (x,y)
  */
-void putlegend(i, d, xlen, ylen, size, x, y, sy, ly, cy, wy, s, barflag, fill, fu, fc, fp)
-    int i, d, xlen, ylen, sy, ly, cy, wy, barflag, fill, fu, fc, fp;
-    double size, x, y;
-    char *s;
+void putlegend(int i, int d, int xlen, int ylen, double size, double x, double y, int sy,
+               int ly, int cy, int wy, char* s, int barflag, int fill, int fu, int fc, int fp)
 {
     int ipx[4], ipy[4], itmp, scol, slins, slinw, xtmp, ytmp;
     static int maxx = 0, ifudgex, ifudgey;
@@ -2111,15 +2051,14 @@ void putlegend(i, d, xlen, ylen, size, x, y, sy, ly, cy, wy, s, barflag, fill, f
     (*devwritestr) (xtmp + (xlen + 1) * ifudgex, ytmp, 0, s, 0, 1);
 }
 
-putlegendrect(
-	      fill,
-	      fillusing,
-	      fillcolor,
-	      fillpat,
-	      cy,
-	      wy,
-	      ly)
-    int fill, fillusing, fillcolor, fillpat, cy, wy, ly;
+void putlegendrect(
+          int fill,
+          int fillusing,
+          int fillcolor,
+          int fillpat,
+          int cy,
+          int wy,
+          int ly)
 {
     int ifudgex, ifudgey;
     int ipx[4], ipy[4];
@@ -2158,20 +2097,17 @@ putlegendrect(
     setlinewidth(slinw);
 }
 
-void my_doublebuffer(mode)
-    int mode;
+void my_doublebuffer(int mode)
 {
     //csto xlibdoublebuffer(mode);
 }
 
-void my_frontbuffer(mode)
-    int mode;
+void my_frontbuffer(int mode)
 {
     //csto xlibfrontbuffer(mode);
 }
 
-void my_backbuffer(mode)
-    int mode;
+void my_backbuffer(int mode)
 {
     //csto xlibbackbuffer(mode);
 }
@@ -2185,8 +2121,7 @@ void my_swapbuffer()
  * initialize the graphics device device
  * return -1 if unable to open device
  */
-int initgraphics(device)
-    int device;
+int initgraphics(int device)
 {
     int retval;
 

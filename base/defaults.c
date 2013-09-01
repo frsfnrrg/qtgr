@@ -412,8 +412,8 @@ void set_default_ticks(t, a)
     t->tl_start = 0.0;
     t->tl_stop = 0.0;
     t->tl_op = (a % 2) ? LEFT : BOTTOM;
-    t->tl_vgap = 1.0;
-    t->tl_hgap = 1.0;
+    t->tl_vgap = 0.7;// frsfnrrg: changed to look nicer
+    t->tl_hgap = 0.7;// frsfnrrg: changed to look nicer
     t->tl_font = 4;
     t->tl_charsize = 1.0;
     t->tl_color = 1;

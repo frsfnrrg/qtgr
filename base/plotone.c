@@ -38,8 +38,7 @@ double setcharsize();
 int density_flag;		/* temp, until interface for density plots is
 				 * completed */
 
-void plotone(gno)
-    int gno;
+void plotone(int gno)
 {
     int i, initgraphics();
     world w;
@@ -63,17 +62,17 @@ void plotone(gno)
     defineworld(w.xg1, w.yg1, w.xg2, w.yg2, islogx(gno), islogy(gno));
     viewport(v.xv1, v.yv1, v.xv2, v.yv2);
     if (debuglevel == 5) {
-	printf("frame\n");
+        printf("frame\n");
     }
     if (f.active == ON) {
-	if (f.fillbg == ON) {
-	    setcolor(f.bgcolor);
-	    fillrectcolor(w.xg1, w.yg1, w.xg2, w.yg2);
-	}
-	boxplot(f, w);
+        if (f.fillbg == ON) {
+            setcolor(f.bgcolor);
+            fillrectcolor(w.xg1, w.yg1, w.xg2, w.yg2);
+        }
+        boxplot(f, w);
     }
     if (debuglevel == 5) {
-	printf("axes\n");
+        printf("axes\n");
     }
     setlinestyle(1);
     setlinewidth(1);
@@ -81,41 +80,15 @@ void plotone(gno)
     setlinestyle(1);
     setlinewidth(1);
 
-    if (debuglevel == 5) {
-	printf("title\n");
-    }
-    if (lab.title.s[0]) {
-	if (debuglevel == 5) {
-	    printf("draw title\n");
-	}
-	setlinewidth(lab.title.linew);
-	setcolor(lab.title.color);
-	setcharsize(lab.title.charsize);
-	setfont(lab.title.font);
-	drawtitle(lab.title.s, 0);
-    }
-    if (debuglevel == 5) {
-	printf("subtitle\n");
-    }
-    if (lab.stitle.s[0]) {
-	if (debuglevel == 5) {
-	    printf("draw subtitle\n");
-	}
-	setlinewidth(lab.stitle.linew);
-	setcolor(lab.stitle.color);
-	setcharsize(lab.stitle.charsize);
-	setfont(lab.stitle.font);
-	drawtitle(lab.stitle.s, 1);
-    }
-    if (debuglevel == 5) {
-	printf("fixed pt\n");
-    }
+    drawtitles(lab.title.s, lab.title.charsize, lab.title.color, lab.title.linew, lab.title.font,
+               lab.stitle.s, lab.stitle.charsize, lab.stitle.color, lab.stitle.linew, lab.stitle.font);
+
     if (g[gno].pointset) {	/* mark the reference point */
-	drawpolysym(&g[gno].dsx, &g[gno].dsy, 1, SYM_CIRCLE, 0, 0, 1.0);
-	drawpolysym(&g[gno].dsx, &g[gno].dsy, 1, SYM_PLUS, 0, 0, 1.0);
+        drawpolysym(&g[gno].dsx, &g[gno].dsy, 1, SYM_CIRCLE, 0, 0, 1.0);
+        drawpolysym(&g[gno].dsx, &g[gno].dsy, 1, SYM_PLUS, 0, 0, 1.0);
     }
     if (debuglevel == 5) {
-	printf("sets\n");
+        printf("sets\n");
     }
     /*
      * draw sets 
