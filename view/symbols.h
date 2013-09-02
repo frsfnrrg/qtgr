@@ -15,21 +15,37 @@ class ViewSymbols : public Dialog
 
   private:
     QComboBox* setNumber;
+
     QComboBox* symbolSymbol;
     QComboBox* symbolFill;
-    QComboBox* lineWidth;
+    QLabel* symbolFillLabel;
+    QDoubleSpinBox* symbolSize;
+    QLabel* symbolSizeLabel;
+    QLineEdit* symbolSkip;
+    QLabel* symbolSkipLabel;
+
     QComboBox* lineStyle;
+    QComboBox* lineWidth;
+    QLabel* lineWidthLabel;
     QComboBox* lineColor;
-    QLineEdit* legendS;
+    QLabel* lineColorLabel;
+
     QComboBox* fillFill;
     QComboBox* fillColor;
+    QLabel* fillColorLabel;
     QComboBox* fillPattern;
+    QLabel* fillPatternLabel;
+
+    QLineEdit* legendS;
     
   public slots:
     void updateDialog();
    
   private slots:	
     void applyDialog();
+    void updateSymbolFade();
+    void updateLineFade();
+    void updateFillFade();
 };
 
 #endif
