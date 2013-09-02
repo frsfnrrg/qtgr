@@ -30,6 +30,7 @@ protected:
 
 private:
     static bool auto_update;
+    bool autoen;
 
     QVBoxLayout* layout;
 signals:

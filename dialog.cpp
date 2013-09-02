@@ -2,9 +2,16 @@
 #include "base/globals.h"
 #include "prop.h"
 
+// nefarious idea: make dialog a "base" class,
+// have three near equivalent subclasses:
+// TransformDialog
+// AutoUpdateDialog
+// StandardDialog
+// to reduce duplication etc.
+
 bool Dialog::auto_update = false;
 
-Dialog::Dialog(MainWindow* mainWin, const char* title, bool autoen) :
+Dialog::Dialog(MainWindow* mainWin, const char* title, bool autoenabled) :
     QDialog(mainWin)
 {
     this->setWindowTitle(tr(title));
@@ -36,6 +43,7 @@ Dialog::Dialog(MainWindow* mainWin, const char* title, bool autoen) :
 
     this->setLayout(layout);
 
+    autoen = autoenabled;
     if (autoen) {
         AutoDisabler::add(apply);
         AutoDisabler::add(cancel);
@@ -62,7 +70,9 @@ void Dialog::setDialogLayout(QLayout* lt) {
 }
 
 void Dialog::doneDialog() {
-    applyDialog();
+    if (!autoen && !auto_update){
+        applyDialog();
+    }
     this->setVisible(false);
 }
 
