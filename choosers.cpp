@@ -3,6 +3,29 @@
 #include "prop.h"
 #include "base/patterns.h"
 
+DoubleSpinBox::DoubleSpinBox() : QDoubleSpinBox() {}
+IntegerSpinBox::IntegerSpinBox() : QSpinBox() {}
+
+void DoubleSpinBox::setValue(double value, bool loud) {
+    if (loud) {
+        QDoubleSpinBox::setValue(value);
+    } else {
+        this->blockSignals(true);
+        QDoubleSpinBox::setValue(value);
+        this->blockSignals(false);
+    }
+}
+
+void IntegerSpinBox::setValue(int value, bool loud) {
+    if (loud) {
+        QSpinBox::setValue(value);
+    } else {
+        this->blockSignals(true);
+        QSpinBox::setValue(value);
+        this->blockSignals(false);
+    }
+}
+
 // SETS
 
 /*
@@ -228,8 +251,8 @@ QColor ColorComboBox::getColor(int index) {
 
 // MISC
 
-QDoubleSpinBox* makeTextSizer() {
-    QDoubleSpinBox* f = new QDoubleSpinBox();
+DoubleSpinBox* makeTextSizer() {
+    DoubleSpinBox* f = new DoubleSpinBox();
     f->setMinimum(0.0);
     f->setDecimals(2);
     f->setSingleStep(0.1);

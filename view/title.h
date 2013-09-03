@@ -17,12 +17,12 @@ public:
 
 private:
     QLineEdit* stext;
-    QDoubleSpinBox* ssize;
+    DoubleSpinBox* ssize;
     QComboBox* sfont;
     QComboBox* scolor;
 
     QLineEdit* ttext;
-    QDoubleSpinBox* tsize;
+    DoubleSpinBox* tsize;
     QComboBox* tfont;
     QComboBox* tcolor;
 

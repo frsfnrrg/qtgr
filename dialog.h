@@ -5,8 +5,9 @@
 #include "mainwindow.h"
 #include "util.h"
 
-// TODO: wrap in a legend list generator, that hooks things up well.
-// Or, subclass again!
+class DoubleSpinBox;
+class IntegerSpinBox;
+
 class Dialog : public QDialog
 {
     Q_OBJECT
@@ -23,7 +24,8 @@ protected:
 
     void autoHook(QComboBox*);
     void autoHook(QLineEdit*);
-    void autoHook(QAbstractSpinBox*);
+    void autoHook(DoubleSpinBox*);
+    void autoHook(IntegerSpinBox*);
     void autoHook(QCheckBox*);
     void autoHook(QRadioButton*);
     void autoHook(QSlider*);

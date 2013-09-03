@@ -1,10 +1,16 @@
 #include "view/viewport.h"
 #include "base/globals.h"
+#include "choosers.h"
+
+// if anyone feels bored,
+// please eliminate the max < min issue
+// by setting the max (x_min) to x_max, etc.
+// ex. make xmin=1,xmax=0 impossible. Signals!
 
 const double snap_sizes[] = {0.1, 0.05, 0.01, 0.005, 0.001};
 
-inline QDoubleSpinBox* getUnitDoubleSpinBox() {
-    QDoubleSpinBox* f = new QDoubleSpinBox();
+DoubleSpinBox* getUnitDoubleSpinBox() {
+    DoubleSpinBox* f = new DoubleSpinBox();
     f->setMaximum(1.0);
     f->setMinimum(0.0);
     f->setDecimals(3);

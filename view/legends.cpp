@@ -25,7 +25,7 @@ ViewLegends::ViewLegends(MainWindow* mainWin) :
     styleFont = new FontComboBox();
     styleColor = new ColorComboBox();
     styleSize = makeTextSizer();
-    // abstract: makeNumberedComboBox
+    // abstract it!; makeNumberedComboBox
     styleWidth = new QComboBox();
     for (int i=0;i<8;i++) {
         styleWidth->addItem(QString::number(i+1));

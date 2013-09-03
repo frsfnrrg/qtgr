@@ -3,6 +3,24 @@
 
 #include <QtGui>
 
+class DoubleSpinBox : public QDoubleSpinBox
+{
+    Q_OBJECT
+public:
+    explicit DoubleSpinBox();
+public slots:
+    void setValue(double, bool loud=false);
+};
+
+class IntegerSpinBox : public QSpinBox
+{
+    Q_OBJECT
+public:
+    explicit IntegerSpinBox();
+public slots:
+    void setValue(int, bool loud=false);
+};
+
 /*
  * Select a font
  */
@@ -67,7 +85,7 @@ public:
     static QColor getColor(int index);
 };
 
-QDoubleSpinBox* makeTextSizer();
+DoubleSpinBox* makeTextSizer();
 
 QComboBox* makeWidthSelector();
 

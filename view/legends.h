@@ -23,7 +23,7 @@ private:
 
     QComboBox* styleFont;
     QComboBox* styleColor;
-    QDoubleSpinBox* styleSize;
+    DoubleSpinBox* styleSize;
     QComboBox* styleWidth;
     QComboBox* styleSpacing;
     QComboBox* styleFrame;

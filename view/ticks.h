@@ -83,10 +83,10 @@ private:
 
     QComboBox* textFont;
     QComboBox* textColor;
-    QDoubleSpinBox* textSize;
+    DoubleSpinBox* textSize;
 
-    QSpinBox* stagger;
-    QSpinBox* skipEvery;
+    IntegerSpinBox* stagger;
+    IntegerSpinBox* skipEvery;
 
     QComboBox* startType;
     QComboBox* stopType;
@@ -98,12 +98,12 @@ private:
     QLineEdit *editStopAt;
 
     QSlider* layoutAngle;
-    QSpinBox* layoutAngleBox;
+    IntegerSpinBox* layoutAngleBox;
     QLabel* layoutAngleLabel;
 
     QComboBox* drawSide;
     QSlider* labelSpacing;
-    QDoubleSpinBox* labelSpacingBox;
+    DoubleSpinBox* labelSpacingBox;
 };
 
 class ViewTicksAxisLabel : public Dialog {
@@ -122,7 +122,7 @@ private:
     QComboBox* direction;
     QComboBox* textFont;
     QComboBox* textColor;
-    QDoubleSpinBox* textSize;
+    DoubleSpinBox* textSize;
 };
 
 class ViewTicksMarks : public Dialog {

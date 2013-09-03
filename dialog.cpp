@@ -1,6 +1,7 @@
 #include "dialog.h"
 #include "base/globals.h"
 #include "prop.h"
+#include "choosers.h"
 
 // nefarious idea: make dialog a "base" class,
 // have three near equivalent subclasses:
@@ -97,8 +98,12 @@ void Dialog::autoHook(QLineEdit* q) {
     connect(q, SIGNAL(textEdited(QString)), this, SLOT(autoUpdate()));
 }
 
-void Dialog::autoHook(QAbstractSpinBox* q) {
-    connect(q, SIGNAL(editingFinished()), this, SLOT(autoUpdate()));
+void Dialog::autoHook(DoubleSpinBox* q) {
+    connect(q, SIGNAL(valueChanged(double)), this, SLOT(autoUpdate()));
+}
+
+void Dialog::autoHook(IntegerSpinBox* q) {
+    connect(q, SIGNAL(valueChanged(int)), this, SLOT(autoUpdate()));
 }
 
 void Dialog::autoHook(QCheckBox* q) {

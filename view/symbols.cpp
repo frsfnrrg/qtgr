@@ -33,7 +33,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     symbolFill->addItem("Filled");
     symbolFill->addItem("Opaque");
     
-    symbolSize = new QDoubleSpinBox();
+    symbolSize = new DoubleSpinBox();
     symbolSize->setMinimum(0.0);
     symbolSize->setMaximum(4.0);
     symbolSize->setDecimals(2);
@@ -147,8 +147,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
   
 void ViewSymbols::updateDialog()
 {
-  
-    int gno,cset,iv; 
+    int gno,cset,iv;
     gno = cg; // current graph only 
       
     cset = setNumber->currentIndex();
@@ -241,20 +240,24 @@ void ViewSymbols::applyDialog()
 
 void ViewSymbols::updateSymbolFade() {
     bool on = symbolSymbol->currentIndex() != 0;
+    bool ss = lineStyle->currentIndex() != 0;
     symbolFill->setEnabled(on);
     symbolSize->setEnabled(on);
     symbolSkip->setEnabled(on);
     symbolFillLabel->setEnabled(on);
     symbolSizeLabel->setEnabled(on);
     symbolSkipLabel->setEnabled(on);
+    lineColor->setEnabled(on || ss);
+    lineColorLabel->setEnabled(on || ss);
 }
 
 void ViewSymbols::updateLineFade() {
     bool on = lineStyle->currentIndex() != 0;
-    lineColor->setEnabled(on);
+    bool ff = symbolSymbol->currentIndex() != 0;
     lineWidth->setEnabled(on);
     lineWidthLabel->setEnabled(on);
-    lineColorLabel->setEnabled(on);
+    lineColor->setEnabled(on || ff);
+    lineColorLabel->setEnabled(on || ff);
 }
 
 void ViewSymbols::updateFillFade() {

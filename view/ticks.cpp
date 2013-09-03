@@ -318,12 +318,12 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     editStopLabel = makeLabel("Value:");
     editStopLabel->setEnabled(false);
 
-    layoutAngleBox = new QSpinBox();
+    layoutAngleBox = new IntegerSpinBox();
     layoutAngleBox->setSingleStep(15);
     layoutAngleBox->setMaximum(360);
     layoutAngleBox->setMinimum(0);
     layoutAngleBox->setEnabled(false);
-    connect(layoutAngleBox, SIGNAL(editingFinished()), this, SLOT(updateAngleSlider()));
+    connect(layoutAngleBox, SIGNAL(valueChanged(int)), this, SLOT(updateAngleSlider()));
 
     layoutAngle = new QSlider(Qt::Horizontal);
     layoutAngle->setEnabled(false);
@@ -342,11 +342,11 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     layoutAngleLabel = makeLabel("Angle");
     layoutAngleLabel->setEnabled(false);
 
-    stagger = new QSpinBox();
+    stagger = new IntegerSpinBox();
     stagger->setMinimum(0);
     stagger->setMaximum(19);
 
-    skipEvery = new QSpinBox();
+    skipEvery = new IntegerSpinBox();
     skipEvery->setMinimum(0);
     skipEvery->setMaximum(19);
 
@@ -364,12 +364,12 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     labelSpacing->setTickPosition(QSlider::TicksAbove);
     connect(labelSpacing, SIGNAL(valueChanged(int)), this, SLOT(updateSpacingBox()));
 
-    labelSpacingBox = new QDoubleSpinBox();
+    labelSpacingBox = new DoubleSpinBox();
     labelSpacingBox->setSingleStep(0.2);
     labelSpacingBox->setMaximum(2.0);
     labelSpacingBox->setMinimum(0.0);
     labelSpacingBox->setDecimals(1);
-    connect(labelSpacingBox, SIGNAL(editingFinished()), this, SLOT(updateSpacingSlider()));
+    connect(labelSpacingBox, SIGNAL(valueChanged(double)), this, SLOT(updateSpacingSlider()));
 
     QHBoxLayout* labelSpacingEdit = new QHBoxLayout();
     labelSpacingEdit->addWidget(labelSpacingBox);
@@ -477,7 +477,13 @@ void ViewTicksLabels::updateAngleBox() {
 }
 
 void ViewTicksLabels::updateAngleSlider() {
+    // same old trick.... if we need to do more
+    // of this setValue trick stuff, then
+    // we should either subclass the slider-box pair,
+    // or subclass slider to get a better setValue func
+    layoutAngle->blockSignals(true);
     layoutAngle->setValue(layoutAngleBox->value());
+    layoutAngle->blockSignals(false);
 }
 
 void ViewTicksLabels::updateSpacingBox() {
@@ -485,7 +491,9 @@ void ViewTicksLabels::updateSpacingBox() {
 }
 
 void ViewTicksLabels::updateSpacingSlider() {
+    labelSpacing->blockSignals(true);
     labelSpacing->setValue((int)(labelSpacingBox->value() * 10.0 + 0.5));
+    labelSpacing->blockSignals(false);
 }
 
 void ViewTicksLabels::updateDialog()

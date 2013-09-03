@@ -20,10 +20,10 @@ public:
     void finishRect(double x1, double x2, double y1, double y2);
 
 private:
-    QDoubleSpinBox* xn;
-    QDoubleSpinBox* xx;
-    QDoubleSpinBox* yn;
-    QDoubleSpinBox* yx;
+    DoubleSpinBox* xn;
+    DoubleSpinBox* xx;
+    DoubleSpinBox* yn;
+    DoubleSpinBox* yx;
     QPushButton* useRect;
 
 signals:
