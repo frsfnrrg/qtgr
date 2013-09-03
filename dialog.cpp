@@ -114,8 +114,16 @@ void Dialog::autoHook(QRadioButton* q) {
     connect(q, SIGNAL(stateChanged(int)), this, SLOT(autoUpdate()));
 }
 
-void Dialog::autoHook(QSlider* q) {
+void Dialog::autoHook(Slider* q) {
     connect(q, SIGNAL(valueChanged(int)), this, SLOT(autoUpdate()));
+}
+
+void Dialog::autoHook(IntegerRangeSelector* q) {
+    connect(q, SIGNAL(userChangedValue(int)), this, SLOT(autoUpdate()));
+}
+
+void Dialog::autoHook(DoubleRangeSelector* q) {
+    connect(q, SIGNAL(userChangedValue(double)), this, SLOT(autoUpdate()));
 }
 
 QLabel* Dialog::makeLabel(const char* text, Qt::Alignment align) {

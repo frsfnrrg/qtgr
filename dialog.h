@@ -7,6 +7,9 @@
 
 class DoubleSpinBox;
 class IntegerSpinBox;
+class Slider;
+class IntegerRangeSelector;
+class DoubleRangeSelector;
 
 class Dialog : public QDialog
 {
@@ -28,7 +31,9 @@ protected:
     void autoHook(IntegerSpinBox*);
     void autoHook(QCheckBox*);
     void autoHook(QRadioButton*);
-    void autoHook(QSlider*);
+    void autoHook(Slider*);
+    void autoHook(IntegerRangeSelector*);
+    void autoHook(DoubleRangeSelector*);
 
 private:
     static bool auto_update;

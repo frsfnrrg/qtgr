@@ -72,10 +72,6 @@ private slots:
     void resetStart();
     void resetStop();
     void resetLayout();
-    void updateAngleBox();
-    void updateAngleSlider();
-    void updateSpacingBox();
-    void updateSpacingSlider();
 
 private:
     QComboBox* labelFormat;
@@ -97,13 +93,12 @@ private:
     QLineEdit *editStartAt;
     QLineEdit *editStopAt;
 
-    QSlider* layoutAngle;
-    IntegerSpinBox* layoutAngleBox;
+    IntegerRangeSelector* layoutAngle;
     QLabel* layoutAngleLabel;
 
     QComboBox* drawSide;
-    QSlider* labelSpacing;
-    DoubleSpinBox* labelSpacingBox;
+
+    DoubleRangeSelector* labelSpacing;
 };
 
 class ViewTicksAxisLabel : public Dialog {
@@ -135,17 +130,13 @@ public slots:
     void updateDialog();
 
 private slots:
-    void updateMaj();
-    void updateMin();
     void applyDialog();
 
 private:
     QComboBox* direction;
     QComboBox* location;
-    QSlider* majLength;
-    QSlider* minLength;
-    QLabel* majReadout;
-    QLabel* minReadout;
+    DoubleRangeSelector* majLength;
+    DoubleRangeSelector* minLength;
 };
 
 class LineStyleDialog : public Dialog {

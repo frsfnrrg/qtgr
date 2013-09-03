@@ -318,26 +318,8 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     editStopLabel = makeLabel("Value:");
     editStopLabel->setEnabled(false);
 
-    layoutAngleBox = new IntegerSpinBox();
-    layoutAngleBox->setSingleStep(15);
-    layoutAngleBox->setMaximum(360);
-    layoutAngleBox->setMinimum(0);
-    layoutAngleBox->setEnabled(false);
-    connect(layoutAngleBox, SIGNAL(valueChanged(int)), this, SLOT(updateAngleSlider()));
-
-    layoutAngle = new QSlider(Qt::Horizontal);
+    layoutAngle = new IntegerRangeSelector(0, 360, 30);
     layoutAngle->setEnabled(false);
-    layoutAngle->setRange(0, 360);
-    layoutAngle->setTickInterval(30);
-    layoutAngle->setValue(0);
-    layoutAngle->setTickPosition(QSlider::TicksAbove);
-    layoutAngle->setSingleStep(5);
-    layoutAngle->setPageStep(30);
-    connect(layoutAngle, SIGNAL(valueChanged(int)), this, SLOT(updateAngleBox()));
-
-    QHBoxLayout* layoutEdit = new QHBoxLayout();
-    layoutEdit->addWidget(layoutAngleBox);
-    layoutEdit->addWidget(layoutAngle);
 
     layoutAngleLabel = makeLabel("Angle");
     layoutAngleLabel->setEnabled(false);
@@ -355,25 +337,7 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     drawSide->addItem(tr("Opposite"));
     drawSide->addItem(tr("Both"));
 
-    labelSpacing = new QSlider(Qt::Horizontal);
-    labelSpacing->setRange(0, 20);
-    labelSpacing->setValue(10);
-    labelSpacing->setTickInterval(4);
-    labelSpacing->setSingleStep(2);
-    labelSpacing->setPageStep(4);
-    labelSpacing->setTickPosition(QSlider::TicksAbove);
-    connect(labelSpacing, SIGNAL(valueChanged(int)), this, SLOT(updateSpacingBox()));
-
-    labelSpacingBox = new DoubleSpinBox();
-    labelSpacingBox->setSingleStep(0.2);
-    labelSpacingBox->setMaximum(2.0);
-    labelSpacingBox->setMinimum(0.0);
-    labelSpacingBox->setDecimals(1);
-    connect(labelSpacingBox, SIGNAL(valueChanged(double)), this, SLOT(updateSpacingSlider()));
-
-    QHBoxLayout* labelSpacingEdit = new QHBoxLayout();
-    labelSpacingEdit->addWidget(labelSpacingBox);
-    labelSpacingEdit->addWidget(labelSpacing);
+    labelSpacing = new DoubleRangeSelector(0.0, 2.0, 1, 0.2);
 
     autoHook(labelFormat);
     autoHook(labelPrecision);
@@ -440,13 +404,13 @@ ViewTicksLabels::ViewTicksLabels(MainWindow* mwin) :
     layout->addWidget(makeLabel("Layout:"), 16, 0);
     layout->addWidget(layoutType, 16, 1);
     layout->addWidget(layoutAngleLabel, 17, 0);
-    layout->addLayout(layoutEdit, 17, 1);
+    layout->addWidget(layoutAngle, 17, 1);
 
     layout->addWidget(makeLabel("Draw side:"), 18, 0);
     layout->addWidget(drawSide, 18, 1);
 
     layout->addWidget(makeLabel("Spacing"), 19, 0);
-    layout->addLayout(labelSpacingEdit, 19, 1);
+    layout->addWidget(labelSpacing, 19, 1);
 
     layout->setColumnMinimumWidth(1, 200);
 
@@ -468,32 +432,7 @@ void ViewTicksLabels::resetStop() {
 void ViewTicksLabels::resetLayout() {
     bool on = (layoutType->currentIndex() == 2);
     layoutAngle->setEnabled(on);
-    layoutAngleBox->setEnabled(on);
     layoutAngleLabel->setEnabled(on);
-}
-
-void ViewTicksLabels::updateAngleBox() {
-    layoutAngleBox->setValue(layoutAngle->value());
-}
-
-void ViewTicksLabels::updateAngleSlider() {
-    // same old trick.... if we need to do more
-    // of this setValue trick stuff, then
-    // we should either subclass the slider-box pair,
-    // or subclass slider to get a better setValue func
-    layoutAngle->blockSignals(true);
-    layoutAngle->setValue(layoutAngleBox->value());
-    layoutAngle->blockSignals(false);
-}
-
-void ViewTicksLabels::updateSpacingBox() {
-    labelSpacingBox->setValue(labelSpacing->value() * 0.1);
-}
-
-void ViewTicksLabels::updateSpacingSlider() {
-    labelSpacing->blockSignals(true);
-    labelSpacing->setValue((int)(labelSpacingBox->value() * 10.0 + 0.5));
-    labelSpacing->blockSignals(false);
 }
 
 void ViewTicksLabels::updateDialog()
@@ -536,11 +475,9 @@ void ViewTicksLabels::updateDialog()
     layoutAngle->setValue(t.tl_angle);
 
     if (axis % 2 == Y_AXIS) {
-        labelSpacing->setValue((int)(10.0 * t.tl_hgap + 0.5));
-        labelSpacingBox->setValue(t.tl_hgap);
+        labelSpacing->setValue(t.tl_hgap);
     } else {
-        labelSpacing->setValue((int)(10.0 * t.tl_vgap + 0.5));
-        labelSpacingBox->setValue(t.tl_vgap);
+        labelSpacing->setValue(t.tl_vgap);
     }
 }
 
@@ -583,9 +520,9 @@ void ViewTicksLabels::applyDialog()
     g[gno].t[axis].tl_angle = layoutAngle->value() % 360;
 
     if (axis % 2 == Y_AXIS) {
-        g[gno].t[axis].tl_hgap = labelSpacingBox->value();
+        g[gno].t[axis].tl_hgap = labelSpacing->value();
     } else {
-        g[gno].t[axis].tl_vgap = labelSpacingBox->value();
+        g[gno].t[axis].tl_vgap = labelSpacing->value();
     }
 
     drawgraph();  
@@ -679,28 +616,9 @@ ViewTicksMarks::ViewTicksMarks(MainWindow* mainWin) :
     location->addItem(tr("Opposite"));
     location->addItem(tr("Both"));
 
-    majLength = new QSlider();
-    majLength->setOrientation(Qt::Horizontal);
-    majLength->setMinimum(0);
-    majLength->setMaximum(400);
-    majLength->setTickInterval(100);
-    majLength->setTickPosition(QSlider::TicksAbove);
-    majLength->setSingleStep(50);
-    majLength->setPageStep(100);
-    connect(majLength, SIGNAL(valueChanged(int)), this, SLOT(updateMaj()));
+    majLength = new DoubleRangeSelector(0.0, 4.0, 2, 1.0);
 
-    minLength = new QSlider();
-    minLength->setOrientation(Qt::Horizontal);
-    minLength->setMinimum(0);
-    minLength->setMaximum(400);
-    minLength->setTickInterval(100);
-    minLength->setTickPosition(QSlider::TicksAbove);
-    minLength->setSingleStep(50);
-    minLength->setPageStep(100);
-    connect(minLength, SIGNAL(valueChanged(int)), this, SLOT(updateMin()));
-
-    majReadout = new QLabel("0.0");
-    minReadout = new QLabel("0.0");
+    minLength = new DoubleRangeSelector(0.0, 4.0, 2, 1.0);
 
     autoHook(majLength);
     autoHook(minLength);
@@ -710,37 +628,27 @@ ViewTicksMarks::ViewTicksMarks(MainWindow* mainWin) :
     QGridLayout* layout = new QGridLayout();
 
     layout->addWidget(makeLabel("Axis:"),0,0);
-    layout->addWidget(editAxis,0,1,1,2);
+    layout->addWidget(editAxis,0,1);
 
     layout->setRowMinimumHeight(1, 8);
 
     layout->addWidget(makeLabel("Direction:"), 2, 0);
-    layout->addWidget(direction, 2, 1,1,2);
+    layout->addWidget(direction, 2, 1);
 
     layout->addWidget(makeLabel("Location:"),3,0);
-    layout->addWidget(location, 3, 1,1,2);
+    layout->addWidget(location, 3, 1);
 
     layout->setRowMinimumHeight(4, 5);
 
     layout->addWidget(makeLabel("Major Length"),5,0);
-    layout->addWidget(majReadout, 5, 1);
-    layout->addWidget(majLength, 5, 2);
+    layout->addWidget(majLength, 5, 1);
 
     layout->addWidget(makeLabel("Minor Length"),6,0);
-    layout->addWidget(minReadout, 6, 1);
-    layout->addWidget(minLength, 6, 2);
+    layout->addWidget(minLength, 6, 1);
 
     layout->setColumnMinimumWidth(1, 50);
 
     this->setDialogLayout(layout);
-}
-
-void ViewTicksMarks::updateMaj() {
-    majReadout->setText(QString::number(((double)majLength->value()) / 100.0));
-}
-
-void ViewTicksMarks::updateMin() {
-    minReadout->setText(QString::number(((double)minLength->value()) / 100.0));
 }
 
 void ViewTicksMarks::updateDialog() {
@@ -754,8 +662,8 @@ void ViewTicksMarks::updateDialog() {
         direction->setCurrentIndex(t.t_inout == IN ? 0 : 1);
     }
 
-    majLength->setValue((int)(t.t_size * 100.0));
-    minLength->setValue((int)(t.t_msize * 100.0));
+    majLength->setValue(t.t_size);
+    minLength->setValue(t.t_msize);
 
     if (t.t_op == BOTH) {
         location->setCurrentIndex(2);
@@ -776,8 +684,8 @@ void ViewTicksMarks::applyDialog() {
         g[gno].t[axis].t_inout = direction->currentIndex() == 0 ? IN : OUT;
     }
 
-    g[gno].t[axis].t_size = ((double)majLength->value()) / 100.0;
-    g[gno].t[axis].t_msize = ((double)minLength->value()) / 100.0;
+    g[gno].t[axis].t_size = majLength->value();
+    g[gno].t[axis].t_msize = minLength->value();
 
     int indx = location->currentIndex();
     if (indx == 2) {

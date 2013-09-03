@@ -21,6 +21,15 @@ public slots:
     void setValue(int, bool loud=false);
 };
 
+class Slider : public QSlider
+{
+    Q_OBJECT
+public:
+    explicit Slider(Qt::Orientation orient = Qt::Horizontal);
+public slots:
+    void setValue(int, bool loud=false);
+};
+
 /*
  * Select a font
  */
@@ -90,5 +99,48 @@ DoubleSpinBox* makeTextSizer();
 QComboBox* makeWidthSelector();
 
 QComboBox* makeLineStyler();
+
+class IntegerRangeSelector : public QWidget
+{
+    Q_OBJECT
+public:
+    IntegerRangeSelector(int min, int max, int step);
+    int value();
+signals:
+    void userChangedValue(int);
+public slots:
+    void setValue(int v);
+    void setEnabled(bool);
+    void setDisabled(bool);
+private slots:
+    void sliderValueUpdated(int);
+    void boxValueUpdated(int);
+private:
+    Slider* slider;
+    IntegerSpinBox* box;
+};
+
+class DoubleRangeSelector : public QWidget
+{
+    Q_OBJECT
+public:
+    // note: positive values are assumed
+    DoubleRangeSelector(double min, double max, int prec, double step);
+    double value();
+signals:
+    void userChangedValue(double);
+public slots:
+    void setValue(double v);
+    void setEnabled(bool);
+    void setDisabled(bool);
+private slots:
+    void sliderValueUpdated(int);
+    void boxValueUpdated(double);
+private:
+    Slider* slider;
+    DoubleSpinBox* box;
+    double scale;
+    double invscale;
+};
 
 #endif // CHOOSERS_H

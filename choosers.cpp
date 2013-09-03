@@ -2,9 +2,11 @@
 #include "base/globals.h"
 #include "prop.h"
 #include "base/patterns.h"
+#include <math.h>
 
 DoubleSpinBox::DoubleSpinBox() : QDoubleSpinBox() {}
 IntegerSpinBox::IntegerSpinBox() : QSpinBox() {}
+Slider::Slider(Qt::Orientation ori) : QSlider(ori) {}
 
 void DoubleSpinBox::setValue(double value, bool loud) {
     if (loud) {
@@ -22,6 +24,16 @@ void IntegerSpinBox::setValue(int value, bool loud) {
     } else {
         this->blockSignals(true);
         QSpinBox::setValue(value);
+        this->blockSignals(false);
+    }
+}
+
+void Slider::setValue(int value, bool loud) {
+    if (loud) {
+        QSlider::setValue(value);
+    } else {
+        this->blockSignals(true);
+        QSlider::setValue(value);
         this->blockSignals(false);
     }
 }
@@ -277,4 +289,115 @@ QComboBox* makeLineStyler() {
     f->addItem("Dash-Dot");
     f->addItem("Dash-DotDot");
     return f;
+}
+
+// Range selectors...
+
+IntegerRangeSelector::IntegerRangeSelector(int min, int max, int step) :
+    QWidget()
+{
+    slider = new Slider();
+    slider->setTickPosition(QSlider::TicksAbove);
+    slider->setRange(min, max);
+    slider->setSingleStep(step);
+    slider->setPageStep(step);
+    slider->setTickInterval(step);
+    connect(slider, SIGNAL(valueChanged(int)), this, SLOT(sliderValueUpdated(int)));
+
+    box = new IntegerSpinBox();
+    box->setRange(min, max);
+    box->setSingleStep(step);
+    connect(box, SIGNAL(valueChanged(int)), this, SLOT(boxValueUpdated(int)));
+
+    QHBoxLayout* layout = new QHBoxLayout();
+    layout->addWidget(box);
+    layout->addWidget(slider);
+    this->setLayout(layout);
+}
+
+int IntegerRangeSelector::value() {
+    return slider->value();
+}
+
+void IntegerRangeSelector::setValue(int v) {
+    slider->setValue(v);
+    box->setValue(v);
+}
+
+void IntegerRangeSelector::sliderValueUpdated(int i) {
+    box->setValue(slider->value());
+    emit userChangedValue(i);
+}
+
+void IntegerRangeSelector::boxValueUpdated(int i) {
+    slider->setValue(box->value());
+    emit userChangedValue(i);
+}
+
+void IntegerRangeSelector::setEnabled(bool b) {
+    box->setEnabled(b);
+    slider->setEnabled(b);
+}
+
+void IntegerRangeSelector::setDisabled(bool b) {
+    box->setDisabled(b);
+    slider->setDisabled(b);
+}
+
+DoubleRangeSelector::DoubleRangeSelector(double min, double max, int prec, double step) :
+    QWidget()
+{
+    int iscale = 1;
+    for (int i=0;i<prec;i++) iscale *= 10;
+    scale = (double) iscale;
+    invscale = 1 / scale;
+
+    slider = new Slider();
+    slider->setTickPosition(QSlider::TicksAbove);
+    slider->setRange(min * scale, max * scale);
+    slider->setSingleStep(step * scale);
+    slider->setPageStep(step * scale);
+    slider->setTickInterval(step * scale);
+    connect(slider, SIGNAL(valueChanged(int)), this, SLOT(sliderValueUpdated(int)));
+
+    box = new DoubleSpinBox();
+    box->setRange(min, max);
+    box->setSingleStep(step);
+    box->setDecimals(prec);
+    connect(box, SIGNAL(valueChanged(double)), this, SLOT(boxValueUpdated(double)));
+
+    QHBoxLayout* layout = new QHBoxLayout();
+    layout->addWidget(box);
+    layout->addWidget(slider);
+    this->setLayout(layout);
+}
+
+double DoubleRangeSelector::value() {
+    return box->value();
+}
+
+void DoubleRangeSelector::setValue(double v) {
+    slider->setValue(v * scale);
+    box->setValue(v);
+}
+
+void DoubleRangeSelector::sliderValueUpdated(int i) {
+    double val = i * invscale;
+    box->setValue(val);
+    emit userChangedValue(val);
+}
+
+void DoubleRangeSelector::boxValueUpdated(double i) {
+    slider->setValue(lround(i * scale));
+    emit userChangedValue(i);
+}
+
+void DoubleRangeSelector::setEnabled(bool b) {
+    box->setEnabled(b);
+    slider->setEnabled(b);
+}
+
+void DoubleRangeSelector::setDisabled(bool b) {
+    box->setDisabled(b);
+    slider->setDisabled(b);
 }
