@@ -24,21 +24,25 @@ ViewView::ViewView(MainWindow *parent) :
     useRect = new QPushButton(tr("Rect Select"));
     connect(useRect, SIGNAL(clicked()), this, SLOT(doRect()));
 
-    QVBoxLayout* over = new QVBoxLayout();
 
-    QGridLayout* layout = new QGridLayout();
-    over->addLayout(layout);
 
     xn = getUnitDoubleSpinBox();
     xx = getUnitDoubleSpinBox();
     yn = getUnitDoubleSpinBox();
     yx = getUnitDoubleSpinBox();
+    connect(xn, SIGNAL(valueChanged(double)), this, SLOT(xmaxd()));
+    connect(xx, SIGNAL(valueChanged(double)), this, SLOT(xminu()));
+    connect(yn, SIGNAL(valueChanged(double)), this, SLOT(ymaxd()));
+    connect(yx, SIGNAL(valueChanged(double)), this, SLOT(yminu()));
     autoHook(xn);
     autoHook(xx);
     autoHook(yn);
     autoHook(yx);
 
-    layout->addWidget(new QLabel(tr("Viewport settings (from 0.0 to 1.0)")), 0,0,2,0);
+
+    QGridLayout* layout = new QGridLayout();
+
+    layout->addWidget(new QLabel(tr("Viewport settings (from 0.0 to 1.0)")), 0,0,2,0, Qt::AlignCenter);
 
     layout->setRowMinimumHeight(1, 8);
 
@@ -54,10 +58,10 @@ ViewView::ViewView(MainWindow *parent) :
     layout->addWidget(new QLabel(tr("Y max")), 5,0);
     layout->addWidget(yx, 5, 1);
 
-    over->addSpacing(8);
-    over->addWidget(useRect);
+    layout->setRowMinimumHeight(6, 8);
+    layout->addWidget(useRect, 7, 0, 1, 2, Qt::AlignCenter);
 
-    this->setDialogLayout(over);
+    this->setDialogLayout(layout);
 }
 
 void ViewView::updateDialog() {
@@ -75,6 +79,7 @@ void ViewView::updateDialog() {
     xx->setValue(xxv);
     yn->setValue(ynv);
     yx->setValue(yxv);
+    setMinMax();
 }
 
 void ViewView::applyDialog() {
@@ -96,4 +101,27 @@ void ViewView::finishRect(double x1, double x2, double y1, double y2) {
     g[gno].v.yv2 = y2;
 
     drawgraph();
+}
+
+void ViewView::setMinMax() {
+    xn->setMaximum(xx->value());
+    xx->setMinimum(xn->value());
+    yn->setMaximum(yx->value());
+    yx->setMinimum(yn->value());
+}
+
+void ViewView::xminu() {
+    xn->setMaximum(xx->value());
+}
+
+void ViewView::xmaxd() {
+    xx->setMinimum(xn->value());
+}
+
+void ViewView::yminu() {
+    yn->setMaximum(yx->value());
+}
+
+void ViewView::ymaxd() {
+    yx->setMinimum(yn->value());
 }

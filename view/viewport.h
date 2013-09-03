@@ -25,6 +25,7 @@ private:
     DoubleSpinBox* yn;
     DoubleSpinBox* yx;
     QPushButton* useRect;
+    void setMinMax();
 
 signals:
     
@@ -34,7 +35,12 @@ private slots:
     void applyDialog();
 
     void doRect();
-    
+
+    void xminu();
+    void xmaxd();
+    void yminu();
+    void ymaxd();
 };
 
 #endif // VIEW_VIEW_H
+
