@@ -11,11 +11,15 @@
 #include "base/globals.h"
 #include "prop.h"
 #include "dialog.h"
+#include <time.h>
+
+static int startuptimer;
 
 MainWindow::MainWindow() :
     QMainWindow(),
     settings("QTGR","QTGR")
 {
+    startuptimer = QTime::currentTime().second() * 1000 + QTime::currentTime().msec();
     this->setWindowTitle(tr("QTGR"));
 
     QGraphicsScene *scene = new GraphicsScene(this);
@@ -152,5 +156,8 @@ void MainWindow::initialize()
             drawgraph();
         }
     }
+
+    int newtime = QTime::currentTime().second() * 1000 + QTime::currentTime().msec();
+    printf("QTGR load time: %d msec\n", newtime - startuptimer);
 }
 
