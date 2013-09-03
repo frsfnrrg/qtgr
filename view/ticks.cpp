@@ -115,14 +115,9 @@ void ViewTicks::updateDialog()
     
     gno = cg; // current graph only 
     axis = editAxis->currentIndex();
-    //printf("UPDATE %d\n", axis);
-
-    //printf("U1 %d %d %d %d %d %d\n", g[gno].t[axis].t_gridflag, g[gno].t[axis].t_mgridflag,g[gno].t[axis].t_mflag,g[gno].t[axis].t_flag,g[gno].t[axis].tl_flag,g[gno].t[axis].t_drawbar);
 
     axisLabel->setText(QString::fromLocal8Bit(g[gno].t[axis].label.s));
     
-
-
     // voodoo code
     // these two (tm, tl) checkboxes trigger an applyDialog via an autoHook. How??
     tickMarks->blockSignals(true);
@@ -145,8 +140,6 @@ void ViewTicks::updateDialog()
     majGrid->blockSignals(false);
     minGrid->blockSignals(false);
 
-    //printf("U2 %d %d %d %d %d %d\n", g[gno].t[axis].t_gridflag, g[gno].t[axis].t_mgridflag,g[gno].t[axis].t_mflag,g[gno].t[axis].t_flag,g[gno].t[axis].tl_flag,g[gno].t[axis].t_drawbar);
-
     updateWorldDimensions(NULL);
 }
 
@@ -166,9 +159,6 @@ void ViewTicks::applyDialog()
     
     gno = cg; // current graph only 
     axis = editAxis->currentIndex();
-    //printf("APPLY %d\n", axis);
-
-    //printf("A1 %d %d %d %d %d %d\n", g[gno].t[axis].t_gridflag, g[gno].t[axis].t_mgridflag,g[gno].t[axis].t_mflag,g[gno].t[axis].t_flag,g[gno].t[axis].tl_flag,g[gno].t[axis].t_drawbar);
 
     label = axisLabel->text().toAscii().data();
 
@@ -186,8 +176,6 @@ void ViewTicks::applyDialog()
     g[gno].t[axis].tl_flag = tickLabels->isChecked() ? ON : OFF;
 
     g[gno].t[axis].t_drawbar = axisBar->isChecked() ? ON : OFF;
-
-    //printf("A2 %d %d %d %d %d %d\n", g[gno].t[axis].t_gridflag, g[gno].t[axis].t_mgridflag,g[gno].t[axis].t_mflag,g[gno].t[axis].t_flag,g[gno].t[axis].tl_flag,g[gno].t[axis].t_drawbar);
 
     drawgraph();  
     
