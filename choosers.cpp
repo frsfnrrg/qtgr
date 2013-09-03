@@ -254,6 +254,7 @@ QColor ColorComboBox::getColor(int index) {
 DoubleSpinBox* makeTextSizer() {
     DoubleSpinBox* f = new DoubleSpinBox();
     f->setMinimum(0.0);
+    f->setMaximum(5.0);
     f->setDecimals(2);
     f->setSingleStep(0.1);
     return f;

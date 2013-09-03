@@ -2,19 +2,13 @@
 #include "base/globals.h"
 #include "choosers.h"
 
-// if anyone feels bored,
-// please eliminate the max < min issue
-// by setting the max (x_min) to x_max, etc.
-// ex. make xmin=1,xmax=0 impossible. Signals!
-
-const double snap_sizes[] = {0.1, 0.05, 0.01, 0.005, 0.001};
-
 DoubleSpinBox* getUnitDoubleSpinBox() {
     DoubleSpinBox* f = new DoubleSpinBox();
     f->setMaximum(1.0);
     f->setMinimum(0.0);
     f->setDecimals(3);
     f->setSingleStep(0.05);
+    f->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);
     return f;
 }
 
@@ -22,9 +16,9 @@ ViewView::ViewView(MainWindow *parent) :
     Dialog(parent, "Viewport", true)
 {
     useRect = new QPushButton(tr("Rect Select"));
+    useRect->setMinimumWidth(150);
+    useRect->setStyleSheet("QPushButton { font-weight: bold }");
     connect(useRect, SIGNAL(clicked()), this, SLOT(doRect()));
-
-
 
     xn = getUnitDoubleSpinBox();
     xx = getUnitDoubleSpinBox();
@@ -39,23 +33,22 @@ ViewView::ViewView(MainWindow *parent) :
     autoHook(yn);
     autoHook(yx);
 
-
     QGridLayout* layout = new QGridLayout();
 
-    layout->addWidget(new QLabel(tr("Viewport settings (from 0.0 to 1.0)")), 0,0,2,0, Qt::AlignCenter);
+    layout->addWidget(makeLabel("Viewport coordinates"), 0,0,2,0, Qt::AlignCenter);
 
     layout->setRowMinimumHeight(1, 8);
 
-    layout->addWidget(new QLabel(tr("X min")), 2,0);
+    layout->addWidget(makeLabel("X min:"), 2,0);
     layout->addWidget(xn, 2, 1);
 
-    layout->addWidget(new QLabel(tr("X max")), 3,0);
+    layout->addWidget(makeLabel("X max"), 3,0);
     layout->addWidget(xx, 3, 1);
 
-    layout->addWidget(new QLabel(tr("Y min")), 4,0);
+    layout->addWidget(makeLabel("Y min"), 4,0);
     layout->addWidget(yn, 4, 1);
 
-    layout->addWidget(new QLabel(tr("Y max")), 5,0);
+    layout->addWidget(makeLabel("Y max"), 5,0);
     layout->addWidget(yx, 5, 1);
 
     layout->setRowMinimumHeight(6, 8);
@@ -72,8 +65,6 @@ void ViewView::updateDialog() {
 
     double ynv = g[gno].v.yv1;
     double yxv = g[gno].v.yv2;
-
-    printf("Viewport: %f %f %f %f\n",xnv,xxv,ynv,yxv);
 
     xn->setValue(xnv);
     xx->setValue(xxv);
@@ -92,8 +83,6 @@ void ViewView::doRect() {
 }
 
 void ViewView::finishRect(double x1, double x2, double y1, double y2) {
-    printf("Viewport: %f %f %f %f\n",x1,x2,y1,y2);
-
     int gno = cg;
     g[gno].v.xv1 = x1;
     g[gno].v.xv2 = x2;
