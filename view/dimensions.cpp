@@ -53,6 +53,7 @@ ViewDimensions::ViewDimensions(MainWindow *parent) :
     for (int k=0;k<OPTS_LEN;k++) {
         worldType->addItem(opts[k].iname);
     }
+    connect(worldType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateScale()));
     updateScale();
 
     viewSelect = makeButton("Rect Select", SLOT(viewRect()));
@@ -228,28 +229,33 @@ void ViewDimensions::viewRect() {
     GraphWidget::startRect(this);
 }
 
+const char* error_style = "QLineEdit{color: red;}";
+
 void ViewDimensions::updateScale() {  
     // better idea: if in one of those modes, turn the offending dimension boxes red until
     // they are changed to be positive and non-zero
+    bool x1,x2,y1,y2;
+    x1 = false;
+    x2 = false;
+    y1 = false;
+    y2 = false;
 
-    if (g[cg].w.xg1 <= 0.0 || g[cg].w.xg2 <= 0.0) {
-        worldType->setItemData(2, Qt::red, Qt::TextColorRole);
-        if (g[cg].w.yg1 <= 0.0 || g[cg].w.yg2 <= 0.0) {
-            worldType->setItemData(1, Qt::red, Qt::TextColorRole);
-            worldType->setItemData(3, Qt::red, Qt::TextColorRole);
-        } else {
-            worldType->setItemData(1, Qt::black, Qt::TextColorRole);
-            worldType->setItemData(3, Qt::black, Qt::TextColorRole);
-        }
-    } else {
-        worldType->setItemData(2, Qt::black, Qt::TextColorRole);
-        worldType->setItemData(3, Qt::black, Qt::TextColorRole);
-        if (g[cg].w.yg1 <= 0.0 || g[cg].w.yg2 <= 0.0) {
-            worldType->setItemData(1, Qt::red, Qt::TextColorRole);
-        } else {
-            worldType->setItemData(1, Qt::black, Qt::TextColorRole);
-        }
+    double val;
+    int o = opts[worldType->currentIndex()].ikey;
+    if (o == LOGX || o == LOGXY) {
+        x1 = !leVal(worldXMin, &val) || val <= 0.0;
+        x2 = !leVal(worldXMax, &val) || val <= 0.0;
     }
+
+    if (o == LOGY || o == LOGXY) {
+        y1 = !leVal(worldYMin, &val) || val <= 0.0;
+        y2 = !leVal(worldYMax, &val) || val <= 0.0;
+    }
+
+    worldXMin->setStyleSheet(x1 ? error_style : "");
+    worldXMax->setStyleSheet(x2 ? error_style : "");
+    worldYMin->setStyleSheet(y1 ? error_style : "");
+    worldYMax->setStyleSheet(y2 ? error_style : "");
 }
 
 void ViewDimensions::rescaleTicks() {

@@ -2,16 +2,16 @@
 #include "dialog.h"
 
 void loadDialog(Dialog* d) {
+    d->updateDialog();
     d->show();
     d->raise();
-    d->updateDialog();
 }
 
 bool showDialog(Dialog* d) {
     if (d) {
+        d->updateDialog();
         d->setVisible(true);
         d->raise();
-        d->updateDialog();
         return true;
     } else {
         return false;
