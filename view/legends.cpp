@@ -4,6 +4,7 @@
 #include "view.h"
 #include "choosers.h"
 #include "graphwidget.h"
+#include "util.h"
 
 ViewLegends::ViewLegends(MainWindow* mainWin) :
     Dialog(mainWin, "Legends", this)
@@ -294,10 +295,6 @@ void ViewLegendsEdit::applyDialog()
     this->mainWindow->viewMenu->updateSymbolsLegend();
 }
 
-void addPair(QGridLayout* layout, int line, QWidget* f, QWidget* s) {
-    layout->addWidget(f, line, 0);
-    layout->addWidget(s, line, 1);
-}
 
 ViewLegendsFrame::ViewLegendsFrame(MainWindow *mainWin) :
     Dialog(mainWin, "Legend Frame", true)

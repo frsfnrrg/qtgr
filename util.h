@@ -15,4 +15,6 @@ QAction* createQAction(const QString &name, const QString &explained, const QStr
 
 bool leVal(QLineEdit* l, double* d);
 
+void addPair(QGridLayout* layout, int line, QWidget* f, QWidget* s);
+
 #endif // UTIL_H

@@ -38,7 +38,8 @@ HEADERS       = edit.h \
     file/openset.h \
     file/export.h \
     file/saveall.h \
-    view/dimensions.h
+    view/dimensions.h \
+    view/legend.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -96,7 +97,8 @@ SOURCES       = edit.cpp \
     file/openset.cpp \
     file/export.cpp \
     file/saveall.cpp \
-    view/dimensions.cpp
+    view/dimensions.cpp \
+    view/legend.cpp
 
 RESOURCES     = qtgr.qrc
 

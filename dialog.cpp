@@ -127,6 +127,10 @@ void Dialog::autoHook(DoubleRangeSelector* q) {
     connect(q, SIGNAL(userChangedValue(double)), this, SLOT(autoUpdate()));
 }
 
+void Dialog::autoHook(QGroupBox* q) {
+    connect(q, SIGNAL(clicked(bool)), this, SLOT(autoUpdate()));
+}
+
 QLabel* Dialog::makeLabel(const char* text, Qt::Alignment align) {
     return makeQLabel(this, text, align);
 }

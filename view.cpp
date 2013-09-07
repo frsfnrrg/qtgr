@@ -3,7 +3,7 @@
 #include "view.h"
 #include "view/symbols.h"
 #include "view/ticks.h"
-#include "view/legends.h"
+#include "view/legend.h"
 #include "view/title.h"
 #include "view/frame.h"
 #include "base/globals.h"
@@ -182,7 +182,7 @@ void ViewMenu::ticks() {
 
 void ViewMenu::legends() {
     if (showDialog(legendsDialog)) return;
-    legendsDialog = new ViewLegends(mainWindow);
+    legendsDialog = new ViewLegend(mainWindow);
     loadDialog(legendsDialog);
 }
 

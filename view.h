@@ -5,7 +5,7 @@
 #include "menu.h"
 
 class ViewTicks;
-class ViewLegends;
+class ViewLegend;
 
 class ViewTitle;
 class ViewFrame;
@@ -70,7 +70,7 @@ private:
 
     ViewDimensions* dimsDialog;
 
-    ViewLegends* legendsDialog;
+    ViewLegend* legendsDialog;
     ViewTitle* titleDialog;
     ViewFrame* frameDialog;
     ViewSymbols* symbolsDialog;

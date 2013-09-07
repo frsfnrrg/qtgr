@@ -41,3 +41,8 @@ bool leVal(QLineEdit* l, double* d) {
     if (ok) *d = v;
     return ok;
 }
+
+void addPair(QGridLayout* layout, int line, QWidget* f, QWidget* s) {
+    layout->addWidget(f, line, 0);
+    layout->addWidget(s, line, 1);
+}

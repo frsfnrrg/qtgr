@@ -34,6 +34,7 @@ protected:
     void autoHook(Slider*);
     void autoHook(IntegerRangeSelector*);
     void autoHook(DoubleRangeSelector*);
+    void autoHook(QGroupBox*);
 
 private:
     static bool auto_update;
