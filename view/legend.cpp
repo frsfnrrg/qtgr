@@ -102,6 +102,7 @@ void ViewLegend::fadeOpts() {
 
 void ViewLegend::updateDialog() {
     showLegend->setChecked(g[cg].l.active == ON);
+
     locType->setCurrentIndex(g[cg].l.loctype == VIEW ? 0 : 1);
 
     for (int i=0; i<MAXPLOT; i++) {
@@ -276,7 +277,7 @@ void ViewLegendProp::updateDialog() {
     styleColor->setCurrentIndex(g[cg].l.color);
     styleSize->setValue(g[cg].l.charsize);
     styleSpacing->setCurrentIndex(g[cg].l.vgap - 1);
-    styleWidth->setCurrentIndex(g[cg].l.hgap - 1);
+    styleWidth->setCurrentIndex(g[cg].l.len - 1);
 
     frame->setChecked(g[cg].l.box == ON);
 
@@ -294,7 +295,7 @@ void ViewLegendProp::applyDialog() {
     g[cg].l.color = styleColor->currentIndex();
     g[cg].l.charsize = styleSize->value();
     g[cg].l.vgap = styleSpacing->currentIndex() + 1;
-    g[cg].l.hgap = styleWidth->currentIndex() + 1;
+    g[cg].l.len = styleWidth->currentIndex() + 1;
 
     g[cg].l.box = frame->isChecked() ? ON : OFF;
 

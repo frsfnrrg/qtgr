@@ -108,7 +108,7 @@ void Dialog::autoHook(IntegerSpinBox* q) {
 }
 
 void Dialog::autoHook(QCheckBox* q) {
-    connect(q, SIGNAL(stateChanged(int)), this, SLOT(autoUpdate()));
+    connect(q, SIGNAL(clicked()), this, SLOT(autoUpdate()));
 }
 
 void Dialog::autoHook(QRadioButton* q) {
