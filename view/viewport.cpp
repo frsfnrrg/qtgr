@@ -1,16 +1,7 @@
 #include "view/viewport.h"
 #include "base/globals.h"
 #include "choosers.h"
-
-DoubleSpinBox* getUnitDoubleSpinBox() {
-    DoubleSpinBox* f = new DoubleSpinBox();
-    f->setMaximum(1.0);
-    f->setMinimum(0.0);
-    f->setDecimals(3);
-    f->setSingleStep(0.05);
-    f->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);
-    return f;
-}
+#include "graphwidget.h"
 
 ViewView::ViewView(MainWindow *parent) :
     Dialog(parent, "Viewport", true)

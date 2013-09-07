@@ -401,3 +401,13 @@ void DoubleRangeSelector::setDisabled(bool b) {
     box->setDisabled(b);
     slider->setDisabled(b);
 }
+
+DoubleSpinBox* getUnitDoubleSpinBox() {
+   DoubleSpinBox* f = new DoubleSpinBox();
+   f->setMaximum(1.0);
+   f->setMinimum(0.0);
+   f->setDecimals(3);
+   f->setSingleStep(0.05);
+   f->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);
+   return f;
+}

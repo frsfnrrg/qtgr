@@ -1,5 +1,6 @@
 #include <QtGui>
 #include "mainwindow.h"
+#include "graphwidget.h"
 #include "file.h"
 #include "base/globals.h"
 #include "prop.h"

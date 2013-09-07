@@ -3,6 +3,7 @@
 #include "prop.h"
 #include "view.h"
 #include "choosers.h"
+#include "graphwidget.h"
 
 ViewLegends::ViewLegends(MainWindow* mainWin) :
     Dialog(mainWin, "Legends", this)

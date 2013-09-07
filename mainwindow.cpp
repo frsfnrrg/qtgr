@@ -11,6 +11,7 @@
 #include "base/globals.h"
 #include "prop.h"
 #include "dialog.h"
+#include "graphwidget.h"
 #include <time.h>
 
 static int startuptimer;

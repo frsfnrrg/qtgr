@@ -143,4 +143,6 @@ private:
     double invscale;
 };
 
+DoubleSpinBox* getUnitDoubleSpinBox();
+
 #endif // CHOOSERS_H

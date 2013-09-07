@@ -2,6 +2,7 @@
 #include "base/globals.h"
 #include "prop.h"
 #include "choosers.h"
+#include "mainwindow.h"
 
 // nefarious idea: make dialog a "base" class,
 // have three near equivalent subclasses:

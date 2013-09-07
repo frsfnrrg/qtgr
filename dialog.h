@@ -2,7 +2,6 @@
 #define DIALOG_H
 
 #include <QtGui>
-#include "mainwindow.h"
 #include "util.h"
 
 class DoubleSpinBox;
@@ -10,6 +9,7 @@ class IntegerSpinBox;
 class Slider;
 class IntegerRangeSelector;
 class DoubleRangeSelector;
+class MainWindow;
 
 class Dialog : public QDialog
 {

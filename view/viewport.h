@@ -2,7 +2,6 @@
 #define VIEW_VIEW_H
 
 #include <QtGui>
-#include "mainwindow.h"
 #include "dialog.h"
 #include "overlay.h"
 

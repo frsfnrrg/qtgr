@@ -37,7 +37,8 @@ HEADERS       = edit.h \
     choosers.h \
     file/openset.h \
     file/export.h \
-    file/saveall.h
+    file/saveall.h \
+    view/dimensions.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -94,7 +95,8 @@ SOURCES       = edit.cpp \
     choosers.cpp \
     file/openset.cpp \
     file/export.cpp \
-    file/saveall.cpp
+    file/saveall.cpp \
+    view/dimensions.cpp
 
 RESOURCES     = qtgr.qrc
 

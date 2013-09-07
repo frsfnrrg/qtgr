@@ -1,5 +1,6 @@
 #include "file/export.h"
 #include "util.h"
+#include "graphwidget.h"
 #include <QtSvg>
 
 const int FILE_TYPES = 6;

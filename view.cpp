@@ -3,35 +3,41 @@
 #include "view.h"
 #include "view/symbols.h"
 #include "view/ticks.h"
-#include "view/world.h"
-#include "view/graphtype.h"
 #include "view/legends.h"
-#include "view/viewport.h"
 #include "view/title.h"
 #include "view/frame.h"
 #include "base/globals.h"
+#include "graphwidget.h"
+#include "view/dimensions.h"
+
+//#include "view/world.h"
+//#include "view/graphtype.h"
+//#include "view/viewport.h"
 
 ViewMenu::ViewMenu(MainWindow* mainWin) :
     Menu(mainWin, "View", true)
 {  
-    worldDialog = NULL;
+//    worldDialog = NULL;
+//    graphTypesDialog = NULL;
+//    viewDialog = NULL;
+
     symbolsDialog = NULL;
     ticksDialog = NULL;
     legendsDialog = NULL;
-    graphTypesDialog = NULL;
-    viewDialog = NULL;
     titleDialog = NULL;
     frameDialog = NULL;
+    dimsDialog = NULL;
 
     createActions();
     populateMenu(this);
 }
 
 void ViewMenu::populateMenu(QMenu* q) {
-    q->addAction(viewAct);
-    q->addAction(worldAct);
-    q->addSeparator();
-    q->addAction(graphTypesAct);
+//    q->addAction(viewAct);
+//    q->addAction(worldAct);
+//    q->addSeparator();
+//    q->addAction(graphTypesAct);
+    q->addAction(dimsAct);
     q->addSeparator();
     q->addAction(titleAct);
     q->addAction(legendsAct);
@@ -42,10 +48,11 @@ void ViewMenu::populateMenu(QMenu* q) {
 }
 
 void ViewMenu::populateToolBar(QToolBar* q) {
-    q->addAction(viewAct);
-    q->addAction(worldAct);
-    q->addSeparator();
-    q->addAction(graphTypesAct);
+//    q->addAction(viewAct);
+//    q->addAction(worldAct);
+//    q->addSeparator();
+//    q->addAction(graphTypesAct);
+    q->addAction(dimsAct);
     q->addSeparator();
     q->addAction(titleAct);
     q->addAction(legendsAct);
@@ -105,17 +112,26 @@ public:
 
 void ViewMenu::createActions()
 {
-    viewAct = makeAction("Set viewport",
-                         "Determine the onscreen boundaries of the graph.",
-                         "Ctrl+Shift+v", SLOT(view()));
-    worldAct = makeAction("Set world",
-                          "Determine the range of values displayed in the graph.",
-                          "Ctrl+w",
-                          SLOT(world()));
+//    viewAct = makeAction("Set viewport",
+//                         "Determine the onscreen boundaries of the graph.",
+//                         "Ctrl+Shift+v", SLOT(view()));
+//    worldAct = makeAction("Set world",
+//                          "Determine the range of values displayed in the graph.",
+//                          "Ctrl+w",
+//                          SLOT(world()));
+//    graphTypesAct = makeAction("Graph Type",
+//                               "Set the graph display metric.",
+//                               "Ctrl+g",
+//                               SLOT(graphTypes()));
+
     titleAct = makeAction("Titling",
                           "Set the title and subtitle of the graph.",
                           "Ctrl+Shift+t",
                           SLOT(title()));
+    dimsAct = makeAction("Graph Details",
+                         "Control the size, zoom, and display type of the graph.",
+                         "Ctrl+w",
+                         SLOT(dims()));
     ticksAct = makeAction("Ticks",
                           "Change spacing and labels for the graph axes.",
                           "Ctrl+t",
@@ -128,10 +144,6 @@ void ViewMenu::createActions()
                             "Give legends to sets on the graph.",
                             "Ctrl+L",
                             SLOT(legends()));
-    graphTypesAct = makeAction("Graph Type",
-                               "Set the graph display metric.",
-                               "Ctrl+g",
-                               SLOT(graphTypes()));
     frameAct = makeAction("Frame",
                           "Alter the look of the graph frame",
                           "Ctrl+f",
@@ -153,11 +165,6 @@ void ViewMenu::updateIndividualLegend(int cset) {
 
 // Lots and lots of boilerplate here
 
-void ViewMenu::world() {
-    if (showDialog(worldDialog)) return;
-    worldDialog = new ViewWorld(mainWindow);
-    loadDialog(worldDialog);
-}
 
 void ViewMenu::symbols() {
     if (showDialog(symbolsDialog)) return;
@@ -171,11 +178,7 @@ void ViewMenu::ticks() {
     loadDialog(ticksDialog);
 }
 
-void ViewMenu::graphTypes() {
-    if (showDialog(graphTypesDialog)) return;
-    graphTypesDialog = new ViewGraphType(mainWindow);
-    loadDialog(graphTypesDialog);
-}
+
 
 void ViewMenu::legends() {
     if (showDialog(legendsDialog)) return;
@@ -183,11 +186,7 @@ void ViewMenu::legends() {
     loadDialog(legendsDialog);
 }
 
-void ViewMenu::view() {
-    if (showDialog(viewDialog)) return;
-    viewDialog = new ViewView(mainWindow);
-    loadDialog(viewDialog);
-}
+
 
 void ViewMenu::title() {
     if (showDialog(titleDialog)) return;
@@ -201,3 +200,28 @@ void ViewMenu::frame() {
     loadDialog(frameDialog);
 }
 
+void ViewMenu::dims() {
+    if (showDialog(dimsDialog)) return;
+    dimsDialog = new ViewDimensions(mainWindow);
+    loadDialog(dimsDialog);
+}
+
+
+
+//void ViewMenu::world() {
+//    if (showDialog(worldDialog)) return;
+//    worldDialog = new ViewWorld(mainWindow);
+//    loadDialog(worldDialog);
+//}
+
+//void ViewMenu::view() {
+//    if (showDialog(viewDialog)) return;
+//    viewDialog = new ViewView(mainWindow);
+//    loadDialog(viewDialog);
+//}
+
+//void ViewMenu::graphTypes() {
+//    if (showDialog(graphTypesDialog)) return;
+//    graphTypesDialog = new ViewGraphType(mainWindow);
+//    loadDialog(graphTypesDialog);
+//}

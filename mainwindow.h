@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QtGui>
-#include "graphwidget.h"
 
 class Menu;
 class ViewMenu;
@@ -11,6 +10,7 @@ class EditMenu;
 class ToolsMenu;
 class TransformMenu;
 class SetsMenu;
+class GraphWidget;
 
 class MainWindow : public QMainWindow
 {

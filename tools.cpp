@@ -3,6 +3,7 @@
 #include "tools.h"
 #include "base/globals.h"
 #include "prop.h"
+#include "graphwidget.h"
 
 ToolsMenu::ToolsMenu(MainWindow* mainWin) :
     Menu(mainWin, "Tools", true)
