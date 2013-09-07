@@ -31,6 +31,10 @@ private:
 
     QCheckBox* showLegend;
 
+    QLabel* coordsLabel;
+    QLabel* xLabel;
+    QLabel* yLabel;
+
     ViewLegendProp* propDialog;
 
     QLineEdit* setLabels[MAXPLOT];
@@ -41,6 +45,8 @@ private slots:
 
     void placeLegend();
     void legendProp();
+
+    void fadeOpts();
 };
 
 

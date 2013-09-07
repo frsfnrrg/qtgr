@@ -19,13 +19,19 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
     locType->addItem("World");
     locType->addItem("View");
 
-    // do a fadeout on the location/place/type/props if show Legend is off??
     showLegend = new QCheckBox("Show Legend");
+    showLegend->setChecked(true);
+    connect(showLegend, SIGNAL(toggled(bool)), this, SLOT(fadeOpts()));
 
     prop = makeButton("Properties", SLOT(legendProp()));
     placer = makeButton("Place", SLOT(placeLegend()));
     placer->setStyleSheet("QPushButton { font-weight: bold }");
     placer->setMinimumWidth(100);
+
+    coordsLabel = makeLabel("Coords");
+
+    xLabel = makeLabel("X:");
+    yLabel = makeLabel("Y:");
 
     autoHook(showLegend);
     autoHook(locType);
@@ -62,11 +68,11 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
 
     layout->setRowMinimumHeight(2, 8);
 
-    layout->addWidget(makeLabel("Coords"), 3, 0);
+    layout->addWidget(coordsLabel, 3, 0);
     layout->addWidget(locType, 3, 1);
 
-    layout->addWidget(makeLabel("X:"), 4, 0);
-    layout->addWidget(makeLabel("Y:"), 5, 0);
+    layout->addWidget(xLabel, 4, 0);
+    layout->addWidget(yLabel, 5, 0);
 
     layout->addWidget(legendX, 4, 1);
     layout->addWidget(legendY, 5, 1);
@@ -80,6 +86,18 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
     over->addWidget(scrollArea, 3);
 
     this->setDialogLayout(over);
+}
+
+void ViewLegend::fadeOpts() {
+    bool on = showLegend->isChecked();
+    placer->setEnabled(on);
+    prop->setEnabled(on);
+    locType->setEnabled(on);
+    legendX->setEnabled(on);
+    legendY->setEnabled(on);
+    coordsLabel->setEnabled(on);
+    xLabel->setEnabled(on);
+    yLabel->setEnabled(on);
 }
 
 void ViewLegend::updateDialog() {
