@@ -191,7 +191,7 @@ void ViewDimensions::applyDialog() {
     g[cg].v.yv1 = viewYMin->value();
     g[cg].v.yv2 = viewYMax->value();
 
-    int type =  opts[worldType->currentIndex()].ikey;
+    g[cg].type =  opts[worldType->currentIndex()].ikey;
     drawgraph();
     WorldDimProp::send(this);
 }
@@ -206,6 +206,11 @@ void ViewDimensions::finishRect(double x1, double x2, double y1, double y2) {
     viewXMax->setValue(x2);
     viewYMin->setValue(y1);
     viewYMax->setValue(y2);
+
+    readjXMin();
+    readjXMax();
+    readjYMin();
+    readjYMax();
 
     drawgraph();
 }
@@ -224,6 +229,9 @@ void ViewDimensions::viewRect() {
 }
 
 void ViewDimensions::updateScale() {  
+    // better idea: if in one of those modes, turn the offending dimension boxes red until
+    // they are changed to be positive and non-zero
+
     if (g[cg].w.xg1 <= 0.0 || g[cg].w.xg2 <= 0.0) {
         worldType->setItemData(2, Qt::red, Qt::TextColorRole);
         if (g[cg].w.yg1 <= 0.0 || g[cg].w.yg2 <= 0.0) {
