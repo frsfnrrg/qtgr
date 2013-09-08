@@ -88,6 +88,30 @@ void Dialog::autoUpdate() {
     }
 }
 
+void Dialog::setTip(QWidget* a, const char* text) {
+    QString tip = tr(text);
+    a->setStatusTip(tip);
+    a->setToolTip(tip);
+}
+
+void Dialog::setTip(QWidget* a, QWidget* b, const char* text) {
+    QString tip = tr(text);
+    a->setStatusTip(tip);
+    a->setToolTip(tip);
+    b->setStatusTip(tip);
+    b->setToolTip(tip);
+}
+
+void Dialog::setTip(QWidget* a, QWidget* b, QWidget* c, const char* text) {
+    QString tip = tr(text);
+    a->setStatusTip(tip);
+    a->setToolTip(tip);
+    b->setStatusTip(tip);
+    b->setToolTip(tip);
+    c->setStatusTip(tip);
+    c->setToolTip(tip);
+}
+
 void Dialog::autoHook(QComboBox* q) {
     // this still sends when the value is the same, but that makes little
     // difference. The problem with value-changed is that it triggers
@@ -133,6 +157,13 @@ void Dialog::autoHook(QGroupBox* q) {
 
 QLabel* Dialog::makeLabel(const char* text, Qt::Alignment align) {
     return makeQLabel(this, text, align);
+}
+
+QLabel* Dialog::makeLabel(const char* text, QWidget* tipgiver, Qt::Alignment align) {
+    QLabel* q = makeQLabel(this, text, align);
+    q->setToolTip(tipgiver->toolTip());
+    q->setStatusTip(tipgiver->statusTip());
+    return q;
 }
 
 void Dialog::setAutoUpdate(bool on) {

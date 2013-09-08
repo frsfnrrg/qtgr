@@ -32,28 +32,33 @@ ViewAxis::ViewAxis(MainWindow *parent) :
 
     editAxis = makeAxisSelector();
     connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
+    setTip(editAxis, "Choose an axis to configure");
 
     axisLabel = new QLineEdit();
     axisLabel->setMinimumWidth(300);
+    setTip(axisLabel, "Label for the entire axis");
 
     uMinLabel = makeLabel("W Min");
     uMaxLabel = makeLabel("W Max");
-
     uMin = new QLineEdit();
     uMax = new QLineEdit();
+    setTip(uMinLabel, uMin, "Minimum value shown on the graph");
+    setTip(uMaxLabel, uMax, "Maximum value shown on the graph");
 
     majTic = new QLineEdit();
     minTic = new QLineEdit();
+    setTip(majTic, "Spacing for the major ticks and their tick labels");
+    setTip(minTic, "Spacing for minor ticks");
 
     startOpt = new QCheckBox(tr("Min Tick:"));
     connect(startOpt, SIGNAL(stateChanged(int)), this, SLOT(fadeMinTick()));
-
     uStart = new QLineEdit();
+    setTip(startOpt, uStart, "At which value to start the major ticks and tick labels; default is axis minimum");
 
     stopOpt = new QCheckBox(tr("Max Tick:"));
     connect(stopOpt, SIGNAL(stateChanged(int)), this, SLOT(fadeMaxTick()));
-
     uStop = new QLineEdit();
+    setTip(stopOpt, uStop, "At which value to stop the major ticks and tick labels; default is axis maximum");
 
     labelFormat = new QComboBox();
     labelFormat->addItem("Decimal");
@@ -73,14 +78,21 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     labelFormatLabel = makeLabel("Format:");
     labelPrecisionLabel = makeLabel("Precision:");
     labelSkipLabel = makeLabel("Skip:");
+    setTip(labelFormatLabel, labelFormat, "How to represent tick axis numbers");
+    setTip(labelPrecisionLabel, labelPrecision, "Number of significant figures given after the first");
+    setTip(labelSkipLabel, labelSkip, "Interval of labels not displayed");
 
     textSide = makeSideSelector(true);
     connect(textSide, SIGNAL(currentIndexChanged(int)), this, SLOT(fadeText()));
+    setTip(textSide, "On which graph side the axis label and tick labels should go");
     textProps = makeButton("Text Properties", SLOT(loadText()));
+    setTip(textProps, "Configure the axis label and tick labels");
     textDialog = NULL;
 
     tickSide = makeSideSelector(false);
+    setTip(tickSide, "On which graph side the major and minor ticks should go");
     tickProps = makeButton("Tick Properties", SLOT(loadTicks()));
+    setTip(tickProps, "Control gridlines and axis bar ticks");
     tickDialog = NULL;
 
     autoHook(axisLabel);
@@ -101,15 +113,15 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     QGridLayout* scr = new QGridLayout();
     addPair(scr, 0, uMinLabel, uMin);
     addPair(scr, 1, uMaxLabel, uMax);
-    addPair(scr, 2, makeLabel("Major Tick:"), majTic);
-    addPair(scr, 3, makeLabel("Minor Tick:"), minTic);
+    addPair(scr, 2, makeLabel("Major Tick:", majTic), majTic);
+    addPair(scr, 3, makeLabel("Minor Tick:", minTic), minTic);
     // TODO: clarify the start/stop type: use two lines??
     addPair(scr, 4, startOpt, uStart);
     addPair(scr, 5, stopOpt, uStop);
     // TODO: add an autoScale Axis button
 
     QGridLayout* lbl = new QGridLayout();
-    addPair(lbl, 0, makeLabel("Side:"), textSide);
+    addPair(lbl, 0, makeLabel("Side:", textSide), textSide);
     lbl->setRowMinimumHeight(1, 4);
     addPair(lbl, 2, labelFormatLabel, labelFormat);
     addPair(lbl, 3, labelPrecisionLabel, labelPrecision);
@@ -118,12 +130,12 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     lbl->addWidget(textProps, 6, 0, 1, 2);
 
     QGridLayout* lns = new QGridLayout();
-    addPair(lns, 0, makeLabel("Side:"), tickSide);
+    addPair(lns, 0, makeLabel("Side:", tickSide), tickSide);
     lns->addWidget(tickProps, 1, 0, 1, 2);
 
     QGridLayout* tp = new QGridLayout();
-    addPair(tp, 0, makeLabel("Edit:"), editAxis);
-    tp->addWidget(makeLabel("Axis Label:"), 1, 0);
+    addPair(tp, 0, makeLabel("Edit:", editAxis), editAxis);
+    tp->addWidget(makeLabel("Axis Label:", axisLabel), 1, 0);
     tp->addWidget(axisLabel, 1, 1, 1, 2);
     tp->setRowMinimumHeight(2, 8);
 
@@ -133,10 +145,13 @@ ViewAxis::ViewAxis(MainWindow *parent) :
 
     QVBoxLayout* layout = new QVBoxLayout();
     QGroupBox* scrb = new QGroupBox(tr("Scale"));
+    //setTip(scrb, "Set the units and range of the axis");
     scrb->setLayout(scr);
     QGroupBox* lblb = new QGroupBox(tr("Labels"));
+    //setTip(lblb, "Configure tick labels");
     lblb->setLayout(lbl);
     QGroupBox* lnsb = new QGroupBox(tr("Ticks, Gridlines"));
+    //setTip(lnsb, "Alter ticks and gridlines");
     lnsb->setLayout(lns);
 
     QVBoxLayout* lhv = new QVBoxLayout();

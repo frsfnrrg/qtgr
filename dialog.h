@@ -23,7 +23,11 @@ public:
     static void setAutoUpdate(bool on);
 protected:
     QLabel* makeLabel(const char* text, Qt::Alignment align = Qt::AlignLeft | Qt::AlignVCenter);
+    QLabel* makeLabel(const char* text, QWidget* tipgiver, Qt::Alignment align = Qt::AlignLeft | Qt::AlignVCenter);
     QPushButton* makeButton(const char* text, const char* slot);
+    void setTip(QWidget*, const char* text);
+    void setTip(QWidget*, QWidget*, const char* text);
+    void setTip(QWidget*, QWidget*, QWidget*, const char* text);
 
     void autoHook(QComboBox*);
     void autoHook(QLineEdit*);
