@@ -19,6 +19,7 @@ public:
     void updateLegendsField(int);
 public slots:
     void updateSets();
+    void updateDialog();
 
 private:
     QComboBox* locType;
@@ -40,7 +41,7 @@ private:
     QLineEdit* setLabels[MAXPLOT];
     QLabel* setLabelLabels[MAXPLOT];
 private slots:
-    void updateDialog();
+
     void applyDialog();
 
     void placeLegend();
@@ -74,8 +75,10 @@ private:
     QLabel* frameFillColorLabel;
     QLabel* frameFillPatternLabel;
 
-private slots:
+public slots:
     void updateDialog();
+
+private slots:
     void applyDialog();
     void resetFill();
 

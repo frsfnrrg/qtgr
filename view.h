@@ -4,7 +4,7 @@
 #include "mainwindow.h"
 #include "menu.h"
 
-class ViewTicks;
+class ViewAxis;
 class ViewLegend;
 
 class ViewTitle;
@@ -24,7 +24,7 @@ class ViewMenu : public Menu
 public:
     ViewMenu(MainWindow* );
 
-    ViewTicks*   ticksDialog;
+    ViewAxis*   ticksDialog;
 
     void populateMenu(QMenu* q);
 
@@ -35,7 +35,7 @@ protected:
   
 public slots:
     void symbols();
-    void ticks();
+    void axis();
     void legends();
     void title();
     void frame();
@@ -53,7 +53,7 @@ private:
     void createActions();
     
     QAction *titleAct;
-    QAction *ticksAct;
+    QAction *axisAct;
     QAction *symbolsAct;
     QAction *legendsAct;
     QAction *frameAct;

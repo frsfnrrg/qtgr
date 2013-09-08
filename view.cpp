@@ -2,7 +2,7 @@
 #include "mainwindow.h"
 #include "view.h"
 #include "view/symbols.h"
-#include "view/ticks.h"
+#include "view/axis.h"
 #include "view/legend.h"
 #include "view/title.h"
 #include "view/frame.h"
@@ -42,7 +42,7 @@ void ViewMenu::populateMenu(QMenu* q) {
     q->addAction(titleAct);
     q->addAction(legendsAct);
     q->addSeparator();
-    q->addAction(ticksAct);
+    q->addAction(axisAct);
     q->addAction(symbolsAct);
     q->addAction(frameAct);
 }
@@ -57,7 +57,7 @@ void ViewMenu::populateToolBar(QToolBar* q) {
     q->addAction(titleAct);
     q->addAction(legendsAct);
     q->addSeparator();
-    q->addAction(ticksAct);
+    q->addAction(axisAct);
     q->addAction(symbolsAct);
     q->addAction(frameAct);
 }
@@ -78,6 +78,8 @@ public:
         y1 = g[cg].v.yv1;
         y2 = g[cg].v.yv2;
 
+        // todo: fix bottom left corner
+
         if (ry > y2 && (ry > 1.0 - rx * (1.0 - y2) / x1)
                 && (ry > 1.0 + (rx - 1.0) * (1.0 - y2) / (1.0 - x2))) {
             view->title();
@@ -87,14 +89,14 @@ public:
         if (ry < y1 && (ry < rx * y1 / x1)
                 && (ry > (1.0 - x) * y1 / (1.0 - x2))
                 ) {
-            view->ticks();
+            view->axis();
             view->ticksDialog->editAxis->setCurrentIndex(X_AXIS);
             view->ticksDialog->updateDialog();
             return;
         }
 
         if (rx < x1) {
-            view->ticks();
+            view->axis();
             view->ticksDialog->editAxis->setCurrentIndex(Y_AXIS);
             view->ticksDialog->updateDialog();
             return;
@@ -132,10 +134,10 @@ void ViewMenu::createActions()
                          "Control the size, zoom, and display type of the graph.",
                          "Ctrl+w",
                          SLOT(dims()));
-    ticksAct = makeAction("Ticks",
+    axisAct = makeAction("Ticks",
                           "Change spacing and labels for the graph axes.",
                           "Ctrl+t",
-                          SLOT(ticks()));
+                          SLOT(axis()));
     symbolsAct = makeAction("Symbols",
                             "Change display of sets on the graph.",
                             "Ctrl+s",
@@ -172,9 +174,9 @@ void ViewMenu::symbols() {
     loadDialog(symbolsDialog);
 }
 
-void ViewMenu::ticks() {
+void ViewMenu::axis() {
     if (showDialog(ticksDialog)) return;
-    ticksDialog = new ViewTicks(mainWindow);
+    ticksDialog = new ViewAxis(mainWindow);
     loadDialog(ticksDialog);
 }
 

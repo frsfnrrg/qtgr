@@ -39,7 +39,8 @@ HEADERS       = edit.h \
     file/export.h \
     file/saveall.h \
     view/dimensions.h \
-    view/legend.h
+    view/legend.h \
+    view/axis.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -98,7 +99,8 @@ SOURCES       = edit.cpp \
     file/export.cpp \
     file/saveall.cpp \
     view/dimensions.cpp \
-    view/legend.cpp
+    view/legend.cpp \
+    view/axis.cpp
 
 RESOURCES     = qtgr.qrc
 
