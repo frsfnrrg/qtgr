@@ -329,18 +329,160 @@ void ViewAxis::fadeMaxTick() {
 
 
 ViewAxisText::ViewAxisText(MainWindow *parent) :
-    Dialog(parent, "Axis Text", true)
+    Dialog(parent, "Axis Labels", true)
 {
     editAxis = makeAxisSelector();
+    connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
+    tickFont = new FontComboBox();
+    tickColor = new ColorComboBox();
+    tickSize = makeTextSizer();
+
+    tickLayout = new QComboBox();
+    tickLayout->addItem("Horizontal");
+    tickLayout->addItem("Vertical");
+    tickLayout->addItem("Angle...");
+    tickLayout->setCurrentIndex(0);
+    connect(tickLayout, SIGNAL(currentIndexChanged(int)), this, SLOT(fadeAngle()));
+
+    tickAngleLabel = makeLabel("Angle:");
+    tickAngleLabel->setEnabled(false);
+    tickAngle = new IntegerRangeSelector(0, 360, 30);
+    tickAngle->setEnabled(false);
+
+    tickSpacing = new DoubleRangeSelector(0.0, 2.0, 1, 0.2);
+
+    axisFont = new FontComboBox();
+    axisColor = new ColorComboBox();
+    axisSize = makeTextSizer();
+
+    axisLayout = new QComboBox();
+    axisLayout->addItem("Parallel");
+    axisLayout->addItem("Perpendicular");
+
+    autoHook(tickFont);
+    autoHook(tickColor);
+    autoHook(tickSize);
+    autoHook(tickLayout);
+    autoHook(tickAngle);
+    autoHook(tickSpacing);
+    autoHook(axisFont);
+    autoHook(axisColor);
+    autoHook(axisSize);
+    autoHook(axisLayout);
+
+    QGridLayout* tp = new QGridLayout();
+    addPair(tp, 0, makeLabel("Edit:"), editAxis);
+    tp->setRowMinimumHeight(1, 8);
+    tp->setColumnStretch(0, 0);
+    tp->setColumnStretch(1, 0);
+    tp->setColumnStretch(2, 2);
+
+    QGridLayout* tickla = new QGridLayout();
+    addPair(tickla, 0, makeLabel("Font:"), tickFont);
+    addPair(tickla, 1, makeLabel("Color:"), tickColor);
+    addPair(tickla, 2, makeLabel("Size:"), tickSize);
+    tickla->setRowMinimumHeight(3, 8);
+    addPair(tickla, 4, makeLabel("Layout:"), tickLayout);
+    addPair(tickla, 5, tickAngleLabel, tickAngle);
+    addPair(tickla, 6, makeLabel("Spacing:"), tickSpacing);
+    tickla->setColumnMinimumWidth(1, 200);
+
+    QGridLayout* axisla = new QGridLayout();
+    addPair(axisla, 0, makeLabel("Font:"), axisFont);
+    addPair(axisla, 1, makeLabel("Color:"), axisColor);
+    addPair(axisla, 2, makeLabel("Size:"), axisSize);
+    axisla->setRowMinimumHeight(3, 8);
+    addPair(axisla, 4, makeLabel("Layout:"), axisLayout);
+    axisla->setColumnStretch(0, 0);
+    axisla->setColumnStretch(1, 1);
+
+    QGroupBox* tbx = new QGroupBox("Ticks");
+    tbx->setLayout(tickla);
+
+    QGroupBox* abx = new QGroupBox("Axis");
+    abx->setLayout(axisla);
+
+    QVBoxLayout* tbl = new QVBoxLayout();
+    tbl->addWidget(tbx);
+    tbl->addStretch(2);
+
+    QVBoxLayout* abl = new QVBoxLayout();
+    abl->addWidget(abx);
+    abl->addStretch(2);
+
+    QHBoxLayout* ov = new QHBoxLayout();
+    ov->addLayout(tbl, 2);
+    ov->addLayout(abl, 1);
+
+    QVBoxLayout* main = new QVBoxLayout();
+    main->addLayout(tp);
+    main->addLayout(ov);
+
+    this->setDialogLayout(main);
 }
 
 void ViewAxisText::updateDialog() {
+    int axis = editAxis->currentIndex();
+    tickmarks t = g[cg].t[axis];
 
+    axisFont->setCurrentIndex(t.label.font);
+    axisColor->setCurrentIndex(t.label.color);
+    axisSize->setValue(t.label.charsize);
+    axisLayout->setCurrentIndex(t.label_layout == PARA ? 0 : 1);
+
+    tickFont->setCurrentIndex(t.tl_font);
+    tickColor->setCurrentIndex(t.tl_color);
+    tickSize->setValue(t.tl_charsize);
+
+    if (t.tl_layout == SPEC) {
+        tickLayout->setCurrentIndex(2);
+    } else {
+        tickLayout->setCurrentIndex(t.tl_layout == HORIZONTAL ? 0 : 1);
+    }
+    tickAngle->setValue(t.tl_angle);
+
+    if (axis % 2 == Y_AXIS) {
+        tickSpacing->setValue(t.tl_hgap);
+    } else {
+        tickSpacing->setValue(t.tl_vgap);
+    }
 }
 
 void ViewAxisText::applyDialog() {
+    int axis = editAxis->currentIndex();
+    tickmarks t = g[cg].t[axis];
 
+    t.label.font = axisFont->currentIndex();
+    t.label.color = axisColor->currentIndex();
+    t.label.charsize = axisSize->value();
+    t.label_layout = axisLayout->currentIndex() == 0 ? PARA : PERP;
+
+    t.tl_font = tickFont->currentIndex();
+    t.tl_color = tickColor->currentIndex();
+    t.tl_charsize = tickSize->value();
+
+    if (tickLayout->currentIndex() == 2) {
+        t.tl_layout = SPEC;
+    } else {
+        t.tl_layout = tickLayout->currentIndex() == 0 ? HORIZONTAL : VERTICAL;
+    }
+    t.tl_angle = tickAngle->value() % 360;
+
+    if (axis % 2 == Y_AXIS) {
+        t.tl_hgap = tickSpacing->value();
+    } else {
+        t.tl_vgap = tickSpacing->value();
+    }
+
+    g[cg].t[axis] = t;
+    drawgraph();
+}
+
+void ViewAxisText::fadeAngle() {
+    bool on = tickLayout->currentIndex() == 2;
+    tickAngleLabel->setEnabled(on);
+    tickAngle->setEnabled(on);
 }
 
 
@@ -349,14 +491,245 @@ ViewAxisTicks::ViewAxisTicks(MainWindow *parent) :
     Dialog(parent, "Axis Ticks & Gridlines", true)
 {
     editAxis = makeAxisSelector();
+    connect(editAxis, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
+    // TODO: fill out _all_ the options available for the ticks
+    // currently some things act oddly. This dialog may
+    // need a second restructuring
+
+    tickBox = new QGroupBox(tr("Ticks"));
+    tickBox->setCheckable(true);
+    connect(tickBox, SIGNAL(toggled(bool)), this, SLOT(fadeTickBox()));
+
+    axisBarBox = new QGroupBox(tr("Axis Bar"));
+    axisBarBox->setCheckable(true);
+    connect(axisBarBox, SIGNAL(toggled(bool)), this, SLOT(fadeAxisBarBox()));
+
+    majGridBox = new QGroupBox(tr("Major Gridlines"));
+    majGridBox->setCheckable(true);
+    connect(majGridBox, SIGNAL(toggled(bool)), this, SLOT(fadeMajGridBox()));
+
+    minGridBox = new QGroupBox(tr("Minor Gridlines"));
+    minGridBox->setCheckable(true);
+    connect(minGridBox, SIGNAL(toggled(bool)), this, SLOT(fadeMinGridBox()));
+
+    tickDirection = new QComboBox();
+    tickDirection->addItem("In");
+    tickDirection->addItem("Out");
+    tickDirection->addItem("Both");
+
+    tickMajLength = new DoubleRangeSelector(0.0, 4.0, 2, 1.0);
+    tickMinLength = new DoubleRangeSelector(0.0, 4.0, 2, 1.0);
+
+    axisBarWidth = makeWidthSelector();
+    axisBarColor = new ColorComboBox();
+    axisBarStyle = makeLineStyler();
+
+    majGridWidth = makeWidthSelector();
+    majGridColor = new ColorComboBox();
+    majGridStyle = makeLineStyler();
+
+    minGridWidth = makeWidthSelector();
+    minGridColor = new ColorComboBox();
+    minGridStyle = makeLineStyler();
+
+    autoHook(tickBox);
+    autoHook(tickDirection);
+    autoHook(tickMajLength);
+    autoHook(tickMinLength);
+
+    autoHook(axisBarBox);
+    autoHook(axisBarWidth);
+    autoHook(axisBarColor);
+    autoHook(axisBarStyle);
+
+    autoHook(majGridBox);
+    autoHook(majGridWidth);
+    autoHook(majGridColor);
+    autoHook(majGridStyle);
+
+    autoHook(minGridBox);
+    autoHook(minGridWidth);
+    autoHook(minGridColor);
+    autoHook(minGridStyle);
+
+    tickDirectionLabel = makeLabel("Direction:");
+    tickMajLengthLabel = makeLabel("Minor Length:");
+    tickMinLengthLabel = makeLabel("Major Length:");
+
+    axisBarStyleLabel = makeLabel("Style:");
+    axisBarWidthLabel = makeLabel("Width:");
+    axisBarColorLabel = makeLabel("Color:");
+
+    majGridStyleLabel = makeLabel("Style:");
+    majGridWidthLabel = makeLabel("Width:");
+    majGridColorLabel = makeLabel("Color:");
+
+    minGridStyleLabel = makeLabel("Style:");
+    minGridWidthLabel = makeLabel("Width:");
+    minGridColorLabel = makeLabel("Color:");
+
+
+    QGridLayout* tickla = new QGridLayout();
+    addPair(tickla, 0, tickDirectionLabel, tickDirection);
+    addPair(tickla, 1, tickMajLengthLabel, tickMajLength);
+    addPair(tickla, 2, tickMinLengthLabel, tickMinLength);
+    tickla->setColumnMinimumWidth(1, 150);
+
+    QGridLayout* axisla = new QGridLayout();
+    addPair(axisla, 0, axisBarStyleLabel, axisBarStyle);
+    addPair(axisla, 1, axisBarWidthLabel, axisBarWidth);
+    addPair(axisla, 2, axisBarColorLabel, axisBarColor);
+    axisla->setColumnMinimumWidth(1, 150);
+
+    QGridLayout* majgla = new QGridLayout();
+    addPair(majgla, 0, majGridStyleLabel, majGridStyle);
+    addPair(majgla, 1, majGridWidthLabel, majGridWidth);
+    addPair(majgla, 2, majGridColorLabel, majGridColor);
+
+    QGridLayout* mingla = new QGridLayout();
+    addPair(mingla, 0, minGridStyleLabel, minGridStyle);
+    addPair(mingla, 1, minGridWidthLabel, minGridWidth);
+    addPair(mingla, 2, minGridColorLabel, minGridColor);
+
+    QGridLayout* tp = new QGridLayout();
+    addPair(tp, 0, makeLabel("Edit:"), editAxis);
+    tp->setRowMinimumHeight(1, 8);
+    tp->setColumnStretch(0, 0);
+    tp->setColumnStretch(1, 0);
+    tp->setColumnStretch(2, 2);
+
+    tickBox->setLayout(tickla);
+    axisBarBox->setLayout(axisla);
+    majGridBox->setLayout(majgla);
+    minGridBox->setLayout(mingla);
+
+    QVBoxLayout* lhs = new QVBoxLayout();
+    lhs->addWidget(tickBox);
+    lhs->addWidget(axisBarBox);
+    lhs->addStretch(2);
+
+    QVBoxLayout* rhs = new QVBoxLayout();
+    rhs->addWidget(majGridBox);
+    rhs->addWidget(minGridBox);
+    rhs->addStretch(2);
+
+    QHBoxLayout* ov = new QHBoxLayout();
+    ov->addLayout(lhs, 1);
+    ov->addLayout(rhs, 1);
+
+    QVBoxLayout* main = new QVBoxLayout();
+    main->addLayout(tp);
+    main->addLayout(ov);
+
+    this->setDialogLayout(main);
 }
 
 void ViewAxisTicks::updateDialog() {
+    int axis = editAxis->currentIndex();
+    tickmarks t = g[cg].t[axis];
 
+    tickBox->setChecked((t.t_flag == ON || t.t_mflag == ON));
+
+    if (t.t_inout == BOTH) {
+        tickDirection->setCurrentIndex(2);
+    } else {
+        tickDirection->setCurrentIndex(t.t_inout == IN ? 0 : 1);
+    }
+
+    tickMajLength->setValue(t.t_size);
+    tickMinLength->setValue(t.t_msize);
+
+    axisBarBox->setChecked(t.t_drawbar == ON);
+    axisBarStyle->setCurrentIndex(t.t_drawbarlines);
+    axisBarColor->setCurrentIndex(t.t_drawbarcolor);
+    axisBarWidth->setCurrentIndex(t.t_drawbarlinew - 1);
+
+    majGridBox->setChecked(t.t_gridflag == ON);
+    majGridStyle->setCurrentIndex(t.t_lines);
+    majGridColor->setCurrentIndex(t.t_color);
+    majGridWidth->setCurrentIndex(t.t_linew - 1);
+
+    minGridBox->setChecked(t.t_mgridflag == ON);
+    minGridStyle->setCurrentIndex(t.t_mlines);
+    minGridColor->setCurrentIndex(t.t_mcolor);
+    minGridWidth->setCurrentIndex(t.t_mlinew - 1);
 }
 
 void ViewAxisTicks::applyDialog() {
+    int axis = editAxis->currentIndex();
+    int tm;
+    tickmarks t = g[cg].t[axis];
 
+    tm = tickBox->isChecked() ? ON : OFF;
+    t.t_mflag = tm;
+    t.t_flag = tm;
+
+    if (tickDirection->currentIndex() == 2) {
+        t.t_inout = BOTH;
+    } else {
+        t.t_inout = tickDirection->currentIndex() == 0 ? IN : OUT;
+    }
+
+    t.t_size = tickMajLength->value();
+    t.t_msize = tickMinLength->value();
+
+    t.t_drawbar = axisBarBox->isChecked() ? ON : OFF;
+    t.t_drawbarcolor = axisBarColor->currentIndex();
+    t.t_drawbarlines = axisBarStyle->currentIndex();
+    t.t_drawbarlinew = axisBarWidth->currentIndex() + 1;
+
+    t.t_gridflag = majGridBox->isChecked() ? ON : OFF;
+    t.t_color = majGridColor->currentIndex();
+    t.t_lines = majGridStyle->currentIndex();
+    t.t_linew = majGridWidth->currentIndex() + 1;
+
+    t.t_mgridflag = minGridBox->isChecked() ? ON : OFF;
+    t.t_mcolor = minGridColor->currentIndex();
+    t.t_mlines = minGridStyle->currentIndex();
+    t.t_mlinew = minGridWidth->currentIndex() + 1;
+
+    g[cg].t[axis] = t;
+    drawgraph();
+}
+
+void ViewAxisTicks::fadeTickBox() {
+    bool on = (tickBox->isChecked());
+    tickDirection->setEnabled(on);
+    tickMajLength->setEnabled(on);
+    tickMinLength->setEnabled(on);
+    tickDirectionLabel->setEnabled(on);
+    tickMajLengthLabel->setEnabled(on);
+    tickMinLengthLabel->setEnabled(on);
+}
+
+void ViewAxisTicks::fadeAxisBarBox() {
+    bool on = (axisBarBox->isChecked());
+    axisBarWidth->setEnabled(on);
+    axisBarColor->setEnabled(on);
+    axisBarStyle->setEnabled(on);
+    axisBarWidthLabel->setEnabled(on);
+    axisBarColorLabel->setEnabled(on);
+    axisBarStyleLabel->setEnabled(on);
+}
+
+void ViewAxisTicks::fadeMajGridBox() {
+    bool on = (majGridBox->isChecked());
+    majGridWidth->setEnabled(on);
+    majGridColor->setEnabled(on);
+    majGridStyle->setEnabled(on);
+    majGridWidthLabel->setEnabled(on);
+    majGridColorLabel->setEnabled(on);
+    majGridStyleLabel->setEnabled(on);
+}
+
+void ViewAxisTicks::fadeMinGridBox() {
+    bool on = (minGridBox->isChecked());
+    minGridWidth->setEnabled(on);
+    minGridColor->setEnabled(on);
+    minGridStyle->setEnabled(on);
+    minGridWidthLabel->setEnabled(on);
+    minGridColorLabel->setEnabled(on);
+    minGridStyleLabel->setEnabled(on);
 }
 

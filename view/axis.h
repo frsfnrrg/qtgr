@@ -73,11 +73,26 @@ public:
     QComboBox* editAxis;
 private:
 
+    QComboBox* tickFont;
+    QComboBox* tickColor;
+    DoubleSpinBox* tickSize;
+    QComboBox* tickLayout;
+    IntegerRangeSelector* tickAngle;
+    QLabel* tickAngleLabel;
+    DoubleRangeSelector* tickSpacing;
+
+    QComboBox* axisFont;
+    QComboBox* axisColor;
+    DoubleSpinBox* axisSize;
+    QComboBox* axisLayout;
+
 public slots:
     void updateDialog();
 
 private slots:
     void applyDialog();
+
+    void fadeAngle();
 
 };
 
@@ -89,12 +104,48 @@ public:
     QComboBox* editAxis;
 private:
 
+    QGroupBox* tickBox;
+    QComboBox* tickDirection;
+    DoubleRangeSelector* tickMajLength;
+    DoubleRangeSelector* tickMinLength;
+    QLabel* tickDirectionLabel;
+    QLabel* tickMajLengthLabel;
+    QLabel* tickMinLengthLabel;
+
+    QGroupBox* axisBarBox;
+    QComboBox* axisBarWidth;
+    QComboBox* axisBarColor;
+    QComboBox* axisBarStyle;
+    QLabel* axisBarWidthLabel;
+    QLabel* axisBarColorLabel;
+    QLabel* axisBarStyleLabel;
+
+    QGroupBox* majGridBox;
+    QComboBox* majGridWidth;
+    QComboBox* majGridColor;
+    QComboBox* majGridStyle;
+    QLabel* majGridWidthLabel;
+    QLabel* majGridColorLabel;
+    QLabel* majGridStyleLabel;
+
+    QGroupBox* minGridBox;
+    QComboBox* minGridWidth;
+    QComboBox* minGridColor;
+    QComboBox* minGridStyle;
+    QLabel* minGridWidthLabel;
+    QLabel* minGridColorLabel;
+    QLabel* minGridStyleLabel;
+
 public slots:
     void updateDialog();
 
 private slots:
     void applyDialog();
 
+    void fadeTickBox();
+    void fadeAxisBarBox();
+    void fadeMajGridBox();
+    void fadeMinGridBox();
 };
 
 #endif // AXIS_H
