@@ -10,17 +10,10 @@
 #include "graphwidget.h"
 #include "view/dimensions.h"
 
-//#include "view/world.h"
-//#include "view/graphtype.h"
-//#include "view/viewport.h"
 
 ViewMenu::ViewMenu(MainWindow* mainWin) :
     Menu(mainWin, "View", true)
 {  
-//    worldDialog = NULL;
-//    graphTypesDialog = NULL;
-//    viewDialog = NULL;
-
     symbolsDialog = NULL;
     ticksDialog = NULL;
     legendsDialog = NULL;
@@ -33,10 +26,6 @@ ViewMenu::ViewMenu(MainWindow* mainWin) :
 }
 
 void ViewMenu::populateMenu(QMenu* q) {
-//    q->addAction(viewAct);
-//    q->addAction(worldAct);
-//    q->addSeparator();
-//    q->addAction(graphTypesAct);
     q->addAction(dimsAct);
     q->addSeparator();
     q->addAction(titleAct);
@@ -48,10 +37,6 @@ void ViewMenu::populateMenu(QMenu* q) {
 }
 
 void ViewMenu::populateToolBar(QToolBar* q) {
-//    q->addAction(viewAct);
-//    q->addAction(worldAct);
-//    q->addSeparator();
-//    q->addAction(graphTypesAct);
     q->addAction(dimsAct);
     q->addSeparator();
     q->addAction(titleAct);
@@ -78,7 +63,7 @@ public:
         y1 = g[cg].v.yv1;
         y2 = g[cg].v.yv2;
 
-        // todo: fix bottom left corner
+        // todo: fix bottom right corner
 
         if (ry > y2 && (ry > 1.0 - rx * (1.0 - y2) / x1)
                 && (ry > 1.0 + (rx - 1.0) * (1.0 - y2) / (1.0 - x2))) {
@@ -114,18 +99,6 @@ public:
 
 void ViewMenu::createActions()
 {
-//    viewAct = makeAction("Set viewport",
-//                         "Determine the onscreen boundaries of the graph.",
-//                         "Ctrl+Shift+v", SLOT(view()));
-//    worldAct = makeAction("Set world",
-//                          "Determine the range of values displayed in the graph.",
-//                          "Ctrl+w",
-//                          SLOT(world()));
-//    graphTypesAct = makeAction("Graph Type",
-//                               "Set the graph display metric.",
-//                               "Ctrl+g",
-//                               SLOT(graphTypes()));
-
     titleAct = makeAction("Titling",
                           "Set the title and subtitle of the graph.",
                           "Ctrl+Shift+t",
@@ -167,7 +140,6 @@ void ViewMenu::updateIndividualLegend(int cset) {
 
 // Lots and lots of boilerplate here
 
-
 void ViewMenu::symbols() {
     if (showDialog(symbolsDialog)) return;
     symbolsDialog = new ViewSymbols(mainWindow);
@@ -180,15 +152,11 @@ void ViewMenu::axis() {
     loadDialog(ticksDialog);
 }
 
-
-
 void ViewMenu::legends() {
     if (showDialog(legendsDialog)) return;
     legendsDialog = new ViewLegend(mainWindow);
     loadDialog(legendsDialog);
 }
-
-
 
 void ViewMenu::title() {
     if (showDialog(titleDialog)) return;
@@ -207,23 +175,3 @@ void ViewMenu::dims() {
     dimsDialog = new ViewDimensions(mainWindow);
     loadDialog(dimsDialog);
 }
-
-
-
-//void ViewMenu::world() {
-//    if (showDialog(worldDialog)) return;
-//    worldDialog = new ViewWorld(mainWindow);
-//    loadDialog(worldDialog);
-//}
-
-//void ViewMenu::view() {
-//    if (showDialog(viewDialog)) return;
-//    viewDialog = new ViewView(mainWindow);
-//    loadDialog(viewDialog);
-//}
-
-//void ViewMenu::graphTypes() {
-//    if (showDialog(graphTypesDialog)) return;
-//    graphTypesDialog = new ViewGraphType(mainWindow);
-//    loadDialog(graphTypesDialog);
-//}

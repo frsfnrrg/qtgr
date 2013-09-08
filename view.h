@@ -6,15 +6,9 @@
 
 class ViewAxis;
 class ViewLegend;
-
 class ViewTitle;
 class ViewFrame;
 class ViewSymbols;
-
-class ViewGraphType;
-class ViewWorld;
-class ViewView;
-
 class ViewDimensions;
 
 class ViewMenu : public Menu
@@ -39,11 +33,6 @@ public slots:
     void legends();
     void title();
     void frame();
-
-//    void world();
-//    void graphTypes();
-//    void view();
-
     void dims();
 
 private slots:
@@ -57,19 +46,9 @@ private:
     QAction *symbolsAct;
     QAction *legendsAct;
     QAction *frameAct;
-
     QAction* dimsAct;
 
-//    QAction *viewAct;
-//    QAction *worldAct;
-//    QAction *graphTypesAct;
-
-//    ViewWorld*   worldDialog;
-//    ViewView* viewDialog;
-//    ViewGraphType* graphTypesDialog;
-
     ViewDimensions* dimsDialog;
-
     ViewLegend* legendsDialog;
     ViewTitle* titleDialog;
     ViewFrame* frameDialog;
