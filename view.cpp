@@ -63,8 +63,6 @@ public:
         y1 = g[cg].v.yv1;
         y2 = g[cg].v.yv2;
 
-        // todo: fix bottom right corner
-
         if (ry > y2 && (ry > 1.0 - rx * (1.0 - y2) / x1)
                 && (ry > 1.0 + (rx - 1.0) * (1.0 - y2) / (1.0 - x2))) {
             view->title();
@@ -72,18 +70,15 @@ public:
         }
 
         if (ry < y1 && (ry < rx * y1 / x1)
-                && (ry > (1.0 - x) * y1 / (1.0 - x2))
+                && (ry <  (rx - 1.0) * y1 / (x2 - 1.0))
+
                 ) {
-            view->axis();
-            view->ticksDialog->editAxis->setCurrentIndex(X_AXIS);
-            view->ticksDialog->updateDialog();
+            view->axis(X_AXIS);
             return;
         }
 
         if (rx < x1) {
-            view->axis();
-            view->ticksDialog->editAxis->setCurrentIndex(Y_AXIS);
-            view->ticksDialog->updateDialog();
+            view->axis(Y_AXIS);
             return;
         }
 
@@ -136,6 +131,17 @@ void ViewMenu::updateSymbolsLegend() {
 
 void ViewMenu::updateIndividualLegend(int cset) {
     if (legendsDialog) legendsDialog->updateLegendsField(cset);
+}
+
+void ViewMenu::axis(int axis) {
+    if (ticksDialog) {
+        ticksDialog->editAxis->setCurrentIndex(axis);
+        showDialog(ticksDialog);
+        return;
+    }
+    ticksDialog = new ViewAxis(mainWindow);
+    ticksDialog->editAxis->setCurrentIndex(axis);
+    loadDialog(ticksDialog);
 }
 
 // Lots and lots of boilerplate here

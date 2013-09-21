@@ -18,12 +18,12 @@ class ViewMenu : public Menu
 public:
     ViewMenu(MainWindow* );
 
-    ViewAxis*   ticksDialog;
-
     void populateMenu(QMenu* q);
 
     void updateSymbolsLegend();
     void updateIndividualLegend(int cset);
+
+    void axis(int axis);
 protected:
     void populateToolBar(QToolBar*);
   
@@ -53,6 +53,7 @@ private:
     ViewTitle* titleDialog;
     ViewFrame* frameDialog;
     ViewSymbols* symbolsDialog;
+    ViewAxis*   ticksDialog;
 };
 
 #endif
