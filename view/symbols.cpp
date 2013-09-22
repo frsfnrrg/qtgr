@@ -94,36 +94,33 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     updateLineFade();
     updateSymbolFade();
 
-    QGridLayout* symlay = new QGridLayout();
+    QGroupBox* symbox = makeGroupBox("Symbols");
+    QGridLayout* symlay = makeBoxLayout(symbox);
     addPair(symlay, 0, makeLabel("Symbol"), symbolSymbol);
     addPair(symlay, 1, symbolFillLabel, symbolFill);
     addPair(symlay, 2, symbolSizeLabel, symbolSize);
     addPair(symlay, 3, symbolSkipLabel, symbolSkip);
 
-    QGridLayout* linlay = new QGridLayout();
+    QGroupBox* linbox = makeGroupBox("Line Style");
+    QGridLayout* linlay = makeBoxLayout(linbox);
     addPair(linlay, 0, makeLabel("Line Style"), lineStyle);
     addPair(linlay, 1, lineWidthLabel, lineWidth);
     addPair(linlay, 2, lineColorLabel, lineColor);
 
-    QGridLayout* fillay = new QGridLayout();
+    QGroupBox* filbox = makeGroupBox("Fills");
+    QGridLayout* fillay = makeBoxLayout(filbox);
     addPair(fillay, 0, makeLabel("Fill"), fillFill);
     addPair(fillay, 1, fillColorLabel, fillColor);
     addPair(fillay, 2, fillPatternLabel, fillPattern);
 
-    QGroupBox* symbox = new QGroupBox(tr("Symbols"));
-    symbox->setLayout(symlay);
     QVBoxLayout* symv = new QVBoxLayout();
     symv->addWidget(symbox, 0);
     symv->addStretch(1);
 
-    QGroupBox* linbox = new QGroupBox(tr("Line Style"));
-    linbox->setLayout(linlay);
     QVBoxLayout* linv = new QVBoxLayout();
     linv->addWidget(linbox, 0);
     linv->addStretch(1);
 
-    QGroupBox* filbox = new QGroupBox(tr("Fills"));
-    filbox->setLayout(fillay);
     QVBoxLayout* filv = new QVBoxLayout();
     filv->addWidget(filbox, 0);
     filv->addStretch(1);
@@ -145,7 +142,9 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
 
     QVBoxLayout* layout = new QVBoxLayout();
     layout->addLayout(top);
+    layout->addSpacing(12);
     layout->addLayout(interm);
+    layout->addSpacing(6);
     layout->addLayout(leg);
 
     this->setDialogLayout(layout);

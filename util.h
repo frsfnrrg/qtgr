@@ -19,5 +19,8 @@ bool leVal(QLineEdit* l, double* d);
 
 void addPair(QGridLayout* layout, int line, QWidget* f, QWidget* s);
 
+QGroupBox* makeQGroupBox(QWidget* parent, const char* text);
+
+QGridLayout* makeBoxLayout(QGroupBox* p);
 
 #endif // UTIL_H

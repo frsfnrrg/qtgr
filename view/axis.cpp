@@ -110,17 +110,23 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     autoHook(textSide);
     autoHook(tickSide);
 
-    QGridLayout* scr = new QGridLayout();
+    QGroupBox* scrb = makeGroupBox("Scale");
+    QGridLayout* scr = makeBoxLayout(scrb);
     addPair(scr, 0, uMinLabel, uMin);
     addPair(scr, 1, uMaxLabel, uMax);
-    addPair(scr, 2, makeLabel("Major Tick", majTic), majTic);
-    addPair(scr, 3, makeLabel("Minor Tick", minTic), minTic);
+    scr->setRowMinimumHeight(2, 6);
+    addPair(scr, 3, makeLabel("Major Tick", majTic), majTic);
+    addPair(scr, 4, makeLabel("Minor Tick", minTic), minTic);
     // TODO: clarify the start/stop type: use two lines??
-    addPair(scr, 4, startOpt, uStart);
-    addPair(scr, 5, stopOpt, uStop);
+    scr->setRowMinimumHeight(5, 8);
+    scr->addWidget(startOpt, 6, 0, Qt::AlignRight | Qt::AlignVCenter);
+    scr->addWidget(uStart, 6, 1);
+    scr->addWidget(stopOpt, 7, 0, Qt::AlignRight | Qt::AlignVCenter);
+    scr->addWidget(uStop, 7, 1);
     // TODO: add an autoScale Axis button
 
-    QGridLayout* lbl = new QGridLayout();
+    QGroupBox* lblb = makeGroupBox("Labels");
+    QGridLayout* lbl = makeBoxLayout(lblb);
     addPair(lbl, 0, makeLabel("Side", textSide), textSide);
     lbl->setRowMinimumHeight(1, 4);
     addPair(lbl, 2, labelFormatLabel, labelFormat);
@@ -129,7 +135,8 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     lbl->setRowMinimumHeight(5, 4);
     lbl->addWidget(textProps, 6, 0, 1, 2);
 
-    QGridLayout* lns = new QGridLayout();
+    QGroupBox* lnsb = makeGroupBox("Ticks, Gridlines");
+    QGridLayout* lns = makeBoxLayout(lnsb);
     addPair(lns, 0, makeLabel("Side", tickSide), tickSide);
     lns->addWidget(tickProps, 1, 0, 1, 2);
 
@@ -142,17 +149,6 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     tp->setColumnStretch(0, 0);
     tp->setColumnStretch(1, 0);
     tp->setColumnStretch(2, 2);
-
-    QVBoxLayout* layout = new QVBoxLayout();
-    QGroupBox* scrb = new QGroupBox(tr("Scale"));
-    //setTip(scrb, "Set the units and range of the axis");
-    scrb->setLayout(scr);
-    QGroupBox* lblb = new QGroupBox(tr("Labels"));
-    //setTip(lblb, "Configure tick labels");
-    lblb->setLayout(lbl);
-    QGroupBox* lnsb = new QGroupBox(tr("Ticks, Gridlines"));
-    //setTip(lnsb, "Alter ticks and gridlines");
-    lnsb->setLayout(lns);
 
     QVBoxLayout* lhv = new QVBoxLayout();
     lhv->addWidget(scrb);
@@ -167,6 +163,7 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     mdiv->addLayout(rhv, 1);
     mdiv->addLayout(lhv, 2);
 
+    QVBoxLayout* layout = new QVBoxLayout();
     layout->addLayout(tp);
     layout->addLayout(mdiv);
 
@@ -392,7 +389,8 @@ ViewAxisText::ViewAxisText(MainWindow *parent) :
     tp->setColumnStretch(1, 0);
     tp->setColumnStretch(2, 2);
 
-    QGridLayout* tickla = new QGridLayout();
+    QGroupBox* tbx = makeGroupBox("Ticks");
+    QGridLayout* tickla = makeBoxLayout(tbx);
     addPair(tickla, 0, makeLabel("Font"), tickFont);
     addPair(tickla, 1, makeLabel("Color"), tickColor);
     addPair(tickla, 2, makeLabel("Size"), tickSize);
@@ -402,7 +400,8 @@ ViewAxisText::ViewAxisText(MainWindow *parent) :
     addPair(tickla, 6, makeLabel("Spacing"), tickSpacing);
     tickla->setColumnMinimumWidth(1, 200);
 
-    QGridLayout* axisla = new QGridLayout();
+    QGroupBox* abx = makeGroupBox("Axis");
+    QGridLayout* axisla = makeBoxLayout(abx);
     addPair(axisla, 0, makeLabel("Font"), axisFont);
     addPair(axisla, 1, makeLabel("Color"), axisColor);
     addPair(axisla, 2, makeLabel("Size"), axisSize);
@@ -410,12 +409,6 @@ ViewAxisText::ViewAxisText(MainWindow *parent) :
     addPair(axisla, 4, makeLabel("Layout"), axisLayout);
     axisla->setColumnStretch(0, 0);
     axisla->setColumnStretch(1, 1);
-
-    QGroupBox* tbx = new QGroupBox("Ticks");
-    tbx->setLayout(tickla);
-
-    QGroupBox* abx = new QGroupBox("Axis");
-    abx->setLayout(axisla);
 
     QVBoxLayout* tbl = new QVBoxLayout();
     tbl->addWidget(tbx);
@@ -511,20 +504,16 @@ ViewAxisTicks::ViewAxisTicks(MainWindow *parent) :
     // currently some things act oddly. This dialog may
     // need a second restructuring
 
-    tickBox = new QGroupBox(tr("Ticks"));
-    tickBox->setCheckable(true);
+    tickBox = makeGroupBox("Ticks", true);
     connect(tickBox, SIGNAL(toggled(bool)), this, SLOT(fadeTickBox()));
 
-    axisBarBox = new QGroupBox(tr("Axis Bar"));
-    axisBarBox->setCheckable(true);
+    axisBarBox = makeGroupBox("Axis Bar", true);
     connect(axisBarBox, SIGNAL(toggled(bool)), this, SLOT(fadeAxisBarBox()));
 
-    majGridBox = new QGroupBox(tr("Major Gridlines"));
-    majGridBox->setCheckable(true);
+    majGridBox = makeGroupBox("Major Gridlines", true);
     connect(majGridBox, SIGNAL(toggled(bool)), this, SLOT(fadeMajGridBox()));
 
-    minGridBox = new QGroupBox(tr("Minor Gridlines"));
-    minGridBox->setCheckable(true);
+    minGridBox = makeGroupBox("Minor Gridlines", true);
     connect(minGridBox, SIGNAL(toggled(bool)), this, SLOT(fadeMinGridBox()));
 
     tickDirection = new QComboBox();
@@ -584,24 +573,24 @@ ViewAxisTicks::ViewAxisTicks(MainWindow *parent) :
     minGridColorLabel = makeLabel("Color");
 
 
-    QGridLayout* tickla = new QGridLayout();
+    QGridLayout* tickla = makeBoxLayout(tickBox);
     addPair(tickla, 0, tickDirectionLabel, tickDirection);
     addPair(tickla, 1, tickMajLengthLabel, tickMajLength);
     addPair(tickla, 2, tickMinLengthLabel, tickMinLength);
     tickla->setColumnMinimumWidth(1, 150);
 
-    QGridLayout* axisla = new QGridLayout();
+    QGridLayout* axisla = makeBoxLayout(axisBarBox);
     addPair(axisla, 0, axisBarStyleLabel, axisBarStyle);
     addPair(axisla, 1, axisBarWidthLabel, axisBarWidth);
     addPair(axisla, 2, axisBarColorLabel, axisBarColor);
     axisla->setColumnMinimumWidth(1, 150);
 
-    QGridLayout* majgla = new QGridLayout();
+    QGridLayout* majgla = makeBoxLayout(majGridBox);
     addPair(majgla, 0, majGridStyleLabel, majGridStyle);
     addPair(majgla, 1, majGridWidthLabel, majGridWidth);
     addPair(majgla, 2, majGridColorLabel, majGridColor);
 
-    QGridLayout* mingla = new QGridLayout();
+    QGridLayout* mingla = makeBoxLayout(minGridBox);
     addPair(mingla, 0, minGridStyleLabel, minGridStyle);
     addPair(mingla, 1, minGridWidthLabel, minGridWidth);
     addPair(mingla, 2, minGridColorLabel, minGridColor);
@@ -612,11 +601,6 @@ ViewAxisTicks::ViewAxisTicks(MainWindow *parent) :
     tp->setColumnStretch(0, 0);
     tp->setColumnStretch(1, 0);
     tp->setColumnStretch(2, 2);
-
-    tickBox->setLayout(tickla);
-    axisBarBox->setLayout(axisla);
-    majGridBox->setLayout(majgla);
-    minGridBox->setLayout(mingla);
 
     QVBoxLayout* lhs = new QVBoxLayout();
     lhs->addWidget(tickBox);

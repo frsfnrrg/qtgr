@@ -46,3 +46,18 @@ void addPair(QGridLayout* layout, int line, QWidget* f, QWidget* s) {
     layout->addWidget(f, line, 0);
     layout->addWidget(s, line, 1);
 }
+
+QGroupBox* makeQGroupBox(QWidget* parent, const char* text) {
+    QGroupBox* q = new QGroupBox(parent->tr(text), parent);
+    q->setFlat(false);
+    q->setStyleSheet("");
+    return q;
+}
+
+QGridLayout* makeBoxLayout(QGroupBox* p) {
+    QGridLayout* f = new QGridLayout();
+    f->setColumnStretch(0, 1);
+    f->setColumnStretch(1, 3);
+    p->setLayout(f);
+    return f;
+}

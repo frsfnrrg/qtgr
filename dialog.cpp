@@ -166,6 +166,12 @@ QLabel* Dialog::makeLabel(const char* text, QWidget* tipgiver, Qt::Alignment ali
     return q;
 }
 
+QGroupBox* Dialog::makeGroupBox(const char* text, bool checkable) {
+    QGroupBox* q = makeQGroupBox(this, text);
+    q->setCheckable(checkable);
+    return q;
+}
+
 void Dialog::setAutoUpdate(bool on) {
     auto_update = on;
     AutoDisabler::send(on);

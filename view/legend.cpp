@@ -216,12 +216,8 @@ ViewLegendProp::ViewLegendProp(MainWindow* mainWin) :
     frameFillPatternLabel = makeLabel("Fill Pattern");
     resetFill();
 
-
-    frame = new QGroupBox(tr("Frame"));
-    frame->setCheckable(true);
-
-    style = new QGroupBox(tr("Style"));
-    style->setCheckable(false);
+    frame = makeGroupBox("Frame", true);
+    style = makeGroupBox("Style");
 
     autoHook(styleFont);
     autoHook(styleColor);
@@ -236,8 +232,7 @@ ViewLegendProp::ViewLegendProp(MainWindow* mainWin) :
     autoHook(frameFillColor);
     autoHook(frameFillPattern);
 
-
-    QGridLayout* stl = new QGridLayout();
+    QGridLayout* stl = makeBoxLayout(style);
 
     stl->addWidget(makeLabel("Font"), 0, 0);
     stl->addWidget(styleFont, 0, 1);
@@ -250,19 +245,13 @@ ViewLegendProp::ViewLegendProp(MainWindow* mainWin) :
     stl->addWidget(makeLabel("Spacing"), 4, 0);
     stl->addWidget(styleSpacing, 4, 1);
 
-    style->setLayout(stl);
-
-    QGridLayout* frl = new QGridLayout();
-
+    QGridLayout* frl = makeBoxLayout(frame);
     addPair(frl, 0, makeLabel("Line Color"), frameColor);
     addPair(frl, 1, makeLabel("Line Width"), frameWidth);
     addPair(frl, 2, makeLabel("Line Style"), frameStyle);
     frl->addWidget(frameFill, 3, 0, 1, 2, Qt::AlignRight);
     addPair(frl, 4, frameFillColorLabel, frameFillColor);
     addPair(frl, 5, frameFillPatternLabel, frameFillPattern);
-
-
-    frame->setLayout(frl);
 
     QHBoxLayout* hrz = new QHBoxLayout();
     hrz->addWidget(style);
