@@ -22,8 +22,8 @@ public:
 
     static void setAutoUpdate(bool on);
 protected:
-    QLabel* makeLabel(const char* text, Qt::Alignment align = Qt::AlignLeft | Qt::AlignVCenter);
-    QLabel* makeLabel(const char* text, QWidget* tipgiver, Qt::Alignment align = Qt::AlignLeft | Qt::AlignVCenter);
+    QLabel* makeLabel(const char* text, Qt::Alignment align = ALIGN_FORM_LABEL);
+    QLabel* makeLabel(const char* text, QWidget* tipgiver, Qt::Alignment align = ALIGN_FORM_LABEL);
     QPushButton* makeButton(const char* text, const char* slot);
     void setTip(QWidget*, const char* text);
     void setTip(QWidget*, QWidget*, const char* text);

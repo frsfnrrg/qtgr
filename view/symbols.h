@@ -21,7 +21,7 @@ class ViewSymbols : public Dialog
     QLabel* symbolFillLabel;
     DoubleSpinBox* symbolSize;
     QLabel* symbolSizeLabel;
-    QLineEdit* symbolSkip;
+    IntegerSpinBox* symbolSkip;
     QLabel* symbolSkipLabel;
 
     QComboBox* lineStyle;

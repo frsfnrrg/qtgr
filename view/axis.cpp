@@ -75,9 +75,9 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     labelSkip->setMinimum(0);
     labelSkip->setMaximum(10);
 
-    labelFormatLabel = makeLabel("Format:");
-    labelPrecisionLabel = makeLabel("Precision:");
-    labelSkipLabel = makeLabel("Skip:");
+    labelFormatLabel = makeLabel("Format");
+    labelPrecisionLabel = makeLabel("Precision");
+    labelSkipLabel = makeLabel("Skip");
     setTip(labelFormatLabel, labelFormat, "How to represent tick axis numbers");
     setTip(labelPrecisionLabel, labelPrecision, "Number of significant figures given after the first");
     setTip(labelSkipLabel, labelSkip, "Interval of labels not displayed");
@@ -113,15 +113,15 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     QGridLayout* scr = new QGridLayout();
     addPair(scr, 0, uMinLabel, uMin);
     addPair(scr, 1, uMaxLabel, uMax);
-    addPair(scr, 2, makeLabel("Major Tick:", majTic), majTic);
-    addPair(scr, 3, makeLabel("Minor Tick:", minTic), minTic);
+    addPair(scr, 2, makeLabel("Major Tick", majTic), majTic);
+    addPair(scr, 3, makeLabel("Minor Tick", minTic), minTic);
     // TODO: clarify the start/stop type: use two lines??
     addPair(scr, 4, startOpt, uStart);
     addPair(scr, 5, stopOpt, uStop);
     // TODO: add an autoScale Axis button
 
     QGridLayout* lbl = new QGridLayout();
-    addPair(lbl, 0, makeLabel("Side:", textSide), textSide);
+    addPair(lbl, 0, makeLabel("Side", textSide), textSide);
     lbl->setRowMinimumHeight(1, 4);
     addPair(lbl, 2, labelFormatLabel, labelFormat);
     addPair(lbl, 3, labelPrecisionLabel, labelPrecision);
@@ -130,12 +130,12 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     lbl->addWidget(textProps, 6, 0, 1, 2);
 
     QGridLayout* lns = new QGridLayout();
-    addPair(lns, 0, makeLabel("Side:", tickSide), tickSide);
+    addPair(lns, 0, makeLabel("Side", tickSide), tickSide);
     lns->addWidget(tickProps, 1, 0, 1, 2);
 
     QGridLayout* tp = new QGridLayout();
-    addPair(tp, 0, makeLabel("Edit:", editAxis), editAxis);
-    tp->addWidget(makeLabel("Axis Label:", axisLabel), 1, 0);
+    addPair(tp, 0, makeLabel("Edit", editAxis), editAxis);
+    tp->addWidget(makeLabel("Axis Label", axisLabel), 1, 0);
     tp->addWidget(axisLabel, 1, 1, 1, 2);
     tp->setRowMinimumHeight(2, 8);
 
@@ -192,7 +192,6 @@ void ViewAxis::updateWorldDimensions(QObject* q) {
 
 void ViewAxis::updateDialog() {
     int axis = editAxis->currentIndex();
-    int indx;
     tickmarks t = g[cg].t[axis];
 
     if (axis % 2 == Y_AXIS) {
@@ -360,7 +359,7 @@ ViewAxisText::ViewAxisText(MainWindow *parent) :
     tickLayout->setCurrentIndex(0);
     connect(tickLayout, SIGNAL(currentIndexChanged(int)), this, SLOT(fadeAngle()));
 
-    tickAngleLabel = makeLabel("Angle:");
+    tickAngleLabel = makeLabel("Angle");
     tickAngleLabel->setEnabled(false);
     tickAngle = new IntegerRangeSelector(0, 360, 30);
     tickAngle->setEnabled(false);
@@ -387,28 +386,28 @@ ViewAxisText::ViewAxisText(MainWindow *parent) :
     autoHook(axisLayout);
 
     QGridLayout* tp = new QGridLayout();
-    addPair(tp, 0, makeLabel("Edit:"), editAxis);
+    addPair(tp, 0, makeLabel("Edit"), editAxis);
     tp->setRowMinimumHeight(1, 8);
     tp->setColumnStretch(0, 0);
     tp->setColumnStretch(1, 0);
     tp->setColumnStretch(2, 2);
 
     QGridLayout* tickla = new QGridLayout();
-    addPair(tickla, 0, makeLabel("Font:"), tickFont);
-    addPair(tickla, 1, makeLabel("Color:"), tickColor);
-    addPair(tickla, 2, makeLabel("Size:"), tickSize);
+    addPair(tickla, 0, makeLabel("Font"), tickFont);
+    addPair(tickla, 1, makeLabel("Color"), tickColor);
+    addPair(tickla, 2, makeLabel("Size"), tickSize);
     tickla->setRowMinimumHeight(3, 8);
-    addPair(tickla, 4, makeLabel("Layout:"), tickLayout);
+    addPair(tickla, 4, makeLabel("Layout"), tickLayout);
     addPair(tickla, 5, tickAngleLabel, tickAngle);
-    addPair(tickla, 6, makeLabel("Spacing:"), tickSpacing);
+    addPair(tickla, 6, makeLabel("Spacing"), tickSpacing);
     tickla->setColumnMinimumWidth(1, 200);
 
     QGridLayout* axisla = new QGridLayout();
-    addPair(axisla, 0, makeLabel("Font:"), axisFont);
-    addPair(axisla, 1, makeLabel("Color:"), axisColor);
-    addPair(axisla, 2, makeLabel("Size:"), axisSize);
+    addPair(axisla, 0, makeLabel("Font"), axisFont);
+    addPair(axisla, 1, makeLabel("Color"), axisColor);
+    addPair(axisla, 2, makeLabel("Size"), axisSize);
     axisla->setRowMinimumHeight(3, 8);
-    addPair(axisla, 4, makeLabel("Layout:"), axisLayout);
+    addPair(axisla, 4, makeLabel("Layout"), axisLayout);
     axisla->setColumnStretch(0, 0);
     axisla->setColumnStretch(1, 1);
 
@@ -568,21 +567,21 @@ ViewAxisTicks::ViewAxisTicks(MainWindow *parent) :
     autoHook(minGridColor);
     autoHook(minGridStyle);
 
-    tickDirectionLabel = makeLabel("Direction:");
-    tickMajLengthLabel = makeLabel("Minor Length:");
-    tickMinLengthLabel = makeLabel("Major Length:");
+    tickDirectionLabel = makeLabel("Direction");
+    tickMajLengthLabel = makeLabel("Minor Length");
+    tickMinLengthLabel = makeLabel("Major Length");
 
-    axisBarStyleLabel = makeLabel("Style:");
-    axisBarWidthLabel = makeLabel("Width:");
-    axisBarColorLabel = makeLabel("Color:");
+    axisBarStyleLabel = makeLabel("Style");
+    axisBarWidthLabel = makeLabel("Width");
+    axisBarColorLabel = makeLabel("Color");
 
-    majGridStyleLabel = makeLabel("Style:");
-    majGridWidthLabel = makeLabel("Width:");
-    majGridColorLabel = makeLabel("Color:");
+    majGridStyleLabel = makeLabel("Style");
+    majGridWidthLabel = makeLabel("Width");
+    majGridColorLabel = makeLabel("Color");
 
-    minGridStyleLabel = makeLabel("Style:");
-    minGridWidthLabel = makeLabel("Width:");
-    minGridColorLabel = makeLabel("Color:");
+    minGridStyleLabel = makeLabel("Style");
+    minGridWidthLabel = makeLabel("Width");
+    minGridColorLabel = makeLabel("Color");
 
 
     QGridLayout* tickla = new QGridLayout();
@@ -608,7 +607,7 @@ ViewAxisTicks::ViewAxisTicks(MainWindow *parent) :
     addPair(mingla, 2, minGridColorLabel, minGridColor);
 
     QGridLayout* tp = new QGridLayout();
-    addPair(tp, 0, makeLabel("Edit:"), editAxis);
+    addPair(tp, 0, makeLabel("Edit"), editAxis);
     tp->setRowMinimumHeight(1, 8);
     tp->setColumnStretch(0, 0);
     tp->setColumnStretch(1, 0);

@@ -30,11 +30,11 @@ ViewFrame::ViewFrame(MainWindow* mainWin) :
     connect(fillBG, SIGNAL(stateChanged(int)), this, SLOT(setFillOpt(int)));
     fillColor->setEnabled(false);
 
-    lineColorLabel = new QLabel(tr("Line Color:"));
-    lineWidthLabel = new QLabel(tr("Line Width:"));
-    lineStyleLabel = new QLabel(tr("Line Style:"));
-    fillBGLabel = new QLabel(tr("Fill background:"));
-    fillColorLabel = new QLabel(tr("Background color:"));
+    lineColorLabel = makeLabel("Line Color");
+    lineWidthLabel = makeLabel("Line Width");
+    lineStyleLabel = makeLabel("Line Style");
+    fillBGLabel = makeLabel("Fill background");
+    fillColorLabel = makeLabel("Background color");
     fillColorLabel->setEnabled(false);
     QGridLayout* layout = new QGridLayout();
 
@@ -45,7 +45,7 @@ ViewFrame::ViewFrame(MainWindow* mainWin) :
     autoHook(fillBG);
     autoHook(fillColor);
 
-    layout->addWidget(new QLabel(tr("Type:")),0,0);
+    layout->addWidget(makeLabel("Type"),0,0);
     layout->addWidget(graphType,0,1);
 
     layout->setRowMinimumHeight(1, 8);

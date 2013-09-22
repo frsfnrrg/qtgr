@@ -30,8 +30,8 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
 
     coordsLabel = makeLabel("Coords");
 
-    xLabel = makeLabel("X:");
-    yLabel = makeLabel("Y:");
+    xLabel = makeLabel("X");
+    yLabel = makeLabel("Y");
 
     autoHook(showLegend);
     autoHook(locType);

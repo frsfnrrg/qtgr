@@ -39,7 +39,9 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     symbolSize->setDecimals(2);
     symbolSize->setSingleStep(0.1);
 
-    symbolSkip = new QLineEdit();
+    symbolSkip = new IntegerSpinBox();
+    symbolSkip->setRange(0, 100000);
+    symbolSkip->setSingleStep(1);
 
     // line inputs
     lineStyle = makeLineStyler();
@@ -80,67 +82,71 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     autoHook(symbolSize);
     autoHook(symbolSkip);
 
-    symbolFillLabel = makeLabel("Fill:");
-    symbolSizeLabel = makeLabel("Size:");
-    symbolSkipLabel = makeLabel("Skip:");
-    lineWidthLabel = makeLabel("Width:");
-    lineColorLabel = makeLabel("Color:");
-    fillColorLabel = makeLabel("Color:");
-    fillPatternLabel = makeLabel("Pattern:");
+    symbolFillLabel = makeLabel("Fill");
+    symbolSizeLabel = makeLabel("Size");
+    symbolSkipLabel = makeLabel("Skip");
+    lineWidthLabel = makeLabel("Width");
+    lineColorLabel = makeLabel("Color");
+    fillColorLabel = makeLabel("Color");
+    fillPatternLabel = makeLabel("Pattern");
 
     updateFillFade();
     updateLineFade();
     updateSymbolFade();
 
-    QGridLayout* layout = new QGridLayout();
-	
-    layout->addWidget(new QLabel("Select Set:"),0,0);
-    layout->addWidget(setNumber,0,1);
+    QGridLayout* symlay = new QGridLayout();
+    addPair(symlay, 0, makeLabel("Symbol"), symbolSymbol);
+    addPair(symlay, 1, symbolFillLabel, symbolFill);
+    addPair(symlay, 2, symbolSizeLabel, symbolSize);
+    addPair(symlay, 3, symbolSkipLabel, symbolSkip);
 
-    layout->setRowMinimumHeight(1, 8);
-    
-    layout->addWidget(new QLabel("Symbols"),2,0,1,2,Qt::AlignHCenter);
-    layout->addWidget(new QLabel("Lines"),2,3,1,2,Qt::AlignHCenter);
-    layout->addWidget(new QLabel("Fills"),2,6,1,2,Qt::AlignHCenter);
-    
-    //symbols details
-    layout->addWidget(new QLabel("Symbol:"),3,0);
-    layout->addWidget(symbolFillLabel,4,0);
-    layout->addWidget(symbolSizeLabel,5,0);
-    layout->addWidget(symbolSkipLabel,6,0);
-    
-    layout->addWidget(symbolSymbol,3,1);
-    layout->addWidget(symbolFill,4,1);
-    layout->addWidget(symbolSize,5,1);
-    layout->addWidget(symbolSkip,6,1);
+    QGridLayout* linlay = new QGridLayout();
+    addPair(linlay, 0, makeLabel("Line Style"), lineStyle);
+    addPair(linlay, 1, lineWidthLabel, lineWidth);
+    addPair(linlay, 2, lineColorLabel, lineColor);
 
-    // horizontal spacer
-    layout->setColumnMinimumWidth(2, 22);
-    
-    //lines details
-    layout->addWidget(new QLabel("Style"),3,3);
-    layout->addWidget(lineWidthLabel,4,3);
-    layout->addWidget(lineColorLabel,5,3);
-    layout->addWidget(lineStyle,3,4);
-    layout->addWidget(lineWidth,4,4);
-    layout->addWidget(lineColor,5,4);
-    
-    // horizontal spacer
-    layout->setColumnMinimumWidth(5, 22);
-    
-    //fills details
-    layout->addWidget(new QLabel("Fill"),3,6);
-    layout->addWidget(fillColorLabel,4,6);
-    layout->addWidget(fillPatternLabel,5,6);
-    layout->addWidget(fillFill,3,7);
-    layout->addWidget(fillColor,4,7);
-    layout->addWidget(fillPattern,5,7);
+    QGridLayout* fillay = new QGridLayout();
+    addPair(fillay, 0, makeLabel("Fill"), fillFill);
+    addPair(fillay, 1, fillColorLabel, fillColor);
+    addPair(fillay, 2, fillPatternLabel, fillPattern);
 
-    layout->setRowMinimumHeight(7, 12);
+    QGroupBox* symbox = new QGroupBox(tr("Symbols"));
+    symbox->setLayout(symlay);
+    QVBoxLayout* symv = new QVBoxLayout();
+    symv->addWidget(symbox, 0);
+    symv->addStretch(1);
 
-    // where should this go??
-    layout->addWidget(new QLabel("Legend:"),8,0);
-    layout->addWidget(legendS,8,1,1,3);
+    QGroupBox* linbox = new QGroupBox(tr("Line Style"));
+    linbox->setLayout(linlay);
+    QVBoxLayout* linv = new QVBoxLayout();
+    linv->addWidget(linbox, 0);
+    linv->addStretch(1);
+
+    QGroupBox* filbox = new QGroupBox(tr("Fills"));
+    filbox->setLayout(fillay);
+    QVBoxLayout* filv = new QVBoxLayout();
+    filv->addWidget(filbox, 0);
+    filv->addStretch(1);
+
+    QHBoxLayout* top = new QHBoxLayout();
+    top->addWidget(makeLabel("Set"),0);
+    top->addWidget(setNumber,0);
+    top->addStretch(1);
+
+    QHBoxLayout* interm = new QHBoxLayout();
+    interm->addLayout(symv);
+    interm->addLayout(linv);
+    interm->addLayout(filv);
+
+    QHBoxLayout* leg = new QHBoxLayout();
+    leg->addWidget(makeLabel("Legend"));
+    leg->addWidget(legendS,1);
+    leg->addStretch(1);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addLayout(top);
+    layout->addLayout(interm);
+    layout->addLayout(leg);
 
     this->setDialogLayout(layout);
 }  
@@ -156,7 +162,7 @@ void ViewSymbols::updateDialog()
     symbolSymbol->setCurrentIndex(g[gno].p[cset].sym);
     symbolFill->setCurrentIndex(g[gno].p[cset].symfill);
     symbolSize->setValue(g[gno].p[cset].symsize);
-    symbolSkip->setText(QString::number(g[gno].p[cset].symskip,'g',9));
+    symbolSkip->setValue(g[gno].p[cset].symskip);
 
     lineStyle->setCurrentIndex(g[gno].p[cset].lines);
     lineWidth->setCurrentIndex(g[gno].p[cset].linew-1);
@@ -191,11 +197,7 @@ void ViewSymbols::applyDialog()
     symfill = symbolFill->currentIndex();
     symsize = symbolSize->value();
 
-    double val;
-    if (leVal(symbolSkip, &val) && val >= 0)
-        symskip = val;
-    else
-        symskip = g[cg].p[cset].symskip;
+    symskip = symbolSkip->value();
 
     wid   = lineWidth->currentIndex()+1;
     style = lineStyle->currentIndex();

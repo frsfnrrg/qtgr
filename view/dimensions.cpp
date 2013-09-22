@@ -73,7 +73,7 @@ ViewDimensions::ViewDimensions(MainWindow *parent) :
     autoHook(worldType);
 
     QHBoxLayout* header = new QHBoxLayout();
-    header->addWidget(makeLabel("Graph Type:"));
+    header->addWidget(makeLabel("Graph Type"));
     header->addWidget(worldType);
 
     QGridLayout* layout  = new QGridLayout();
@@ -87,10 +87,10 @@ ViewDimensions::ViewDimensions(MainWindow *parent) :
 
     layout->setRowMinimumHeight(3, 4);
 
-    layout->addWidget(makeLabel("X Min:"), 4, 0);
-    layout->addWidget(makeLabel("X Max:"), 5, 0);
-    layout->addWidget(makeLabel("Y Min:"), 6, 0);
-    layout->addWidget(makeLabel("Y Max:"), 7, 0);
+    layout->addWidget(makeLabel("X Min"), 4, 0);
+    layout->addWidget(makeLabel("X Max"), 5, 0);
+    layout->addWidget(makeLabel("Y Min"), 6, 0);
+    layout->addWidget(makeLabel("Y Max"), 7, 0);
 
     layout->addWidget(worldXMin, 4, 1);
     layout->addWidget(worldXMax, 5, 1);
@@ -99,10 +99,10 @@ ViewDimensions::ViewDimensions(MainWindow *parent) :
 
     layout->setColumnMinimumWidth(2, 12);
 
-    layout->addWidget(makeLabel("X Min:"), 4, 3);
-    layout->addWidget(makeLabel("X Max:"), 5, 3);
-    layout->addWidget(makeLabel("Y Min:"), 6, 3);
-    layout->addWidget(makeLabel("Y Max:"), 7, 3);
+    layout->addWidget(makeLabel("X Min"), 4, 3);
+    layout->addWidget(makeLabel("X Max"), 5, 3);
+    layout->addWidget(makeLabel("Y Min"), 6, 3);
+    layout->addWidget(makeLabel("Y Max"), 7, 3);
 
     layout->addWidget(viewXMin, 4, 4);
     layout->addWidget(viewXMax, 5, 4);
