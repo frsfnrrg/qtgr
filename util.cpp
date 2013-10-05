@@ -69,3 +69,9 @@ QComboBox* makeQComboBox(QWidget* parent, const char* textarray[], int len) {
     }
     return q;
 }
+
+QCheckBox* makeQCheckBox(QWidget* parent, const char* text) {
+    QCheckBox* q = new QCheckBox(parent->tr(text));
+    q->setLayoutDirection(Qt::RightToLeft);
+    return q;
+}

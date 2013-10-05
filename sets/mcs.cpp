@@ -20,11 +20,11 @@ SetsMCS::SetsMCS(MainWindow* mainWin) :
 
     targetNumber = new SetComboBox();
     connect(targetNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTarget()));
-    targetNumberLabel = new QLabel(tr("To:"));
+    targetNumberLabel = new QLabel(tr("To"));
 
     QGridLayout* layout = new QGridLayout();
 
-    layout->addWidget(new QLabel(tr("From:")), 0, 0);
+    layout->addWidget(new QLabel(tr("From")), 0, 0);
     layout->addWidget(setNumber, 0, 1);
     layout->setRowMinimumHeight(1, 8);
     layout->addWidget(targetNumberLabel, 2, 0);

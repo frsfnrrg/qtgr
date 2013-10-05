@@ -50,12 +50,12 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     setTip(majTic, "Spacing for the major ticks and their tick labels");
     setTip(minTic, "Spacing for minor ticks");
 
-    startOpt = new QCheckBox(tr("Min Tick:"));
+    startOpt = new QCheckBox(tr("Min Tick"));
     connect(startOpt, SIGNAL(stateChanged(int)), this, SLOT(fadeMinTick()));
     uStart = new QLineEdit();
     setTip(startOpt, uStart, "At which value to start the major ticks and tick labels; default is axis minimum");
 
-    stopOpt = new QCheckBox(tr("Max Tick:"));
+    stopOpt = new QCheckBox(tr("Max Tick"));
     connect(stopOpt, SIGNAL(stateChanged(int)), this, SLOT(fadeMaxTick()));
     uStop = new QLineEdit();
     setTip(stopOpt, uStop, "At which value to stop the major ticks and tick labels; default is axis maximum");

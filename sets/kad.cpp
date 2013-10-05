@@ -20,7 +20,7 @@ SetsKAD::SetsKAD(MainWindow* mainWin) :
 
     QGridLayout* layout = new QGridLayout();
 
-    layout->addWidget(new QLabel(tr("Set:")), 0, 0);
+    layout->addWidget(new QLabel(tr("Set")), 0, 0);
     layout->addWidget(setNumber, 0, 1);
 
     layout->setRowMinimumHeight(1, 8);

@@ -18,9 +18,9 @@ ToolsOptions::ToolsOptions(MainWindow* mwin) :
         settings = new QSettings("QTGR","QTGR");
     }
 
-    rescaleOnLoad = new QCheckBox();
-    rescaleOnTransform = new QCheckBox();
-    autoUpdate = new QCheckBox();
+    rescaleOnLoad = makeQCheckBox(this, "Autoscale on load");
+    rescaleOnTransform = makeQCheckBox(this, "Autoscale on transforms");
+    autoUpdate = makeQCheckBox(this, "Automatically apply updates");
 
     rescaleOnLoad->setChecked(isRescaleOnLoad());
     rescaleOnTransform->setChecked(isRescaleOnTransform());
@@ -32,20 +32,15 @@ ToolsOptions::ToolsOptions(MainWindow* mwin) :
 
     QGridLayout* layout = new QGridLayout();
 
-    layout->addWidget(new QLabel(tr("Autoscale on load")), 0,0);
-    layout->addWidget(rescaleOnLoad, 0, 1);
+    layout->addWidget(rescaleOnLoad, 0, 0);
 
     layout->setRowMinimumHeight(1, 8);
 
-    layout->addWidget(new QLabel(tr("Autoscale on transforms")), 2,0);
-    layout->addWidget(rescaleOnTransform, 2, 1);
+    layout->addWidget(rescaleOnTransform, 2, 0);
 
     layout->setRowMinimumHeight(3, 8);
 
-    layout->addWidget(makeLabel("Automatically apply updates"), 4, 0);
-    layout->addWidget(autoUpdate, 4, 1);
-
-    layout->setColumnMinimumWidth(1, 150);
+    layout->addWidget(autoUpdate, 4, 0);
 
     this->setDialogLayout(layout);
 

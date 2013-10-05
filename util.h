@@ -25,4 +25,6 @@ QGridLayout* makeBoxLayout(QGroupBox* p);
 
 QComboBox* makeQComboBox(QWidget* parent, const char* textarray[], int len);
 
+QCheckBox* makeQCheckBox(QWidget* parent, const char* text);
+
 #endif // UTIL_H

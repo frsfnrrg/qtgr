@@ -35,11 +35,11 @@ FileOpenSet::FileOpenSet(MainWindow *mwin) :
     QGridLayout* gridbox = qobject_cast<QGridLayout*>(layout);
 
     if (gridbox) {
-        gridbox->addWidget(new QLabel("File type:"),4,0);
+        gridbox->addWidget(new QLabel("File type"),4,0);
         gridbox->addWidget(fileType,4,1);
-        gridbox->addWidget(new QLabel("Read from:"),5,0);
+        gridbox->addWidget(new QLabel("Read from"),5,0);
         gridbox->addWidget(fromButtons,5,1);
-        gridbox->addWidget(new QLabel("Read to graph:"),6,0);
+        gridbox->addWidget(new QLabel("Read to graph"),6,0);
         gridbox->addWidget(graphNum,6,1);
     }
 
