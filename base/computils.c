@@ -679,7 +679,7 @@ void do_regress(setno, ideg, iresid)
 	    }
 	}
 	sprintf(buf, "\nRegression of set %d results to set %d\n", setno, fitset);
-    //frsfnrrg stufftext(buf, 1);
+    stufftext(buf, 1);
 
 	fitcurve(getx(cg, setno), gety(cg, setno),
 		 getsetlength(cg, setno), ideg, gety(cg, fitset));

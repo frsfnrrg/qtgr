@@ -10,6 +10,13 @@
 //qtview interface methods
 #include "graphwidget.h"
 
+// text outputs
+#include "transform/regression.h"
+
+void stufftext(char* s) {
+    qt_stufftext(s);
+}
+
 // extern void qtview_getcanvas(int*, int*);
 // extern void qtview_paint(int,int,int,int);
 // extern void qtview_linew(int);

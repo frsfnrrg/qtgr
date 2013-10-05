@@ -135,25 +135,25 @@ void stasum(x, n, xbar, sd, flag)
     rsqu = 0.0;
      }
      sprintf(buf, "Number of observations = %10d\n", n);
-//frsfnrrg     stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "A[0] is the constant, A[i] is the coefficient for ith power of X\n", n);
-//frsfnrrg     stufftext(buf, 0);
+     stufftext(buf, 0);
      for (i = 0; i <= degree; i++) {
     sprintf(buf, "A[%d] = %.9lg\n", i, r[i]);
-//frsfnrrg    stufftext(buf, 0);
+    stufftext(buf, 0);
      }
      i += 4;
      sprintf(buf, "R square = %.7lg\n", rsqu);
-//frsfnrrg     stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Avg Y    = %.7lg\n", ybar);
-//frsfnrrg     stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Sdev Y   = %.7lg\n", ysdev);
-//frsfnrrg     stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Avg X    = %.7lg\n", xbar);
-//frsfnrrg     stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Sdev X   = %.7lg\n\n", xsdev);
-//frsfnrrg     stufftext(buf, 0);
-//frsfnrrg     stufftext("\n", 2);
+     stufftext(buf, 0);
+     stufftext("\n", 2);
  }
 
 /*
@@ -548,39 +548,39 @@ int n, lag, meth;
      F = SSreg / rms;
      R2 = SSreg / SYY;
      sprintf(buf, "Number of observations\t\t\t = %d\n", n);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Mean of independent variable\t\t = %.7g\n", xbar);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Mean of dependent variable\t\t = %.7g\n", ybar);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Standard dev. of ind. variable\t\t = %.7g\n", sdx);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Standard dev. of dep. variable\t\t = %.7g\n", sdy);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Correlation coefficient\t\t\t = %.7g\n", rxy);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Regression coefficient (SLOPE)\t\t = %.7g\n", slope);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Standard error of coefficient\t\t = %.7g\n", seslope);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "t - value for coefficient\t\t = %.7g\n", slope / seslope);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Regression constant (INTERCEPT)\t\t = %.7g\n", intercept);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Standard error of constant\t\t = %.7g\n", seintercept);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "t - value for constant\t\t\t = %.7g\n", intercept / seintercept);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "\nAnalysis of variance\n");
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Source\t\t d.f\t Sum of squares\t Mean Square\t F\n");
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Regression\t   1\t%.7g\t%.7g\t%.7g\n", SSreg, SSreg, F);
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Residual\t%5d\t%.7g\t%.7g\n", n - 2, RSS, RSS / (n - 2));
-     //frsfnrrg stufftext(buf, 0);
+     stufftext(buf, 0);
      sprintf(buf, "Total\t\t%5d\t%.7g\n\n", n - 1, SYY);
-     // stufftext(buf, 2);
+     stufftext(buf, 2);
      for (i = 0; i < n; i++) {
     fitted[i] = slope * x[i] + intercept;
      }

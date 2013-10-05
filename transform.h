@@ -18,21 +18,23 @@ protected:
 
 private:
     void createActions();
+
     QAction* integrateAct;
     QAction* differentiateAct;
     QAction* evaluateAct;
+    QAction* regressionAct;
+
     Dialog* integrateDialog;
     Dialog* differentiateDialog;
     Dialog* evaluateDialog;
+    Dialog* regressionDialog;
 
-signals:
-    
-public slots:
+private slots:
     void evaluate();
     void integrate();
     void differentiate();
+    void regression();
 
-private slots:
 };
 
 #endif // TRANSFORM_H

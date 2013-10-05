@@ -2,6 +2,7 @@
 #include "transform/integration.h"
 #include "transform/differentiation.h"
 #include "transform/evaluate.h"
+#include "transform/regression.h"
 
 TransformMenu::TransformMenu(MainWindow* mainWin) :
     Menu(mainWin,"Transforms",true)
@@ -10,6 +11,7 @@ TransformMenu::TransformMenu(MainWindow* mainWin) :
     integrateDialog = NULL;
     differentiateDialog = NULL;
     evaluateDialog = NULL;
+    regressionDialog = NULL;
     populateMenu(this);
 }
 
@@ -26,18 +28,24 @@ void TransformMenu::createActions() {
                               "Apply an arbitrary simple operation to a set",
                               "",
                               SLOT(evaluate()));
+    regressionAct = makeAction("Regression",
+                              "Apply regression to a set",
+                              "",
+                              SLOT(regression()));
 }
 
 void TransformMenu::populateMenu(QMenu* q) {
     q->addAction(evaluateAct);
     q->addAction(integrateAct);
     q->addAction(differentiateAct);
+    q->addAction(regressionAct);
 }
 
 void TransformMenu::populateToolBar(QToolBar* q) {
     q->addAction(evaluateAct);
     q->addAction(integrateAct);
     q->addAction(differentiateAct);
+    q->addAction(regressionAct);
 }
 
 void TransformMenu::integrate() {
@@ -56,4 +64,10 @@ void TransformMenu::evaluate() {
     if (showDialog(evaluateDialog)) return;
     evaluateDialog = new TransformEvaluate(mainWindow);
     loadDialog(evaluateDialog);
+}
+
+void TransformMenu::regression() {
+    if (showDialog(regressionDialog)) return;
+    regressionDialog = new TransformRegression(mainWindow);
+    loadDialog(regressionDialog);
 }

@@ -61,3 +61,11 @@ QGridLayout* makeBoxLayout(QGroupBox* p) {
     p->setLayout(f);
     return f;
 }
+
+QComboBox* makeQComboBox(QWidget* parent, const char* textarray[], int len) {
+    QComboBox* q = new QComboBox();
+    for (int i=0;i<len;i++) {
+        q->addItem(parent->tr(textarray[i]));
+    }
+    return q;
+}

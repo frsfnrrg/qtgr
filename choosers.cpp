@@ -70,6 +70,7 @@ void SetComboBox::updateSets() {
             this->setItemText(i+add, QString::number(i) + ": " + g[cg].l.str[i].s);
         }
     }
+    emit currentIndexChanged(this->currentIndex());
 }
 
 // FONTS

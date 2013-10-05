@@ -39,7 +39,7 @@ Dialog::Dialog(MainWindow* mainWin, const char* title, bool autoenabled) :
     base->addWidget(apply);
     base->addWidget(done);
 
-    layout->addStretch();
+    layout->addStretch(0);
     layout->addSpacing(12);
     layout->addLayout(base);
 
@@ -69,6 +69,7 @@ QPushButton* Dialog::makeButton(const char* text, const char* slot) {
  */
 void Dialog::setDialogLayout(QLayout* lt) {
     layout->insertLayout(0, lt);
+    layout->setStretch(0, 10);
 }
 
 void Dialog::doneDialog() {

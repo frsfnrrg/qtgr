@@ -23,4 +23,6 @@ QGroupBox* makeQGroupBox(QWidget* parent, const char* text);
 
 QGridLayout* makeBoxLayout(QGroupBox* p);
 
+QComboBox* makeQComboBox(QWidget* parent, const char* textarray[], int len);
+
 #endif // UTIL_H
