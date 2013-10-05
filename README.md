@@ -1,8 +1,6 @@
 qtgr
 ====
 
-Port of xvgr to Qt.
+Port of XVGR to Qt.
 
-Still under heavy development.
-
-Not yet licensed, leaning toward a GPL.
+Still under erratic development.
