@@ -5066,7 +5066,7 @@ case 129:
 case 130:
 # line 1019 "pars.yacc"
 {
-	    // csto curstring = next_string();
+        curstring = next_string();
 	} /*NOTREACHED*/ break;
 case 131:
 # line 1022 "pars.yacc"
