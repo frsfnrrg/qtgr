@@ -10,6 +10,7 @@ class ViewTitle;
 class ViewFrame;
 class ViewSymbols;
 class ViewDimensions;
+class ViewText;
 
 class ViewMenu : public Menu
 {
@@ -34,6 +35,7 @@ public slots:
     void title();
     void frame();
     void dims();
+    void text();
 
 private slots:
    
@@ -47,6 +49,7 @@ private:
     QAction *legendsAct;
     QAction *frameAct;
     QAction* dimsAct;
+    QAction* textAct;
 
     ViewDimensions* dimsDialog;
     ViewLegend* legendsDialog;
@@ -54,6 +57,7 @@ private:
     ViewFrame* frameDialog;
     ViewSymbols* symbolsDialog;
     ViewAxis*   ticksDialog;
+    ViewText* textDialog;
 };
 
 #endif

@@ -27,4 +27,6 @@ QComboBox* makeQComboBox(QWidget* parent, const char* textarray[], int len);
 
 QCheckBox* makeQCheckBox(QWidget* parent, const char* text);
 
+void setButtonBold(QPushButton* button);
+
 #endif // UTIL_H

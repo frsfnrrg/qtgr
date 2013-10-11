@@ -1,15 +1,16 @@
-#include <QtGui>
 #include "mainwindow.h"
 #include "view.h"
+
+#include "base/globals.h"
+#include "graphwidget.h"
+
 #include "view/symbols.h"
 #include "view/axis.h"
 #include "view/legend.h"
 #include "view/title.h"
 #include "view/frame.h"
-#include "base/globals.h"
-#include "graphwidget.h"
 #include "view/dimensions.h"
-
+#include "view/text.h"
 
 ViewMenu::ViewMenu(MainWindow* mainWin) :
     Menu(mainWin, "View", true)
@@ -20,6 +21,7 @@ ViewMenu::ViewMenu(MainWindow* mainWin) :
     titleDialog = NULL;
     frameDialog = NULL;
     dimsDialog = NULL;
+    textDialog = NULL;
 
     createActions();
     populateMenu(this);
@@ -34,6 +36,8 @@ void ViewMenu::populateMenu(QMenu* q) {
     q->addAction(axisAct);
     q->addAction(symbolsAct);
     q->addAction(frameAct);
+    q->addSeparator();
+    q->addAction(textAct);
 }
 
 void ViewMenu::populateToolBar(QToolBar* q) {
@@ -45,6 +49,8 @@ void ViewMenu::populateToolBar(QToolBar* q) {
     q->addAction(axisAct);
     q->addAction(symbolsAct);
     q->addAction(frameAct);
+    q->addSeparator();
+    q->addAction(textAct);
 }
 
 class MouseDoubleCall : public MouseCallBack
@@ -119,6 +125,11 @@ void ViewMenu::createActions()
                           "Ctrl+f",
                           SLOT(frame()));
 
+    textAct = makeAction("Text",
+                          "Add free strings to the graph",
+                          "",
+                          SLOT(text()));
+
     // setup double click handler
     mouseDouble.view = this;
     mainWindow->gwidget->mouseDoubleCall =  &mouseDouble;
@@ -180,4 +191,10 @@ void ViewMenu::dims() {
     if (showDialog(dimsDialog)) return;
     dimsDialog = new ViewDimensions(mainWindow);
     loadDialog(dimsDialog);
+}
+
+void ViewMenu::text() {
+    if (showDialog(textDialog)) return;
+    textDialog = new ViewText(mainWindow);
+    loadDialog(textDialog);
 }

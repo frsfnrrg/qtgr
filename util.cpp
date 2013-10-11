@@ -75,3 +75,7 @@ QCheckBox* makeQCheckBox(QWidget* parent, const char* text) {
     q->setLayoutDirection(Qt::RightToLeft);
     return q;
 }
+
+void setButtonBold(QPushButton* button) {
+    button->setStyleSheet("QPushButton { font-weight: bold }");
+}

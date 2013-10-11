@@ -57,10 +57,10 @@ ViewDimensions::ViewDimensions(MainWindow *parent) :
     updateScale();
 
     viewSelect = makeButton("Rect Select", SLOT(viewRect()));
-    viewSelect->setStyleSheet("QPushButton { font-weight: bold }");
+    setButtonBold(viewSelect);
 
     rescaleAxes = makeButton("Rescale Axes", SLOT(rescaleTicks()));
-    rescaleAxes->setStyleSheet("QPushButton { font-weight: bold }");
+    setButtonBold(rescaleAxes);
 
     autoHook(viewXMin);
     autoHook(viewXMax);

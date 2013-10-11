@@ -25,7 +25,7 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
 
     prop = makeButton("Properties", SLOT(legendProp()));
     placer = makeButton("Place", SLOT(placeLegend()));
-    placer->setStyleSheet("QPushButton { font-weight: bold }");
+    setButtonBold(placer);
     placer->setMinimumWidth(100);
 
     coordsLabel = makeLabel("Coords");

@@ -21,15 +21,6 @@ public:
     void setDialogLayout(QLayout* layout);
 
     static void setAutoUpdate(bool on);
-protected:
-    QLabel* makeLabel(const char* text, Qt::Alignment align = ALIGN_FORM_LABEL);
-    QLabel* makeLabel(const char* text, QWidget* tipgiver, Qt::Alignment align = ALIGN_FORM_LABEL);
-    QPushButton* makeButton(const char* text, const char* slot);
-    QGroupBox* makeGroupBox(const char* text, bool checkable=false);
-
-    void setTip(QWidget*, const char* text);
-    void setTip(QWidget*, QWidget*, const char* text);
-    void setTip(QWidget*, QWidget*, QWidget*, const char* text);
 
     void autoHook(QComboBox*);
     void autoHook(QLineEdit*);
@@ -41,6 +32,17 @@ protected:
     void autoHook(IntegerRangeSelector*);
     void autoHook(DoubleRangeSelector*);
     void autoHook(QGroupBox*);
+    void autoHook(QPlainTextEdit*);
+
+protected:
+    QLabel* makeLabel(const char* text, Qt::Alignment align = ALIGN_FORM_LABEL);
+    QLabel* makeLabel(const char* text, QWidget* tipgiver, Qt::Alignment align = ALIGN_FORM_LABEL);
+    QPushButton* makeButton(const char* text, const char* slot);
+    QGroupBox* makeGroupBox(const char* text, bool checkable=false);
+
+    void setTip(QWidget*, const char* text);
+    void setTip(QWidget*, QWidget*, const char* text);
+    void setTip(QWidget*, QWidget*, QWidget*, const char* text);
 
 private:
     static bool auto_update;

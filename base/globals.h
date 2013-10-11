@@ -382,6 +382,20 @@ extern void do_sample(int setno, int typeno, char* exprstr,
 
 extern void fswap(double*, double*);
 
+// objutils
+
+extern int isactive_string(int strno);
+extern int isactive_box(int boxno);
+extern int isactive_line(int lineno);
+
+extern void do_clear_lines();
+extern void do_clear_boxes();
+extern void do_clear_text();
+
+extern int next_string();
+extern int next_box();
+extern int next_line();
+
 #endif
 
 #ifdef __cplusplus 

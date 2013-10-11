@@ -12,6 +12,9 @@
 #include "pars.h"
 #endif
 
+#ifndef _BASE_DEFINES_H
+#define _BASE_DEFINES_H
+
 /*
  * some constants
  *
@@ -711,3 +714,5 @@ typedef struct {
                         NULL);
 
 #endif
+
+#endif // _BASE_DEFINES_H

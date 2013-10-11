@@ -2,15 +2,15 @@
 #undef TICK
 #endif
 
-typedef union  {
-    double val;
-    int ival;
-    double *ptr;
-    int func;
-    int pset;
-    char *str;
-} YYSTYPE;
-extern YYSTYPE yylval;
+//typedef union  {
+//    double val;
+//    int ival;
+//    double *ptr;
+//    int func;
+//    int pset;
+//    char *str;
+//} YYSTYPE;
+//extern YYSTYPE yylval;
 # define ABS 257
 # define ACOS 258
 # define ASIN 259

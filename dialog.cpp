@@ -156,6 +156,11 @@ void Dialog::autoHook(QGroupBox* q) {
     connect(q, SIGNAL(clicked(bool)), this, SLOT(autoUpdate()));
 }
 
+void Dialog::autoHook(QPlainTextEdit* q) {
+    // Todo: subclass to create two alteration modes, one signalled, one not
+   connect(q, SIGNAL(textChanged()), this, SLOT(autoUpdate()));
+}
+
 QLabel* Dialog::makeLabel(const char* text, Qt::Alignment align) {
     return makeQLabel(this, text, align);
 }
