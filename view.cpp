@@ -104,11 +104,11 @@ void ViewMenu::createActions()
                           "Set the title and subtitle of the graph.",
                           "Ctrl+Shift+t",
                           SLOT(title()));
-    dimsAct = makeAction("Graph Details",
+    dimsAct = makeAction("Dimensions",
                          "Control the size, zoom, and display type of the graph.",
                          "Ctrl+w",
                          SLOT(dims()));
-    axisAct = makeAction("Ticks",
+    axisAct = makeAction("Axis",
                           "Change spacing and labels for the graph axes.",
                           "Ctrl+t",
                           SLOT(axis()));
@@ -124,8 +124,7 @@ void ViewMenu::createActions()
                           "Alter the look of the graph frame",
                           "Ctrl+f",
                           SLOT(frame()));
-
-    textAct = makeAction("Text",
+    textAct = makeAction("Strings",
                           "Add free strings to the graph",
                           "",
                           SLOT(text()));
