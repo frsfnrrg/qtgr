@@ -396,6 +396,10 @@ extern int next_string();
 extern int next_box();
 extern int next_line();
 
+extern void kill_string(int strno);
+extern void kill_box(int boxno);
+extern void kill_line(int lineno);
+
 #endif
 
 #ifdef __cplusplus 

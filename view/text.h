@@ -14,7 +14,12 @@ public:
 
     void addText(int id, float x, float y);
 
+    void relocateText(int id);
     void setText(int id, float x, float y);
+
+    void deleteText(int id);
+
+    void scrollToField(int num);
 private:
     QPushButton* placeTextButton;
 
@@ -22,10 +27,10 @@ private:
 
     QVBoxLayout* textsLayout;
 
+    QScrollArea* scrollBox;
+
 public slots:
     void updateDialog();
-
-    void relocateText(int id);
 
 private slots:
     void applyDialog();
@@ -40,17 +45,20 @@ public:
     explicit ViewTextElement(ViewText* parent, int id);
     ~ViewTextElement();
 
-    DoubleSpinBox* xCoord;
-    DoubleSpinBox* yCoord;
+    void setLocation(double x, double y, bool focus=false);
 
     void applyValues();
     void updateValues();
 private:
+    DoubleSpinBox* xCoord;
+    DoubleSpinBox* yCoord;
+
     QPushButton* relocateButton;
     QPushButton* moreButton;
     QPushButton* deleteButton;
 
-    QGridLayout* layout;
+    QHBoxLayout* layout;
+    QGridLayout* rlayout;
 
     LongTextEdit* textArea;
 
@@ -62,6 +70,7 @@ private:
 
 private slots:
     void reloc();
+    void del();
 };
 
 #endif // TEXT_H
