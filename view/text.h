@@ -12,7 +12,7 @@ class ViewText : public Dialog
 public:
     explicit ViewText(MainWindow* mainWin);
 
-    void addText(float x, float y);
+    void addText(int id, float x, float y);
 
     void setText(int id, float x, float y);
 private:
@@ -48,6 +48,7 @@ public:
 private:
     QPushButton* relocateButton;
     QPushButton* moreButton;
+    QPushButton* deleteButton;
 
     QGridLayout* layout;
 

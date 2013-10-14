@@ -1,6 +1,8 @@
 #include "view/text.h"
 #include "base/globals.h"
 #include "choosers.h"
+#include "graphwidget.h"
+#include "mainwindow.h"
 
 ViewText::ViewText(MainWindow* mainWin) :
     Dialog(mainWin, "Free Strings", true)
@@ -58,15 +60,49 @@ void ViewText::applyDialog() {
     drawgraph();
 }
 
+class StringPlacingThingy : public MouseCallBack
+{
+private:
+    ViewText* view;
+    int id;
+public:
+    void set(ViewText* t, QString txt, int n) {
+        view = t;
+        id = n;
+        view->mainWindow->gwidget->mouseClickCall = this;
+        view->mainWindow->gwidget->setCursor(Qt::CrossCursor);
+        view->mainWindow->statusBar()->showMessage(txt);
+    }
+
+    void mouse(int x, int y, int w, int h) {
+        view->mainWindow->gwidget->mouseClickCall = NULL;
+        view->mainWindow->gwidget->unsetCursor();
+        view->mainWindow->statusBar()->clearMessage();
+        view->addText(id, double(x)/double(w), 1.0 - double(y)/double(h));
+    }
+} stringPlacer;
+
 void ViewText::placeText() {
     int i = next_string();
+    pstr[i].active = ON;
     texts[i] = new ViewTextElement(this, i);
     textsLayout->addWidget(texts[i]);
+    stringPlacer.set(this, tr("Click to place string"), i);
 }
 
-void ViewText::addText(float x, float y) {
+void ViewText::addText(int id, float x, float y) {
+    texts[id]->xCoord->setValue(x);
+    texts[id]->yCoord->setValue(y);
 
+    pstr[id].x = x;
+    pstr[id].y = y;
+
+    // focus on text area?
+
+    drawgraph();
 }
+
+
 
 void ViewText::relocateText(int id) {
 
@@ -100,6 +136,8 @@ ViewTextElement::ViewTextElement(ViewText* parent, int id) :
 
     moreButton = new QPushButton(tr("More..."));
 
+    deleteButton = new QPushButton("X");
+
     xLabel = makeQLabel(this, "X");
     yLabel = makeQLabel(this, "Y");
 
@@ -127,6 +165,9 @@ ViewTextElement::ViewTextElement(ViewText* parent, int id) :
 
     layout->addWidget(moreButton, 1, 6);
 
+    // need a good placement, so nobody accidentally clicks this...
+    layout->addWidget(deleteButton, 2, 6, Qt::AlignVCenter | Qt::AlignRight);
+
     this->setMinimumWidth(400);
     this->setMinimumHeight(75);
     this->setFrameShadow(QFrame::Plain);
@@ -144,6 +185,7 @@ ViewTextElement::~ViewTextElement() {
     delete moreButton;
     delete xLabel;
     delete yLabel;
+    delete deleteButton;
 }
 
 void ViewTextElement::reloc() {
