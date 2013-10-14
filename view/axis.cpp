@@ -257,7 +257,7 @@ void ViewAxis::applyDialog() {
            axisLabel->text().toAscii().data());
 
     if (leVal(majTic, &val)) t.tmajor = val;
-    if (leVal(majTic, &val)) t.tminor = val;
+    if (leVal(minTic, &val)) t.tminor = val;
 
     t.tl_starttype = startOpt->isChecked() ? AUTO : SPEC;
     t.tl_stoptype = stopOpt->isChecked() ? AUTO : SPEC;
