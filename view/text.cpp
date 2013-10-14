@@ -36,18 +36,15 @@ ViewText::ViewText(MainWindow* mainWin) :
 
 void ViewText::updateDialog() {
     ViewTextElement* elem;
-    plotstr str;
     for (int i=0;i<MAXSTR;i++) {
         if (isactive_string(i) && !texts[i]) {
             texts[i] = new ViewTextElement(this, i);
             textsLayout->addWidget(texts[i]);
-            printf("TT Added: %i\n", i);
-        } else if (texts[i] != NULL) {
+        } else if (texts[i] && !isactive_string(i)) {
             elem = texts[i];
             textsLayout->removeWidget(texts[i]);
             delete elem;
             texts[i] = NULL;
-            printf("TT Emptied: %i\n", i);
         }
 
         if (texts[i]) texts[i]->updateValues();
@@ -85,18 +82,26 @@ ViewTextElement::ViewTextElement(ViewText* parent, int id) :
     par = parent;
     num = id;
 
-    textArea = new QPlainTextEdit();
+    textArea = new LongTextEdit();
 
     xCoord = new DoubleSpinBox();
     xCoord->setRange(0, 1.0);
     xCoord->setSingleStep(0.05);
+    xCoord->setDecimals(3);
 
     yCoord = new DoubleSpinBox();
     yCoord->setRange(0, 1.0);
     yCoord->setSingleStep(0.05);
+    yCoord->setDecimals(3);
 
     relocateButton = new QPushButton(tr("Move"));
+    setButtonBold(relocateButton);
     connect(relocateButton, SIGNAL(clicked()), this, SLOT(reloc()));
+
+    moreButton = new QPushButton(tr("More..."));
+
+    xLabel = makeQLabel(this, "X");
+    yLabel = makeQLabel(this, "Y");
 
     par->autoHook(xCoord);
     par->autoHook(yCoord);
@@ -104,9 +109,23 @@ ViewTextElement::ViewTextElement(ViewText* parent, int id) :
 
     layout = new QGridLayout();
 
-    layout->addWidget(makeQLabel(this, "Text"),0,0);
+    layout->setColumnMinimumWidth(0, 3);
 
-    layout->addWidget(textArea, 0, 1);
+    layout->addWidget(textArea, 0, 1, 3, 1);
+
+    layout->setColumnMinimumWidth(2, 12);
+
+    layout->addWidget(xLabel, 0, 3);
+    layout->addWidget(yLabel, 1, 3);
+
+    layout->addWidget(xCoord, 0, 4);
+    layout->addWidget(yCoord, 1, 4);
+
+    layout->setColumnMinimumWidth(5, 8);
+
+    layout->addWidget(relocateButton, 0, 6);
+
+    layout->addWidget(moreButton, 1, 6);
 
     this->setMinimumWidth(400);
     this->setMinimumHeight(75);
@@ -122,6 +141,9 @@ ViewTextElement::~ViewTextElement() {
     delete yCoord;
     delete relocateButton;
     delete layout;
+    delete moreButton;
+    delete xLabel;
+    delete yLabel;
 }
 
 void ViewTextElement::reloc() {
@@ -129,16 +151,17 @@ void ViewTextElement::reloc() {
 }
 
 void ViewTextElement::applyValues() {
-    // use sizeof
+    // use sizeof for field
     strncpy((char*)pstr[num].s, textArea->toPlainText().toAscii().data(), MAXSTRLEN+1);
+    pstr[num].x = xCoord->value();
+    pstr[num].y = yCoord->value();
 }
 
 void ViewTextElement::updateValues() {
-    // todo subclass for cleanliness
-    textArea->blockSignals(true);
-    textArea->clear();
-    textArea->moveCursor(QTextCursor::End);
-    textArea->insertPlainText(QString(pstr[num].s));
-    textArea->blockSignals(false);
+    textArea->setText(QString(pstr[num].s));
+    xCoord->setValue(pstr[num].x);
+    yCoord->setValue(pstr[num].y);
 }
+
+
 

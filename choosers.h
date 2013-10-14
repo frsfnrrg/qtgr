@@ -21,6 +21,15 @@ public slots:
     void setValue(int, bool loud=false);
 };
 
+class LongTextEdit : public QPlainTextEdit
+{
+    Q_OBJECT
+public:
+    explicit LongTextEdit();
+public slots:
+    void setText(const QString &text, bool loud=false);
+};
+
 class Slider : public QSlider
 {
     Q_OBJECT

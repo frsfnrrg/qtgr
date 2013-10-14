@@ -7,6 +7,7 @@
 class DoubleSpinBox;
 class IntegerSpinBox;
 class Slider;
+class LongTextEdit;
 class IntegerRangeSelector;
 class DoubleRangeSelector;
 class MainWindow;
@@ -32,7 +33,7 @@ public:
     void autoHook(IntegerRangeSelector*);
     void autoHook(DoubleRangeSelector*);
     void autoHook(QGroupBox*);
-    void autoHook(QPlainTextEdit*);
+    void autoHook(LongTextEdit*);
 
 protected:
     QLabel* makeLabel(const char* text, Qt::Alignment align = ALIGN_FORM_LABEL);

@@ -156,8 +156,7 @@ void Dialog::autoHook(QGroupBox* q) {
     connect(q, SIGNAL(clicked(bool)), this, SLOT(autoUpdate()));
 }
 
-void Dialog::autoHook(QPlainTextEdit* q) {
-    // Todo: subclass to create two alteration modes, one signalled, one not
+void Dialog::autoHook(LongTextEdit* q) {
    connect(q, SIGNAL(textChanged()), this, SLOT(autoUpdate()));
 }
 

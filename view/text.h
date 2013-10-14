@@ -47,12 +47,17 @@ public:
     void updateValues();
 private:
     QPushButton* relocateButton;
+    QPushButton* moreButton;
+
     QGridLayout* layout;
 
-    QPlainTextEdit* textArea;
+    LongTextEdit* textArea;
 
     ViewText* par;
     int num;
+
+    QLabel* xLabel;
+    QLabel* yLabel;
 
 private slots:
     void reloc();

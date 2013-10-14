@@ -7,6 +7,7 @@
 DoubleSpinBox::DoubleSpinBox() : QDoubleSpinBox() {}
 IntegerSpinBox::IntegerSpinBox() : QSpinBox() {}
 Slider::Slider(Qt::Orientation ori) : QSlider(ori) {}
+LongTextEdit::LongTextEdit() : QPlainTextEdit() {}
 
 void DoubleSpinBox::setValue(double value, bool loud) {
     if (loud) {
@@ -37,6 +38,17 @@ void Slider::setValue(int value, bool loud) {
         this->blockSignals(false);
     }
 }
+
+void LongTextEdit::setText(const QString &text, bool loud) {
+    if (!loud) this->blockSignals(true);
+
+    clear();
+    moveCursor(QTextCursor::End);
+    insertPlainText(text);
+
+    if (!loud) this->blockSignals(false);
+}
+
 
 // SETS
 
