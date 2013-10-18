@@ -7,6 +7,8 @@
 ViewText::ViewText(MainWindow* mainWin) :
     Dialog(mainWin, "Free Strings", true)
 {
+    propsDialog = NULL;
+
     for (int i=0;i<MAXSTR;i++) {
         texts[i] = NULL;
     }
@@ -48,8 +50,14 @@ void ViewText::updateDialog() {
         if (isactive_string(i) && !texts[i]) {
             texts[i] = new ViewTextElement(this, i);
             textsLayout->addWidget(texts[i]);
+            if (propsDialog) {
+                propsDialog->addItem(i);
+            }
         } else if (texts[i] && !isactive_string(i)) {
             elem = texts[i];
+            if (propsDialog) {
+                propsDialog->removeItem(textsLayout->indexOf(texts[i]));
+            }
             textsLayout->removeWidget(texts[i]);
             delete elem;
             texts[i] = NULL;
@@ -95,6 +103,7 @@ void ViewText::placeText() {
         pstr[i].active = ON;
         texts[i] = new ViewTextElement(this, i);
         textsLayout->addWidget(texts[i]);
+        if (propsDialog) propsDialog->addItem(i);
     }
     // this doesn't do anything?
     scrollToField(i);
@@ -146,6 +155,9 @@ void ViewText::setText(int id, float x, float y) {
 void ViewText::deleteText(int id) {
     kill_string(id);
     if (texts[id]) {
+        if (propsDialog) {
+            propsDialog->removeItem(textsLayout->indexOf(texts[id]));
+        }
         textsLayout->removeWidget(texts[id]);
         delete texts[id];
         texts[id] = NULL;
@@ -159,6 +171,17 @@ void ViewText::scrollToField(int id) {
         QPoint loc = texts[id]->geometry().center();
         scrollBox->ensureVisible(loc.x(), loc.y());
     }
+}
+
+void ViewText::loadTextProperties(int num) {
+    if (showDialog(propsDialog)) return;
+
+    propsDialog = new ViewTextProperties(mainWindow);
+    for (int i=0;i<textsLayout->count();i++) {
+        propsDialog->addItem( ( (ViewTextElement*) textsLayout->itemAt(i)->widget())->num );
+    }
+    propsDialog->setItem(textsLayout->indexOf(texts[num]));
+    loadDialog(propsDialog);
 }
 
 ViewTextElement::ViewTextElement(ViewText* parent, int id) :
@@ -184,6 +207,7 @@ ViewTextElement::ViewTextElement(ViewText* parent, int id) :
     connect(relocateButton, SIGNAL(clicked()), this, SLOT(reloc()));
 
     moreButton = new QPushButton(tr("More..."));
+    connect(moreButton, SIGNAL(clicked()), this, SLOT(prop()));
 
     deleteButton = new QPushButton(tr("Kill"));
     setButtonBold(deleteButton);
@@ -208,9 +232,8 @@ ViewTextElement::ViewTextElement(ViewText* parent, int id) :
 
     rlayout->setColumnMinimumWidth(2, 8);
 
-    rlayout->addWidget(moreButton, 0, 3);
+    rlayout->addWidget(moreButton, 0, 3);  
 
-    // need a good placement, so nobody accidentally clicks this...
     rlayout->addWidget(deleteButton, 2, 3, Qt::AlignVCenter | Qt::AlignRight);
 
     rlayout->setRowStretch(0, 1);
@@ -271,6 +294,10 @@ void ViewTextElement::del() {
     par->deleteText(num);
 }
 
+void ViewTextElement::prop() {
+    par->loadTextProperties(num);
+}
+
 void ViewTextElement::applyValues() {
     // use sizeof for field
     strncpy((char*)pstr[num].s, textArea->toPlainText().toAscii().data(), MAXSTRLEN+1);
@@ -284,5 +311,108 @@ void ViewTextElement::updateValues() {
     yCoord->setValue(pstr[num].y);
 }
 
+ViewTextProperties::ViewTextProperties(MainWindow* mainWin) :
+    Dialog(mainWin, "String Properties", true)
+{
+    tNum = new QComboBox();
+    tNum->setMinimumWidth(85);
+    connect(tNum, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
+    tFont = new FontComboBox();
+    tColor = new ColorComboBox();
+    tSize = new DoubleRangeSelector(0.0,1.0,2,0.05);
 
+    tJust = new QComboBox();
+    tJust->addItem(tr("Left"));
+    tJust->addItem(tr("Right"));
+    tJust->addItem(tr("Center"));
+
+    tAngle = new IntegerRangeSelector(0, 360, 15);
+
+    autoHook(tFont);
+    autoHook(tColor);
+    autoHook(tSize);
+    autoHook(tJust);
+    autoHook(tAngle);
+
+    QHBoxLayout* top = new QHBoxLayout();
+    top->addWidget(makeLabel("String"));
+    top->addWidget(tNum);
+    top->addStretch(1);
+
+    QGridLayout* opts = new QGridLayout();
+    addPair(opts, 0, makeLabel("Font"), tFont);
+    addPair(opts, 1, makeLabel("Color"), tColor);
+    addPair(opts, 2, makeLabel("Size"), tSize);
+    opts->setRowMinimumHeight(3, 6);
+    addPair(opts, 4, makeLabel("Just"), tJust);
+    addPair(opts, 5, makeLabel("Angle"), tAngle);
+
+    opts->setColumnMinimumWidth(1, 200);
+
+    tSet = makeGroupBox("Properties");
+    tSet->setLayout(opts);
+
+    QVBoxLayout* main = new QVBoxLayout();
+    main->addLayout(top);
+    main->addSpacing(6);
+    main->addWidget(tSet);
+    main->addStretch(1);
+
+    this->setDialogLayout(main);
+}
+
+void ViewTextProperties::updateDialog() {
+    bool enabled = tNum->count();
+    tSet->setEnabled(enabled);
+    if (!enabled) return;
+
+    bool ok;
+    int id = tNum->currentText().toInt(&ok);
+    if (!ok) {
+        printf("Uh oh. So not okay.\n");
+        return;
+    }
+    tFont->setCurrentIndex(pstr[id].font);
+    tColor->setCurrentIndex(pstr[id].color);
+    tSize->setValue(pstr[id].charsize);
+
+    tJust->setCurrentIndex(pstr[id].just);
+    tAngle->setValue(pstr[id].rot);
+}
+
+void ViewTextProperties::applyDialog() {
+    if (tNum->count() == 0) return;
+
+    bool ok;
+    int id = tNum->currentText().toInt(&ok);
+    if (!ok) {
+        printf("Uh oh. So not okay.\n");
+        return;
+    }
+    pstr[id].font = tFont->currentIndex();
+    pstr[id].color = tColor->currentIndex();
+    pstr[id].charsize = tSize->value();
+
+    pstr[id].just = tJust->currentIndex();
+    pstr[id].rot = tAngle->value();
+
+    drawgraph();
+}
+
+void ViewTextProperties::addItem(int id) {
+    if (tNum->count() == 0) {
+        tNum->addItem(QString::number(id));
+        tNum->setCurrentIndex(0);
+    } else {
+        tNum->addItem(QString::number(id));
+    }
+}
+
+void ViewTextProperties::setItem(int loc) {
+    tNum->setCurrentIndex(loc);
+}
+
+void ViewTextProperties::removeItem(int loc) {
+    tNum->removeItem(loc);
+}

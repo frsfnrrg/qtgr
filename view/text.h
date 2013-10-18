@@ -5,6 +5,7 @@
 #include "base/defines.h"
 
 class ViewTextElement;
+class ViewTextProperties;
 
 class ViewText : public Dialog
 {
@@ -20,6 +21,8 @@ public:
     void deleteText(int id);
 
     void scrollToField(int num);
+
+    void loadTextProperties(int num);
 private:
     QPushButton* placeTextButton;
 
@@ -28,6 +31,8 @@ private:
     QVBoxLayout* textsLayout;
 
     QScrollArea* scrollBox;
+
+    ViewTextProperties* propsDialog;
 
 public slots:
     void updateDialog();
@@ -49,6 +54,8 @@ public:
 
     void applyValues();
     void updateValues();
+
+    int num;
 private:
     DoubleSpinBox* xCoord;
     DoubleSpinBox* yCoord;
@@ -63,7 +70,6 @@ private:
     LongTextEdit* textArea;
 
     ViewText* par;
-    int num;
 
     QLabel* xLabel;
     QLabel* yLabel;
@@ -71,6 +77,34 @@ private:
 private slots:
     void reloc();
     void del();
+    void prop();
 };
 
+class ViewTextProperties : public Dialog
+{
+    Q_OBJECT
+public:
+    explicit ViewTextProperties(MainWindow* mainWin);
+
+    void addItem(int id);
+    void setItem(int loc);
+    void removeItem(int loc);
+private:
+    QComboBox* tNum;
+
+    QComboBox* tFont;
+    QComboBox* tColor;
+    DoubleRangeSelector* tSize;
+
+    QComboBox* tJust;
+    IntegerRangeSelector* tAngle;
+
+    QGroupBox* tSet;
+
+public slots:
+    void updateDialog();
+
+private slots:
+    void applyDialog();
+};
 #endif // TEXT_H
