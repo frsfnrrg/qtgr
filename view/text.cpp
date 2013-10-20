@@ -318,9 +318,12 @@ ViewTextProperties::ViewTextProperties(MainWindow* mainWin) :
     tNum->setMinimumWidth(85);
     connect(tNum, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
+    tApplyTextStyle = makeButton("Apply text style to all", SLOT(spreadTextStyle()));
+    setButtonBold(tApplyTextStyle);
+
     tFont = new FontComboBox();
     tColor = new ColorComboBox();
-    tSize = new DoubleRangeSelector(0.0,1.0,2,0.05);
+    tSize = new DoubleRangeSelector(0.0,5.0,2,0.2);
 
     tJust = new QComboBox();
     tJust->addItem(tr("Left"));
@@ -344,9 +347,11 @@ ViewTextProperties::ViewTextProperties(MainWindow* mainWin) :
     addPair(opts, 0, makeLabel("Font"), tFont);
     addPair(opts, 1, makeLabel("Color"), tColor);
     addPair(opts, 2, makeLabel("Size"), tSize);
-    opts->setRowMinimumHeight(3, 6);
-    addPair(opts, 4, makeLabel("Just"), tJust);
-    addPair(opts, 5, makeLabel("Angle"), tAngle);
+    opts->setRowMinimumHeight(3, 2);
+    opts->addWidget(tApplyTextStyle, 4, 0, 1, 2, Qt::AlignVCenter | Qt::AlignRight);
+    opts->setRowMinimumHeight(5, 6);
+    addPair(opts, 6, makeLabel("Just"), tJust);
+    addPair(opts, 7, makeLabel("Angle"), tAngle);
 
     opts->setColumnMinimumWidth(1, 200);
 
@@ -363,16 +368,12 @@ ViewTextProperties::ViewTextProperties(MainWindow* mainWin) :
 }
 
 void ViewTextProperties::updateDialog() {
-    bool enabled = tNum->count();
-    tSet->setEnabled(enabled);
-    if (!enabled) return;
-
-    bool ok;
-    int id = tNum->currentText().toInt(&ok);
-    if (!ok) {
-        printf("Uh oh. So not okay.\n");
+    int id = getID();
+    tSet->setEnabled(id != -1);
+    if (id == -1) {
         return;
     }
+
     tFont->setCurrentIndex(pstr[id].font);
     tColor->setCurrentIndex(pstr[id].color);
     tSize->setValue(pstr[id].charsize);
@@ -382,14 +383,9 @@ void ViewTextProperties::updateDialog() {
 }
 
 void ViewTextProperties::applyDialog() {
-    if (tNum->count() == 0) return;
+    int id = getID();
+    if (id == -1) return;
 
-    bool ok;
-    int id = tNum->currentText().toInt(&ok);
-    if (!ok) {
-        printf("Uh oh. So not okay.\n");
-        return;
-    }
     pstr[id].font = tFont->currentIndex();
     pstr[id].color = tColor->currentIndex();
     pstr[id].charsize = tSize->value();
@@ -398,6 +394,18 @@ void ViewTextProperties::applyDialog() {
     pstr[id].rot = tAngle->value();
 
     drawgraph();
+}
+
+int ViewTextProperties::getID() {
+    if (tNum->count() == 0) return -1;
+
+    bool ok;
+    int id = tNum->currentText().toInt(&ok);
+    if (!ok) {
+        printf("Uh oh. So not okay.\n");
+        return -1;
+    }
+    return id;\
 }
 
 void ViewTextProperties::addItem(int id) {
@@ -415,4 +423,21 @@ void ViewTextProperties::setItem(int loc) {
 
 void ViewTextProperties::removeItem(int loc) {
     tNum->removeItem(loc);
+}
+
+void ViewTextProperties::spreadTextStyle() {
+    int id = getID();
+    if (id == -1) return;
+
+    int font = tFont->currentIndex();
+    int color = tColor->currentIndex();
+    double size = tSize->value();
+
+    for (int i=0;i<MAXSTR;i++) {
+        pstr[i].font = font;
+        pstr[i].color = color;
+        pstr[i].charsize = size;
+    }
+
+    drawgraph();
 }

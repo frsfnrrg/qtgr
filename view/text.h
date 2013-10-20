@@ -101,10 +101,16 @@ private:
 
     QGroupBox* tSet;
 
+    QPushButton* tApplyTextStyle;
+
+    int getID();
+
 public slots:
     void updateDialog();
 
 private slots:
     void applyDialog();
+
+    void spreadTextStyle();
 };
 #endif // TEXT_H
