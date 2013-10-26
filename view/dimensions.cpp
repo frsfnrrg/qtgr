@@ -73,57 +73,56 @@ ViewDimensions::ViewDimensions(MainWindow *parent) :
     autoHook(worldType);
 
     QHBoxLayout* header = new QHBoxLayout();
-    header->addWidget(makeLabel("Graph Type"));
-    header->addWidget(worldType);
+    header->addWidget(makeLabel("Graph Type"), 0);
+    header->addWidget(worldType, 0);
+    header->addStretch(1);
 
-    QGridLayout* layout  = new QGridLayout();
+    QGridLayout* wrldl = new QGridLayout();
+    addPair(wrldl, 0, makeLabel("X Min"), worldXMin);
+    addPair(wrldl, 1, makeLabel("X Max"), worldXMax);
+    addPair(wrldl, 2, makeLabel("Y Min"), worldYMin);
+    addPair(wrldl, 3, makeLabel("Y Max"), worldYMax);
+    wrldl->setRowMinimumHeight(4, 12);
+    wrldl->addWidget(rescaleAxes, 5, 0, 1, 2, Qt::AlignCenter);
+    wrldl->setColumnMinimumWidth(1, 100);
+    wrldl->setColumnStretch(0, 0);
+    wrldl->setColumnStretch(1, 2);
 
-    layout->addLayout(header, 0, 0, 1, 4, Qt::AlignLeft | Qt::AlignVCenter);
+    QGroupBox* wrldb = makeGroupBox("World Coords");
+    wrldb->setLayout(wrldl);
 
-    layout->setRowMinimumHeight(1, 8);
+    QVBoxLayout* wrld = new QVBoxLayout();
+    wrld->addWidget(wrldb, 0);
+    wrld->addStretch(1);
 
-    layout->addWidget(makeLabel("World coords"), 2, 0, 1, 2, Qt::AlignCenter);
-    layout->addWidget(makeLabel("View coords"), 2, 3, 1, 2, Qt::AlignCenter);
+    QGridLayout* viewl = new QGridLayout();
+    addPair(viewl, 0, makeLabel("X Min"), viewXMin);
+    addPair(viewl, 1, makeLabel("X Max"), viewXMax);
+    addPair(viewl, 2, makeLabel("Y Min"), viewYMin);
+    addPair(viewl, 3, makeLabel("Y Max"), viewYMax);
+    viewl->setRowMinimumHeight(4, 12);
+    viewl->addWidget(viewSelect, 5, 0, 1, 2, Qt::AlignCenter);
+    viewl->setColumnMinimumWidth(1, 120);
+    viewl->setColumnStretch(0, 0);
+    viewl->setColumnStretch(1, 2);
 
-    layout->setRowMinimumHeight(3, 4);
+    QGroupBox* viewb = makeGroupBox("View Coords");
+    viewb->setLayout(viewl);
 
-    layout->addWidget(makeLabel("X Min"), 4, 0);
-    layout->addWidget(makeLabel("X Max"), 5, 0);
-    layout->addWidget(makeLabel("Y Min"), 6, 0);
-    layout->addWidget(makeLabel("Y Max"), 7, 0);
+    QVBoxLayout* view = new QVBoxLayout();
+    view->addWidget(viewb, 0);
+    view->addStretch(1);
 
-    layout->addWidget(worldXMin, 4, 1);
-    layout->addWidget(worldXMax, 5, 1);
-    layout->addWidget(worldYMin, 6, 1);
-    layout->addWidget(worldYMax, 7, 1);
+    QHBoxLayout* bot = new QHBoxLayout();
+    bot->addLayout(wrld);
+    bot->addLayout(view);
 
-    layout->setColumnMinimumWidth(2, 12);
+    QVBoxLayout* ovr = new QVBoxLayout();
+    ovr->addLayout(header);
+    ovr->addStrut(12);
+    ovr->addLayout(bot);
 
-    layout->addWidget(makeLabel("X Min"), 4, 3);
-    layout->addWidget(makeLabel("X Max"), 5, 3);
-    layout->addWidget(makeLabel("Y Min"), 6, 3);
-    layout->addWidget(makeLabel("Y Max"), 7, 3);
-
-    layout->addWidget(viewXMin, 4, 4);
-    layout->addWidget(viewXMax, 5, 4);
-    layout->addWidget(viewYMin, 6, 4);
-    layout->addWidget(viewYMax, 7, 4);
-
-    layout->setRowMinimumHeight(8, 12);
-
-    layout->addWidget(rescaleAxes, 9, 0, 1, 2, Qt::AlignCenter);
-    layout->addWidget(viewSelect, 9, 3, 1, 2, Qt::AlignCenter);
-
-    layout->setColumnStretch(0, 0);
-    layout->setColumnStretch(1, 2);
-    layout->setColumnStretch(2, 0);
-    layout->setColumnStretch(3, 0);
-    layout->setColumnStretch(4, 2);
-
-    layout->setColumnMinimumWidth(1, 100);
-    layout->setColumnMinimumWidth(4, 100);
-
-    this->setDialogLayout(layout);
+    this->setDialogLayout(ovr);
 }
 
 
