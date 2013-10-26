@@ -167,7 +167,7 @@ void FileMenu::save_as()
 {
     if (exportDialog) {
         exportDialog->setVisible(true);
-        opensetDialog->raise();
+        exportDialog->raise();
     } else {
         exportDialog = new FileExport(mainWindow);
         exportDialog->show();
