@@ -3,6 +3,8 @@
 #include "util.h"
 #include "base/globals.h"
 #include "prop.h"
+#include "mainwindow.h"
+#include "view.h"
 
 QComboBox* makeAxisSelector() {
     QComboBox* q = new QComboBox();
@@ -60,6 +62,9 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     uStop = new QLineEdit();
     setTip(stopOpt, uStop, "At which value to stop the major ticks and tick labels; default is axis maximum");
 
+    loadDimensionsDialog = new QPushButton(tr("Dimension Properties..."));
+    connect(loadDimensionsDialog, SIGNAL(clicked()), this->mainWindow->viewMenu, SLOT(dims()));
+
     labelFormat = new QComboBox();
     labelFormat->addItem("Decimal");
     labelFormat->addItem("Exponential");
@@ -85,13 +90,13 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     textSide = makeSideSelector(true);
     connect(textSide, SIGNAL(currentIndexChanged(int)), this, SLOT(fadeText()));
     setTip(textSide, "On which graph side the axis label and tick labels should go");
-    textProps = makeButton("Text Properties", SLOT(loadText()));
+    textProps = makeButton("Text Properties...", SLOT(loadText()));
     setTip(textProps, "Configure the axis label and tick labels");
     textDialog = NULL;
 
     tickSide = makeSideSelector(false);
     setTip(tickSide, "On which graph side the major and minor ticks should go");
-    tickProps = makeButton("Tick Properties", SLOT(loadTicks()));
+    tickProps = makeButton("Tick Properties...", SLOT(loadTicks()));
     setTip(tickProps, "Control gridlines and axis bar ticks");
     tickDialog = NULL;
 
@@ -123,7 +128,8 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     scr->addWidget(uStart, 6, 1);
     scr->addWidget(stopOpt, 7, 0, Qt::AlignRight | Qt::AlignVCenter);
     scr->addWidget(uStop, 7, 1);
-    // TODO: add an autoScale Axis button
+    scr->setRowMinimumHeight(8, 8);
+    scr->addWidget(loadDimensionsDialog, 9, 0, 1, 2, Qt::AlignRight | Qt::AlignVCenter);
 
     QGroupBox* lblb = makeGroupBox("Labels");
     QGridLayout* lbl = makeBoxLayout(lblb);
@@ -504,6 +510,9 @@ ViewAxisTicks::ViewAxisTicks(MainWindow *parent) :
     // currently some things act oddly. This dialog may
     // need a second restructuring
 
+    frameProps = new QPushButton(tr("Frame Properties..."));
+    connect(frameProps, SIGNAL(clicked()), this->mainWindow->viewMenu, SLOT(frame()));
+
     tickBox = makeGroupBox("Ticks", true);
     connect(tickBox, SIGNAL(toggled(bool)), this, SLOT(fadeTickBox()));
 
@@ -597,10 +606,12 @@ ViewAxisTicks::ViewAxisTicks(MainWindow *parent) :
 
     QGridLayout* tp = new QGridLayout();
     addPair(tp, 0, makeLabel("Edit"), editAxis);
+    tp->addWidget(frameProps, 0, 3);
     tp->setRowMinimumHeight(1, 8);
     tp->setColumnStretch(0, 0);
     tp->setColumnStretch(1, 0);
     tp->setColumnStretch(2, 2);
+    tp->setColumnStretch(3, 0);
 
     QVBoxLayout* lhs = new QVBoxLayout();
     lhs->addWidget(tickBox);

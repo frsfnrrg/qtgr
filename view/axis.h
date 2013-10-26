@@ -31,6 +31,8 @@ private:
     QCheckBox* stopOpt;
     QLineEdit* uStop;
 
+    QPushButton* loadDimensionsDialog;
+
     QComboBox* labelFormat;
     QComboBox* labelPrecision;
     IntegerSpinBox* labelSkip;
@@ -103,6 +105,7 @@ public:
 
     QComboBox* editAxis;
 private:
+    QPushButton* frameProps;
 
     QGroupBox* tickBox;
     QComboBox* tickDirection;
