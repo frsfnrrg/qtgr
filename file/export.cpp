@@ -91,6 +91,7 @@ void save_pdf(QGraphicsScene* scene, QString target, int width, int height) {
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(target);
     printer.setFullPage(true);
+    printer.setColorMode(QPrinter::Color);
     printer.setPaperSize(QSize(width, height), QPrinter::Point);
 
     QPainter painter(&printer);
