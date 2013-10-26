@@ -41,20 +41,19 @@ ViewDimensions::ViewDimensions(MainWindow *parent) :
     connect(viewYMax, SIGNAL(valueChanged(double)), this, SLOT(readjYMin()));
 
     worldXMin = new QLineEdit();
-    connect(worldXMin, SIGNAL(textChanged(QString)), this, SLOT(updateScale()));
+    connect(worldXMin, SIGNAL(textEdited(QString)), this, SLOT(updateScale()));
     worldXMax = new QLineEdit();
-    connect(worldXMax, SIGNAL(textChanged(QString)), this, SLOT(updateScale()));
+    connect(worldXMax, SIGNAL(textEdited(QString)), this, SLOT(updateScale()));
     worldYMin = new QLineEdit();
-    connect(worldYMin, SIGNAL(textChanged(QString)), this, SLOT(updateScale()));
+    connect(worldYMin, SIGNAL(textEdited(QString)), this, SLOT(updateScale()));
     worldYMax = new QLineEdit();
-    connect(worldYMax, SIGNAL(textChanged(QString)), this, SLOT(updateScale()));
+    connect(worldYMax, SIGNAL(textEdited(QString)), this, SLOT(updateScale()));
 
     worldType = new QComboBox();
     for (int k=0;k<OPTS_LEN;k++) {
         worldType->addItem(opts[k].iname);
     }
     connect(worldType, SIGNAL(currentIndexChanged(int)), this, SLOT(updateScale()));
-    updateScale();
 
     viewSelect = makeButton("Rect Select", SLOT(viewRect()));
     setButtonBold(viewSelect);
@@ -222,6 +221,8 @@ void ViewDimensions::updateWorldDimensions(QObject* sender) {
     worldXMax->setText(QString::number(g[cg].w.xg2,'g',9));
     worldYMin->setText(QString::number(g[cg].w.yg1,'g',9));
     worldYMax->setText(QString::number(g[cg].w.yg2,'g',9));
+
+    updateScale();
 }
 
 void ViewDimensions::viewRect() {
@@ -230,41 +231,55 @@ void ViewDimensions::viewRect() {
 
 const char* error_style = "QLineEdit{color: red;}";
 
-void ViewDimensions::updateScale() {  
-    // better idea: if in one of those modes, turn the offending dimension boxes red until
-    // they are changed to be positive and non-zero
+void ViewDimensions::updateScale() {
     bool x1,x2,y1,y2;
-    x1 = false;
-    x2 = false;
-    y1 = false;
-    y2 = false;
 
-    double val;
+    double valn,valx;
     int o = opts[worldType->currentIndex()].ikey;
+
+    x1 = leVal(worldXMin, &valn);
+    x2 = leVal(worldXMax, &valx);
     if (o == LOGX || o == LOGXY) {
-        x1 = !leVal(worldXMin, &val) || val <= 0.0;
-        x2 = !leVal(worldXMax, &val) || val <= 0.0;
+        x1 &= valn > 0.0;
+        x2 &= valx > 0.0;
+    }
+    if (x1 && x2 && valn >= valx) {
+        x1 = x2 = false;
     }
 
+    y1 = leVal(worldYMin, &valn);
+    y2 = leVal(worldYMax, &valx);
     if (o == LOGY || o == LOGXY) {
-        y1 = !leVal(worldYMin, &val) || val <= 0.0;
-        y2 = !leVal(worldYMax, &val) || val <= 0.0;
+        y1 &= valn > 0.0;
+        y2 &= valx > 0.0;
+    }
+    if (y1 && y2 && valn >= valx) {
+        y1 = y2 = false;
     }
 
-    worldXMin->setStyleSheet(x1 ? error_style : "");
-    worldXMax->setStyleSheet(x2 ? error_style : "");
-    worldYMin->setStyleSheet(y1 ? error_style : "");
-    worldYMax->setStyleSheet(y2 ? error_style : "");
+    worldXMin->setStyleSheet(x1 ? "" : error_style);
+    worldXMax->setStyleSheet(x2 ? "" : error_style);
+    worldYMin->setStyleSheet(y1 ? "" : error_style);
+    worldYMax->setStyleSheet(y2 ? "" : error_style);
 }
 
 void ViewDimensions::rescaleTicks() {
-    default_axis(cg, g[cg].auto_type, X_AXIS);
-    default_axis(cg, g[cg].auto_type, ZX_AXIS);
-    default_axis(cg, g[cg].auto_type, XA_AXIS);
-    default_axis(cg, g[cg].auto_type, Y_AXIS);
-    default_axis(cg, g[cg].auto_type, ZY_AXIS);
-    default_axis(cg, g[cg].auto_type, YA_AXIS);
+    // only rescale if dims are well ordered, etc.
+    // If they are not, they are highlighted red, and
+    // the style sheet has nonzero length
+    if (!worldXMin->styleSheet().length() &&
+            !worldXMax->styleSheet().length()) {
+        default_axis(cg, g[cg].auto_type, X_AXIS);
+        default_axis(cg, g[cg].auto_type, ZX_AXIS);
+        default_axis(cg, g[cg].auto_type, XA_AXIS);
+    }
 
+    if (!worldYMin->styleSheet().length() &&
+            !worldYMax->styleSheet().length()) {
+        default_axis(cg, g[cg].auto_type, Y_AXIS);
+        default_axis(cg, g[cg].auto_type, ZY_AXIS);
+        default_axis(cg, g[cg].auto_type, YA_AXIS);
+    }
     drawgraph();
 
     WorldDimProp::send(NULL);
