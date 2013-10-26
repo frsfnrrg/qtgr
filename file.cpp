@@ -104,7 +104,7 @@ void FileMenu::open_set() {
         opensetDialog->setVisible(true);
         opensetDialog->raise();
     } else {
-       opensetDialog = new FileOpenSet(this->mainWindow);
+       opensetDialog = new FileOpenSet(mainWindow);
        opensetDialog->show();
     }
 }
@@ -126,7 +126,6 @@ void FileMenu::write_param() {
 }
 
 void FileMenu::save_all() {
-
        saveallDialog->exec();
 }
 
@@ -153,8 +152,7 @@ void FileMenu::print()
     
     QPrintDialog *dialog = new QPrintDialog(printer, this);
     dialog->setWindowTitle(tr("Print Document"));
-    if (dialog->exec() != QDialog::Accepted)
-	return;
+    if (dialog->exec() != QDialog::Accepted) return;
 
     QPainter* painter = new QPainter(); 
     painter->begin(printer);
