@@ -358,6 +358,8 @@ extern void do_copyset(int gfrom, int j1, int gto, int j2);
 extern void do_moveset(int gfrom, int j1, int gto, int j2);
 extern void do_swapset(int gfrom, int j1, int gto, int j2);
 extern void do_writesets(int gno, int setno,int  imbed, char * fn, char * format);
+extern void minmax(double *x, int n, double * xmin, double * xmax, int *imin, int *imax);
+
 
 //computils
 
@@ -399,6 +401,10 @@ extern int next_line();
 extern void kill_string(int strno);
 extern void kill_box(int boxno);
 extern void kill_line(int lineno);
+
+// fit
+
+extern void stasum(double x[], int n, double* xbar, double* sd, int flag);
 
 #endif
 

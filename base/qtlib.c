@@ -17,6 +17,12 @@ void stufftext(char* s) {
     qt_stufftext(s);
 }
 
+#include "tools/status.h"
+
+void update_set_status(int graphno, int setno) {
+    qt_update_set_status(graphno, setno);
+}
+
 // extern void qtview_getcanvas(int*, int*);
 // extern void qtview_paint(int,int,int,int);
 // extern void qtview_linew(int);

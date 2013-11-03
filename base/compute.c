@@ -51,7 +51,7 @@ void loadset(gno, selset, toval, startno, stepno)
 	*ltmp++ = startno + i * stepno;
     }
     updatesetminmax(gno, selset);
-    //frsfnrrg update_set_status(gno, selset);
+    update_set_status(gno, selset);
 }
 
 /*
@@ -76,6 +76,6 @@ int formula(gno, selset, sscanstr)
     fixupstr(tmpstr);
     scanner(tmpstr, xtmp, ytmp, lenset, ax, bx, cx, dx, MAXARR, i, selset, &errpos);
     updatesetminmax(gno, selset);
-    //frsfnrrg update_set_status(gno, selset);
+    update_set_status(gno, selset);
     return (errpos);
 }

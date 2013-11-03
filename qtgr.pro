@@ -37,7 +37,8 @@ HEADERS       = edit.h \
     view/legend.h \
     view/axis.h \
     transform/regression.h \
-    view/text.h
+    view/text.h \
+    tools/status.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -94,7 +95,8 @@ SOURCES       = edit.cpp \
     view/legend.cpp \
     view/axis.cpp \
     transform/regression.cpp \
-    view/text.cpp
+    view/text.cpp \
+    tools/status.cpp
 
 RESOURCES     = qtgr.qrc
 

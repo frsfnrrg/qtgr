@@ -4,11 +4,14 @@
 #include "base/globals.h"
 #include "prop.h"
 #include "graphwidget.h"
+#include "tools/options.h"
+#include "tools/status.h"
 
 ToolsMenu::ToolsMenu(MainWindow* mainWin) :
     Menu(mainWin, "Tools", true)
 {
     optionsDialog = NULL;
+    statusDialog = NULL;
     createActions();
     populateMenu(this);
 }
@@ -18,6 +21,7 @@ void ToolsMenu::populateMenu(QMenu* q) {
     q->addAction(zoomRectAct);
     q->addSeparator();
     q->addAction(optionsAct);
+    q->addAction(statusAct);
 }
 
 void ToolsMenu::createActions()
@@ -34,6 +38,10 @@ void ToolsMenu::createActions()
                             "Configure the program settings",
                             "",
                             SLOT(options()));
+    statusAct = makeAction("Status",
+                            "See the status and metrics of the sets",
+                            "",
+                            SLOT(status()));
 }
 
 void ToolsMenu::populateToolBar(QToolBar* foo) {
@@ -83,6 +91,12 @@ void ToolsMenu::options() {
     if (showDialog(optionsDialog)) return;
     optionsDialog = ToolsOptions::getOptionsDialog(mainWindow);
     loadDialog(optionsDialog);
+}
+
+void ToolsMenu::status() {
+    if (showDialog(statusDialog)) return;
+    statusDialog = new ToolsStatus(mainWindow);
+    loadDialog(statusDialog);
 }
 
 

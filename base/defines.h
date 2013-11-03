@@ -538,6 +538,8 @@ typedef struct {
 #define on_or_off(x) ((x == ON)?"on":"off")
 #define yes_or_no(x) ((x)?"yes":"no")
 #define w_or_v(x) ((x == WORLD)?"world":"view")
+#define getdx(gno, setn)	getcol(gno, setn, 2)
+#define getdy(gno, setn)	getcol(gno, setn, 3)
 
 #define HISTOSYM 19		/* plotsymbol for histograms */
 

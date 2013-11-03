@@ -177,7 +177,7 @@ void extract_region(gno, setno, regno)
 	}
     }
     updatesetminmax(gno, setno);
-    //frsfnrrg update_set_status(gno, setno);
+    update_set_status(gno, setno);
     drawgraph();
 }
 
@@ -216,7 +216,7 @@ void delete_region(gno, regno)
 		    }
 		}
 		updatesetminmax(gno, j);
-        //frsfnrrg update_set_status(gno, j);
+        update_set_status(gno, j);
 	    }
 	}
     } else {
@@ -245,7 +245,7 @@ void delete_region(gno, regno)
 		    }
 		}
 		updatesetminmax(gno, j);
-        //frsfnrrg update_set_status(gno, j);
+        update_set_status(gno, j);
 	    }
 	}
     }
@@ -274,7 +274,7 @@ void evaluate_region(regno, buf)
 			    scanner(buf, &x[i], &y[i], 1, &a, &b, &c, &d, 1, i, j, &errpos);
 			    if (errpos) {
 				updatesetminmax(cg, j);
-                //frsfnrrg update_set_status(cg, j);
+                update_set_status(cg, j);
 				return;
 			    }
 			}
@@ -283,14 +283,14 @@ void evaluate_region(regno, buf)
 			    scanner(buf, &x[i], &y[i], 1, &a, &b, &c, &d, 1, i, j, &errpos);
 			    if (errpos) {
 				updatesetminmax(cg, j);
-                //frsfnrrg update_set_status(cg, j);
+                update_set_status(cg, j);
 				return;
 			    }
 			}
 		    }
 		}
 		updatesetminmax(cg, j);
-        //frsfnrrg update_set_status(cg, j);
+        update_set_status(cg, j);
 	    }
 	}
     } else {
@@ -311,13 +311,13 @@ void evaluate_region(regno, buf)
 			scanner(buf, &x[i], &y[i], 1, &a, &b, &c, &d, 1, i, j, &errpos);
 			if (errpos) {
 			    updatesetminmax(cg, j);
-                //frsfnrrg update_set_status(cg, j);
+                update_set_status(cg, j);
 			    return;
 			}
 		    }
 		}
 		updatesetminmax(cg, j);
-        //frsfnrrg update_set_status(cg, j);
+        update_set_status(cg, j);
 	    }
 	}
     }

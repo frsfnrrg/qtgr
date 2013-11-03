@@ -6668,7 +6668,7 @@ case 474:
 		result = yypvt[-0].val;
 	    }
 	    updatesetminmax(cg, curset);
-	    //csto update_set_status(cg, curset);
+        update_set_status(cg, curset);
 	} /*NOTREACHED*/ break;
 case 475:
 # line 2164 "pars.yacc"
@@ -6685,7 +6685,7 @@ case 475:
 	    }
 	    result = yypvt[-0].val;
 	    updatesetminmax(cg, yypvt[-7].pset);
-	    //csto update_set_status(cg, yypvt[-7].pset);
+        update_set_status(cg, yypvt[-7].pset);
 	} /*NOTREACHED*/ break;
 case 476:
 # line 2180 "pars.yacc"
@@ -6702,7 +6702,7 @@ case 476:
 	    }
 	    result = yypvt[-0].val;
 	    updatesetminmax(yypvt[-9].pset, yypvt[-7].pset);
-	    //csto update_set_status(yypvt[-9].pset, yypvt[-7].pset);
+        update_set_status(yypvt[-9].pset, yypvt[-7].pset);
 	} /*NOTREACHED*/ break;
 case 477:
 # line 2199 "pars.yacc"
@@ -6731,7 +6731,7 @@ case 479:
 	    }
 	    result = yypvt[-0].ptr[0];
 	    updatesetminmax(cg, curset);
-	    //csto update_set_status(cg, curset);
+        update_set_status(cg, curset);
 	} /*NOTREACHED*/ break;
 case 480:
 # line 2228 "pars.yacc"
@@ -6753,7 +6753,7 @@ case 480:
 	    }
 	    result = yypvt[-0].ptr[0];
 	    updatesetminmax(cg, yypvt[-4].pset);
-	    //csto update_set_status(cg, yypvt[-4].pset);
+        update_set_status(cg, yypvt[-4].pset);
 	} /*NOTREACHED*/ break;
 case 481:
 # line 2249 "pars.yacc"
@@ -6775,7 +6775,7 @@ case 481:
 	    }
 	    result = yypvt[-0].ptr[0];
 	    updatesetminmax(yypvt[-6].pset, yypvt[-4].pset);
-	    //csto update_set_status(yypvt[-6].pset, yypvt[-4].pset);
+        update_set_status(yypvt[-6].pset, yypvt[-4].pset);
 	} /*NOTREACHED*/ break;
 case 482:
 # line 2270 "pars.yacc"
@@ -6795,7 +6795,7 @@ case 483:
 	    }
 	    result = yypvt[-0].val;
 	    updatesetminmax(cg, curset);
-	    //csto update_set_status(cg, curset);
+        update_set_status(cg, curset);
 	} /*NOTREACHED*/ break;
 case 484:
 # line 2288 "pars.yacc"
@@ -6812,7 +6812,7 @@ case 484:
 	    }
 	    result = yypvt[-0].val;
 	    updatesetminmax(cg, yypvt[-4].pset);
-	    //csto update_set_status(cg, yypvt[-4].pset);
+        update_set_status(cg, yypvt[-4].pset);
 	} /*NOTREACHED*/ break;
 case 485:
 # line 2304 "pars.yacc"
@@ -6829,7 +6829,7 @@ case 485:
 	    }
 	    result = yypvt[-0].val;
 	    updatesetminmax(yypvt[-6].pset, yypvt[-4].pset);
-	    //csto update_set_status(yypvt[-6].pset, yypvt[-4].pset);
+        update_set_status(yypvt[-6].pset, yypvt[-4].pset);
 	} /*NOTREACHED*/ break;
 case 486:
 # line 2323 "pars.yacc"

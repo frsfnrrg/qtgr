@@ -13,6 +13,7 @@
 #include "dialog.h"
 #include "graphwidget.h"
 #include <time.h>
+#include "tools/options.h"
 
 static int startuptimer;
 

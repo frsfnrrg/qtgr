@@ -369,7 +369,7 @@ void do_digfilter(set1, set2)
 		  getsetlength(cg, set2));
 	setcomment(cg, digfiltset, buf);
 	updatesetminmax(cg, digfiltset);
-    //frsfnrrg update_set_status(cg, digfiltset);
+    update_set_status(cg, digfiltset);
 	drawgraph();
     }
 }
@@ -403,7 +403,7 @@ void do_linearc(set1, set2)
 	sprintf(buf, "Linear convolution of set %d with set %d", set1, set2);
 	setcomment(cg, linearcset, buf);
 	updatesetminmax(cg, linearcset);
-    //frsfnrrg update_set_status(cg, linearcset);
+    update_set_status(cg, linearcset);
 	drawgraph();
     }
 }
@@ -445,7 +445,7 @@ void do_xcor(set1, set2, itype, lag)
 	}
 	setcomment(cg, xcorset, buf);
 	updatesetminmax(cg, xcorset);
-    //frsfnrrg update_set_status(cg, xcorset);
+    update_set_status(cg, xcorset);
 	drawgraph();
     }
 }
@@ -503,7 +503,7 @@ void do_spline(set, start, stop, n)
 	}
 	setcomment(cg, splineset, buf);
 	updatesetminmax(cg, splineset);
-    //frsfnrrg update_set_status(cg, splineset);
+    update_set_status(cg, splineset);
 	cxfree(b);
 	cxfree(c);
 	cxfree(d);
@@ -544,7 +544,7 @@ double do_int(setno, itype)
 	    sum = trapint(getx(cg, setno), gety(cg, setno), getx(cg, intset), gety(cg, intset), getsetlength(cg, setno));
 	    setcomment(cg, intset, buf);
 	    updatesetminmax(cg, intset);
-        //frsfnrrg update_set_status(cg, intset);
+        update_set_status(cg, intset);
 	    drawgraph();
 	}
     } else {
@@ -595,7 +595,7 @@ void do_differ(setno, itype)
 	}
 	setcomment(cg, diffset, buf);
 	updatesetminmax(cg, diffset);
-    //frsfnrrg update_set_status(cg, diffset);
+    update_set_status(cg, diffset);
 	drawgraph();
     }
 }
@@ -712,7 +712,7 @@ void do_regress(setno, ideg, iresid)
 	sprintf(buf, "%d deg fit of set %d", ideg, setno);
 	setcomment(cg, fitset, buf);
 	updatesetminmax(cg, fitset);
-    //frsfnrrg update_set_status(cg, fitset);
+    update_set_status(cg, fitset);
     }
 }
 
@@ -764,7 +764,7 @@ void do_runavg(setno, runlen, runtype)
 	}
 	setcomment(cg, runset, buf);
 	updatesetminmax(cg, runset);
-    //frsfnrrg  update_set_status(cg, runset);
+    update_set_status(cg, runset);
     }
 }
 
@@ -880,7 +880,7 @@ void do_fourier(fftflag, setno, load, loadx, invflag, type, wind)
 	}
 	setcomment(cg, specset, buf);
 	updatesetminmax(cg, specset);
-    //frsfnrrg  update_set_status(cg, specset);
+    update_set_status(cg, specset);
     }
 }
 
@@ -917,7 +917,7 @@ void do_window(setno, type, wind)
 	sprintf(buf, "Windowed set %d", setno);
 	setcomment(cg, specset, buf);
 	updatesetminmax(cg, specset);
-    //frsfnrrg  update_set_status(cg, specset);
+    update_set_status(cg, specset);
     }
 }
 
@@ -1051,7 +1051,7 @@ void histogram(setno, bins, xmin, xmax, hist_type)
     updatesetminmax(cg, hset);
     sprintf(buf, "Histogram from set # %d", setno);
     setcomment(cg, hset, buf);
-    //frsfnrrg  update_set_status(cg, hset);
+    update_set_status(cg, hset);
     cxfree(ind);
     drawgraph();
 }
@@ -1124,7 +1124,7 @@ void do_sample(setno, typeno, exprstr, startno, stepno)
     if (npts > 0) {
 	updatesetminmax(cg, resset);
 	setcomment(cg, resset, buf);
-    //frsfnrrg update_set_status(cg, resset);
+    update_set_status(cg, resset);
 	drawgraph();
     }
 }

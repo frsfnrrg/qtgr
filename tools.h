@@ -5,7 +5,9 @@
 #include "mainwindow.h"
 #include "overlay.h"
 #include "menu.h"
-#include "tools/options.h"
+
+class ToolsOptions;
+class ToolsStatus;
 
 /**
  * @brief The ToolsMenu class
@@ -31,20 +33,20 @@ protected:
 
 public slots:
     void autoScale();
-    void zoom();
-    void options();
-
-protected:
-   
 
 private slots:
-    
+    void zoom();
+    void options();
+    void status();
+
 private:
     void createActions();
     QAction *autoScaleAct;
     QAction *zoomRectAct;
     QAction *optionsAct;
+    QAction *statusAct;
     ToolsOptions* optionsDialog;
+    ToolsStatus* statusDialog;
 };
 
 #endif
