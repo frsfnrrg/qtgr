@@ -58,7 +58,7 @@ ViewDimensions::ViewDimensions(MainWindow *parent) :
     viewSelect = makeButton("Rect Select", SLOT(viewRect()));
     setButtonBold(viewSelect);
 
-    rescaleAxes = makeButton("Rescale Axes", SLOT(rescaleTicks()));
+    rescaleAxes = makeButton("Autoscale", SLOT(rescaleTicks()));
     setButtonBold(rescaleAxes);
 
     autoHook(viewXMin);
