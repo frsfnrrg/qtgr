@@ -100,6 +100,11 @@ void save_pdf(QGraphicsScene* scene, QString target, int width, int height) {
 }
 
 void FileExport::accept() {
+    // There are two sources for accept(); a buttonbox, and the filechooser
+    // frame. We do not want to accept on frame click. Keypresses take buttons
+    if (sender()->inherits("QFrame")) {
+        return;
+    }
     QFileDialog::accept();
 
     QStringList targets = this->selectedFiles();

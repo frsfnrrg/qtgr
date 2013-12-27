@@ -10,7 +10,6 @@ class FileSaveAll : public QFileDialog
 public:
     explicit FileSaveAll(MainWindow *mwin);
     MainWindow* mainWindow;
-private:
 
 public slots:
     void accept();

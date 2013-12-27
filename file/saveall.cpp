@@ -13,7 +13,13 @@ FileSaveAll::FileSaveAll(MainWindow *mwin) :
 }
 
 void FileSaveAll::accept() {
+    // There are two sources for accept(); a buttonbox, and the filechooser
+    // frame. We do not want to accept on frame click. Keypresses take buttons
+    if (sender()->inherits("QFrame")) {
+        return;
+    }
     QFileDialog::accept();
+
     QStringList files = this->selectedFiles();
     if (files.size() == 0) return;
 
