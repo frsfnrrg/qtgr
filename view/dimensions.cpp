@@ -3,6 +3,8 @@
 #include "choosers.h"
 #include "graphwidget.h"
 #include "prop.h"
+#include "mainwindow.h"
+#include "tools.h"
 
 const int OPTS_LEN = 8;
 
@@ -264,23 +266,5 @@ void ViewDimensions::updateScale() {
 }
 
 void ViewDimensions::rescaleTicks() {
-    // only rescale if dims are well ordered, etc.
-    // If they are not, they are highlighted red, and
-    // the style sheet has nonzero length
-    if (!worldXMin->styleSheet().length() &&
-            !worldXMax->styleSheet().length()) {
-        default_axis(cg, g[cg].auto_type, X_AXIS);
-        default_axis(cg, g[cg].auto_type, ZX_AXIS);
-        default_axis(cg, g[cg].auto_type, XA_AXIS);
-    }
-
-    if (!worldYMin->styleSheet().length() &&
-            !worldYMax->styleSheet().length()) {
-        default_axis(cg, g[cg].auto_type, Y_AXIS);
-        default_axis(cg, g[cg].auto_type, ZY_AXIS);
-        default_axis(cg, g[cg].auto_type, YA_AXIS);
-    }
-    drawgraph();
-
-    WorldDimProp::send(NULL);
+    mainWindow->toolsMenu->autoScale();
 }
