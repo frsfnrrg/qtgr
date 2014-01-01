@@ -148,6 +148,66 @@ void GraphWidget::linec(int c)
 
 QMap<QString, QString> tex2html;
 
+QMap<QString, QString> texmapping() {
+    QMap<QString, QString> map;
+    typedef struct {const char* tex;
+                    const char* html;} ppair;
+
+    const ppair th[] = {
+        {"\\alpha", "&alpha;"},
+        {"\\beta", "&beta;"},
+        {"\\gamma", "&gamma;"},
+        {"\\delta", "&delta;"},
+        {"\\epsilon", "&epsilon;"},
+
+        {"\\zeta", "&zeta;"},
+        {"\\eta", "&eta;"},
+        {"\\theta", "&theta;"},
+        {"\\iota", "&iota;"},
+        {"\\kappa", "&kappa;"},
+
+        {"\\lambda", "&lambda;"},
+        {"\\mu", "&mu;"},
+        {"\\nu", "&nu;"},
+        {"\\xi", "&xi;"},
+        {"\\omicron", "&omicron;"},
+
+        {"\\pi", "&pi;"},
+        {"\\rho", "&rho;"},
+        {"\\sigma", "&sigma;"},
+        {"\\tau", "&tau;"},
+        {"\\upsilon", "&upsilon;"},
+
+        {"\\phi", "&phi;"},
+        {"\\chi", "&chi;"},
+        {"\\psi", "&psi;"},
+        {"\\omega", "&omega;"},
+
+        // Note: \varepsilon -> &vepsilon and like
+        // are in XVGR, but not in QT
+        // Therefore, we italicize, with all its problems
+
+        {"\\varepsilon", "<i>&epsilon;</i>"},
+        {"\\vartheta", "<i>&theta;</i>"},
+        {"\\varpi", "<i>&pi;</i>"},
+        {"\\varrho", "<i>&rho;</i>"},
+        {"\\varsigma", "<i>&sigma;</i>"},
+        {"\\varphi", "<i>&phi;</i>"},
+
+        // Auxiliary
+
+        {"\\S", "<sup>"},
+        {"\\N", "</sup>"}
+    };
+
+    int i;
+    for (i=0;i<(int)(sizeof(th) / sizeof(ppair));i++) {
+        map.insert(th[i].tex, th[i].html);
+    }
+
+    return map;
+}
+
 QString texconvert(char* s, int slen)
 {
     char s1[1024];
@@ -157,27 +217,10 @@ QString texconvert(char* s, int slen)
 
     int  i,k,l;
 
-    const char *texsym[]  =
-    {"\\alpha","\\beta","\\gamma","\\delta","\\epsilon",
-     "\\zeta" ,"\\eta"  ,"\\theta","\\iota" ,"\\kappa"  ,
-     "\\lambda","\\mu"  ,"\\nu",   "\\xi",  "\\omicron" ,  "\\pi"  ,
-     "\\rho"   ,"\\sigma","\\tau","\\upsilon",
-     "\\phi"   ,"\\chi","\\psi"   ,"\\omega" ,     ""};
-    const char *htmlsym[] =
-    {"&alpha;","&beta;","&gamma;","&delta;","&epsilon;",
-     "&zeta;" ,"&eta;" ,"&theta;","&iota;","&kappa;",
-     "&lambda;","&mu;" ,"&nu;"   ,"&xi;"  ,"&omicron;","&pi;"  ,
-     "&rho;" ,"&sigma;","&tau;"   ,"&upsilon;",
-     "&phi;"  ,"&chi;" ,"&psi;"   ,"&omega;"   ,""        };
-
     // initialize tex2html map
     i=0;
     if (tex2html.isEmpty()) {
-        while(strcmp(texsym[i],"") != 0) {
-            // 	printf("test %s \n",texsym[i]);
-            tex2html.insert(texsym[i],htmlsym[i]);
-            i++;
-        }
+        tex2html = texmapping();
     }
 
     s_tmp = s1;
@@ -230,7 +273,8 @@ QString texconvert(char* s, int slen)
             do {
                 s_tmp[k] = s[l];
                 k++; l++;
-            } while((int) s[l]>= (int) 'a' && (int) s[l]<= (int) 'z');
+            } while( ((int) s[l]>= (int) 'a' && (int) s[l]<= (int) 'z') ||
+                     ((int) s[l]>= (int) 'A' && (int) s[l]<= (int) 'Z'));
 
             s_tmp[k] = '\0';
             //  	    printf("test %s ",s_tmp);
