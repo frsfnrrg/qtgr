@@ -152,12 +152,11 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
   
 void ViewSymbols::updateDialog()
 {
-    int gno,cset,iv;
+    int gno,cset;
     gno = cg; // current graph only 
       
     cset = setNumber->currentIndex();
     
-    iv = 100.0 * g[gno].p[cset].symsize;
     symbolSymbol->setCurrentIndex(g[gno].p[cset].sym);
     symbolFill->setCurrentIndex(g[gno].p[cset].symfill);
     symbolSize->setValue(g[gno].p[cset].symsize);

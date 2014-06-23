@@ -12,6 +12,7 @@ FileOpenSet::FileOpenSet(MainWindow *mwin) :
     this->setOptions(QFileDialog::DontUseNativeDialog);
     this->setAcceptMode(QFileDialog::AcceptOpen);
     this->setFileMode(QFileDialog::ExistingFiles);
+    this->setModal(true);
 
     fileType = new QComboBox();
     fileType->addItem("X Y");
@@ -75,6 +76,7 @@ void FileOpenSet::accept() {
     } else {
         drawgraph();
     }
+    mainWindow->attemptSetFile(files[0]);
 
     SetsSender::send();
 }

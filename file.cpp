@@ -17,7 +17,7 @@ FileMenu::FileMenu(MainWindow* mainWin) :
 
     opensetDialog = NULL;
     exportDialog = NULL;
-    saveallDialog = new FileSaveAll(this->mainWindow);   
+    saveallDialog = NULL;
 
     populateMenu(this);
 }
@@ -126,7 +126,17 @@ void FileMenu::write_param() {
 }
 
 void FileMenu::save_all() {
-       saveallDialog->exec();
+    if (saveallDialog) {
+        saveallDialog->setVisible(true);
+        saveallDialog->raise();
+    } else {
+        saveallDialog = new FileSaveAll(mainWindow);
+        saveallDialog->show();
+    }
+    if (mainWindow->hasFileName()) {
+        QString ending = saveallDialog->selectedFilter();
+        saveallDialog->selectFile(mainWindow->getFileName()+ending.right(ending.size() - 1));
+    }
 }
 
 void FileMenu::reset()
@@ -137,10 +147,11 @@ void FileMenu::reset()
     set_graph_active(0);
     drawgraph();
 
+    mainWindow->clearFileName();
+
     SetsSender::send();
 }
 
-// WARNING LEAKS: make a dialog
 void FileMenu::print()
 {
     QPrinter *printer = new QPrinter();
@@ -160,7 +171,6 @@ void FileMenu::print()
     painter->end();   
 }
 
-// WARNING LEAKS: make a dialog
 void FileMenu::save_as()
 {
     if (exportDialog) {
@@ -169,5 +179,9 @@ void FileMenu::save_as()
     } else {
         exportDialog = new FileExport(mainWindow);
         exportDialog->show();
+    }
+    if (mainWindow->hasFileName()) {
+        QString ending = exportDialog->selectedFilter();
+        exportDialog->selectFile(mainWindow->getFileName()+ending.right(ending.size() - 1));
     }
 }

@@ -28,8 +28,16 @@ public:
     TransformMenu* transformMenu;
     QMenu* helpMenu;
 
+    void setFileName(QString name);
+    void clearFileName();
+    void attemptSetFile(QString name);
+    bool hasFileName();
+    QString getFileName();
+
 private:
     QSettings settings;
+
+    QString fileName;
 
 protected:
     void closeEvent(QCloseEvent *);

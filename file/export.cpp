@@ -32,6 +32,7 @@ FileExport::FileExport(MainWindow *mwin) :
     this->setOptions(QFileDialog::DontUseNativeDialog);
     this->setAcceptMode(QFileDialog::AcceptSave);
     this->setFileMode(QFileDialog::AnyFile);
+    this->setModal(true);
 
     QStringList filters;
     for (int i=0;i<FILE_TYPES;i++) {

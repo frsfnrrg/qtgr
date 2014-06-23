@@ -42,9 +42,9 @@ private:
     QAction *exportAct;
     QAction *exitAct;
 
-    QDialog* opensetDialog;
-    QDialog* exportDialog;
-    QDialog* saveallDialog;
+    QFileDialog* opensetDialog;
+    QFileDialog* exportDialog;
+    QFileDialog* saveallDialog;
 };
 
 #endif

@@ -22,7 +22,7 @@ MainWindow::MainWindow() :
     settings("QTGR","QTGR")
 {
     startuptimer = QTime::currentTime().second() * 1000 + QTime::currentTime().msec();
-    this->setWindowTitle(tr("QTGR"));
+    clearFileName();
 
     QGraphicsScene *scene = new GraphicsScene(this);
     scene->setSceneRect(0, 0, 800, 600);
@@ -37,10 +37,7 @@ MainWindow::MainWindow() :
 
     setCentralWidget(gwidget);
 
-    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
-    QSize size = settings.value("size", QSize(400, 400)).toSize();
-    resize(size);
-    move(pos);
+
     bool autoup = settings.value("auto_update", QVariant(true)).toBool();
     Dialog::setAutoUpdate(autoup);
 
@@ -53,6 +50,24 @@ MainWindow::MainWindow() :
     //    set_default_graph(0);
     set_graph_active(0);
     drawgraph();
+
+
+    // finalize window
+    QPoint pos = settings.value("pos", QPoint(200, 200)).toPoint();
+    QSize size = settings.value("size", QSize(400, 400)).toSize();
+    resize(size);
+    move(pos);
+
+    //
+    // Name behavior: The document name is set on:
+    // - loading a dataset or graph in the unnamed state
+    // - saving to a .gr file
+    // and reset when
+    // - clearing all
+    // - program start
+    //
+    // The name is hinted for saving & exporting
+    //
 
     this->statusBar()->showMessage(tr("Ready"));
 }
@@ -149,6 +164,7 @@ void MainWindow::initialize()
     if (arguments.length() == 2) {
         int type=XY;
 
+        setFileName(arguments[1]);
         QByteArray v = arguments[1].toAscii();
         getdata(0,v.data(),DISK,type);
 
@@ -163,3 +179,28 @@ void MainWindow::initialize()
     printf("QTGR load time: %d msec\n", newtime - startuptimer);
 }
 
+void MainWindow::setFileName(QString name) {
+    QString file = QDir(name).dirName();
+    int split = file.lastIndexOf(".");
+    fileName = file.left(split);
+    this->setWindowTitle(fileName + " - " + tr("QTGR"));
+}
+
+void MainWindow::attemptSetFile(QString name) {
+    if (!hasFileName()) {
+        setFileName(name);
+    }
+}
+
+bool MainWindow::hasFileName() {
+    return !fileName.isEmpty();
+}
+
+QString MainWindow::getFileName() {
+    return fileName;
+}
+
+void MainWindow::clearFileName() {
+    fileName = QString();
+    this->setWindowTitle(tr("QTGR"));
+}
