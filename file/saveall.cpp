@@ -3,14 +3,14 @@
 
 
 FileSaveAll::FileSaveAll(MainWindow *mwin) :
-    QFileDialog(mwin, tr("Save graph"), QDir::currentPath(), "*.gr")
+    QFileDialog(mwin, tr("Save graph"), QDir::currentPath(), "*;;*.xvgr")
 {
     mainWindow = mwin;
 
     this->setOptions(QFileDialog::DontUseNativeDialog);
     this->setAcceptMode(QFileDialog::AcceptSave);
     this->setFileMode(QFileDialog::AnyFile);
-    this->setDefaultSuffix("gr");
+    this->setDefaultSuffix("xvgr");
     this->setModal(true);
 }
 
@@ -27,10 +27,10 @@ void FileSaveAll::accept() {
 
     QString outformat("%g %g");
 
-    QString file = files.at(0);
-//    if (!file.contains(QChar('.'))) {
-//        file.append(".gr");
-//    }
+    QString file = files[0];
+
+    mainWindow->setFileName(files[0]);
+    mainWindow->setLastDirectory(directory());
 
     do_writesets(MAXGRAPH, -1, -1, file.toAscii().data(), outformat.toAscii().data());
 }

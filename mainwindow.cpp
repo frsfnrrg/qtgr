@@ -22,6 +22,7 @@ MainWindow::MainWindow() :
     settings("QTGR","QTGR")
 {
     startuptimer = QTime::currentTime().second() * 1000 + QTime::currentTime().msec();
+    setLastDirectory(QDir::home());
     clearFileName();
 
     QGraphicsScene *scene = new GraphicsScene(this);
@@ -182,25 +183,27 @@ void MainWindow::initialize()
 void MainWindow::setFileName(QString name) {
     QString file = QDir(name).dirName();
     int split = file.lastIndexOf(".");
-    fileName = file.left(split);
-    this->setWindowTitle(fileName + " - " + tr("QTGR"));
-}
-
-void MainWindow::attemptSetFile(QString name) {
-    if (!hasFileName()) {
-        setFileName(name);
-    }
+    fName = file.left(split);
+    this->setWindowTitle(fName + " - " + tr("QTGR"));
 }
 
 bool MainWindow::hasFileName() {
-    return !fileName.isEmpty();
+    return !fName.isEmpty();
 }
 
-QString MainWindow::getFileName() {
-    return fileName;
+QString MainWindow::fileName() {
+    return fName;
 }
 
 void MainWindow::clearFileName() {
-    fileName = QString();
+    fName = QString();
     this->setWindowTitle(tr("QTGR"));
+}
+
+void MainWindow::setLastDirectory(QDir dir) {
+    lastDir = dir;
+}
+
+QDir MainWindow::lastDirectory() {
+    return lastDir;
 }

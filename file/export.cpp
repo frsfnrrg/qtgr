@@ -107,6 +107,7 @@ void FileExport::accept() {
         return;
     }
     QFileDialog::accept();
+    mainWindow->setLastDirectory(directory());
 
     QStringList targets = this->selectedFiles();
     if (targets.size() == 0) return;

@@ -107,6 +107,7 @@ void FileMenu::open_set() {
        opensetDialog = new FileOpenSet(mainWindow);
        opensetDialog->show();
     }
+    opensetDialog->setDirectory(mainWindow->lastDirectory());
 }
 
 void FileMenu::open_param() {
@@ -134,9 +135,9 @@ void FileMenu::save_all() {
         saveallDialog->show();
     }
     if (mainWindow->hasFileName()) {
-        QString ending = saveallDialog->selectedFilter();
-        saveallDialog->selectFile(mainWindow->getFileName()+ending.right(ending.size() - 1));
+        saveallDialog->selectFile(mainWindow->fileName()+"."+saveallDialog->defaultSuffix());
     }
+    saveallDialog->setDirectory(mainWindow->lastDirectory());
 }
 
 void FileMenu::reset()
@@ -180,8 +181,12 @@ void FileMenu::save_as()
         exportDialog = new FileExport(mainWindow);
         exportDialog->show();
     }
+    // technically, this could be reduced to signal-slot connection between
+    // FileMenu & the four name-inducing actions/dialogs. Why put mainWindow into
+    // this?
     if (mainWindow->hasFileName()) {
         QString ending = exportDialog->selectedFilter();
-        exportDialog->selectFile(mainWindow->getFileName()+ending.right(ending.size() - 1));
+        exportDialog->selectFile(mainWindow->fileName()+ending.right(ending.size() - 1));
     }
+    exportDialog->setDirectory(mainWindow->lastDirectory());
 }

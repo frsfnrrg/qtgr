@@ -76,7 +76,8 @@ void FileOpenSet::accept() {
     } else {
         drawgraph();
     }
-    mainWindow->attemptSetFile(files[0]);
+    mainWindow->setFileName(files[0]);
+    mainWindow->setLastDirectory(directory());
 
     SetsSender::send();
 }

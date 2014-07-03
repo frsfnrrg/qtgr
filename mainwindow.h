@@ -30,14 +30,17 @@ public:
 
     void setFileName(QString name);
     void clearFileName();
-    void attemptSetFile(QString name);
     bool hasFileName();
-    QString getFileName();
+    QString fileName();
+
+    void setLastDirectory(QDir);
+    QDir lastDirectory();
 
 private:
     QSettings settings;
 
-    QString fileName;
+    QString fName;
+    QDir lastDir;
 
 protected:
     void closeEvent(QCloseEvent *);
