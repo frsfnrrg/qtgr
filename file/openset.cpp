@@ -4,6 +4,13 @@
 #include "prop.h"
 #include "tools.h"
 
+typedef struct {const char* name; int type;} FType;
+
+FType FILETYPES[] = {
+    {"X Y [Y2] [Y3] ...", NXY},
+    {"X Y", XY}
+};
+
 FileOpenSet::FileOpenSet(MainWindow *mwin) :
     QFileDialog(mwin, tr("Read Sets"), QDir::currentPath(), "*")
 {
@@ -15,15 +22,19 @@ FileOpenSet::FileOpenSet(MainWindow *mwin) :
     this->setModal(true);
 
     fileType = new QComboBox();
-    fileType->addItem("X Y");
-    fileType->addItem("X Y1 Y2");
+    for (unsigned int i=0;i< sizeof(FILETYPES) /sizeof(FILETYPES[0]);i++) {
+        fileType->addItem(FILETYPES[i].name);
+    }
 
     graphNum = new QComboBox();
     graphNum->addItem("0");
     graphNum->addItem("1");
+    graphNum->setDisabled(true);
 
     fromFile = new QRadioButton(tr("File"));
     fromPipe = new QRadioButton(tr("Pipe"));
+    fromFile->setChecked(true);
+    fromPipe->setDisabled(true);
 
     QWidget* fromButtons = new QWidget();
     QHBoxLayout* fromButtonsLayout = new QHBoxLayout();
@@ -56,14 +67,10 @@ void FileOpenSet::accept() {
     QFileDialog::accept();
 
     QStringList files = this->selectedFiles();
-    int type;
-
     if (files.size() == 0) return;
 
-    if ( fileType->currentIndex() == 0)
-        type = XY;
-    if ( fileType->currentIndex() == 1)
-        type = NXY;
+    int type = FILETYPES[fileType->currentIndex()].type;
+
 
     for (int i = 0; i < files.size(); ++i) {
         QByteArray v = files.at(i).toAscii();
