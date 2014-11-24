@@ -163,7 +163,7 @@ void MainWindow::initialize()
 
     // only accept one argument so far: a file to be loaded
     if (arguments.length() == 2) {
-        int type=XY;
+        int type=NXY;
 
         setFileName(arguments[1]);
         QByteArray v = arguments[1].toAscii();
