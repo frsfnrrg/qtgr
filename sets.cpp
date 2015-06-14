@@ -15,9 +15,12 @@ SetsMenu::SetsMenu(MainWindow* mwin) :
 }
 
 void SetsMenu::createActions() {
+    // TODO (eventually): localize all actions into one file to make
+    // shortcuts easily modified together
+
     kadAct = makeAction("Kill/(De)Activate",
                         "Remove, enable, or disable a set",
-                        "", SLOT(kad()));
+                        "Alt+K", SLOT(kad()));
 
     editAct = makeAction("Edit",
                          "Edit the points, type, and more of a set",
@@ -26,7 +29,7 @@ void SetsMenu::createActions() {
 
     mcsAct = makeAction("Reorder sets",
                                  "Rearrange sets; move them; copy them; swap them",
-                                 "", SLOT(mcs()));
+                                 "Alt+M", SLOT(mcs()));
 
     splitAct = makeAction("Split",
                           "Divide set",

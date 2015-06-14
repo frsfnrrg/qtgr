@@ -102,31 +102,31 @@ void ViewMenu::createActions()
 {
     titleAct = makeAction("Titling",
                           "Set the title and subtitle of the graph.",
-                          "Ctrl+Shift+t",
+                          "Alt+T",
                           SLOT(title()));
     dimsAct = makeAction("Dimensions",
                          "Control the size, zoom, and display type of the graph.",
-                         "Ctrl+w",
+                         "Alt+D",
                          SLOT(dims()));
     axisAct = makeAction("Axis",
                           "Change spacing and labels for the graph axes.",
-                          "Ctrl+t",
+                          "Alt+A",
                           SLOT(axis()));
     symbolsAct = makeAction("Symbols",
                             "Change display of sets on the graph.",
-                            "Ctrl+s",
+                            "Alt+S",
                             SLOT(symbols()));
     legendsAct = makeAction("Legends",
                             "Give legends to sets on the graph.",
-                            "Ctrl+L",
+                            "Alt+L",
                             SLOT(legends()));
     frameAct = makeAction("Frame",
                           "Alter the look of the graph frame",
-                          "Ctrl+f",
+                          "Alt+F",
                           SLOT(frame()));
     textAct = makeAction("Strings",
                           "Add free strings to the graph",
-                          "",
+                          "Alt+Shift+S",
                           SLOT(text()));
 
     // setup double click handler

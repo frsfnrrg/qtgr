@@ -28,11 +28,11 @@ void ToolsMenu::createActions()
 {
     autoScaleAct = makeAction("Autoscale",
                                  "Rescale the displayed area of the graph to show all points.",
-                                 "Ctrl+a",
+                                 "Alt+N",
                                  SLOT(autoScale()));
     zoomRectAct = makeAction("Rect Zoom",
                              "Zoom the graph in.",
-                             "Ctrl+r",
+                             "ALt+R",
                              SLOT(zoom()));
     optionsAct = makeAction("Options",
                             "Configure the program settings",

@@ -18,19 +18,19 @@ TransformMenu::TransformMenu(MainWindow* mainWin) :
 void TransformMenu::createActions() {
     integrateAct = makeAction("Integrate",
                               "Integrate a set",
-                              "",
+                              "Alt+Shift+I",
                               SLOT(integrate()));
     differentiateAct = makeAction("Differentiate",
                               "Differentiate a set",
-                              "",
+                              "Alt+Shift+D",
                               SLOT(differentiate()));
     evaluateAct = makeAction("Evaluate",
                               "Apply an arbitrary simple operation to a set",
-                              "",
+                              "Alt+Shift+E",
                               SLOT(evaluate()));
     regressionAct = makeAction("Regression",
                               "Apply regression to a set",
-                              "",
+                              "Alt+Shift+R",
                               SLOT(regression()));
 }
 
