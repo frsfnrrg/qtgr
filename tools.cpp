@@ -36,11 +36,11 @@ void ToolsMenu::createActions()
                              SLOT(zoom()));
     optionsAct = makeAction("Options",
                             "Configure the program settings",
-                            "",
+                            "Alt+O",
                             SLOT(options()));
     statusAct = makeAction("Status",
                             "See the status and metrics of the sets",
-                            "",
+                            "Alt+.",
                             SLOT(status()));
 }
 

@@ -34,6 +34,7 @@ ToolsStatus::ToolsStatus(MainWindow* mainWin) :
     output->setRowCount(MAXPLOT * 2);
     output->setColumnCount(numcols);
 
+    output->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     QTableWidgetItem* it;
 
     for (int i=0;i<numcols;i++) {
@@ -51,6 +52,9 @@ ToolsStatus::ToolsStatus(MainWindow* mainWin) :
         disable_item(output, j*2+1, 1);
         disable_item(output, j*2+1, 2);
     }
+
+    output->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    output->setMinimumWidth(output->viewport()->width() + output->verticalScrollBar()->width());
 
     // perhaps, hook up row selection so selecting one row on the lhs selects all the items for that set
 
