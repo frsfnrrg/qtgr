@@ -359,7 +359,7 @@ extern void do_moveset(int gfrom, int j1, int gto, int j2);
 extern void do_swapset(int gfrom, int j1, int gto, int j2);
 extern void do_writesets(int gno, int setno,int  imbed, char * fn, char * format);
 extern void minmax(double *x, int n, double * xmin, double * xmax, int *imin, int *imax);
-
+extern int activeset(int gno);
 
 //computils
 

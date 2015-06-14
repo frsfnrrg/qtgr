@@ -77,10 +77,10 @@ int getdata(int gno, char* fn, int src, int type)
         retval = readnxy(cur_gno, fn, fp);
 	    break;
 	case IHL:
-	    //csto retval = readihl(cur_gno, fn, fp);
+        retval = readihl(cur_gno, fn, fp);
 	    break;
 	case BIN:
-	    //csto retval = readbinary(cur_gno, fn, fp);
+        //csto retval = readbinary(cur_gno, fn, fp);
 	    break;
 	case XYDX:
 	case XYDY:
@@ -92,13 +92,13 @@ int getdata(int gno, char* fn, int src, int type)
 	case XYHILO:
 	case XYUV:
 	case XYBOX:
-	    //csto retval = readxxyy(cur_gno, fn, fp, cur_type);
+        retval = readxxyy(cur_gno, fn, fp, cur_type);
 	    break;
 	case XYSTRING:
-	    //csto retval = readxystring(cur_gno, fn, fp);
+        //csto retval = readxystring(cur_gno, fn, fp);
 	    break;
 	case BLOCK:
-	    //csto retval = readblockdata(cur_gno, fn, fp);
+        //csto retval = readblockdata(cur_gno, fn, fp);
 	    break;
 	}
     }
@@ -163,7 +163,7 @@ int getdata_step(int gno, char* fn, int src, int type)
         retval = readnxy(cur_gno, fn, fp);
 	    break;
 	case IHL:
-	    //csto retval = readihl(cur_gno, fn, fp);
+        retval = readihl(cur_gno, fn, fp);
 	    break;
 	case BIN:
 	    //csto retval = readbinary(cur_gno, fn, fp);
@@ -177,7 +177,7 @@ int getdata_step(int gno, char* fn, int src, int type)
 	case XYRT:
 	case XYHILO:
 	case XYBOX:
-	    //csto retval = readxxyy(cur_gno, fn, fp, cur_type);
+        retval = readxxyy(cur_gno, fn, fp, cur_type);
 	    break;
 	case XYSTRING:
 	    //csto retval = readxystring(cur_gno, fn, fp);
@@ -337,48 +337,48 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
 }
 
 /*
-//  * read IHL format
-//  */
-// int readihl(int gno, char* fn, FILE *fp)
-// {
-//     int i, j, pstat, npts;
-//     double *x, *y, tmp;
-// 
-//     i = 0;
-//     pstat = 0;
-//     if ((j = nextset(gno)) == -1) {
-// 	return 0;
-//     }
-//     if (fgets(buf, MAX_LINE_LEN, fp) == NULL) {
-// 	errwin("Can't read from file");
-// 	killset(gno, j);
-// 	return 0;
-//     }
-//     pstat = sscanf(buf, "%d", &npts);
-//     if (npts == 0) {
-// 	errwin("Number of points = 0");
-// 	killset(gno, j);
-// 	return 0;
-//     }
-//     activateset(gno, j);
-//     settype(gno, j, XY);
-//     setlength(gno, j, npts);
-//     setcomment(gno, j, fn);
-//     x = getx(gno, j);
-//     y = gety(gno, j);
-//     for (i = 0; i < npts; i++) {
-// 	if (fgets(buf, MAX_LINE_LEN, fp) == NULL) {
-// 	    errwin("Premature EOF");
-// 	    updatesetminmax(gno, j);
-// 	    return 1;
-// 	}
-// 	convertchar(buf);
-// 	pstat = sscanf(buf, "%lf %lf %lf", &tmp, &x[i], &y[i]);
-//     }
-//     updatesetminmax(gno, j);
-//     return 1;
-// }
-// 
+  * read IHL format
+  */
+ int readihl(int gno, char* fn, FILE *fp)
+ {
+     int i, j, pstat, npts;
+     double *x, *y, tmp;
+
+     i = 0;
+     pstat = 0;
+     if ((j = nextset(gno)) == -1) {
+    return 0;
+     }
+     if (fgets(buf, MAX_LINE_LEN, fp) == NULL) {
+    errwin("Can't read from file");
+    killset(gno, j);
+    return 0;
+     }
+     pstat = sscanf(buf, "%d", &npts);
+     if (npts == 0) {
+    errwin("Number of points = 0");
+    killset(gno, j);
+    return 0;
+     }
+     activateset(gno, j);
+     settype(gno, j, XY);
+     setlength(gno, j, npts);
+     setcomment(gno, j, fn);
+     x = getx(gno, j);
+     y = gety(gno, j);
+     for (i = 0; i < npts; i++) {
+    if (fgets(buf, MAX_LINE_LEN, fp) == NULL) {
+        errwin("Premature EOF");
+        updatesetminmax(gno, j);
+        return 1;
+    }
+    convertchar(buf);
+    pstat = sscanf(buf, "%lf %lf %lf", &tmp, &x[i], &y[i]);
+     }
+     updatesetminmax(gno, j);
+     return 1;
+ }
+//
  /*
   * read x1 y1 y2 ... y30 formatted files
   * note that the maximum number of sets is 30
@@ -607,230 +607,230 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
 // {
 // }
 // 
-// /*
-//  * read file types using dx and/or dy
-//  */
-// int readxxyy(int gno, char *fn, FILE *fp, int type)
-// {
-//     int i = 0, j, pstat, readset = 0, ptype, retval = 0;
-//     double *x, *y, *dx, *dy, *dz;
-//     double xtmp, ytmp, dxtmp, dytmp, dztmp;
-// 
-//     x = y = dx = dy = dz = NULL;
-//     x = (double *) calloc(BUFSIZE, sizeof(double));
-//     y = (double *) calloc(BUFSIZE, sizeof(double));
-//     switch (type) {
-//     case XYZ:
-//     case XYRT:
-//     case XYDX:
-//     case XYDY:
-// 	dx = (double *) calloc(BUFSIZE, sizeof(double));
-// 	break;
-//     case XYDXDX:
-//     case XYDYDY:
-//     case XYDXDY:
-//     case XYUV:
-// 	dx = (double *) calloc(BUFSIZE, sizeof(double));
-// 	dy = (double *) calloc(BUFSIZE, sizeof(double));
-// 	break;
-//     case XYHILO:
-//     case XYBOX:
-// 	dx = (double *) calloc(BUFSIZE, sizeof(double));
-// 	dy = (double *) calloc(BUFSIZE, sizeof(double));
-// 	dz = (double *) calloc(BUFSIZE, sizeof(double));
-// 	break;
-//     default:
-// 	dx = (double *) calloc(BUFSIZE, sizeof(double));
-// 	dy = (double *) calloc(BUFSIZE, sizeof(double));
-// 	break;
-//     }
-//     if (x == NULL || y == NULL) {
-// 	errwin("Insufficient memory for set");
-// 	cxfree(x);
-// 	cxfree(y);
-// 	cxfree(dx);
-// 	cxfree(dy);
-// 	cxfree(dz);
-// 	return (0);
-//     }
-//     while (fgets(buf, MAX_LINE_LEN, fp) != NULL) {
-// 	if (buf[0] == '#') {
-// 	    continue;
-// 	}
-// 	if (buf[0] == '@') {
-// 	    change_gno = -1;
-// 	    change_type = cur_type;
-// 	    read_param(buf + 1);
-// 	    if (change_gno >= 0) {
-// 		cur_gno = gno = change_gno;
-// 	    }
-// 	    if (change_type != cur_type) {
-// 		if (change_type != cur_type) {
-// 		    cur_type = change_type;
-// 		    retval = -1;
-// 		    break;	/* exit this module and store any set */
-// 		}
-// 	    }
-// 	    continue;
-// 	}
-// 	convertchar(buf);
-// 	/* count the number of items scanned */
-// 	if ((pstat = sscanf(buf, "%lf %lf %lf %lf %lf", &xtmp, &ytmp, &dxtmp, &dytmp, &dztmp)) >= 1) {
-// 	    /* got x and y so increment */
-// 	    x[i] = xtmp;
-// 	    y[i] = ytmp;
-// 	    if (type == XYDX || type == XYDY || type == XYZ || type == XYRT) {
-// 		dx[i] = dxtmp;
-// 	    } else if (type == XYHILO || type == XYBOX) {
-// 		dx[i] = dxtmp;
-// 		dy[i] = dytmp;
-// 		dz[i] = dztmp;
-// 	    } else {
-// 		dx[i] = dxtmp;
-// 		dy[i] = dytmp;
-// 	    }
-// 	    i++;
-// 	    if (i % BUFSIZE == 0) {
-// 		x = (double *) realloc(x, (i + BUFSIZE) * sizeof(double));
-// 		y = (double *) realloc(y, (i + BUFSIZE) * sizeof(double));
-// 		switch (type) {
-// 		case XYDX:
-// 		case XYDY:
-// 		case XYZ:
-// 		case XYRT:
-// 		    dx = (double *) realloc(dx, (i + BUFSIZE) * sizeof(double));
-// 		    break;
-// 		case XYDXDX:
-// 		case XYDYDY:
-// 		case XYDXDY:
-// 		case XYUV:
-// 		    dx = (double *) realloc(dx, (i + BUFSIZE) * sizeof(double));
-// 		    dy = (double *) realloc(dy, (i + BUFSIZE) * sizeof(double));
-// 		    break;
-// 		case XYHILO:
-// 		case XYBOX:
-// 		    dx = (double *) realloc(dx, (i + BUFSIZE) * sizeof(double));
-// 		    dy = (double *) realloc(dy, (i + BUFSIZE) * sizeof(double));
-// 		    dz = (double *) realloc(dz, (i + BUFSIZE) * sizeof(double));
-// 		    break;
-// 		default:
-// 		    dx = (double *) realloc(dx, (i + BUFSIZE) * sizeof(double));
-// 		    dy = (double *) realloc(dy, (i + BUFSIZE) * sizeof(double));
-// 		    break;
-// 		}
-// 	    }
-// 	} else {
-// 	    if (i != 0) {
-// 		if ((j = nextset(gno)) == -1) {
-// 		    cxfree(x);
-// 		    cxfree(y);
-// 		    cxfree(dx);
-// 		    cxfree(dy);
-// 		    cxfree(dz);
-// 		    return readset;
-// 		}
-// 		activateset(gno, j);
-// 		settype(gno, j, type);
-// 		setcol(gno, x, j, i, 0);
-// 		setcol(gno, y, j, i, 1);
-// 		setcol(gno, dx, j, i, 2);
-// 		setcol(gno, dy, j, i, 3);
-// 		setcol(gno, dz, j, i, 4);
-// 		setcomment(gno, j, fn);
-// 		updatesetminmax(gno, j);
-// 		readset++;
-// 	    } else {
-// 		readerror++;
-// 		if (readerror > 10) {
-// 		    if (yesno("Lots of errors, abort?", "Press YES or NO", "YES", "NO")) {
-// 			cxfree(x);
-// 			cxfree(y);
-// 			cxfree(dx);
-// 			cxfree(dy);
-// 			cxfree(dz);
-// 			return (0);
-// 		    } else {
-// 			readerror = 0;
-// 		    }
-// 		}
-// 	    }
-// 	    i = 0;
-// 	    x = (double *) calloc(BUFSIZE, sizeof(double));
-// 	    y = (double *) calloc(BUFSIZE, sizeof(double));
-// 	    switch (type) {
-// 	    case XYDX:
-// 	    case XYZ:
-// 	    case XYRT:
-// 	    case XYDY:
-// 		dx = (double *) calloc(BUFSIZE, sizeof(double));
-// 		break;
-// 	    case XYDXDX:
-// 	    case XYDYDY:
-// 	    case XYDXDY:
-// 	    case XYUV:
-// 		dx = (double *) calloc(BUFSIZE, sizeof(double));
-// 		dy = (double *) calloc(BUFSIZE, sizeof(double));
-// 		break;
-// 	    case XYHILO:
-// 	    case XYBOX:
-// 		dx = (double *) calloc(BUFSIZE, sizeof(double));
-// 		dy = (double *) calloc(BUFSIZE, sizeof(double));
-// 		dz = (double *) calloc(BUFSIZE, sizeof(double));
-// 		break;
-// 	    default:
-// 		dx = (double *) calloc(BUFSIZE, sizeof(double));
-// 		dy = (double *) calloc(BUFSIZE, sizeof(double));
-// 		break;
-// 	    }
-// 	    if (x == NULL || y == NULL) {
-// 		errwin("Insufficient memory for set");
-// 		cxfree(x);
-// 		cxfree(y);
-// 		cxfree(dx);
-// 		cxfree(dy);
-// 		cxfree(dz);
-// 		killset(gno, j);
-// 		return (readset);
-// 	    }
-// 	}
-//     }
-//     if (i != 0) {
-// 	if ((j = nextset(gno)) == -1) {
-// 	    cxfree(x);
-// 	    cxfree(y);
-// 	    cxfree(dx);
-// 	    cxfree(dy);
-// 	    cxfree(dz);
-// 	    return readset;
-// 	}
-// 	activateset(gno, j);
-// 	settype(gno, j, type);
-// 	setcol(gno, x, j, i, 0);
-// 	setcol(gno, y, j, i, 1);
-// 	setcol(gno, dx, j, i, 2);
-// 	setcol(gno, dy, j, i, 3);
-// 	setcol(gno, dz, j, i, 4);
-// 	setcomment(gno, j, fn);
-// 	updatesetminmax(gno, j);
-// 	readset++;
-//     } else {
-// 	cxfree(x);
-// 	cxfree(y);
-// 	cxfree(dx);
-// 	cxfree(dy);
-// 	cxfree(dz);
-//     }
-//     if (retval == -1) {
-// 	return retval;
-//     } else {
-// 	return readset;
-//     }
-// }
+ /*
+  * read file types using dx and/or dy
+  */
+ int readxxyy(int gno, char *fn, FILE *fp, int type)
+ {
+     int i = 0, j, pstat, readset = 0, ptype, retval = 0;
+     double *x, *y, *dx, *dy, *dz;
+     double xtmp, ytmp, dxtmp, dytmp, dztmp;
+
+     x = y = dx = dy = dz = NULL;
+     x = (double *) calloc(BUFSIZE, sizeof(double));
+     y = (double *) calloc(BUFSIZE, sizeof(double));
+     switch (type) {
+     case XYZ:
+     case XYRT:
+     case XYDX:
+     case XYDY:
+    dx = (double *) calloc(BUFSIZE, sizeof(double));
+    break;
+     case XYDXDX:
+     case XYDYDY:
+     case XYDXDY:
+     case XYUV:
+    dx = (double *) calloc(BUFSIZE, sizeof(double));
+    dy = (double *) calloc(BUFSIZE, sizeof(double));
+    break;
+     case XYHILO:
+     case XYBOX:
+    dx = (double *) calloc(BUFSIZE, sizeof(double));
+    dy = (double *) calloc(BUFSIZE, sizeof(double));
+    dz = (double *) calloc(BUFSIZE, sizeof(double));
+    break;
+     default:
+    dx = (double *) calloc(BUFSIZE, sizeof(double));
+    dy = (double *) calloc(BUFSIZE, sizeof(double));
+    break;
+     }
+     if (x == NULL || y == NULL) {
+    errwin("Insufficient memory for set");
+    cxfree(x);
+    cxfree(y);
+    cxfree(dx);
+    cxfree(dy);
+    cxfree(dz);
+    return (0);
+     }
+     while (fgets(buf, MAX_LINE_LEN, fp) != NULL) {
+    if (buf[0] == '#') {
+        continue;
+    }
+    if (buf[0] == '@') {
+        change_gno = -1;
+        change_type = cur_type;
+        read_param(buf + 1);
+        if (change_gno >= 0) {
+        cur_gno = gno = change_gno;
+        }
+        if (change_type != cur_type) {
+        if (change_type != cur_type) {
+            cur_type = change_type;
+            retval = -1;
+            break;	/* exit this module and store any set */
+        }
+        }
+        continue;
+    }
+    convertchar(buf);
+    /* count the number of items scanned */
+    if ((pstat = sscanf(buf, "%lf %lf %lf %lf %lf", &xtmp, &ytmp, &dxtmp, &dytmp, &dztmp)) >= 1) {
+        /* got x and y so increment */
+        x[i] = xtmp;
+        y[i] = ytmp;
+        if (type == XYDX || type == XYDY || type == XYZ || type == XYRT) {
+        dx[i] = dxtmp;
+        } else if (type == XYHILO || type == XYBOX) {
+        dx[i] = dxtmp;
+        dy[i] = dytmp;
+        dz[i] = dztmp;
+        } else {
+        dx[i] = dxtmp;
+        dy[i] = dytmp;
+        }
+        i++;
+        if (i % BUFSIZE == 0) {
+        x = (double *) realloc(x, (i + BUFSIZE) * sizeof(double));
+        y = (double *) realloc(y, (i + BUFSIZE) * sizeof(double));
+        switch (type) {
+        case XYDX:
+        case XYDY:
+        case XYZ:
+        case XYRT:
+            dx = (double *) realloc(dx, (i + BUFSIZE) * sizeof(double));
+            break;
+        case XYDXDX:
+        case XYDYDY:
+        case XYDXDY:
+        case XYUV:
+            dx = (double *) realloc(dx, (i + BUFSIZE) * sizeof(double));
+            dy = (double *) realloc(dy, (i + BUFSIZE) * sizeof(double));
+            break;
+        case XYHILO:
+        case XYBOX:
+            dx = (double *) realloc(dx, (i + BUFSIZE) * sizeof(double));
+            dy = (double *) realloc(dy, (i + BUFSIZE) * sizeof(double));
+            dz = (double *) realloc(dz, (i + BUFSIZE) * sizeof(double));
+            break;
+        default:
+            dx = (double *) realloc(dx, (i + BUFSIZE) * sizeof(double));
+            dy = (double *) realloc(dy, (i + BUFSIZE) * sizeof(double));
+            break;
+        }
+        }
+    } else {
+        if (i != 0) {
+        if ((j = nextset(gno)) == -1) {
+            cxfree(x);
+            cxfree(y);
+            cxfree(dx);
+            cxfree(dy);
+            cxfree(dz);
+            return readset;
+        }
+        activateset(gno, j);
+        settype(gno, j, type);
+        setcol(gno, x, j, i, 0);
+        setcol(gno, y, j, i, 1);
+        setcol(gno, dx, j, i, 2);
+        setcol(gno, dy, j, i, 3);
+        setcol(gno, dz, j, i, 4);
+        setcomment(gno, j, fn);
+        updatesetminmax(gno, j);
+        readset++;
+        } else {
+        readerror++;
+        if (readerror > 10) {
+            if (yesno("Lots of errors, abort?", "Press YES or NO", "YES", "NO")) {
+            cxfree(x);
+            cxfree(y);
+            cxfree(dx);
+            cxfree(dy);
+            cxfree(dz);
+            return (0);
+            } else {
+            readerror = 0;
+            }
+        }
+        }
+        i = 0;
+        x = (double *) calloc(BUFSIZE, sizeof(double));
+        y = (double *) calloc(BUFSIZE, sizeof(double));
+        switch (type) {
+        case XYDX:
+        case XYZ:
+        case XYRT:
+        case XYDY:
+        dx = (double *) calloc(BUFSIZE, sizeof(double));
+        break;
+        case XYDXDX:
+        case XYDYDY:
+        case XYDXDY:
+        case XYUV:
+        dx = (double *) calloc(BUFSIZE, sizeof(double));
+        dy = (double *) calloc(BUFSIZE, sizeof(double));
+        break;
+        case XYHILO:
+        case XYBOX:
+        dx = (double *) calloc(BUFSIZE, sizeof(double));
+        dy = (double *) calloc(BUFSIZE, sizeof(double));
+        dz = (double *) calloc(BUFSIZE, sizeof(double));
+        break;
+        default:
+        dx = (double *) calloc(BUFSIZE, sizeof(double));
+        dy = (double *) calloc(BUFSIZE, sizeof(double));
+        break;
+        }
+        if (x == NULL || y == NULL) {
+        errwin("Insufficient memory for set");
+        cxfree(x);
+        cxfree(y);
+        cxfree(dx);
+        cxfree(dy);
+        cxfree(dz);
+        killset(gno, j);
+        return (readset);
+        }
+    }
+     }
+     if (i != 0) {
+    if ((j = nextset(gno)) == -1) {
+        cxfree(x);
+        cxfree(y);
+        cxfree(dx);
+        cxfree(dy);
+        cxfree(dz);
+        return readset;
+    }
+    activateset(gno, j);
+    settype(gno, j, type);
+    setcol(gno, x, j, i, 0);
+    setcol(gno, y, j, i, 1);
+    setcol(gno, dx, j, i, 2);
+    setcol(gno, dy, j, i, 3);
+    setcol(gno, dz, j, i, 4);
+    setcomment(gno, j, fn);
+    updatesetminmax(gno, j);
+    readset++;
+     } else {
+    cxfree(x);
+    cxfree(y);
+    cxfree(dx);
+    cxfree(dy);
+    cxfree(dz);
+     }
+     if (retval == -1) {
+    return retval;
+     } else {
+    return readset;
+     }
+ }
 // 
 // double *blockdata[MAXPLOT];
 // int blocklen;
 // int blockncols;
-// 
+//
 // /*
 //  * read block data
 //  */
@@ -840,7 +840,7 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
 //     int first = 1, readerror = 0;
 //     double *data[MAXPLOT]; /*, atof(); */
 //     char tmpbuf[1024], *s, *strtok();
-// 
+//
 //     i = 0;
 //     pstat = 0;
 //     while ((s = fgets(buf, MAX_LINE_LEN, fp)) != NULL) {
@@ -929,9 +929,9 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
 //     blockncols = ncols;
 //     return 1;
 // }
-// 
+//
 // void create_set_fromblock(int gno, int type, char* cols)
-// 
+//
 // {
 //     int i;
 //     int setno, graphno;
@@ -958,7 +958,7 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
 // 	    return;
 // 	}
 //     }
-// 
+//
 //     cx = coli[0];
 //     cy = coli[1];
 //     if (cx >= blockncols) {
@@ -1017,7 +1017,7 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
 //     }
 //     setno = -1;
 //     graphno = -1;
-// 
+//
 //     if (graphno == -1) {
 // 	graphno = cg;
 //     }
@@ -1032,7 +1032,7 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
 //     }
 //     activateset(graphno, setno);
 //     settype(graphno, setno, type);
-// 
+//
 //     tx = (double *) calloc(blocklen, sizeof(double));
 //     ty = (double *) calloc(blocklen, sizeof(double));
 //     for (i = 0; i < blocklen; i++) {
@@ -1041,7 +1041,7 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
 //     }
 //     setcol(graphno, tx, setno, blocklen, 0);
 //     setcol(graphno, ty, setno, blocklen, 1);
-// 
+//
 //     switch (type) {
 //     case XY:
 // 	sprintf(buf, "Cols %d %d", cx + 1, cy + 1);
@@ -1086,7 +1086,7 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
 // 	setcol(graphno, t4, setno, blocklen, 4);
 // 	break;
 //     }
-// 
+//
 //     setcomment(graphno, setno, buf);
 //     updatesetminmax(graphno, setno);
 //     update_status_popup();

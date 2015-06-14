@@ -29,7 +29,7 @@ void FileSaveAll::accept() {
 
     QString file = files[0];
 
-    mainWindow->setFileName(files[0]);
+    mainWindow->setFile(directory().absolutePath(), files[0]);
     mainWindow->setLastDirectory(directory());
 
     do_writesets(MAXGRAPH, -1, -1, file.toAscii().data(), outformat.toAscii().data());

@@ -21,9 +21,13 @@ MainWindow::MainWindow() :
     QMainWindow(),
     settings("QTGR","QTGR")
 {
+    QIcon ico(":images/icon.png");
+    qDebug("ico %d", ico.availableSizes().length());
+    QWidget::setWindowIcon(ico);
+
     startuptimer = QTime::currentTime().second() * 1000 + QTime::currentTime().msec();
     setLastDirectory(QDir::home());
-    clearFileName();
+    clearFile();
 
     QGraphicsScene *scene = new GraphicsScene(this);
     scene->setSceneRect(0, 0, 800, 600);
@@ -165,7 +169,8 @@ void MainWindow::initialize()
     if (arguments.length() == 2) {
         int type=NXY;
 
-        setFileName(arguments[1]);
+        QFileInfo info(arguments[1]);
+        setFile( info.absoluteDir().path(), info.fileName());
         QByteArray v = arguments[1].toAscii();
         getdata(0,v.data(),DISK,type);
 
@@ -180,22 +185,41 @@ void MainWindow::initialize()
     printf("QTGR load time: %d msec\n", newtime - startuptimer);
 }
 
-void MainWindow::setFileName(QString name) {
-    QString file = QDir(name).dirName();
-    int split = file.lastIndexOf(".");
-    fName = file.left(split);
-    this->setWindowTitle(fName + " - " + tr("QTGR"));
+void MainWindow::setFile(QString dir, QString name) {
+    fDir = QDir(dir).absolutePath();
+    fName = QDir(name).dirName();
+    this->setWindowTitle(shortFileName() + " - " + tr("QTGR"));
 }
 
-bool MainWindow::hasFileName() {
-    return !fName.isEmpty();
+QString MainWindow::fullFileName() {
+    if (fName.isEmpty()) {
+        return QString();
+    }
+    return fDir + QDir::separator() + fName;
 }
 
 QString MainWindow::fileName() {
     return fName;
 }
 
-void MainWindow::clearFileName() {
+QString MainWindow::shortFileName() {
+    if (fName.isEmpty()) {
+        return QString();
+    }
+
+    int split = fName.lastIndexOf(".");
+    return fName.left(split);
+}
+
+QString MainWindow::fileDirectory() {
+    return fDir;
+}
+
+bool MainWindow::hasFile() {
+    return !fName.isEmpty();
+}
+
+void MainWindow::clearFile() {
     fName = QString();
     this->setWindowTitle(tr("QTGR"));
 }

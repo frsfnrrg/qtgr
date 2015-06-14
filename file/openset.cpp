@@ -8,13 +8,25 @@ typedef struct {const char* name; int type;} FType;
 
 FType FILETYPES[] = {
     {"X Y [Y2] [Y3] ...", NXY},
-    {"X Y", XY}
+    {"X Y", XY},
+    {"X Y DX",  XYDX},
+    {"X Y DY",  XYDY},
+    {"X Y DX DX",  XYDXDX},
+    {"X Y DY DY",  XYDYDY},
+    {"X Y DX DY",  XYDXDY},
+    {"X Y Z",  XYZ},
+    {"X Y RT",  XYRT},
+    {"X Y HI LO",  XYHILO},
+    {"X Y U V",  XYUV},
+    {"X Y BOX",  XYBOX},
+    {"IHL", IHL}
 };
 
 FileOpenSet::FileOpenSet(MainWindow *mwin) :
-    QFileDialog(mwin, tr("Read Sets"), QDir::currentPath(), "*")
+    QFileDialog(mwin, "", QDir::currentPath(), "*")
 {
     mainWindow = mwin;
+    setAdoptName(true);
 
     this->setOptions(QFileDialog::DontUseNativeDialog);
     this->setAcceptMode(QFileDialog::AcceptOpen);
@@ -83,8 +95,19 @@ void FileOpenSet::accept() {
     } else {
         drawgraph();
     }
-    mainWindow->setFileName(files[0]);
-    mainWindow->setLastDirectory(directory());
+    if (adoptingName) {
+        mainWindow->setFile(directory().absolutePath(), files[0]);
+        mainWindow->setLastDirectory(directory());
+    }
 
     SetsSender::send();
+}
+
+void FileOpenSet::setAdoptName(bool adopt) {
+    adoptingName = adopt;
+    if (adoptingName) {
+        this->setWindowTitle(tr("Open graph"));
+    } else {
+        this->setWindowTitle(tr("Read sets or parameters"));
+    }
 }

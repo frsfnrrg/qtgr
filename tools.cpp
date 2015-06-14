@@ -51,8 +51,11 @@ void ToolsMenu::populateToolBar(QToolBar* foo) {
 
 void ToolsMenu::autoScale()
 {
-   autoscale_proc();
-   WorldDimProp::send(this);
+    autoscale_proc();
+    if (!activeset(cg)) {
+        drawgraph();
+    }
+    WorldDimProp::send(this);
 }
 
 void ToolsMenu::zoom() {

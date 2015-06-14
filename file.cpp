@@ -23,6 +23,7 @@ FileMenu::FileMenu(MainWindow* mainWin) :
 }
 
 void FileMenu::populateToolBar(QToolBar* t) {
+    t->addAction(openAct);
     t->addAction(readSetAct);
     t->addAction(resetAct);
     t->addSeparator();
@@ -35,15 +36,17 @@ void FileMenu::populateToolBar(QToolBar* t) {
 
 void FileMenu::populateMenu(QMenu* m)
 {
+    m->addAction(resetAct);
+    m->addSeparator();
+    m->addAction(openAct);
     m->addAction(readSetAct);
     m->addAction(readParaAct);
     m->addAction(readBlockAct);
     m->addSeparator();
     m->addAction(writeSetAct);
     m->addAction(writeParaAct);
-    m->addAction(writeBlockAct);
-    m->addSeparator();
-    m->addAction(resetAct);
+    m->addAction(saveAct);
+    m->addAction(saveAsAct);
     m->addSeparator();
     m->addAction(printAct);
     m->addAction(exportAct);
@@ -53,15 +56,23 @@ void FileMenu::populateMenu(QMenu* m)
 
 void FileMenu::createActions()
 {
-    readSetAct = makeAction("Open",
+    resetAct = makeAction("New",
+                          "Reset the graph to its original state",
+                          "Ctrl+N", SLOT(reset()));
+
+    openAct = makeAction("Open graph",
                             "Load a set or graph from file or pipe onto the graph",
-                            "Ctrl+O", SLOT(open_set()));
+                            "Ctrl+O", SLOT(open_file()));
+
+    readSetAct = makeAction("Read set",
+                            "Read a set but to not adopt its file name",
+                            "Ctrl+R", SLOT(read_set()));
 
     readParaAct = makeAction("Read parameters",
                              "Read instructions to create a graph",
                              "", SLOT(open_param()));
     readParaAct->setEnabled(false);
-    
+
     readBlockAct = makeAction("Read block data",
                               "Read block data",
                               "", SLOT(open_block()));
@@ -77,13 +88,13 @@ void FileMenu::createActions()
                               "", SLOT(write_param()));
     writeParaAct->setEnabled(false);
 
-    writeBlockAct = makeAction("Save graph",
-                               "Save graph to a file",
-                               "", SLOT(save_all()));
+    saveAct = makeAction("Save",
+                          "Save graph",
+                           "Ctrl+S", SLOT(save()));
 
-    resetAct = makeAction("Clear all",
-                          "Reset the graph to its original state",
-                          "Ctrl+Shift+d", SLOT(reset()));
+    saveAsAct = makeAction("Save As",
+                          "Save graph with a new filename",
+                           "Ctrl+Shift+S", SLOT(save_as()));
 	
     printAct = makeAction("Print",
                           "Print the current view to file or printer.",
@@ -91,15 +102,15 @@ void FileMenu::createActions()
 
     exportAct = makeAction("Export",
                            "Export display to an image",
-                           "Ctrl+E", SLOT(save_as()));
+                           "Ctrl+E", SLOT(export_file()));
 
-    exitAct = new QAction(tr("Exit"), this);
+    exitAct = new QAction(tr("Quit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
     exitAct->setStatusTip(tr("Exit the application"));
     connect(exitAct, SIGNAL(triggered()), this->mainWindow, SLOT(close()));
 }
 
-void FileMenu::open_set() {
+void FileMenu::open_file() {
     if (opensetDialog) {
         opensetDialog->setVisible(true);
         opensetDialog->raise();
@@ -107,6 +118,19 @@ void FileMenu::open_set() {
        opensetDialog = new FileOpenSet(mainWindow);
        opensetDialog->show();
     }
+    opensetDialog->setAdoptName(true);
+    opensetDialog->setDirectory(mainWindow->lastDirectory());
+}
+
+void FileMenu::read_set() {
+    if (opensetDialog) {
+        opensetDialog->setVisible(true);
+        opensetDialog->raise();
+    } else {
+       opensetDialog = new FileOpenSet(mainWindow);
+       opensetDialog->show();
+    }
+    opensetDialog->setAdoptName(false);
     opensetDialog->setDirectory(mainWindow->lastDirectory());
 }
 
@@ -126,7 +150,17 @@ void FileMenu::write_param() {
     // TODO
 }
 
-void FileMenu::save_all() {
+void FileMenu::save() {
+    if (mainWindow->hasFile()) {
+        QString outformat("%g %g");
+        do_writesets(MAXGRAPH, -1, -1, mainWindow->fullFileName().toAscii().data(),
+                     outformat.toAscii().data());
+    } else {
+        save_as();
+    }
+}
+
+void FileMenu::save_as() {
     if (saveallDialog) {
         saveallDialog->setVisible(true);
         saveallDialog->raise();
@@ -134,8 +168,10 @@ void FileMenu::save_all() {
         saveallDialog = new FileSaveAll(mainWindow);
         saveallDialog->show();
     }
-    if (mainWindow->hasFileName()) {
-        saveallDialog->selectFile(mainWindow->fileName()+"."+saveallDialog->defaultSuffix());
+    if (mainWindow->hasFile()) {
+        saveallDialog->selectFile(mainWindow->shortFileName() + "." + saveallDialog->defaultSuffix());
+    } else {
+        saveallDialog->selectFile(QString());
     }
     saveallDialog->setDirectory(mainWindow->lastDirectory());
 }
@@ -148,7 +184,7 @@ void FileMenu::reset()
     set_graph_active(0);
     drawgraph();
 
-    mainWindow->clearFileName();
+    mainWindow->clearFile();
 
     SetsSender::send();
 }
@@ -172,7 +208,7 @@ void FileMenu::print()
     painter->end();   
 }
 
-void FileMenu::save_as()
+void FileMenu::export_file()
 {
     if (exportDialog) {
         exportDialog->setVisible(true);
@@ -184,9 +220,11 @@ void FileMenu::save_as()
     // technically, this could be reduced to signal-slot connection between
     // FileMenu & the four name-inducing actions/dialogs. Why put mainWindow into
     // this?
-    if (mainWindow->hasFileName()) {
+    if (mainWindow->hasFile()) {
         QString ending = exportDialog->selectedFilter();
-        exportDialog->selectFile(mainWindow->fileName()+ending.right(ending.size() - 1));
+        exportDialog->selectFile(mainWindow->shortFileName()+ending.right(ending.size() - 1));
+    } else {
+        exportDialog->selectFile(QString());
     }
     exportDialog->setDirectory(mainWindow->lastDirectory());
 }

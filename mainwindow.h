@@ -28,10 +28,13 @@ public:
     TransformMenu* transformMenu;
     QMenu* helpMenu;
 
-    void setFileName(QString name);
-    void clearFileName();
-    bool hasFileName();
+    void setFile(QString directory, QString name);
+    void clearFile();
+    bool hasFile();
+    QString fullFileName();
     QString fileName();
+    QString shortFileName();
+    QString fileDirectory();
 
     void setLastDirectory(QDir);
     QDir lastDirectory();
@@ -40,6 +43,7 @@ private:
     QSettings settings;
 
     QString fName;
+    QString fDir;
     QDir lastDir;
 
 protected:

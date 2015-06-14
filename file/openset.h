@@ -10,11 +10,14 @@ class FileOpenSet : public QFileDialog
 public:
     explicit FileOpenSet(MainWindow *mwin);
     MainWindow* mainWindow;
+    void setAdoptName(bool);
+
 private:
     QComboBox* fileType;
     QComboBox* graphNum;
     QRadioButton* fromFile;
     QRadioButton* fromPipe;
+    bool adoptingName;
 
 public slots:
     void accept();
