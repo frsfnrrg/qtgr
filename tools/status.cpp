@@ -24,6 +24,32 @@ void disable_item(QTableWidget* o, int row, int col) {
     o->item(row, col)->setBackgroundColor(QColor(220,220,220));
 }
 
+class TableWidgetHolder : public QWidget {
+public:
+    TableWidgetHolder(QTableWidget* h) {
+        widg = h;
+        QHBoxLayout* l = new QHBoxLayout();
+        l->addWidget(h);
+        this->setLayout(l);
+
+        // note: this value is ballpark
+        firstwidth = widg->viewport()->width() + widg->verticalScrollBar()->width();
+
+        setMinimumWidth(firstwidth * 0.5);
+        setMinimumHeight(firstwidth * 0.25);
+        setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    }
+
+    virtual QSize sizeHint() const {
+                widg->ensurePolished();
+        qDebug("%d %d %d %d\n", widg->viewport()->width(), widg->verticalHeader()->width(), widg->horizontalHeader()->width(), firstwidth);
+        return QSize(firstwidth * 1.10, firstwidth * 0.6);
+    }
+private:
+    int firstwidth;
+    QTableWidget * widg;
+};
+
 /*
  * This does not really fit in the "dialog" mold: this dialog only displays things
  */
@@ -33,8 +59,8 @@ ToolsStatus::ToolsStatus(MainWindow* mainWin) :
     output = new QTableWidget();
     output->setRowCount(MAXPLOT * 2);
     output->setColumnCount(numcols);
+    output->horizontalHeader()->setStretchLastSection(true);
 
-    output->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
     QTableWidgetItem* it;
 
     for (int i=0;i<numcols;i++) {
@@ -54,7 +80,6 @@ ToolsStatus::ToolsStatus(MainWindow* mainWin) :
     }
 
     output->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    output->setMinimumWidth(output->viewport()->width() + output->verticalScrollBar()->width());
 
     // perhaps, hook up row selection so selecting one row on the lhs selects all the items for that set
 
@@ -74,7 +99,7 @@ ToolsStatus::ToolsStatus(MainWindow* mainWin) :
     QVBoxLayout* s = new QVBoxLayout();
     s->addLayout(top);
     s->addStrut(6);
-    s->addWidget(output);
+    s->addWidget(new TableWidgetHolder(output));
 
     this->setDialogLayout(s);
 
