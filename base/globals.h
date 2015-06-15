@@ -328,6 +328,7 @@ extern void drawgraph();
 
 // draw
 extern void view2world(double vx, double vy, double *wx, double *wy);
+extern int world2view(double x, double y,double* vx,double* vy);
 
 //drawutils
 extern void autoscale_proc();

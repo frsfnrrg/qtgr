@@ -16,8 +16,8 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
     legendY = new QLineEdit();
 
     locType = new QComboBox();
-    locType->addItem("World");
     locType->addItem("View");
+    locType->addItem("World");
 
     showLegend = new QCheckBox("Show Legend");
     showLegend->setChecked(true);
@@ -162,7 +162,17 @@ public:
 } legendPlacer;
 
 
-void ViewLegend::applyLegendPos(double x, double y) {
+void ViewLegend::applyLegendPos(double vx, double vy) {
+    double x, y;
+    if (locType->currentIndex() == 0) {
+        g[cg].l.loctype = VIEW;
+        x = vx;
+        y = vy;
+    } else {
+        g[cg].l.loctype = WORLD;
+        view2world(vx, vy, &x, &y);
+    }
+
     legendX->setText(QString::number(x, 'g', 3));
     legendY->setText(QString::number(y, 'g', 3));
 
