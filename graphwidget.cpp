@@ -65,11 +65,10 @@ void GraphWidget::mouseMoveEvent(QMouseEvent *event)
         view2world(vx,vy,&wx,&wy);
         this->setCursor(Qt::WhatsThisCursor);
         message = "[x,y] = " + QString::number(wx,'f',6) + "," + QString::number(wy,'f',6);
-        mainWindow->statusBar()->showMessage(message);
+        mainWindow->statusBar()->showMessage(message, 5000);
     } else {
         this->setCursor(Qt::ArrowCursor);
-        message = "";
-        mainWindow->statusBar()->showMessage(message);
+        mainWindow->statusBar()->clearMessage();
     }
     //     printf("mouseMove %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
 
@@ -354,31 +353,32 @@ void GraphWidget::arc(int x, int y, int r, int fill)
 
 void GraphWidget::fillcolor(int n, int px[], int py[])
 {
-    //     printf("GraphWidget::fillcolor %i %i %i \n",n, px[0], py[0]);
-    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
+    qDebug("GraphWidget::plaincolor %i %i %i",n, px[0], py[0]);
     QPen* pen = GraphWidget::myGraphWidget->pen;
-    QBrush brush = QBrush(pen->color());
+    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
+    QBrush brush = QBrush(pen->color(), Qt::SolidPattern);
     QVector<QPointF> path;
-    
-    int patnum = GraphWidget::myGraphWidget->patnum;
-
-    if (patnum != 0) {
-        brush.setTexture(PatternComboBox::getPattern(patnum));
-    }
-
     for (int i = 0; i < n; i++) {
         path.append(QPointF(px[i],py[i]));
     }
-
     scene->addPolygon(QPolygonF(path),*pen,brush);
 }
 
 void GraphWidget::fill(int n, int px[], int py[]) {
-    QColor color = GraphWidget::myGraphWidget->pen->color();
-    QColor q(0,0,0);
-    GraphWidget::myGraphWidget->pen->setColor(q);
-    fillcolor(n, px, py);
-    GraphWidget::myGraphWidget->pen->setColor(color);
+    qDebug("GraphWidget::fillpattern %i %i %i",n, px[0], py[0]);
+    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
+    QPen* pen = GraphWidget::myGraphWidget->pen;
+    QBrush brush = QBrush(pen->color());
+    QVector<QPointF> path;
+
+    int patnum = GraphWidget::myGraphWidget->patnum;
+
+    brush.setTexture(PatternComboBox::getPattern(patnum));
+
+    for (int i = 0; i < n; i++) {
+        path.append(QPointF(px[i],py[i]));
+    }
+    scene->addPolygon(QPolygonF(path),*pen,brush);
 }
 
 void GraphWidget::ellipse(int x, int y, int xm, int ym) {

@@ -31,6 +31,8 @@ void FileSaveAll::accept() {
 
     mainWindow->setFile(directory().absolutePath(), files[0]);
     mainWindow->setLastDirectory(directory());
+    QString message = "Saved file: " + mainWindow->fullFileName();
+    mainWindow->statusBar()->showMessage(message, 2000);
 
     do_writesets(MAXGRAPH, -1, -1, file.toAscii().data(), outformat.toAscii().data());
 }

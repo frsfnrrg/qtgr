@@ -10,7 +10,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
 {
     //make input fields
     setNumber = new SetComboBox();
-    connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
+    connect(setNumber, SIGNAL(currentIndexChanged(int)), SLOT(updateDialog()));
     
     // symbols inputs
     symbolSymbol = new QComboBox();
@@ -26,7 +26,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     symbolSymbol->addItem("Plus");
     symbolSymbol->addItem("X");
     symbolSymbol->addItem("Star");
-    connect(symbolSymbol, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSymbolFade()));
+    connect(symbolSymbol, SIGNAL(currentIndexChanged(int)), SLOT(updateSymbolFade()));
 
     symbolFill = new QComboBox();
     symbolFill->addItem("None");
@@ -45,7 +45,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
 
     // line inputs
     lineStyle = makeLineStyler();
-    connect(lineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(updateLineFade()));
+    connect(lineStyle, SIGNAL(currentIndexChanged(int)), SLOT(updateLineFade()));
 
     lineWidth = makeWidthSelector();
 
@@ -59,11 +59,12 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     fillFill->addItem(tr("To X=0"));
     fillFill->addItem(tr("To X-min"));
     fillFill->addItem(tr("To X-max"));
-    fillFill->addItem(tr("To Y-max"));
     fillFill->addItem(tr("To Y-min"));
-    connect(fillFill, SIGNAL(currentIndexChanged(int)), this, SLOT(updateFillFade()));
+    fillFill->addItem(tr("To Y-max"));
+    connect(fillFill, SIGNAL(currentIndexChanged(int)), SLOT(updateFillFade()));
 
     fillColor = new ColorComboBox();
+    connect(fillColor, SIGNAL(currentIndexChanged(int)), SLOT(updateFillFade()));
     
     fillPattern = new PatternComboBox();
     
@@ -74,6 +75,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     autoHook(legendS);
     autoHook(fillColor);
     autoHook(fillFill);
+    autoHook(fillPattern);
     autoHook(lineColor);
     autoHook(lineWidth);
     autoHook(lineStyle);
@@ -169,11 +171,10 @@ void ViewSymbols::updateDialog()
     legendS->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));
 
     fillFill->setCurrentIndex(g[gno].p[cset].fill);
-    if (g[gno].p[cset].fillusing == COLOR) {
-        fillPattern->setCurrentIndex(0);
-    } else {
-        fillPattern->setCurrentIndex(g[gno].p[cset].fillpattern);
+    if (g[gno].p[cset].fillusing == PATTERN) {
+        fillColor->setCurrentIndex(1);
     }
+    fillPattern->setCurrentIndex(g[gno].p[cset].fillpattern);
     fillColor->setCurrentIndex(g[gno].p[cset].fillcolor);
 }
   
@@ -201,14 +202,17 @@ void ViewSymbols::applyDialog()
     style = lineStyle->currentIndex();
     color = lineColor->currentIndex();
 
+    fillcol = fillColor->currentIndex();
     fill = fillFill->currentIndex();
     fillpat = fillPattern->currentIndex();
-    if (fillpat == 0) {
-        fillusing = COLOR;
-    } else {
+    if (fillcol == 1) {
+        // i.e., for black, use patterns as well.
+        // the optimal solution is to allow
+        // patterns of all colors
         fillusing = PATTERN;
+    } else {
+        fillusing = COLOR;
     }
-    fillcol = fillColor->currentIndex();
     strcpy((char*)g[cg].l.str[cset].s,legendS->text().toAscii().data());		
 
     // Note: there is an apply-to-all-sets option
@@ -261,9 +265,10 @@ void ViewSymbols::updateLineFade() {
 }
 
 void ViewSymbols::updateFillFade() {
-    bool on = fillFill->currentIndex() != 0;
-    fillColor->setEnabled(on);
-    fillPattern->setEnabled(on);
-    fillColorLabel->setEnabled(on);
-    fillPatternLabel->setEnabled(on);
+    bool fillOn = fillFill->currentIndex() != 0;
+    fillColor->setEnabled(fillOn);
+    fillColorLabel->setEnabled(fillOn);
+    bool patternOn = fillColor->currentIndex() == 1;
+    fillPattern->setEnabled(patternOn);
+    fillPatternLabel->setEnabled(patternOn);
 }

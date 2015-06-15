@@ -401,7 +401,7 @@ void draw_annotation(gno)
     setclipping(0);		/* shut down clipping for strings, boxes,
 				 * lines, and legends */
     if (debuglevel == 5) {
-	printf("Boxes\n");
+    //frsfnrrg printf("Boxes\n");
     }
     for (i = 0; i < MAXBOXES; i++) {
 	if (isactive_box(i)) {
@@ -409,7 +409,7 @@ void draw_annotation(gno)
 	}
     }
     if (debuglevel == 5) {
-	printf("Lines\n");
+    //frsfnrrg printf("Lines\n");
     }
     for (i = 0; i < MAXLINES; i++) {
 	if (isactive_line(i)) {
@@ -417,12 +417,12 @@ void draw_annotation(gno)
 	}
     }
     if (debuglevel == 5) {
-	printf("Strings\n");
+    //frsfnrrg printf("Strings\n");
     }
     for (i = 0; i < MAXSTR; i++) {
 	if (isactive_string(i)) {
 	    if (debuglevel == 5) {
-		printf("String %d\n", i);
+        // frsfnrrg printf("String %d\n", i);
 	    }
 	    draw_string(gno, i);
 	}
@@ -740,12 +740,12 @@ void drawsetfill(gno, p)
 	break;
     }
     if (p.fillusing == COLOR) {
-	c = setcolor(p.fillcolor);
-	fillcolor(len, xtmp, ytmp);
-	setcolor(c);
+        c = setcolor(p.fillcolor);
+        fillcolor(len, xtmp, ytmp);
+        setcolor(c);
     } else if (p.fillusing == PATTERN) {
-	setpattern(p.fillpattern);
-	fillpattern(len, xtmp, ytmp);
+        setpattern(p.fillpattern);
+        fillpattern(len, xtmp, ytmp);
     }
     cxfree(xtmp);
     cxfree(ytmp);

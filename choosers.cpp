@@ -226,7 +226,18 @@ QPixmap PatternComboBox::getPattern(int index) {
 void PatternComboBox::initializePatterns() {
     for (int i=0;i<MAX_PATTERN;i++) {
         pattern pat = patterns[i];
-        QPixmap* x = new QPixmap(pat.width, pat.height);
+
+        QImage q(pat.width, pat.height, QImage::Format_Mono);
+        for (int j = 0; j < pat.height; j++) {
+            for (int k = 0; k < pat.width; k++) {
+                int idx = j*pat.width + k;
+                int byte = idx >> 3;
+                int shift = idx - (byte << 3);
+                q.setPixel(k, j, (pat.bits[j] & (1 << shift)) == 0);
+            }
+        }
+
+        QPixmap* x = new QPixmap(QPixmap::fromImage(q));
         pxs[i] = x;
     }
 }

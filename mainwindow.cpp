@@ -21,9 +21,7 @@ MainWindow::MainWindow() :
     QMainWindow(),
     settings("QTGR","QTGR")
 {
-    QIcon ico(":images/icon.png");
-    qDebug("ico %d", ico.availableSizes().length());
-    QWidget::setWindowIcon(ico);
+    QWidget::setWindowIcon(QIcon(":images/icon.png"));
 
     startuptimer = QTime::currentTime().second() * 1000 + QTime::currentTime().msec();
     setLastDirectory(QDir::home());
@@ -35,13 +33,19 @@ MainWindow::MainWindow() :
 
     gwidget = new GraphWidget(scene,this);
     gwidget->setMouseTracking(true);
-    gwidget->setMinimumWidth(806);
-    gwidget->setMaximumWidth(806);
-    gwidget->setMaximumHeight(606);
-    gwidget->setMinimumHeight(606);
+    gwidget->setMinimumWidth(800 + 6);
+    gwidget->setMaximumWidth(800 + 6);
+    gwidget->setMaximumHeight(600 + 6);
+    gwidget->setMinimumHeight(600 + 6);
 
-    setCentralWidget(gwidget);
+    QHBoxLayout* layout = new QHBoxLayout();
+    layout->addStretch(1);
+    layout->addWidget(gwidget);
+    layout->addStretch(1);
 
+    QWidget* holder = new QWidget();
+    holder->setLayout(layout);
+    setCentralWidget(holder);
 
     bool autoup = settings.value("auto_update", QVariant(true)).toBool();
     Dialog::setAutoUpdate(autoup);
@@ -117,6 +121,10 @@ void MainWindow::createMenus()
     createHelpMenu();
 
     // for some odd reason, these must be added _after_ the menus
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBarBreak(Qt::LeftToolBarArea);
+    addToolBarBreak(Qt::RightToolBarArea);
+    addToolBarBreak(Qt::BottomToolBarArea);
 
     addToolBar(toolsMenu,true);
     addToolBar(viewMenu,true);
@@ -130,7 +138,7 @@ void MainWindow::addToolBar(Menu* m, bool showdef) {
     bool visible = settings.value(QString("TB-") + m->title(), showdef).toBool();
     QToolBar* t = m->createToolBar(visible);
     connect(t, SIGNAL(visibilityChanged(bool)), this, SLOT(writeToolBarSettings(bool)));
-    QMainWindow::addToolBar(t);
+    QMainWindow::addToolBar(Qt::TopToolBarArea, t);
 }
 
 void MainWindow::writeToolBarSettings(bool on) {

@@ -155,6 +155,8 @@ void FileMenu::save() {
         QString outformat("%g %g");
         do_writesets(MAXGRAPH, -1, -1, mainWindow->fullFileName().toAscii().data(),
                      outformat.toAscii().data());
+        QString message = "Saved file: " + mainWindow->fullFileName();
+        mainWindow->statusBar()->showMessage(message, 2000);
     } else {
         save_as();
     }
