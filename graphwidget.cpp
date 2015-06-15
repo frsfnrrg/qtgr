@@ -353,7 +353,6 @@ void GraphWidget::arc(int x, int y, int r, int fill)
 
 void GraphWidget::fillcolor(int n, int px[], int py[])
 {
-    qDebug("GraphWidget::plaincolor %i %i %i",n, px[0], py[0]);
     QPen* pen = GraphWidget::myGraphWidget->pen;
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     QBrush brush = QBrush(pen->color(), Qt::SolidPattern);
@@ -365,7 +364,6 @@ void GraphWidget::fillcolor(int n, int px[], int py[])
 }
 
 void GraphWidget::fill(int n, int px[], int py[]) {
-    qDebug("GraphWidget::fillpattern %i %i %i",n, px[0], py[0]);
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     QPen* pen = GraphWidget::myGraphWidget->pen;
     QBrush brush = QBrush(pen->color());

@@ -211,6 +211,7 @@ ViewLegendProp::ViewLegendProp(MainWindow* mainWin) :
     connect(frameFill, SIGNAL(toggled(bool)), this, SLOT(resetFill()));
 
     frameFillColor = new ColorComboBox();
+    connect(frameFillColor, SIGNAL(currentIndexChanged(int)), this, SLOT(resetFill()));
     frameFillPattern = new PatternComboBox();
     frameFillColorLabel = makeLabel("Fill Color");
     frameFillPatternLabel = makeLabel("Fill Pattern");
@@ -295,15 +296,16 @@ void ViewLegendProp::applyDialog() {
     g[cg].l.boxfill = frameFill->isChecked() ? ON : OFF;
     g[cg].l.boxfillcolor = frameFillColor->currentIndex();
     g[cg].l.boxfillpat = frameFillPattern->currentIndex();
-    g[cg].l.boxfillusing = frameFillPattern->currentIndex() == 0 ? COLOR : PATTERN;
+    g[cg].l.boxfillusing = frameFillColor->currentIndex() == 1 ? PATTERN : COLOR;
 
     drawgraph();
 }
 
 void ViewLegendProp::resetFill() {
-    bool on = frameFill->isChecked();
-    frameFillColor->setEnabled(on);
-    frameFillPattern->setEnabled(on);
-    frameFillColorLabel->setEnabled(on);
-    frameFillPatternLabel->setEnabled(on);
+    bool fillOn = frameFill->isChecked();
+    frameFillColor->setEnabled(fillOn);
+    frameFillColorLabel->setEnabled(fillOn);
+    bool patternOn = fillOn && frameFillColor->currentIndex() == 1;
+    frameFillPattern->setEnabled(patternOn);
+    frameFillPatternLabel->setEnabled(patternOn);
 }

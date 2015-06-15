@@ -268,7 +268,7 @@ void ViewSymbols::updateFillFade() {
     bool fillOn = fillFill->currentIndex() != 0;
     fillColor->setEnabled(fillOn);
     fillColorLabel->setEnabled(fillOn);
-    bool patternOn = fillColor->currentIndex() == 1;
+    bool patternOn = fillOn && fillColor->currentIndex() == 1;
     fillPattern->setEnabled(patternOn);
     fillPatternLabel->setEnabled(patternOn);
 }
