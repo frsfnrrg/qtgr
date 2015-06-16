@@ -23,17 +23,20 @@ private:
     QAction* differentiateAct;
     QAction* evaluateAct;
     QAction* regressionAct;
+    QAction* fourierAct;
 
     Dialog* integrateDialog;
     Dialog* differentiateDialog;
     Dialog* evaluateDialog;
     Dialog* regressionDialog;
+    Dialog* fourierDialog;
 
 private slots:
     void evaluate();
     void integrate();
     void differentiate();
     void regression();
+    void fourier();
 
 };
 

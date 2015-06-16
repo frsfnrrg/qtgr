@@ -4,10 +4,19 @@
 #include <QtGui>
 
 class Dialog;
+class MainWindow;
 
 void loadDialog(Dialog*);
 
 bool showDialog(Dialog*);
+
+// T must be a subclass of Dialog
+template<class T>
+void launchOrRelaunch(Dialog** d, MainWindow* m) {
+    if (showDialog(*d)) return;
+    *d = new T(m);
+    loadDialog(*d);
+}
 
 const Qt::Alignment ALIGN_FORM_LABEL = Qt::AlignVCenter | Qt::AlignRight;
 

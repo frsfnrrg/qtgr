@@ -84,7 +84,7 @@ int checkon_viewport(gno)
     return 1;
 }
 
-#define MAX_FONT 10
+#define MAX_FONT 12
 #define MAX_JUST 2
 #define MAX_ARROW 3
 #define MAX_PATTERN 30
@@ -115,12 +115,12 @@ int checkon(prop, old_val, new_val)
 	    check_err = 1;
 	}
 	break;
-    case COLOR: /* TODO use MAX_COLOR */
-	if (new_val >= 0 && new_val < 16) {
+    case COLOR:
+    if (new_val >= 0 && new_val < MAXCOLORS) {
 	    retval = new_val;
 	}
 	else {
-	    sprintf(buf, "COLOR out of bounds, should be from 0 to %d", 16 - 1);
+        sprintf(buf, "COLOR out of bounds, should be from 0 to %d", MAXCOLORS - 1);
 	    check_err = 1;
 	}
 	break;

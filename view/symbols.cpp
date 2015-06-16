@@ -218,8 +218,6 @@ void ViewSymbols::applyDialog()
     // Note: there is an apply-to-all-sets option
     // in XVGR
 
-    printf("fill %i %i %i %i\n", fill, fillusing, fillcol, fillpat);
-
     set_prop(cg, SET,
 	     SETNUM, cset,
 	     SYMBOL, TYPE, sym,

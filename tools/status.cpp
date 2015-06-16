@@ -41,8 +41,6 @@ public:
     }
 
     virtual QSize sizeHint() const {
-                widg->ensurePolished();
-        qDebug("%d %d %d %d\n", widg->viewport()->width(), widg->verticalHeader()->width(), widg->horizontalHeader()->width(), firstwidth);
         return QSize(firstwidth * 1.10, firstwidth * 0.6);
     }
 private:

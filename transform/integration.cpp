@@ -70,6 +70,8 @@ void TransformIntegration::applyDialog() {
     // recognized double redraw: in both
     if (itype == 0 && ToolsOptions::isRescaleOnTransform()) {
         mainWindow->toolsMenu->autoScale();
+    } else {
+        drawgraph();
     }
 
     SetsSender::send();

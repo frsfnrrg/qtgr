@@ -88,6 +88,8 @@ void TransformRegression::applyDialog() {
 
     if (ToolsOptions::isRescaleOnTransform()) {
         mainWindow->toolsMenu->autoScale();
+    } else {
+        drawgraph();
     }
     SetsSender::send();
 }

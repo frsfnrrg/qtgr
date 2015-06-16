@@ -3,6 +3,7 @@
 #include "transform/differentiation.h"
 #include "transform/evaluate.h"
 #include "transform/regression.h"
+#include "transform/fouriertransform.h"
 
 TransformMenu::TransformMenu(MainWindow* mainWin) :
     Menu(mainWin,"Transforms",true)
@@ -12,6 +13,7 @@ TransformMenu::TransformMenu(MainWindow* mainWin) :
     differentiateDialog = NULL;
     evaluateDialog = NULL;
     regressionDialog = NULL;
+    fourierDialog = NULL;
     populateMenu(this);
 }
 
@@ -32,6 +34,10 @@ void TransformMenu::createActions() {
                               "Apply regression to a set",
                               "Alt+Shift+R",
                               SLOT(regression()));
+    fourierAct = makeAction("Fourier Transform",
+                              "Apply inverse or forward FFT or DFT to a set",
+                              "Alt+Shift+F",
+                              SLOT(fourier()));
 }
 
 void TransformMenu::populateMenu(QMenu* q) {
@@ -39,6 +45,7 @@ void TransformMenu::populateMenu(QMenu* q) {
     q->addAction(integrateAct);
     q->addAction(differentiateAct);
     q->addAction(regressionAct);
+    q->addAction(fourierAct);
 }
 
 void TransformMenu::populateToolBar(QToolBar* q) {
@@ -46,28 +53,25 @@ void TransformMenu::populateToolBar(QToolBar* q) {
     q->addAction(integrateAct);
     q->addAction(differentiateAct);
     q->addAction(regressionAct);
+    q->addAction(fourierAct);
 }
 
 void TransformMenu::integrate() {
-    if (showDialog(integrateDialog)) return;
-    integrateDialog = new TransformIntegration(mainWindow);
-    loadDialog(integrateDialog);
+    launchOrRelaunch<TransformIntegration>(&integrateDialog, mainWindow);
 }
 
 void TransformMenu::differentiate() {
-    if (showDialog(differentiateDialog)) return;
-    differentiateDialog = new TransformDifferentiation(mainWindow);
-    loadDialog(differentiateDialog);
+    launchOrRelaunch<TransformDifferentiation>(&differentiateDialog, mainWindow);
 }
 
 void TransformMenu::evaluate() {
-    if (showDialog(evaluateDialog)) return;
-    evaluateDialog = new TransformEvaluate(mainWindow);
-    loadDialog(evaluateDialog);
+    launchOrRelaunch<TransformEvaluate>(&evaluateDialog, mainWindow);
 }
 
 void TransformMenu::regression() {
-    if (showDialog(regressionDialog)) return;
-    regressionDialog = new TransformRegression(mainWindow);
-    loadDialog(regressionDialog);
+    launchOrRelaunch<TransformRegression>(&regressionDialog, mainWindow);
+}
+
+void TransformMenu::fourier() {
+    launchOrRelaunch<TransformFourier>(&fourierDialog, mainWindow);
 }

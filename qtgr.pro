@@ -38,7 +38,8 @@ HEADERS       = edit.h \
     view/axis.h \
     transform/regression.h \
     view/text.h \
-    tools/status.h
+    tools/status.h \
+    transform/fouriertransform.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -96,7 +97,8 @@ SOURCES       = edit.cpp \
     view/axis.cpp \
     transform/regression.cpp \
     view/text.cpp \
-    tools/status.cpp
+    tools/status.cpp \
+    transform/fouriertransform.cpp
 
 RESOURCES     = qtgr.qrc
 

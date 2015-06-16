@@ -81,6 +81,8 @@ void TransformDifferentiation::applyDialog() {
     // recognized double redraw: in both
     if (ToolsOptions::isRescaleOnTransform()) {
         mainWindow->toolsMenu->autoScale();
+    } else {
+        drawgraph();
     }
 
     SetsSender::send();

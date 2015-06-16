@@ -49,8 +49,8 @@ void plotone(int gno)
     labels lab;
     plotarr p;
     
-    printf("plotone start\n");
-    debuglevel = 5;
+    //printf("plotone start\n");
+    debuglevel = 0;
 
     get_graph_world(gno, &w);
     get_graph_view(gno, &v);
@@ -292,7 +292,7 @@ void plotone(int gno)
 		    if (p.fill) {
 			drawsetfill(gno, p);
 		    }
-		    printf("plotone drawsetxy\n");
+            //frsfnrrg printf("plotone drawsetxy\n");
 		    drawsetxy(g[gno].p[i], i);
 		    break;
 		case XYDX:
@@ -313,7 +313,7 @@ void plotone(int gno)
 		    drawsetxy(g[gno].p[i], i);
 		    break;
 		case XYZ:
-		    if (!density_flag) {
+            if (!density_flag) {
 			drawsetxy(g[gno].p[i], i);
 			drawval(g[gno].p[i]);
 		    } else {
@@ -904,7 +904,7 @@ void drawval(p)
     for (j = 0; j < p.len; j++) {
 	if (symok(x[j], y[j])) {
 	    loc = z[j];
-	    //csto create_ticklabel(p.format, p.prec, loc, s1);
+        create_ticklabel(p.format, p.prec, loc, s1);
 	    if (p.sym) {
 		writestr(x[j], y[j], 0, 0, s1 - 1);
 	    } else {

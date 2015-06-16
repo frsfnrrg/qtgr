@@ -339,7 +339,6 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
 
 void GraphWidget::arc(int x, int y, int r, int fill)
 {
-    //      printf("GraphWidget::arc %i %i %i %i\n",x,y,r);
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     QPen* pen = GraphWidget::myGraphWidget->pen;
     QBrush brush = QBrush();
@@ -366,7 +365,7 @@ void GraphWidget::fillcolor(int n, int px[], int py[])
 void GraphWidget::fill(int n, int px[], int py[]) {
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     QPen* pen = GraphWidget::myGraphWidget->pen;
-    QBrush brush = QBrush(pen->color());
+    QBrush brush = QBrush();
     QVector<QPointF> path;
 
     int patnum = GraphWidget::myGraphWidget->patnum;
@@ -380,12 +379,19 @@ void GraphWidget::fill(int n, int px[], int py[]) {
 }
 
 void GraphWidget::ellipse(int x, int y, int xm, int ym) {
-    // TODO
-    printf("ELLIPSE DRAW CALLED: %d %d %d %d\n",x,y,xm,ym);
+    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
+    QPen* pen = GraphWidget::myGraphWidget->pen;
+    QBrush brush = QBrush();
+    int h = scene->height();
+    scene->addEllipse(QRect(x - xm/2,h-y-ym/2,xm,ym),*pen,brush);
 }
 
 void GraphWidget::fillellipse(int x, int y, int xm, int ym) {
-    printf("ELLIPSE FILL CALLED: %d %d %d %d\n",x,y,xm,ym);
+    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
+    QPen* pen = GraphWidget::myGraphWidget->pen;
+    QBrush brush = QBrush(pen->color());
+    int h = scene->height();
+    scene->addEllipse(QRect(x - xm/2,h-y-ym/2,xm,ym),*pen,brush);
 }
 
 int GraphWidget::stringextentx(double scale, char* str) {
@@ -435,7 +441,6 @@ extern "C"
 void qtview_getcanvas(int* win_w, int* win_h)
 {
     GraphWidget::getcanvas(win_w, win_h);
-    
 }
 
 void qtview_paint(int x1, int y1, int x2, int y2)
