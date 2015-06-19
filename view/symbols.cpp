@@ -6,8 +6,6 @@
 #include "mainwindow.h"
 #include "util.h"
 
-#include <iostream>
-
 #include <QLineEdit>
 #include <QLabel>
 #include <QVBoxLayout>

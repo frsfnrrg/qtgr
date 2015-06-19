@@ -3,13 +3,18 @@
 
 # ifdef __cplusplus 
 
-#include "mousecall.h"
 #include "overlay.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
 class MainWindow;
+
+class MouseCallBack
+{
+public:
+    virtual void mouse( int , int , int , int  ) {} // {} is required for linker
+};
 
 class GraphicsScene : public QGraphicsScene {
     Q_OBJECT

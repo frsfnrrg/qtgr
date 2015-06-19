@@ -2,7 +2,6 @@
 #define MENU_H
 
 #include <QMenu>
-#include <stdio.h>
 
 class QAction;
 class QToolBar;
@@ -28,7 +27,7 @@ protected:
     // is this the problem
     QAction* makeAction(const char* name, const char* desc, const char* shortcut,
               const char* slot);
-    virtual void populateToolBar(QToolBar*) {printf("YOU SHOULD NOT BE CALLING THIS\n");}
+    virtual void populateToolBar(QToolBar*);
 signals:
     
 public slots:

@@ -9,7 +9,6 @@ HEADERS       = edit.h \
     base/symdefs.h \
     base/f2c.h \
     mainwindow.h \
-    mousecall.h \
     view.h \ 
     view/symbols.h \
     tools.h \
