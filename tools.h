@@ -1,13 +1,12 @@
 #ifndef MENUTOOLS_H
 #define MENUTOOLS_H
 
-#include <QtGui>
-#include "mainwindow.h"
 #include "overlay.h"
 #include "menu.h"
 
 class ToolsOptions;
 class ToolsStatus;
+class MainWindow;
 
 /**
  * @brief The ToolsMenu class

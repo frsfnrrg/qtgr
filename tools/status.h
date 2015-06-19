@@ -6,6 +6,8 @@
 
 #include "dialog.h"
 
+class QTableWidget;
+
 class ToolsStatus : public Dialog
 {
     Q_OBJECT

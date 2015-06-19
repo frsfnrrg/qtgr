@@ -1,7 +1,6 @@
 #ifndef DIFFERENTIATION_H
 #define DIFFERENTIATION_H
 
-#include <QtGui>
 #include "dialog.h"
 
 class TransformDifferentiation : public Dialog

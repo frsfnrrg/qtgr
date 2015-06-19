@@ -1,4 +1,3 @@
-#include <QtGui>
 #include "mainwindow.h"
 #include "tools.h"
 #include "base/globals.h"
@@ -6,6 +5,9 @@
 #include "graphwidget.h"
 #include "tools/options.h"
 #include "tools/status.h"
+#include "util.h"
+
+#include <QToolBar>
 
 ToolsMenu::ToolsMenu(MainWindow* mainWin) :
     Menu(mainWin, "Tools", true)

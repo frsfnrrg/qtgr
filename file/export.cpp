@@ -1,7 +1,17 @@
 #include "file/export.h"
 #include "util.h"
+#include "mainwindow.h"
 #include "graphwidget.h"
-#include <QtSvg>
+
+#include <QSpinBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QSvgGenerator>
+#if QT_VERSION >= 0x050000
+#include <QtPrintSupport/QPrinter>
+#else
+#include <QPrinter>
+#endif
 
 const int FILE_TYPES = 6;
 QString filetype[FILE_TYPES] = {
@@ -38,7 +48,7 @@ FileExport::FileExport(MainWindow *mwin) :
     for (int i=0;i<FILE_TYPES;i++) {
         filters.append(filetype[i]);
     }
-    this->setFilters(filters);
+    this->setNameFilters(filters);
 
     widthBox = new QSpinBox();
     // use a sizepolicy
@@ -116,7 +126,7 @@ void FileExport::accept() {
     int height = heightBox->value();
     QString target = targets.at(0);
 
-    QString type = this->selectedFilter();
+    QString type = this->selectedNameFilter();
 
     int index = -1;
     for (int i=0;i<MATCH_TYPES;i++) {

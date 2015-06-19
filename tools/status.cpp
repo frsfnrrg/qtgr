@@ -1,6 +1,15 @@
 #include "tools/status.h"
 #include "base/globals.h"
 #include "prop.h"
+#include "util.h"
+
+#include <QTableWidget>
+#include <QHBoxLayout>
+#include <QScrollBar>
+#include <QHeaderView>
+#include <QPushButton>
+#include <QApplication>
+#include <QClipboard>
 
 ToolsStatus* ToolsStatus::me = NULL;
 

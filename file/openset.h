@@ -1,8 +1,11 @@
 #ifndef OPENSET_H
 #define OPENSET_H
 
-#include <QtGui>
-#include "mainwindow.h"
+#include <QFileDialog>
+
+class QComboBox;
+class QRadioButton;
+class MainWindow;
 
 class FileOpenSet : public QFileDialog
 {

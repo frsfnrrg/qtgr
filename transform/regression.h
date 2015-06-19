@@ -5,6 +5,8 @@
 
 #include "dialog.h"
 
+class QPlainTextEdit;
+
 class TransformRegression : public Dialog
 {
     Q_OBJECT

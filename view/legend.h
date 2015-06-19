@@ -1,7 +1,6 @@
 #ifndef LEGEND_H
 #define LEGEND_H
 
-#include <QtGui>
 #include "dialog.h"
 
 #define MAXPLOT 30

@@ -1,7 +1,6 @@
 #ifndef MENUVIEW_H
 #define MENUVIEW_H
 
-#include "mainwindow.h"
 #include "menu.h"
 
 class ViewAxis;
@@ -11,6 +10,8 @@ class ViewFrame;
 class ViewSymbols;
 class ViewDimensions;
 class ViewText;
+
+class MainWindow;
 
 class ViewMenu : public Menu
 {

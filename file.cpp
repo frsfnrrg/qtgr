@@ -1,4 +1,3 @@
-#include <QtGui>
 #include "mainwindow.h"
 #include "graphwidget.h"
 #include "file.h"
@@ -9,6 +8,17 @@
 #include "file/openset.h"
 #include "file/export.h"
 #include "file/saveall.h"
+
+#include <QToolBar>
+#include <QString>
+#include <QStatusBar>
+#if QT_VERSION >= 0x050000
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
+#else
+#include <QPrinter>
+#include <QPrintDialog>
+#endif
 
 FileMenu::FileMenu(MainWindow* mainWin) :
     Menu(mainWin, "File", true)
@@ -153,8 +163,8 @@ void FileMenu::write_param() {
 void FileMenu::save() {
     if (mainWindow->hasFile()) {
         QString outformat("%g %g");
-        do_writesets(MAXGRAPH, -1, -1, mainWindow->fullFileName().toAscii().data(),
-                     outformat.toAscii().data());
+        do_writesets(MAXGRAPH, -1, -1, mainWindow->fullFileName().toUtf8().data(),
+                     outformat.toUtf8().data());
         QString message = "Saved file: " + mainWindow->fullFileName();
         mainWindow->statusBar()->showMessage(message, 2000);
     } else {
@@ -223,7 +233,7 @@ void FileMenu::export_file()
     // FileMenu & the four name-inducing actions/dialogs. Why put mainWindow into
     // this?
     if (mainWindow->hasFile()) {
-        QString ending = exportDialog->selectedFilter();
+        QString ending = exportDialog->selectedNameFilter();
         exportDialog->selectFile(mainWindow->shortFileName()+ending.right(ending.size() - 1));
     } else {
         exportDialog->selectFile(QString());

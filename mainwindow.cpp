@@ -1,5 +1,3 @@
-#include <QtGui>
-
 #include "mainwindow.h"
 #include "file.h"
 #include "edit.h"
@@ -12,8 +10,18 @@
 #include "prop.h"
 #include "dialog.h"
 #include "graphwidget.h"
-#include <time.h>
 #include "tools/options.h"
+
+#include <time.h>
+
+#include <QHBoxLayout>
+#include <QStatusBar>
+#include <QMessageBox>
+#include <QMenuBar>
+#include <QToolBar>
+#include <QTime>
+#include <QCloseEvent>
+#include <QCoreApplication>
 
 static int startuptimer;
 
@@ -179,7 +187,7 @@ void MainWindow::initialize()
 
         QFileInfo info(arguments[1]);
         setFile( info.absoluteDir().path(), info.fileName());
-        QByteArray v = arguments[1].toAscii();
+        QByteArray v = arguments[1].toUtf8();
         getdata(0,v.data(),DISK,type);
 
         if (ToolsOptions::isRescaleOnLoad()) {

@@ -3,6 +3,12 @@
 #include "tools/options.h"
 #include "prop.h"
 #include "tools.h"
+#include "mainwindow.h"
+
+#include <QComboBox>
+#include <QRadioButton>
+#include <QHBoxLayout>
+#include <QLabel>
 
 typedef struct {const char* name; int type;} FType;
 
@@ -85,7 +91,7 @@ void FileOpenSet::accept() {
 
 
     for (int i = 0; i < files.size(); ++i) {
-        QByteArray v = files.at(i).toAscii();
+        QByteArray v = files.at(i).toUtf8();
         printf("%s \n",v.constData());
         getdata(0,v.data(),DISK,type);
     }

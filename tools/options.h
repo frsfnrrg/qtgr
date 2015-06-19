@@ -1,8 +1,9 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#include <QtGui>
 #include "dialog.h"
+
+class QSettings;
 
 class ToolsOptions : public Dialog
 {

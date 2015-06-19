@@ -3,6 +3,11 @@
 #include "prop.h"
 #include "base/globals.h"
 
+#include <QButtonGroup>
+#include <QLabel>
+#include <QGridLayout>
+#include <QRadioButton>
+
 SetsMCS::SetsMCS(MainWindow* mainWin) :
     Dialog(mainWin, "Move, Copy, Swap")
 {

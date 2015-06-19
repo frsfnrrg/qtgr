@@ -2,6 +2,9 @@
 #include "base/globals.h"
 #include "choosers.h"
 
+#include <QLabel>
+#include <QGridLayout>
+
 SetsEdit::SetsEdit(MainWindow* mwin) :
     Dialog(mwin, "Edit Sets")
 {

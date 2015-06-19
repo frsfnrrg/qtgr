@@ -2,6 +2,10 @@
 #include "base/globals.h"
 #include "choosers.h"
 
+#include <QCheckBox>
+#include <QLabel>
+#include <QGridLayout>
+
 ViewFrame::ViewFrame(MainWindow* mainWin) :
     Dialog(mainWin, "Frame", true)
 {

@@ -6,6 +6,15 @@
 #include "mainwindow.h"
 #include "view.h"
 
+#include <QLineEdit>
+#include <QLabel>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
+
 QComboBox* makeAxisSelector() {
     QComboBox* q = new QComboBox();
     q->addItem("X axis");
@@ -260,7 +269,7 @@ void ViewAxis::applyDialog() {
     }
 
     strcpy(t.label.s,
-           axisLabel->text().toAscii().data());
+           axisLabel->text().toUtf8().data());
 
     if (leVal(majTic, &val)) t.tmajor = val;
     if (leVal(minTic, &val)) t.tminor = val;

@@ -1,6 +1,8 @@
 #include "file/saveall.h"
 #include "base/globals.h"
+#include "mainwindow.h"
 
+#include <QStatusBar>
 
 FileSaveAll::FileSaveAll(MainWindow *mwin) :
     QFileDialog(mwin, tr("Save graph"), QDir::currentPath(), "*;;*.xvgr")
@@ -34,5 +36,5 @@ void FileSaveAll::accept() {
     QString message = "Saved file: " + mainWindow->fullFileName();
     mainWindow->statusBar()->showMessage(message, 2000);
 
-    do_writesets(MAXGRAPH, -1, -1, file.toAscii().data(), outformat.toAscii().data());
+    do_writesets(MAXGRAPH, -1, -1, file.toUtf8().data(), outformat.toUtf8().data());
 }

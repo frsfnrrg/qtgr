@@ -1,9 +1,9 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include <QtGui>
-#include "dialog.h"
 #include "menu.h"
+
+class Dialog;
 
 class TransformMenu : public Menu
 {

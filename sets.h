@@ -1,11 +1,11 @@
 #ifndef SETS_H
 #define SETS_H
 
-#include <QtGui>
 #include "menu.h"
-#include "sets/kad.h"
-#include "sets/sedit.h"
-#include "sets/mcs.h"
+
+class SetsEdit;
+class SetsKAD;
+class SetsMCS;
 
 /*
  This menu contains all whole-set operations:

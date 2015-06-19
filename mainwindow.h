@@ -1,7 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui>
+#include <QString>
+#include <QMainWindow>
+#include <QDir>
+#include <QSettings>
 
 class Menu;
 class ViewMenu;
@@ -11,6 +14,9 @@ class ToolsMenu;
 class TransformMenu;
 class SetsMenu;
 class GraphWidget;
+
+class QGraphicsView;
+class QMenu;
 
 class MainWindow : public QMainWindow
 {

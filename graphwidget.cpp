@@ -1,10 +1,12 @@
-#include <QtGui>
-
 #include "graphwidget.h"
 #include "mainwindow.h"
 #include "base/globals.h"
 #include "view.h"
 #include "choosers.h"
+
+#include <QGraphicsSceneContextMenuEvent>
+#include <QStatusBar>
+#include <QGraphicsTextItem>
 
 const double FONT_BASE_SIZE = 14.0;
 

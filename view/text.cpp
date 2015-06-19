@@ -3,6 +3,15 @@
 #include "choosers.h"
 #include "graphwidget.h"
 #include "mainwindow.h"
+#include "util.h"
+
+#include <QScrollArea>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QStatusBar>
+#include <QLabel>
+#include <QGroupBox>
 
 ViewText::ViewText(MainWindow* mainWin) :
     Dialog(mainWin, "Free Strings", true)
@@ -300,7 +309,7 @@ void ViewTextElement::prop() {
 
 void ViewTextElement::applyValues() {
     // use sizeof for field
-    strncpy((char*)pstr[num].s, textArea->toPlainText().toAscii().data(), MAXSTRLEN+1);
+    strncpy((char*)pstr[num].s, textArea->toPlainText().toUtf8().data(), MAXSTRLEN+1);
     pstr[num].x = xCoord->value();
     pstr[num].y = yCoord->value();
 }

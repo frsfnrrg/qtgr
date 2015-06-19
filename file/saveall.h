@@ -1,8 +1,9 @@
 #ifndef SAVEALL_H
 #define SAVEALL_H
 
-#include <QtGui>
-#include "mainwindow.h"
+#include <QFileDialog>
+
+class MainWindow;
 
 class FileSaveAll : public QFileDialog
 {

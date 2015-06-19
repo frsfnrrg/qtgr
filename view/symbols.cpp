@@ -1,9 +1,17 @@
-#include <iostream>
 #include "view/symbols.h"
 #include "view.h"
 #include "base/globals.h"
 #include "choosers.h"
 #include "prop.h"
+#include "mainwindow.h"
+#include "util.h"
+
+#include <iostream>
+
+#include <QLineEdit>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QGroupBox>
 
 ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     Dialog(mainWin, "Symbols", true)
@@ -213,7 +221,7 @@ void ViewSymbols::applyDialog()
     } else {
         fillusing = COLOR;
     }
-    strcpy((char*)g[cg].l.str[cset].s,legendS->text().toAscii().data());		
+    strcpy((char*)g[cg].l.str[cset].s,legendS->text().toUtf8().data());
 
     // Note: there is an apply-to-all-sets option
     // in XVGR

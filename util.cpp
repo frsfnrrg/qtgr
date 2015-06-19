@@ -1,6 +1,15 @@
 #include "util.h"
 #include "dialog.h"
 
+#include <QLabel>
+#include <QAction>
+#include <QLineEdit>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QPushButton>
+
 void loadDialog(Dialog* d) {
     d->updateDialog();
     d->show();

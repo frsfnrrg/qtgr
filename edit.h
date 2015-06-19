@@ -1,8 +1,9 @@
 #ifndef MENUEDIT_H
 #define MENUEDIT_H
 
-#include <QtGui>
 #include "menu.h"
+
+class QAction;
 
 class EditMenu : public Menu
 {

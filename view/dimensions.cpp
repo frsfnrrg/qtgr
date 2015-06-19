@@ -5,6 +5,13 @@
 #include "prop.h"
 #include "mainwindow.h"
 #include "tools.h"
+#include "util.h"
+
+#include <QLineEdit>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QGroupBox>
 
 const int OPTS_LEN = 8;
 

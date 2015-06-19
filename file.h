@@ -1,10 +1,10 @@
 #ifndef MENUFILE_H
 #define MENUFILE_H
 
-#include <QtGui>
 #include "menu.h"
 
 class FileOpenSet;
+class QFileDialog;
 
 class FileMenu : public Menu
 {

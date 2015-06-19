@@ -1,8 +1,10 @@
-#include <QApplication>
 #include "mainwindow.h"
 
 #define MAIN
 #include "base/globals.h"
+
+#include <QApplication>
+#include <QTimer>
 
 int main(int argc, char *argv[])
 {

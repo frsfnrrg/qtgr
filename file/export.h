@@ -1,8 +1,11 @@
 #ifndef SAVEAS_H
 #define SAVEAS_H
 
-#include <QtGui>
-#include "mainwindow.h"
+#include <QFileDialog>
+
+class QFrame;
+class QSpinBox;
+class MainWindow;
 
 class FileExport : public QFileDialog
 {

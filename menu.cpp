@@ -3,6 +3,8 @@
 #include "util.h"
 #include "mainwindow.h"
 
+#include <QToolBar>
+
 Menu::Menu(MainWindow* mainWin, const char* title, bool tearoff) :
     QMenu(mainWin)
 {

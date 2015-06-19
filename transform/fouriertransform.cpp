@@ -5,6 +5,10 @@
 #include "tools.h"
 #include "tools/options.h"
 #include "prop.h"
+#include "util.h"
+
+#include <QGridLayout>
+#include <QLabel>
 
 TransformFourier::TransformFourier(MainWindow* mainWin) :
     Dialog(mainWin, "Fourier Transform")

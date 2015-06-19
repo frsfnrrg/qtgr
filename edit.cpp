@@ -1,5 +1,7 @@
 #include "edit.h"
 
+#include <QToolBar>
+
 EditMenu::EditMenu(MainWindow* mainWin) :
     Menu(mainWin,"Edit",true)
 {

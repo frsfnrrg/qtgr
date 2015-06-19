@@ -1,7 +1,6 @@
 #ifndef DIMENSIONS_H
 #define DIMENSIONS_H
 
-#include <QtGui>
 #include "dialog.h"
 #include "overlay.h"
 

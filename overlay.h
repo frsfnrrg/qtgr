@@ -1,7 +1,7 @@
 #ifndef OVERLAY_H
 #define OVERLAY_H
 
-#include <QtGui>
+#include <QWidget>
 
 class RectReceiver {
 public:

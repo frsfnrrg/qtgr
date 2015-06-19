@@ -1,7 +1,6 @@
 #ifndef VIEWSYMBOLS_H
 #define VIEWSYMBOLS_H
 
-#include <QtGui>
 #include "dialog.h"
 
 class ViewSymbols : public Dialog

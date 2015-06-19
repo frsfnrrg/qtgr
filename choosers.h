@@ -1,7 +1,11 @@
 #ifndef CHOOSERS_H
 #define CHOOSERS_H
 
-#include <QtGui>
+#include <QDoubleSpinBox>
+#include <QSpinBox>
+#include <QPlainTextEdit>
+#include <QSlider>
+#include <QComboBox>
 
 class DoubleSpinBox : public QDoubleSpinBox
 {

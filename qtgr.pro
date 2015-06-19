@@ -102,6 +102,7 @@ SOURCES       = edit.cpp \
 
 RESOURCES     = qtgr.qrc
 
+greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
 QT += svg
 
 MOC_DIR = build/moc
@@ -110,9 +111,3 @@ RCC_DIR = build/rcc
 UI_DIR = build/ui
 
 QMAKE_CXXFLAGS += -pipe
-
-# install
-target.path = $$[QT_INSTALL_EXAMPLES]/mainwindows/qtgr
-sources.files = $$SOURCES $$HEADERS $$RESOURCES $$FORMS qtgr.pro images
-sources.path = $$[QT_INSTALL_EXAMPLES]/mainwindows/qtgr
-INSTALLS += target sources

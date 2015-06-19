@@ -1,9 +1,7 @@
 #include "mainwindow.h"
 #include "view.h"
-
 #include "base/globals.h"
 #include "graphwidget.h"
-
 #include "view/symbols.h"
 #include "view/axis.h"
 #include "view/legend.h"
@@ -11,6 +9,10 @@
 #include "view/frame.h"
 #include "view/dimensions.h"
 #include "view/text.h"
+#include "util.h"
+
+#include <QToolBar>
+#include <QComboBox>
 
 ViewMenu::ViewMenu(MainWindow* mainWin) :
     Menu(mainWin, "View", true)

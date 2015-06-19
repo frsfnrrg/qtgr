@@ -1,13 +1,23 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#include <QtGui>
+#include <qnamespace.h>
 
 class Dialog;
 class MainWindow;
 
-void loadDialog(Dialog*);
+class QLabel;
+class QWidget;
+class QAction;
+class QLineEdit;
+class QGridLayout;
+class QGroupBox;
+class QComboBox;
+class QPushButton;
+class QCheckBox;
+class QObject;
 
+void loadDialog(Dialog*);
 bool showDialog(Dialog*);
 
 // T must be a subclass of Dialog
@@ -17,8 +27,6 @@ void launchOrRelaunch(Dialog** d, MainWindow* m) {
     *d = new T(m);
     loadDialog(*d);
 }
-
-const Qt::Alignment ALIGN_FORM_LABEL = Qt::AlignVCenter | Qt::AlignRight;
 
 QLabel* makeQLabel(QWidget* parent, const char* text, Qt::Alignment align = Qt::AlignCenter);
 

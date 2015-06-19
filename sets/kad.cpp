@@ -3,6 +3,11 @@
 #include "choosers.h"
 #include "prop.h"
 
+#include <QButtonGroup>
+#include <QRadioButton>
+#include <QGridLayout>
+#include <QLabel>
+
 SetsKAD::SetsKAD(MainWindow* mainWin) :
     Dialog(mainWin, "Kill/(De)Activate Sets")
 {

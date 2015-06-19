@@ -3,9 +3,11 @@
 
 # ifdef __cplusplus 
 
-#include <QtGui>
 #include "mousecall.h"
 #include "overlay.h"
+
+#include <QGraphicsScene>
+#include <QGraphicsView>
 
 class MainWindow;
 

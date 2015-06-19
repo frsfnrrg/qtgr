@@ -4,6 +4,10 @@
 #include "prop.h"
 #include "tools.h"
 #include "tools/options.h"
+#include <mainwindow.h>
+
+#include <QLabel>
+#include <QGridLayout>
 
 TransformIntegration::TransformIntegration(MainWindow* mainWin) :
     Dialog(mainWin, "Integration")

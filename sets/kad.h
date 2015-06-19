@@ -1,7 +1,6 @@
 #ifndef KAD_H
 #define KAD_H
 
-#include <QtGui>
 #include "dialog.h"
 
 class SetsKAD : public Dialog

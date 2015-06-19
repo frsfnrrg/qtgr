@@ -1,5 +1,10 @@
 #include "tools/options.h"
 #include "choosers.h"
+#include "util.h"
+
+#include <QSettings>
+#include <QCheckBox>
+#include <QGridLayout>
 
 ToolsOptions* ToolsOptions::me = NULL;
 QSettings* ToolsOptions::settings = NULL;
@@ -31,20 +36,12 @@ ToolsOptions::ToolsOptions(MainWindow* mwin) :
     autoHook(autoUpdate);
 
     QGridLayout* layout = new QGridLayout();
-
     layout->addWidget(rescaleOnLoad, 0, 0);
-
     layout->setRowMinimumHeight(1, 8);
-
     layout->addWidget(rescaleOnTransform, 2, 0);
-
     layout->setRowMinimumHeight(3, 8);
-
     layout->addWidget(autoUpdate, 4, 0);
-
     this->setDialogLayout(layout);
-
-
 }
 
 bool ToolsOptions::isRescaleOnLoad() {

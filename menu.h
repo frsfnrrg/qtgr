@@ -1,8 +1,11 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <QtGui>
+#include <QMenu>
+#include <stdio.h>
 
+class QAction;
+class QToolBar;
 class MainWindow;
 class Dialog;
 

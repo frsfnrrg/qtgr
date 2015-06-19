@@ -5,6 +5,16 @@
 #include "view.h"
 #include "prop.h"
 #include "choosers.h"
+#include "util.h"
+
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QLabel>
+#include <QStatusBar>
+#include <QHBoxLayout>
+#include <QGroupBox>
 
 ViewLegend::ViewLegend(MainWindow* mainWin) :
     Dialog(mainWin, "Legend", this)
@@ -132,7 +142,7 @@ void ViewLegend::applyDialog() {
     g[cg].l.legy = legendY->text().toDouble();
 
     for (int i=0;i<MAXPLOT;i++) {
-        strcpy((char*)g[cg].l.str[i].s,setLabels[i]->text().toAscii().data());
+        strcpy((char*)g[cg].l.str[i].s,setLabels[i]->text().toUtf8().data());
     }
 
     SetsSender::send();

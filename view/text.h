@@ -4,6 +4,13 @@
 #include "dialog.h"
 #include "base/defines.h"
 
+#include <QFrame>
+
+class QScrollArea;
+class QHBoxLayout;
+class QVBoxLayout;
+class QGridLayout;
+
 class ViewTextElement;
 class ViewTextProperties;
 

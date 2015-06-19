@@ -1,7 +1,6 @@
 #ifndef MCS_H
 #define MCS_H
 
-#include <QtGui>
 #include "dialog.h"
 
 class SetsMCS : public Dialog

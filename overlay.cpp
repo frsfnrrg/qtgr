@@ -2,6 +2,9 @@
 #include "mainwindow.h"
 #include "util.h"
 
+#include <QAction>
+#include <QPainter>
+
 const int offset = 3;
 
 Overlay::Overlay(QWidget* parent) :

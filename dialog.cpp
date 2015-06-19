@@ -3,6 +3,15 @@
 #include "prop.h"
 #include "choosers.h"
 #include "mainwindow.h"
+#include "util.h"
+
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QGroupBox>
+#include <QLabel>
 
 // nefarious idea: make dialog a "base" class,
 // have three near equivalent subclasses:

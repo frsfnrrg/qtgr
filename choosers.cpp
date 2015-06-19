@@ -4,6 +4,8 @@
 #include "base/patterns.h"
 #include <math.h>
 
+#include <QHBoxLayout>
+
 DoubleSpinBox::DoubleSpinBox() : QDoubleSpinBox() {}
 IntegerSpinBox::IntegerSpinBox() : QSpinBox() {}
 Slider::Slider(Qt::Orientation ori) : QSlider(ori) {}

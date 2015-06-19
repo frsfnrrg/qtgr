@@ -4,6 +4,9 @@
 #include "transform/evaluate.h"
 #include "transform/regression.h"
 #include "transform/fouriertransform.h"
+#include "util.h"
+
+#include <QToolBar>
 
 TransformMenu::TransformMenu(MainWindow* mainWin) :
     Menu(mainWin,"Transforms",true)

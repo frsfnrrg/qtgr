@@ -1,7 +1,6 @@
 #ifndef INTEGRATION_H
 #define INTEGRATION_H
 
-#include <QtGui>
 #include "dialog.h"
 
 class TransformIntegration : public Dialog

@@ -2,6 +2,10 @@
 #include "base/globals.h"
 #include "choosers.h"
 
+#include <QLineEdit>
+#include <QGridLayout>
+#include <QLabel>
+
 ViewTitle::ViewTitle(MainWindow* mainWin) :
     Dialog(mainWin, "Title", true)
 {
@@ -72,8 +76,8 @@ void ViewTitle::updateDialog() {
 void ViewTitle::applyDialog() {
     int gno = cg;
 
-    strcpy((char*)g[gno].labs.title.s,ttext->text().toAscii().data());
-    strcpy((char*)g[gno].labs.stitle.s,stext->text().toAscii().data());
+    strcpy((char*)g[gno].labs.title.s,ttext->text().toUtf8().data());
+    strcpy((char*)g[gno].labs.stitle.s,stext->text().toUtf8().data());
 
     g[gno].labs.title.charsize = tsize->value();
     g[gno].labs.stitle.charsize = ssize->value();

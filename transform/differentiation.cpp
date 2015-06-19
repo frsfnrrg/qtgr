@@ -4,6 +4,10 @@
 #include "prop.h"
 #include "tools.h"
 #include "tools/options.h"
+#include "mainwindow.h"
+
+#include <QGridLayout>
+#include <QLabel>
 
 TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
     Dialog(mainWin, "Differentiate")

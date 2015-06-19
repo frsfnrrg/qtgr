@@ -1,4 +1,10 @@
 #include "sets.h"
+#include "sets/kad.h"
+#include "sets/mcs.h"
+#include "sets/sedit.h"
+#include "util.h"
+
+#include <QToolBar>
 
 SetsMenu::SetsMenu(MainWindow* mwin) :
     Menu(mwin, "Sets", true)

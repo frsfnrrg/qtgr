@@ -4,6 +4,11 @@
 #include "prop.h"
 #include "tools.h"
 #include "tools/options.h"
+#include "mainwindow.h"
+#include "util.h"
+
+#include <QGridLayout>
+#include <QLabel>
 
 TransformRegression* TransformRegression::me = NULL;
 

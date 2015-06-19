@@ -1,8 +1,7 @@
 #ifndef DIALOG_H
 #define DIALOG_H
 
-#include <QtGui>
-#include "util.h"
+#include <QDialog>
 
 class DoubleSpinBox;
 class IntegerSpinBox;
@@ -11,6 +10,14 @@ class LongTextEdit;
 class IntegerRangeSelector;
 class DoubleRangeSelector;
 class MainWindow;
+class QLineEdit;
+class QComboBox;
+class QCheckBox;
+class QGroupBox;
+class QLabel;
+
+class QRadioButton;
+class QVBoxLayout;
 
 class Dialog : public QDialog
 {
@@ -36,8 +43,8 @@ public:
     void autoHook(LongTextEdit*);
 
 protected:
-    QLabel* makeLabel(const char* text, Qt::Alignment align = ALIGN_FORM_LABEL);
-    QLabel* makeLabel(const char* text, QWidget* tipgiver, Qt::Alignment align = ALIGN_FORM_LABEL);
+    QLabel* makeLabel(const char* text, Qt::Alignment align = Qt::AlignVCenter | Qt::AlignRight);
+    QLabel* makeLabel(const char* text, QWidget* tipgiver, Qt::Alignment align = Qt::AlignVCenter | Qt::AlignRight);
     QPushButton* makeButton(const char* text, const char* slot);
     QGroupBox* makeGroupBox(const char* text, bool checkable=false);
 

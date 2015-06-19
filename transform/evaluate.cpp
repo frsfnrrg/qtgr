@@ -4,6 +4,11 @@
 #include "prop.h"
 #include "tools.h"
 #include "tools/options.h"
+#include "mainwindow.h"
+
+#include <QGridLayout>
+#include <QLineEdit>
+#include <QLabel>
 
 TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
     Dialog(mainWin, "Evaluate")
