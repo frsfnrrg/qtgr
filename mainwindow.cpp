@@ -30,7 +30,8 @@ public:
     FixedAspectContainer(QWidget* w) {
         widget = w;
         widget->setParent(this);
-        widget->setGeometry(0, 0, 1006, 756);
+        widget->setGeometry(0, 0, 806, 606);
+        this->setMinimumSize(806, 606);
     }
 
     virtual void resizeEvent(QResizeEvent *)

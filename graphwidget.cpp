@@ -7,10 +7,16 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QStatusBar>
 #include <QGraphicsTextItem>
+#if QT_VERSION > 0x050000
+#include <QApplication>
+#include <QScreen>
+#endif
+
 
 const double FONT_BASE_SIZE = 14.0;
 
 MainWindow *mainWindow;
+qreal dpiInvScale = 1.0;
 
 GraphWidget* GraphWidget::myGraphWidget;
 
@@ -39,6 +45,9 @@ GraphWidget::GraphWidget(QGraphicsScene *s, MainWindow *mwin)
     GraphWidget::pen = new QPen();
     GraphWidget::patnum = 0;
     GraphWidget::fontnum = 0;
+#if QT_VERSION > 0x050000
+    dpiInvScale = 1 / qApp->primaryScreen()->devicePixelRatio();
+#endif
 
     mainWindow = mwin;
     PatternComboBox::initializePatterns();
@@ -294,6 +303,9 @@ QString texconvert(char* s, int slen)
     return s_html;
 }
 
+#include <QApplication>
+#include <QScreen>
+
 void GraphWidget::text(int x, int y, int rot, char* s, int just)
 {
     //printf("GraphWidget: text %i %i %i %s %i\n",x,y,rot,s,just);
@@ -306,7 +318,7 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
 
     QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
     // Avoid double dpi scaling
-    font.setPixelSize(fontsize);
+    font.setPointSizeF(fontsize * dpiInvScale);
 
     QGraphicsScene* gscene = GraphWidget::myGraphWidget->scene();
     QGraphicsTextItem* text = gscene->addText("");
@@ -398,7 +410,7 @@ void GraphWidget::fillellipse(int x, int y, int xm, int ym) {
 
 int GraphWidget::stringextentx(double scale, char* str) {
     QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
-    font.setPixelSize(FONT_BASE_SIZE * scale);
+    font.setPointSizeF(FONT_BASE_SIZE * scale * dpiInvScale);
     QFontMetrics metric(font);
     int w = metric.boundingRect(str).width();
     // fudge factor.... (y axis labels)
@@ -410,7 +422,7 @@ int GraphWidget::stringextentx(double scale, char* str) {
 
 int GraphWidget::stringextenty(double scale, char* str) {
     QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
-    font.setPixelSize(FONT_BASE_SIZE * scale);
+    font.setPointSizeF(FONT_BASE_SIZE * scale * dpiInvScale);
     QFontMetrics metric(font);
     int h = metric.boundingRect(str).height();
     return (int)((double)h * 1.1);
