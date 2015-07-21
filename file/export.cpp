@@ -53,13 +53,13 @@ FileExport::FileExport(MainWindow *mwin) :
     widthBox = new QSpinBox();
     // use a sizepolicy
     widthBox->setMinimum(1);
-    widthBox->setMaximum(25000);
+    widthBox->setMaximum(32000);
     widthBox->setValue(2400);
     widthBox->setSingleStep(200);
 
     heightBox = new QSpinBox();
     heightBox->setMinimum(1);
-    heightBox->setMaximum(25000);
+    heightBox->setMaximum(24000);
     heightBox->setValue(1800);
     heightBox->setSingleStep(200);
 

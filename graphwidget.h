@@ -56,7 +56,6 @@ public:
     Overlay* overlay;
 
     static void startRect(RectReceiver* r);
-
 public slots:
 
 protected:
