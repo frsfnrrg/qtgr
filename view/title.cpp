@@ -56,6 +56,7 @@ ViewTitle::ViewTitle(MainWindow* mainWin) :
     layout->addWidget(sfont, 4, 5);
 
     this->setDialogLayout(layout);
+    ttext->setFocus();
 }
 
 void ViewTitle::updateDialog() {

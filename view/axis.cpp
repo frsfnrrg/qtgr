@@ -183,6 +183,8 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     layout->addLayout(mdiv);
 
     this->setDialogLayout(layout);
+
+    axisLabel->setFocus();
 }
 
 void ViewAxis::updateWorldDimensions(QObject* q) {
