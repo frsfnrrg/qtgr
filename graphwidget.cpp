@@ -53,8 +53,8 @@ void GraphWidget::mouseMoveEvent(QMouseEvent *event)
 {
     QString message;
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
-    double vx = double(event->x())/scene->width();
-    double vy = 1.0-double(event->y())/scene->height();
+    double vx = double(event->x())/this->width();
+    double vy = 1.0-double(event->y())/this->height();
     double wx,wy;
     
     // cursor is used by other function
@@ -72,9 +72,9 @@ void GraphWidget::mouseMoveEvent(QMouseEvent *event)
         this->setCursor(Qt::ArrowCursor);
         mainWindow->statusBar()->clearMessage();
     }
-    //     printf("mouseMove %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
+    //     printf("mouseMove %i %i %f %f\n",event->x(),event->y(),overlay->height(),overlay->width());
 
-    overlay->updateMouse(event->x(),event->y(),scene->width(),scene->height());
+    overlay->updateMouse(event->x(),event->y(),overlay->width(),overlay->height());
 }
 
 void GraphWidget::mousePressEvent(QMouseEvent *event)
@@ -85,25 +85,24 @@ void GraphWidget::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
-    //    printf("mouseClick %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
     if (mouseClickCall != NULL) {
-        mouseClickCall->mouse(event->x(),event->y(),scene->width(),scene->height());
+        mouseClickCall->mouse(event->x(),event->y(),this->width(),this->height());
     }
-    overlay->clickMouse(event->x(),event->y(),scene->width(),scene->height());
+    overlay->clickMouse(event->x(),event->y(),overlay->width(),overlay->height());
     event->accept();
 }
 
 void GraphWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
-    //    printf("mouseDoubleClick %i %i %f %f\n",event->x(),event->y(),scene->height(),scene->width());
+    //    printf("mouseDoubleClick %i %i %f %f\n",event->x(),event->y(),this->height(),this->width());
     if (mouseDoubleCall != NULL) {
-        mouseDoubleCall->mouse(event->x(),event->y(),scene->width(),scene->height());
+        mouseDoubleCall->mouse(event->x(),event->y(),this->width(),this->height());
     }
 }
 
 void GraphWidget::resizeEvent(QResizeEvent *r) {
+    fitInView(scene()->sceneRect(), Qt::KeepAspectRatioByExpanding);
     overlay->resize(this->size());
     QGraphicsView::resizeEvent(r);
 }
@@ -144,7 +143,7 @@ void GraphWidget::lines(int s)
 void GraphWidget::linec(int c)
 {
     QPen* pen = GraphWidget::myGraphWidget->pen;
-    pen->setColor(  ColorComboBox::getColor(c));
+    pen->setColor(ColorComboBox::getColor(c));
 }
 
 QMap<QString, QString> tex2html;
@@ -306,7 +305,8 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
     double fontsize = FONT_BASE_SIZE * charsize;
 
     QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
-    font.setPointSizeF(fontsize);
+    // Avoid double dpi scaling
+    font.setPixelSize(fontsize);
 
     QGraphicsScene* gscene = GraphWidget::myGraphWidget->scene();
     QGraphicsTextItem* text = gscene->addText("");
@@ -398,7 +398,7 @@ void GraphWidget::fillellipse(int x, int y, int xm, int ym) {
 
 int GraphWidget::stringextentx(double scale, char* str) {
     QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
-    font.setPointSizeF(FONT_BASE_SIZE * scale);
+    font.setPixelSize(FONT_BASE_SIZE * scale);
     QFontMetrics metric(font);
     int w = metric.boundingRect(str).width();
     // fudge factor.... (y axis labels)
@@ -410,7 +410,7 @@ int GraphWidget::stringextentx(double scale, char* str) {
 
 int GraphWidget::stringextenty(double scale, char* str) {
     QFont font = FontComboBox::getFont(GraphWidget::myGraphWidget->fontnum);
-    font.setPointSizeF(FONT_BASE_SIZE * scale);
+    font.setPixelSize(FONT_BASE_SIZE * scale);
     QFontMetrics metric(font);
     int h = metric.boundingRect(str).height();
     return (int)((double)h * 1.1);

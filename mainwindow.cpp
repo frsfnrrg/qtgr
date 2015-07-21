@@ -25,6 +25,32 @@
 
 static int startuptimer;
 
+class FixedAspectContainer : public QWidget {
+public:
+    FixedAspectContainer(QWidget* w) {
+        widget = w;
+        widget->setParent(this);
+        widget->setGeometry(0, 0, 1006, 756);
+    }
+
+    virtual void resizeEvent(QResizeEvent *)
+    {
+        int contentsHeight = height() ;
+        int contentsWidth = height() * (4.0 / 3.0);
+        if (contentsWidth > width() ) {
+            contentsWidth = width() ;
+            contentsHeight = width() * (3.0 / 4.0);
+        }
+
+        int xpos = (width() - contentsWidth) / 2;
+        int ypos = (height() - contentsHeight) / 2;
+
+        widget->setGeometry(xpos, ypos, contentsWidth, contentsHeight);
+    }
+private:
+    QWidget* widget;
+};
+
 MainWindow::MainWindow() :
     QMainWindow(),
     settings("QTGR","QTGR")
@@ -41,19 +67,10 @@ MainWindow::MainWindow() :
 
     gwidget = new GraphWidget(scene,this);
     gwidget->setMouseTracking(true);
-    gwidget->setMinimumWidth(800 + 6);
-    gwidget->setMaximumWidth(800 + 6);
-    gwidget->setMaximumHeight(600 + 6);
-    gwidget->setMinimumHeight(600 + 6);
+    gwidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    gwidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    QHBoxLayout* layout = new QHBoxLayout();
-    layout->addStretch(1);
-    layout->addWidget(gwidget);
-    layout->addStretch(1);
-
-    QWidget* holder = new QWidget();
-    holder->setLayout(layout);
-    setCentralWidget(holder);
+    setCentralWidget(new FixedAspectContainer(gwidget));
 
     bool autoup = settings.value("auto_update", QVariant(true)).toBool();
     Dialog::setAutoUpdate(autoup);

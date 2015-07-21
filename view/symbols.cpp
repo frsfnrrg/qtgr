@@ -156,6 +156,8 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     layout->addLayout(leg);
 
     this->setDialogLayout(layout);
+
+    setNumber->setFocus();
 }  
   
 void ViewSymbols::updateDialog()
