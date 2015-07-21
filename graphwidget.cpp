@@ -7,11 +7,6 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QStatusBar>
 #include <QGraphicsTextItem>
-#if QT_VERSION > 0x050000
-#include <QApplication>
-#include <QScreen>
-#endif
-
 
 const double FONT_BASE_SIZE = 14.0;
 
@@ -45,9 +40,9 @@ GraphWidget::GraphWidget(QGraphicsScene *s, MainWindow *mwin)
     GraphWidget::pen = new QPen();
     GraphWidget::patnum = 0;
     GraphWidget::fontnum = 0;
-#if QT_VERSION > 0x050000
-    dpiInvScale = 1 / qApp->primaryScreen()->devicePixelRatio();
-#endif
+
+    // Normally, X=Y.
+    dpiInvScale = 96.0 / qreal(this->logicalDpiX());
 
     mainWindow = mwin;
     PatternComboBox::initializePatterns();
