@@ -2,7 +2,7 @@
 #define DIMENSIONS_H
 
 #include "dialog.h"
-#include "overlay.h"
+#include "graphwidget.h"
 
 class ViewDimensions : public Dialog, RectReceiver
 {

@@ -1,8 +1,8 @@
 #ifndef MENUTOOLS_H
 #define MENUTOOLS_H
 
-#include "overlay.h"
 #include "menu.h"
+#include "graphwidget.h"
 
 class ToolsOptions;
 class ToolsStatus;

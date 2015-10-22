@@ -19,7 +19,6 @@ HEADERS       = edit.h \
     transform/evaluate.h \
     view/title.h \
     prop.h \
-    overlay.h \
     sets.h \
     view/frame.h \
     sets/kad.h \
@@ -78,7 +77,6 @@ SOURCES       = edit.cpp \
     transform/evaluate.cpp \
     view/title.cpp \
     prop.cpp \
-    overlay.cpp \
     sets.cpp \
     view/frame.cpp \
     sets/kad.cpp \

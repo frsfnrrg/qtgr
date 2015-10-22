@@ -3,8 +3,6 @@
 
 # ifdef __cplusplus 
 
-#include "overlay.h"
-
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
@@ -16,14 +14,31 @@ public:
     virtual void mouse( int , int , int , int  ) {} // {} is required for linker
 };
 
+class RectReceiver {
+public:
+    virtual void finishRect(double , double , double , double ) {}
+};
+
 class GraphicsScene : public QGraphicsScene {
     Q_OBJECT
 public:
     GraphicsScene(MainWindow*);
+
+    void startRect(RectReceiver* r);
+    void updateMouse(double x, double y);
+    void clickMouse(double x, double y);
 protected slots:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+private slots:
+    void cancelRect();
+protected:
+    virtual void drawForeground(QPainter*, const QRectF &);
 private:
     MainWindow* mainWindow;
+    double x1,x2,y1,y2;
+    enum {Picking, Dragging} stage;
+    RectReceiver* rec;
+    QAction* cancelRectSelect;
 };
 
 class GraphWidget : public QGraphicsView
@@ -32,7 +47,7 @@ class GraphWidget : public QGraphicsView
     static GraphWidget *myGraphWidget;
 
 public:
-    GraphWidget(QGraphicsScene *, MainWindow *);
+    GraphWidget(MainWindow *);
     static void paint(int x1, int y1, int x2, int y2);
     static void linew(int w);
     static void lines(int s);
@@ -53,7 +68,6 @@ public:
     QColor cmscolors[16];
     MouseCallBack *mouseClickCall;
     MouseCallBack *mouseDoubleCall;
-    Overlay* overlay;
 
     static void startRect(RectReceiver* r);
 public slots:
@@ -71,6 +85,7 @@ private:
     int fontnum;
     int patnum;
     int colornum;
+    GraphicsScene* mscene;
 };
 
 #endif // __cplusplus

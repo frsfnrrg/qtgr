@@ -62,11 +62,7 @@ MainWindow::MainWindow() :
     setLastDirectory(QDir::home());
     clearFile();
 
-    QGraphicsScene *scene = new GraphicsScene(this);
-    scene->setSceneRect(0, 0, 800, 600);
-    scene->setBackgroundBrush(Qt::white);
-
-    gwidget = new GraphWidget(scene,this);
+    gwidget = new GraphWidget(this);
     gwidget->setMouseTracking(true);
     gwidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     gwidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

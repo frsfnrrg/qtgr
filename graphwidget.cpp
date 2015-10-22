@@ -3,6 +3,7 @@
 #include "base/globals.h"
 #include "view.h"
 #include "choosers.h"
+#include "util.h"
 
 #include <QGraphicsSceneContextMenuEvent>
 #include <QStatusBar>
@@ -19,13 +20,26 @@ GraphicsScene::GraphicsScene(MainWindow* mwin) :
     QGraphicsScene()
 {
     mainWindow = mwin;
+    // no direct interaction with the graph,
+    this->setItemIndexMethod(QGraphicsScene::NoIndex);
+
+    this->setSceneRect(0, 0, 800, 600);
+    this->setBackgroundBrush(Qt::white);
+
+    rec = NULL;
+
+    cancelRectSelect = createQAction(tr("Cancel rect select"),
+                                     tr("Stop the process of choosing a rectangle"),
+                                     "",
+                                     this);
+    connect(cancelRectSelect, SIGNAL(triggered()), this, SLOT(cancelRect()));
 }
 
 void GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     QMenu menu(event->widget());
-    if (mainWindow->gwidget->overlay->isRectSelecting()) {
-        menu.addAction(mainWindow->gwidget->overlay->cancelRectSelect);
+    if (rec != NULL) {
+        menu.addAction(cancelRectSelect);
         menu.addSeparator();
     }
 
@@ -33,13 +47,74 @@ void GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     menu.exec(event->screenPos());
 }
 
-GraphWidget::GraphWidget(QGraphicsScene *s, MainWindow *mwin)
-    : QGraphicsView(s,mwin)
+void GraphicsScene::drawForeground(QPainter *painter, const QRectF &rect) {
+    if (rec == NULL || stage != Dragging) return;
+
+    painter->setRenderHint(QPainter::Antialiasing, false);
+    painter->setPen(QPen(Qt::black,0.5));
+
+    double w = rect.width();
+    double h = rect.height();
+    QRectF target(QPointF(x1*w,(1.0 - y1)*h),QPointF(x2*w,(1.0-y2)*h));
+    target.translate(rect.topLeft());
+    painter->drawRect(target);
+}
+
+void GraphicsScene::startRect(RectReceiver* r) {
+    this->rec = r;
+    stage = Picking;
+    update();
+}
+
+void GraphicsScene::updateMouse(double x, double y) {
+    if (this->rec != NULL && stage == Dragging) {
+        if (x != this->x2 || y != this->y2) {
+            this->x2 = x;
+            this->y2 = y;
+            update();
+        }
+    }
+}
+
+void GraphicsScene::clickMouse(double x, double y) {
+    if (rec == NULL) return;
+
+    if (stage == Picking) {
+        x1 = x2 = x;
+        y1 = y2 = y;
+        stage = Dragging;
+    } else {
+        x2 = x;
+        y2 = y;
+
+        double tmp;
+        if (x1 > x2) {
+            tmp = x2; x2 = x1; x1 = tmp;
+        }
+        if (y1 > y2) {
+            tmp = y2; y2 = y1; y1 = tmp;
+        }
+
+        rec->finishRect(x1, x2, y1, y2);
+        rec = NULL;
+    }
+    update();
+}
+
+void GraphicsScene::cancelRect() {
+    rec = NULL;
+    update();
+}
+
+GraphWidget::GraphWidget(MainWindow *mwin)
+    : QGraphicsView(mscene = new GraphicsScene(mwin),mwin)
 {
     GraphWidget::myGraphWidget = this;
     GraphWidget::pen = new QPen();
     GraphWidget::patnum = 0;
     GraphWidget::fontnum = 0;
+
+    this->setOptimizationFlag(QGraphicsView::DontSavePainterState);
 
     // Normally, X=Y.
     dpiInvScale = 96.0 / qreal(this->logicalDpiX());
@@ -49,14 +124,11 @@ GraphWidget::GraphWidget(QGraphicsScene *s, MainWindow *mwin)
     FontComboBox::initializeFonts();
     mouseClickCall = NULL;
     mouseDoubleCall = NULL;
-    overlay = new Overlay(this);
-    overlay->setMouseTracking(true);
 }
 
 void GraphWidget::mouseMoveEvent(QMouseEvent *event)
 {
     QString message;
-    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     double vx = double(event->x())/this->width();
     double vy = 1.0-double(event->y())/this->height();
     double wx,wy;
@@ -76,9 +148,9 @@ void GraphWidget::mouseMoveEvent(QMouseEvent *event)
         this->setCursor(Qt::ArrowCursor);
         mainWindow->statusBar()->clearMessage();
     }
-    //     printf("mouseMove %i %i %f %f\n",event->x(),event->y(),overlay->height(),overlay->width());
+    //qDebug("mouseMove %i %i %f %f",event->x(),event->y(),vx,vy);
 
-    overlay->updateMouse(event->x(),event->y(),overlay->width(),overlay->height());
+    mscene->updateMouse(vx,vy);
 }
 
 void GraphWidget::mousePressEvent(QMouseEvent *event)
@@ -91,14 +163,16 @@ void GraphWidget::mousePressEvent(QMouseEvent *event)
 
     if (mouseClickCall != NULL) {
         mouseClickCall->mouse(event->x(),event->y(),this->width(),this->height());
+    } else {
+        double vx = double(event->x())/this->width();
+        double vy = 1.0-double(event->y())/this->height();
+        mscene->clickMouse(vx,vy);
     }
-    overlay->clickMouse(event->x(),event->y(),overlay->width(),overlay->height());
     event->accept();
 }
 
 void GraphWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     //    printf("mouseDoubleClick %i %i %f %f\n",event->x(),event->y(),this->height(),this->width());
     if (mouseDoubleCall != NULL) {
         mouseDoubleCall->mouse(event->x(),event->y(),this->width(),this->height());
@@ -107,12 +181,11 @@ void GraphWidget::mouseDoubleClickEvent(QMouseEvent *event)
 
 void GraphWidget::resizeEvent(QResizeEvent *r) {
     fitInView(scene()->sceneRect(), Qt::KeepAspectRatioByExpanding);
-    overlay->resize(this->size());
     QGraphicsView::resizeEvent(r);
 }
 
 void GraphWidget::startRect(RectReceiver* r) {
-    GraphWidget::myGraphWidget->overlay->startRect(r);
+    GraphWidget::myGraphWidget->mscene->startRect(r);
 }
 
 void GraphWidget::getcanvas(int* win_w, int* win_h)
