@@ -54,7 +54,7 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
 
     for (int i=0;i<MAXPLOT;i++) {
         setLabels[i] = new QLineEdit();
-        setLabels[i]->setMaxLength(50);
+        setLabels[i]->setMaxLength(MAXSTRLEN);
         setLabelLabels[i] = new QLabel(QString("Set ")+QString::number(i));
         intern->addWidget(setLabelLabels[i],i,0);
         intern->addWidget(setLabels[i],i,1);

@@ -75,7 +75,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     fillPattern = new PatternComboBox();
     
     legendS = new QLineEdit();
-    legendS->setMaximumWidth(300); 
+    legendS->setMaxLength(MAXSTRLEN);
 
     autoHook(fillColor);
     autoHook(legendS);
