@@ -84,7 +84,6 @@ void SetComboBox::updateSets() {
                               QString::number(i) + ": " + g[cg].l.str[i].s);
         }
     }
-    emit currentIndexChanged(this->currentIndex());
 }
 
 // FONTS
