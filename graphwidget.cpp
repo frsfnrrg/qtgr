@@ -54,8 +54,8 @@ void GraphicsScene::drawForeground(QPainter *painter, const QRectF &/*exposed*/)
     painter->setPen(QPen(Qt::black,0.5));
     painter->setBrush(QBrush());
 
-    double w = 800;
-    double h = 600;
+    double w = this->width();
+    double h = this->height();
     QRectF target(QPointF(x1*w,(1.0 - y1)*h),QPointF(x2*w,(1.0-y2)*h));
     painter->drawRect(target);
 }
