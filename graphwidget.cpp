@@ -47,16 +47,16 @@ void GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
     menu.exec(event->screenPos());
 }
 
-void GraphicsScene::drawForeground(QPainter *painter, const QRectF &rect) {
+void GraphicsScene::drawForeground(QPainter *painter, const QRectF &/*exposed*/) {
     if (rec == NULL || stage != Dragging) return;
 
     painter->setRenderHint(QPainter::Antialiasing, false);
     painter->setPen(QPen(Qt::black,0.5));
+    painter->setBrush(QBrush());
 
-    double w = rect.width();
-    double h = rect.height();
+    double w = 800;
+    double h = 600;
     QRectF target(QPointF(x1*w,(1.0 - y1)*h),QPointF(x2*w,(1.0-y2)*h));
-    target.translate(rect.topLeft());
     painter->drawRect(target);
 }
 
@@ -129,8 +129,9 @@ GraphWidget::GraphWidget(MainWindow *mwin)
 void GraphWidget::mouseMoveEvent(QMouseEvent *event)
 {
     QString message;
-    double vx = double(event->x())/this->width();
-    double vy = 1.0-double(event->y())/this->height();
+    QPointF pt = mapToScene(event->pos());
+    double vx = pt.x() / mscene->width();
+    double vy = 1.0-pt.y()/mscene->height();
     double wx,wy;
     
     // cursor is used by other function
@@ -148,7 +149,6 @@ void GraphWidget::mouseMoveEvent(QMouseEvent *event)
         this->setCursor(Qt::ArrowCursor);
         mainWindow->statusBar()->clearMessage();
     }
-    //qDebug("mouseMove %i %i %f %f",event->x(),event->y(),vx,vy);
 
     mscene->updateMouse(vx,vy);
 }
@@ -161,11 +161,13 @@ void GraphWidget::mousePressEvent(QMouseEvent *event)
         return;
     }
 
+    QPointF pt = mapToScene(event->pos());
+    double vx = pt.x() / mscene->width();
+    double vy = 1.0-pt.y()/mscene->height();
+
     if (mouseClickCall != NULL) {
-        mouseClickCall->mouse(event->x(),event->y(),this->width(),this->height());
+        mouseClickCall->mouse(vx,vy);
     } else {
-        double vx = double(event->x())/this->width();
-        double vy = 1.0-double(event->y())/this->height();
         mscene->clickMouse(vx,vy);
     }
     event->accept();
@@ -173,9 +175,11 @@ void GraphWidget::mousePressEvent(QMouseEvent *event)
 
 void GraphWidget::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    //    printf("mouseDoubleClick %i %i %f %f\n",event->x(),event->y(),this->height(),this->width());
+    QPointF pt = mapToScene(event->pos());
+    double vx = pt.x() / mscene->width();
+    double vy = 1.0-pt.y()/mscene->height();
     if (mouseDoubleCall != NULL) {
-        mouseDoubleCall->mouse(event->x(),event->y(),this->width(),this->height());
+        mouseDoubleCall->mouse(vx,vy);
     }
 }
 

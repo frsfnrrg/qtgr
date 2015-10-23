@@ -162,12 +162,12 @@ public:
         view->mainWindow->statusBar()->showMessage(txt);
     }
 
-    void mouse( int x, int y, int w, int h )
+    void mouse( double vx, double vy )
     {
         view->mainWindow->gwidget->mouseClickCall = NULL;
         view->mainWindow->gwidget->unsetCursor();
         view->mainWindow->statusBar()->clearMessage();
-        view->applyLegendPos(double(x)/double(w), 1.0 - double(y)/double(h));
+        view->applyLegendPos(vx,vy);
     }
 } legendPlacer;
 

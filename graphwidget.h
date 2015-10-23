@@ -11,12 +11,12 @@ class MainWindow;
 class MouseCallBack
 {
 public:
-    virtual void mouse( int , int , int , int  ) {} // {} is required for linker
+    virtual void mouse( double, double ) = 0;
 };
 
 class RectReceiver {
 public:
-    virtual void finishRect(double , double , double , double ) {}
+    virtual void finishRect(double , double , double , double ) = 0;
 };
 
 class GraphicsScene : public QGraphicsScene {

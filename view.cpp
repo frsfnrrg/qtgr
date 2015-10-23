@@ -61,9 +61,7 @@ class MouseDoubleCall : public MouseCallBack
 public:  
     ViewMenu* view;
     
-    void mouse( int x, int y, int w, int h ) {	
-        double rx = double(x)/w;
-        double ry = 1.0-double(y)/h;
+    void mouse( double rx, double ry ) {
 
         double x1,x2,y1,y2;
         x1 = g[cg].v.xv1;
