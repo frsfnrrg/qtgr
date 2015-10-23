@@ -13,6 +13,8 @@
 #include "tools/options.h"
 
 #include <time.h>
+#include <unistd.h>
+#include <errno.h>
 
 #include <QHBoxLayout>
 #include <QStatusBar>
@@ -209,6 +211,18 @@ void MainWindow::initialize()
         } else {
             drawgraph();
         }
+    } else if (!isatty(fileno(stdin))) {
+        qDebug("trying to read from stdin pipe: err: %d (%d is ENOTTY)", errno,  ENOTTY);
+        // TODO: figure out how to thread-decouple
+        // base (graph, input) processes from UI. (if the program
+        // is fed an empty pipe, it hangs.)
+        getdata(cg, (char*)"STDIN", 2/*means stdin*/, NXY);
+        if (ToolsOptions::isRescaleOnLoad()) {
+            this->toolsMenu->autoScale();
+        } else {
+            drawgraph();
+        }
+        qDebug("done reading");
     }
 
     int newtime = QTime::currentTime().second() * 1000 + QTime::currentTime().msec();
