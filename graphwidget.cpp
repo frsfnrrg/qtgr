@@ -238,11 +238,21 @@ void GraphWidget::paint(int x, int y, int mode)
             currentTrace.append(pt);
         }
     }
-    else if (!drawing_line || pt != currentTrace.last()) {
-        // mode=0; starting a line or requesting a jump
-        currentTrace = QPolygonF();
-        currentTrace.append(pt);
-        drawing_line = true;
+    else {
+        if (!drawing_line) {
+            // mode=0; starting a line
+            currentTrace = QPolygonF();
+            currentTrace.append(pt);
+            drawing_line = true;
+        } else if (pt != currentTrace.last()) {
+            // mode=0; requesting a jump
+            commitTrace();
+            currentTrace = QPolygonF();
+            currentTrace.append(pt);
+            drawing_line = true;
+        } else {
+            // mode=0; last line conviently coincides with this one
+        }
     }
 }
 
