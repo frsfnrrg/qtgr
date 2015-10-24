@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include <QHBoxLayout>
+#include <QFontDatabase>
 
 DoubleSpinBox::DoubleSpinBox() : QDoubleSpinBox() {}
 IntegerSpinBox::IntegerSpinBox() : QSpinBox() {}
@@ -125,7 +126,7 @@ void FontComboBox::initializeFonts() {
     QFontDatabase q;
     QString t;
     QStringList l = q.families();
-    for (int i = 0; i < l.length(); i++) {
+    for (int i = 0; i < l.size(); i++) {
         for (int j = 0; j < 3; j++) {
             t = l.at(i);
             if (t == names[j][0] && j < serif)

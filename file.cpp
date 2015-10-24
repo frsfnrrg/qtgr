@@ -115,7 +115,11 @@ void FileMenu::createActions()
                            "Ctrl+E", SLOT(export_file()));
 
     exitAct = new QAction(tr("Quit"), this);
+#if QT_VERSION >= 0x040600
     exitAct->setShortcuts(QKeySequence::Quit);
+#else 
+    exitAct->setShortcut(QKeySequence("Ctrl+Q"));
+#endif
     exitAct->setStatusTip(tr("Exit the application"));
     connect(exitAct, SIGNAL(triggered()), this->mainWindow, SLOT(close()));
 }
@@ -233,7 +237,11 @@ void FileMenu::export_file()
     // FileMenu & the four name-inducing actions/dialogs. Why put mainWindow into
     // this?
     if (mainWindow->hasFile()) {
+#if QT_VERSION >= 0x040400
         QString ending = exportDialog->selectedNameFilter();
+#else
+        QString ending = exportDialog->selectedFilter();
+#endif
         exportDialog->selectFile(mainWindow->shortFileName()+ending.right(ending.size() - 1));
     } else {
         exportDialog->selectFile(QString());

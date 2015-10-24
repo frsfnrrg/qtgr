@@ -34,7 +34,9 @@ FileOpenSet::FileOpenSet(MainWindow *mwin) :
     mainWindow = mwin;
     setAdoptName(true);
 
+#if QT_VERSION >= 0x040500
     this->setOptions(QFileDialog::DontUseNativeDialog);
+#endif
     this->setAcceptMode(QFileDialog::AcceptOpen);
     this->setFileMode(QFileDialog::ExistingFiles);
     this->setModal(true);

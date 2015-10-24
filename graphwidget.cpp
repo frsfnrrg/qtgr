@@ -9,6 +9,10 @@
 #include <QStatusBar>
 #include <QGraphicsTextItem>
 
+#if QT_VERSION < 0x040400
+#include <QMouseEvent>
+#endif
+
 const double FONT_BASE_SIZE = 14.0;
 
 MainWindow *mainWindow;
@@ -56,7 +60,7 @@ void GraphicsScene::drawForeground(QPainter *painter, const QRectF &/*exposed*/)
 
     double w = this->width();
     double h = this->height();
-    QRectF target(QPointF(x1*w,(1.0 - y1)*h),QPointF(x2*w,(1.0-y2)*h));
+    QRectF target(x1*w,(1.0 - y1)*h,(x2-x1)*w,(y1-y2)*h);
     painter->drawRect(target);
 }
 
@@ -114,8 +118,9 @@ GraphWidget::GraphWidget(MainWindow *mwin)
     GraphWidget::patnum = 0;
     GraphWidget::fontnum = 0;
 
+#if QT_VERSION >= 0x040300
     this->setOptimizationFlag(QGraphicsView::DontSavePainterState);
-
+#endif
     // Normally, X=Y.
     dpiInvScale = 96.0 / qreal(this->logicalDpiX());
 
@@ -206,7 +211,7 @@ void GraphWidget::paint(int x1, int y1, int x2, int y2)
     //     printf("GraphWidget::test %i %i %i %i\n",x1,y1,x2,y2);
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
     QPen* pen = GraphWidget::myGraphWidget->pen;
-    scene->addLine(x1,y1,x2,y2,*pen);
+    scene->addLine(QLineF(x1,y1,x2,y2),*pen);
 }
 
 void GraphWidget::linew(int w)
@@ -375,9 +380,6 @@ QString texconvert(char* s, int slen)
     return s_html;
 }
 
-#include <QApplication>
-#include <QScreen>
-
 void GraphWidget::text(int x, int y, int rot, char* s, int just)
 {
     //printf("GraphWidget: text %i %i %i %s %i\n",x,y,rot,s,just);
@@ -417,10 +419,15 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
         yoff = height / 2;
         break;
     }
-
+#if QT_VERSION >= 0x040600
     text->setTransformOriginPoint(xoff,yoff);
-    text->setPos(x-xoff,y-yoff);
     text->setRotation(-rot);
+#else
+    text->translate(xoff, yoff);
+    text->rotate(-rot);
+    text->translate(-xoff, -yoff);
+#endif
+    text->setPos(x-xoff,y-yoff);
 }
 
 void GraphWidget::arc(int x, int y, int r, int fill)
@@ -433,7 +440,7 @@ void GraphWidget::arc(int x, int y, int r, int fill)
         brush = QBrush(pen->color());
     }
     
-    scene->addEllipse(x-r,y-r,2*r,2*r,*pen,brush);
+    scene->addEllipse(QRectF(x-r,y-r,2*r,2*r),*pen,brush);
 }
 
 void GraphWidget::fillcolor(int n, int px[], int py[])
@@ -469,7 +476,7 @@ void GraphWidget::ellipse(int x, int y, int xm, int ym) {
     QPen* pen = GraphWidget::myGraphWidget->pen;
     QBrush brush = QBrush();
     int h = scene->height();
-    scene->addEllipse(QRect(x - xm/2,h-y-ym/2,xm,ym),*pen,brush);
+    scene->addEllipse(QRectF(x - xm/2,h-y-ym/2,xm,ym),*pen,brush);
 }
 
 void GraphWidget::fillellipse(int x, int y, int xm, int ym) {
@@ -477,7 +484,7 @@ void GraphWidget::fillellipse(int x, int y, int xm, int ym) {
     QPen* pen = GraphWidget::myGraphWidget->pen;
     QBrush brush = QBrush(pen->color());
     int h = scene->height();
-    scene->addEllipse(QRect(x - xm/2,h-y-ym/2,xm,ym),*pen,brush);
+    scene->addEllipse(QRectF(x - xm/2,h-y-ym/2,xm,ym),*pen,brush);
 }
 
 int GraphWidget::stringextentx(double scale, char* str) {
@@ -508,7 +515,15 @@ int GraphWidget::setpattern(int num) {
 void GraphWidget::clear()
 {
     QGraphicsScene* scene = GraphWidget::myGraphWidget->scene();
+#if QT_VERSION >= 0x040400
     scene->clear();
+#else
+    QList<QGraphicsItem*> items = scene->items();
+    while (items.size()) {
+        scene->removeItem(items.last());
+        items.pop_back();
+    }
+#endif
 }
 
 void GraphWidget::update()

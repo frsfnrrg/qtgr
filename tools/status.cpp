@@ -29,7 +29,7 @@ const char* columns[] = {
 const int numcols = sizeof columns / sizeof (char*);
 
 void disable_item(QTableWidget* o, int row, int col) {
-    o->item(row, col)->setFlags(Qt::NoItemFlags);
+    o->item(row, col)->setFlags(Qt::ItemFlags());
     o->item(row, col)->setBackgroundColor(QColor(220,220,220));
 }
 

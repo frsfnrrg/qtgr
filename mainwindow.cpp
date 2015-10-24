@@ -24,6 +24,7 @@
 #include <QTime>
 #include <QCloseEvent>
 #include <QCoreApplication>
+#include <QApplication>
 
 static int startuptimer;
 
@@ -75,8 +76,9 @@ MainWindow::MainWindow() :
     Dialog::setAutoUpdate(autoup);
 
     createMenus();
-
+#if QT_VERSION >= 0x040300
     setUnifiedTitleAndToolBarOnMac(true);
+#endif
 
     // initialize grapics
     inwin = TRUE;
@@ -179,7 +181,7 @@ void MainWindow::createHelpMenu()
 
     QAction* aboutQtAct = new QAction(tr("About Qt"), this);
     aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
-    connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    connect(aboutQtAct, SIGNAL(triggered()), QApplication::instance(), SLOT(aboutQt()));
 
     helpMenu = this->menuBar()->addMenu(tr("&Help"));
     helpMenu->addSeparator();
@@ -198,7 +200,7 @@ void MainWindow::initialize()
     // Now you can parse the arguments *after* the main window has been created.
 
     // only accept one argument so far: a file to be loaded
-    if (arguments.length() == 2) {
+    if (arguments.size() == 2) {
         int type=NXY;
 
         QFileInfo info(arguments[1]);

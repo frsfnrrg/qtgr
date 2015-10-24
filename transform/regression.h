@@ -5,7 +5,12 @@
 
 #include "dialog.h"
 
+#if QT_VERSION >= 0x040400
 class QPlainTextEdit;
+#else
+class QTextEdit;
+typedef QTextEdit QPlainTextEdit;
+#endif
 
 class TransformRegression : public Dialog
 {

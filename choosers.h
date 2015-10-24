@@ -3,7 +3,12 @@
 
 #include <QDoubleSpinBox>
 #include <QSpinBox>
+#if QT_VERSION >= 0x040400
 #include <QPlainTextEdit>
+#else
+#include <QTextEdit>
+typedef QTextEdit QPlainTextEdit;
+#endif
 #include <QSlider>
 #include <QComboBox>
 

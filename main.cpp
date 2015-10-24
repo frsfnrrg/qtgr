@@ -15,7 +15,9 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setOrganizationName("QTGR");
     app.setApplicationName("QTGR");
+#if QT_VERSION >= 0x040400
     app.setApplicationVersion("0.1.1");
+#endif
 
     MainWindow mainWin;
 

@@ -77,8 +77,7 @@ QPushButton* Dialog::makeButton(const char* text, const char* slot) {
  * @param lt
  */
 void Dialog::setDialogLayout(QLayout* lt) {
-    layout->insertLayout(0, lt);
-    layout->setStretch(0, 10);
+    layout->insertLayout(0, lt, 10);
 }
 
 void Dialog::doneDialog() {

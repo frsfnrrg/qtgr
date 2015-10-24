@@ -6,11 +6,13 @@
 #include <QSpinBox>
 #include <QGridLayout>
 #include <QLabel>
-#include <QSvgGenerator>
 #if QT_VERSION >= 0x050000
 #include <QtPrintSupport/QPrinter>
 #else
 #include <QPrinter>
+#endif
+#if QT_VERSION >= 0x040300
+#include <QSvgGenerator>
 #endif
 
 const int FILE_TYPES = 6;
@@ -39,7 +41,9 @@ FileExport::FileExport(MainWindow *mwin) :
 {
     mainWindow = mwin;
 
+#if QT_VERSION >= 0x040500
     this->setOptions(QFileDialog::DontUseNativeDialog);
+#endif
     this->setAcceptMode(QFileDialog::AcceptSave);
     this->setFileMode(QFileDialog::AnyFile);
     this->setModal(true);
@@ -48,7 +52,11 @@ FileExport::FileExport(MainWindow *mwin) :
     for (int i=0;i<FILE_TYPES;i++) {
         filters.append(filetype[i]);
     }
+#if QT_VERSION >= 0x040400
     this->setNameFilters(filters);
+#else
+    this->setFilters(filters);
+#endif
 
     widthBox = new QSpinBox();
     // use a sizepolicy
@@ -79,6 +87,7 @@ FileExport::FileExport(MainWindow *mwin) :
 }
 
 void save_svg(QGraphicsScene* scene, QString target, int width, int height) {
+#if QT_VERSION >= 0x040300
     QSvgGenerator gen;
     gen.setFileName(target);
     gen.setSize(QSize(width, height));
@@ -86,6 +95,7 @@ void save_svg(QGraphicsScene* scene, QString target, int width, int height) {
     QPainter painter(&gen);
     scene->render(&painter);
     painter.end();
+#endif
 }
 
 void save_pixel(QGraphicsScene* scene, QString target, int width, int height) {
@@ -103,7 +113,12 @@ void save_pdf(QGraphicsScene* scene, QString target, int width, int height) {
     printer.setOutputFileName(target);
     printer.setFullPage(true);
     printer.setColorMode(QPrinter::Color);
+#if QT_VERSION >= 0x040400
     printer.setPaperSize(QSize(width, height), QPrinter::Point);
+#else
+    printer.setPageSize(QPrinter::A5);
+    printer.setOrientation(QPrinter::Landscape);
+#endif
 
     QPainter painter(&printer);
     scene->render(&painter);
@@ -126,7 +141,11 @@ void FileExport::accept() {
     int height = heightBox->value();
     QString target = targets.at(0);
 
+#if QT_VERSION >= 0x040400
     QString type = this->selectedNameFilter();
+#else
+    QString type = this->selectedFilter();
+#endif
 
     int index = -1;
     for (int i=0;i<MATCH_TYPES;i++) {

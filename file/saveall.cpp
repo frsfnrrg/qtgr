@@ -9,7 +9,9 @@ FileSaveAll::FileSaveAll(MainWindow *mwin) :
 {
     mainWindow = mwin;
 
+#if QT_VERSION >= 0x040500
     this->setOptions(QFileDialog::DontUseNativeDialog);
+#endif
     this->setAcceptMode(QFileDialog::AcceptSave);
     this->setFileMode(QFileDialog::AnyFile);
     this->setDefaultSuffix("xvgr");
