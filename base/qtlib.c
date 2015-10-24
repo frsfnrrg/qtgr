@@ -113,16 +113,11 @@ static int npending;
 // 
 // static int dash_list_length[] = {1, 2, 2, 2, 4};
 
-static int x1, y1;
 // 
 void drawqtlib(int x, int y, int mode)
 {
     // mode == 1 -> draw; mode == 0 -> move
-    if (mode) {
-        qtview_paint(x1,win_h-y1,x,win_h-y);
-    }
-    x1 = x;
-    y1 = y;
+    qtview_paint(x,win_h-y,mode);
 }
 
 // should be moved somewhere else depends on xconv in draw.c //FIXME
@@ -140,13 +135,11 @@ int qtlibconvy(double y) // should be moved somewhere else
 
 void qtlibsetfont(int n)
 {
-    x1 = y1 = 99999;
     qtview_setfont(n);
 }
 
 int qtlibsetlinewidth(int width)
 {
-    x1 = y1 = 99999;
     if (width) {
         width = width % MAXLINEW;
         if (width == 0)
@@ -162,7 +155,6 @@ int qtlibsetlinewidth(int width)
 
 int qtlibsetlinestyle(int style)
 {
-    x1 = y1 = 99999;
     if (style > 1 && qtliblinewidth) {
         // 	XSetLineAttributes(disp, gc, xliblinewidth - 1 ? 0 : xliblinewidth, LineOnOffDash, CapButt, JoinRound);
         // 	XSetDashes(disp, gc, 0, dash_list[style - 1], dash_list_length[style - 1]);
@@ -176,7 +168,6 @@ int qtlibsetlinestyle(int style)
 
 int qtlibsetcolor(int color)
 {
-    x1 = y1 = 99999;
     color = color % maxcolors;
     qtview_linec(color);
     return color;
@@ -214,9 +205,7 @@ void qtlibdrawtic(int x, int y, int dir, int updown)
 
 void qtlibwritestr(int x, int y, int rot, char *s, int just, int fudge)
 {
-    x1 = y1 = 99999;
     qtview_text(x,win_h-y,rot,s,just);
-    x1 = y1 = 99999;
 }
 
 // #define MAXPATTERNS 16
@@ -348,7 +337,6 @@ int stringextenty(double scale, char* str) {
 
 void qtlibleavegraphics()
 {   
-    x1 = y1 = 99999;
     save_images = 0;
     qtview_update();
 }
@@ -357,8 +345,6 @@ void qtlibleavegraphics()
 int qtlibinitgraphics(int dmode)
 {
     npending = 0;
-    x1 = 99999;
-    y1 = 99999;
     if (dmode > 1) {
         save_images = 1;
         dmode = 0;

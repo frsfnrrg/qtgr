@@ -44,27 +44,26 @@ private:
 class GraphWidget : public QGraphicsView
 {
     Q_OBJECT
-    static GraphWidget *myGraphWidget;
 
 public:
     GraphWidget(MainWindow *);
-    static void paint(int x1, int y1, int x2, int y2);
-    static void linew(int w);
-    static void lines(int s);
-    static void linec(int s);
-    static void text(int x, int y, int rot, char* c, int just);
-    static void arc(int x, int y, int r, int fill);
-    static void fillcolor (int n, int px[], int py[]);
-    static void fill(int n, int px[], int py[]);
-    static void clear();
-    static void update();
-    static void getcanvas(int* win_w, int* win_h);
-    static int stringextentx(double scale, char* str);
-    static int stringextenty(double scale, char* str);
-    static int setpattern(int num);
-    static void ellipse(int x, int y, int xm, int ym);
-    static void fillellipse(int x, int y, int xm, int ym);
-    static void setfont(int num);
+    void paint(int x,int y, int mode);
+    void linew(int w);
+    void lines(int s);
+    void linec(int s);
+    void text(int x, int y, int rot, char* c, int just);
+    void arc(int x, int y, int r, int fill);
+    void fillcolor (int n, int px[], int py[]);
+    void fill(int n, int px[], int py[]);
+    void clear();
+    void update();
+    void getcanvas(int* win_w, int* win_h);
+    int stringextentx(double scale, char* str);
+    int stringextenty(double scale, char* str);
+    int setpattern(int num);
+    void ellipse(int x, int y, int xm, int ym);
+    void fillellipse(int x, int y, int xm, int ym);
+    void setfont(int num);
     QColor cmscolors[16];
     MouseCallBack *mouseClickCall;
     MouseCallBack *mouseDoubleCall;
@@ -81,11 +80,15 @@ protected:
 private slots:
 
 private:
+    void commitTrace();
+
     QPen *pen;
     int fontnum;
     int patnum;
     int colornum;
     GraphicsScene* mscene;
+    QPolygonF currentTrace;
+    bool drawing_line;
 };
 
 #endif // __cplusplus
@@ -95,7 +98,7 @@ extern "C"
 {
 #endif // __cplusplus
 
-void qtview_paint(int x1, int y1, int x2, int y2);
+void qtview_paint(int x, int y, int mode);
 void qtview_linew(int w);
 void qtview_lines(int s);
 void qtview_linec(int c);
