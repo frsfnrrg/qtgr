@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("QTGR");
     app.setApplicationName("QTGR");
 #if QT_VERSION >= 0x040400
-    app.setApplicationVersion("0.1.1");
+    app.setApplicationVersion("0.1.2");
 #endif
 
     MainWindow mainWin;
