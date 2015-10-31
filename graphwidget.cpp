@@ -136,7 +136,8 @@ GraphWidget::GraphWidget(MainWindow* mwin)
     // Moving antialiased objects leaves traces. But nothing is moved.
     this->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing);
 #endif
-    this->setInteractive(false);
+    // required for context menu to work
+    this->setInteractive(true);
 
     // Normally, X=Y.
     dpiInvScale = 96.0 / qreal(this->logicalDpiX());
@@ -147,6 +148,7 @@ GraphWidget::GraphWidget(MainWindow* mwin)
     mouseClickCall = NULL;
     mouseDoubleCall = NULL;
     drawing_line = false;
+    point_state = ptNot;
 }
 
 void GraphWidget::mouseMoveEvent(QMouseEvent* event)
@@ -179,23 +181,22 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* event)
 
 void GraphWidget::mousePressEvent(QMouseEvent* event)
 {
-    // Graph is strictly interacted with using left click
-    if (!(event->buttons() & Qt::LeftButton)) {
-        event->ignore();
-        return;
-    }
-
-    QPointF pt = mapToScene(event->pos());
-    double vx = pt.x() / mscene->width();
-    double vy = 1.0 - pt.y() / mscene->height();
-
-    if (mouseClickCall != NULL) {
-        mouseClickCall->mouse(vx, vy);
+    if (event->buttons() & Qt::LeftButton) {
+        // left click is for handlers
+        QPointF pt = mapToScene(event->pos());
+        double vx = pt.x() / mscene->width();
+        double vy = 1.0 - pt.y() / mscene->height();
+        if (mouseClickCall != NULL) {
+            mouseClickCall->mouse(vx, vy);
+        }
+        else {
+            mscene->clickMouse(vx, vy);
+        }
+        event->accept();
     }
     else {
-        mscene->clickMouse(vx, vy);
+        QGraphicsView::mousePressEvent(event);
     }
-    event->accept();
 }
 
 void GraphWidget::mouseDoubleClickEvent(QMouseEvent* event)
@@ -229,30 +230,48 @@ void GraphWidget::getcanvas(int* win_w, int* win_h)
 
 void GraphWidget::paint(int x, int y, int mode)
 {
+    //qDebug("%d %d %d %d",x,y,mode,point_state);
     QPointF pt(x, y);
     if (mode) { // continue drawing line
         if (!drawing_line) {
             qCritical("Incorrect command order; something happened.");
         }
         else {
-            currentTrace.append(pt);
+            // dense curves have lots of duplicate points
+            if (currentTrace.last() != pt) {
+                currentTrace.append(pt);
+                point_state = ptNot;
+            }
+            else if (point_state == ptOne) {
+                point_state = ptNot;
+            }
+            else if (point_state == ptTwo) {
+                point_state = ptThree;
+            }
         }
     }
     else {
-        if (!drawing_line) {
-            // mode=0; starting a line
-            currentTrace = QPolygonF();
-            currentTrace.append(pt);
-            drawing_line = true;
-        } else if (pt != currentTrace.last()) {
-            // mode=0; requesting a jump
+        // If points were piled up, requesting a jump
+        if (currentTrace.size() > 0 && pt != currentTrace.last()) {
             commitTrace();
-            currentTrace = QPolygonF();
-            currentTrace.append(pt);
-            drawing_line = true;
-        } else {
-            // mode=0; last line conviently coincides with this one
+            point_state = ptNot;
         }
+
+        if (drawing_line && pt == currentTrace.last()) {
+            // do nothing; the last line coincides with this one
+            if (point_state == ptOne) {
+                point_state = ptTwo;
+            }
+            else {
+                point_state = ptNot;
+            }
+        }
+        else {
+            // starting a new line segment
+            currentTrace.append(pt);
+            point_state = ptOne;
+        }
+        drawing_line = true;
     }
 }
 
@@ -414,8 +433,7 @@ QString texconvert(char* s, int slen)
                 s_tmp[k] = s[l];
                 k++;
                 l++;
-            } while (((int)s[l] >= (int)'a' && (int)s[l] <= (int)'z') ||
-                     ((int)s[l] >= (int)'A' && (int)s[l] <= (int)'Z'));
+            } while (((int)s[l] >= (int)'a' && (int)s[l] <= (int)'z') || ((int)s[l] >= (int)'A' && (int)s[l] <= (int)'Z'));
 
             s_tmp[k] = '\0';
             //  	    printf("test %s ",s_tmp);
@@ -493,8 +511,11 @@ void GraphWidget::arc(int x, int y, int r, int fill)
     if (drawing_line) {
         commitTrace();
     }
+    if (r == 0) {
+        drawPoint(x, y);
+        return;
+    }
     QBrush brush = QBrush();
-
     if (fill == 1) {
         brush = QBrush(pen->color());
     }
@@ -536,6 +557,10 @@ void GraphWidget::ellipse(int x, int y, int xm, int ym)
     if (drawing_line) {
         commitTrace();
     }
+    if (xm == 0 && ym == 0) {
+        drawPoint(x, y);
+        return;
+    }
     QBrush brush = QBrush();
     int h = scene()->height();
     scene()->addEllipse(QRectF(x - xm / 2, h - y - ym / 2, xm, ym), *pen, brush);
@@ -546,6 +571,11 @@ void GraphWidget::fillellipse(int x, int y, int xm, int ym)
     if (drawing_line) {
         commitTrace();
     }
+    if (xm == 0 && ym == 0) {
+        drawPoint(x, y);
+        return;
+    }
+
     QBrush brush = QBrush(pen->color());
     int h = scene()->height();
     scene()->addEllipse(QRectF(x - xm / 2, h - y - ym / 2, xm, ym), *pen, brush);
@@ -619,18 +649,32 @@ void GraphWidget::setfont(int num)
     fontnum = num;
 }
 
+void GraphWidget::drawPoint(int x, int y)
+{
+    // not external; no drawing_line check (may be
+    // called by that fn. anyway
+    qreal size = 0.5;
+    scene()->addEllipse(QRectF(x - size, y - size, 2 * size, 2 * size), QPen(pen->color()), QBrush(pen->color()));
+}
+
 void GraphWidget::commitTrace()
 {
     QPainterPath p;
     int max = currentTrace.size();
-    for (int i = 0; i < max - 1; i++) {
-        // If you skips the moveTo's at each step, performance tanks because
-        // the system plans to polygon fill the path, and does N^2 intersection
-        // calculations.
-        p.moveTo(currentTrace[i]);
-        p.lineTo(currentTrace[i + 1]);
+    if (point_state == ptThree) {
+        drawPoint(currentTrace.last().x(), currentTrace.last().y());
     }
-    scene()->addPath(p, *pen);
+    else if (max >= 2) {
+        for (int i = 0; i < max - 1; i++) {
+            // If you skips the moveTo's at each step, performance tanks because
+            // the system plans to polygon fill the path, and does N^2
+            // intersection calculations.
+            p.moveTo(currentTrace[i]);
+            p.lineTo(currentTrace[i + 1]);
+        }
+        scene()->addPath(p, *pen);
+    }
+    currentTrace = QPolygonF();
 
     drawing_line = false;
 }

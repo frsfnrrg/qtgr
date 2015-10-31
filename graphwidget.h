@@ -80,6 +80,7 @@ protected:
 private slots:
 
 private:
+    void drawPoint(int x, int y);
     void commitTrace();
 
     QPen *pen;
@@ -89,6 +90,7 @@ private:
     GraphicsScene* mscene;
     QPolygonF currentTrace;
     bool drawing_line;
+    enum { ptNot, ptOne, ptTwo, ptThree } point_state;
 };
 
 #endif // __cplusplus
