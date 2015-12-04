@@ -62,7 +62,7 @@ MainWindow::MainWindow() :
     QWidget::setWindowIcon(QIcon(":images/icon.png"));
 
     startuptimer = QTime::currentTime().second() * 1000 + QTime::currentTime().msec();
-    setLastDirectory(QDir::home());
+    setLastDirectory(QDir::current());
     clearFile();
 
     gwidget = new GraphWidget(this);
