@@ -64,12 +64,22 @@ FileExport::FileExport(MainWindow *mwin) :
     widthBox->setMaximum(32000);
     widthBox->setValue(2400);
     widthBox->setSingleStep(200);
+    connect(widthBox, SIGNAL(valueChanged(int)), this, SLOT(updateHeightBox(int)));
 
     heightBox = new QSpinBox();
     heightBox->setMinimum(1);
     heightBox->setMaximum(24000);
     heightBox->setValue(1800);
-    heightBox->setSingleStep(200);
+    heightBox->setSingleStep(150);
+    connect(heightBox, SIGNAL(valueChanged(int)), this, SLOT(updateWidthBox(int)));
+
+    widthBoxLabel = makeQLabel(this, "Width");
+    heightBoxLabel = makeQLabel(this, "Height");
+
+#if QT_VERSION >= 0x040300
+        connect(this,SIGNAL(filterSelected(QString)),
+                this,SLOT(updateBoxes(QString)));
+#endif
 
     options = new QFrame();
 
@@ -78,9 +88,9 @@ FileExport::FileExport(MainWindow *mwin) :
 
     if (!layout) return;
 
-    layout->addWidget(makeQLabel(this, "Width"), 4, 0);
+    layout->addWidget(widthBoxLabel, 4, 0);
     layout->addWidget(widthBox, 4, 1);
-    layout->addWidget(makeQLabel(this, "Height"), 5, 0);
+    layout->addWidget(heightBoxLabel, 5, 0);
     layout->addWidget(heightBox, 5, 1);
 
     this->setLayout(layout);
@@ -107,14 +117,14 @@ void save_pixel(QGraphicsScene* scene, QString target, int width, int height) {
     image.save(target);
 }
 
-void save_pdf(QGraphicsScene* scene, QString target, int width, int height) {
+void save_pdf(QGraphicsScene* scene, QString target) {
     QPrinter printer;
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(target);
     printer.setFullPage(true);
     printer.setColorMode(QPrinter::Color);
 #if QT_VERSION >= 0x040400
-    printer.setPaperSize(QSize(width, height), QPrinter::Point);
+    printer.setPaperSize(QSize(100, 75), QPrinter::Millimeter);
 #else
     printer.setPageSize(QPrinter::A5);
     printer.setOrientation(QPrinter::Landscape);
@@ -179,10 +189,10 @@ void FileExport::accept() {
         save_pixel(scene, target, width, height);
         break;
     case 5:// svg
-        save_svg(scene, target,width, height);
+        save_svg(scene, target, width, height);
         break;
     case 6:// pdf
-        save_pdf(scene, target, width, height);
+        save_pdf(scene, target);
         break;
     default:
         //printf("Save type not implemented yet\n");
@@ -190,3 +200,23 @@ void FileExport::accept() {
     }
 }
 
+void FileExport::updateHeightBox(int val) {
+    heightBox->blockSignals(true);
+    heightBox->setValue((val * 3) / 4);
+    heightBox->blockSignals(false);
+}
+
+void FileExport::updateWidthBox(int val) {
+    widthBox->blockSignals(true);
+    widthBox->setValue((val * 4) / 3);
+    widthBox->blockSignals(false);
+}
+
+void FileExport::updateBoxes(QString s) {
+    // Values restricted to those provided in FILE_TYPES
+    bool ispdf = s.endsWith(".pdf");
+    heightBox->setEnabled(!ispdf);
+    widthBox->setEnabled(!ispdf);
+    heightBoxLabel->setEnabled(!ispdf);
+    widthBoxLabel->setEnabled(!ispdf);
+}

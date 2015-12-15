@@ -5,6 +5,7 @@
 
 class QFrame;
 class QSpinBox;
+class QLabel;
 class MainWindow;
 
 class FileExport : public QFileDialog
@@ -18,8 +19,15 @@ private:
     QFrame* options;
     QSpinBox* heightBox;
     QSpinBox* widthBox;
+    QLabel* heightBoxLabel;
+    QLabel* widthBoxLabel;
 public slots:
     void accept();
+
+private slots:
+    void updateHeightBox(int);
+    void updateWidthBox(int);
+    void updateBoxes(QString);
 };
 
 #endif // SAVEAS_H
