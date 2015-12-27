@@ -264,13 +264,11 @@ named_color colors[MAXCOLORS] = {{QColor(255, 255, 255), "White"},
                                  {QColor(85, 192, 52), "Mid Green"}};
 
 ColorComboBox::ColorComboBox() {
-    QIcon colorIcon;
-    QPixmap colorPix(20, 20);
     for (int i = 0; i < MAXCOLORS; i++) {
         named_color n = colors[i];
+        QPixmap colorPix(20, 20);
         colorPix.fill(n.color);
-        colorIcon.addPixmap(colorPix);
-        this->addItem(colorIcon, tr(n.name));
+        this->addItem(QIcon(colorPix), tr(n.name));
     }
 }
 
