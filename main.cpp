@@ -24,6 +24,5 @@ int main(int argc, char *argv[])
     // make sure that event loop is started before parsing command line
     QTimer::singleShot(0, &mainWin, SLOT(initialize()));
 
-    mainWin.show();
     return app.exec();
 }

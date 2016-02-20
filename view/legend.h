@@ -3,7 +3,7 @@
 
 #include "dialog.h"
 
-#define MAXPLOT 30
+#define MAXPLOT 96
 
 class ViewLegendProp;
 

@@ -17,12 +17,12 @@ static int cur_gno;		/* if the graph number changes on read in */
 int change_type;		/* current set type */
 static int cur_type;		/* current set type */
 
-#define MAX_LINE_LEN 512
+#define MAX_LINE_LEN 4096
 
 /*
  * number of doubles to allocate for each call to realloc
  */
-#define BUFSIZE  512
+#define BUFSIZE  4096
 
 
 // forward declarations
@@ -383,13 +383,13 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
   * read x1 y1 y2 ... y30 formatted files
   * note that the maximum number of sets is 30
   */
- #define MAXSETN 30
+ #define MAXSETN MAXPLOT
 
  int readnxy(int gno, char *fn, FILE * fp)
  {
      int i, j, pstat, rcnt, cnt, scnt[MAXSETN], setn[MAXSETN], ptype, retval = 0;
      double /* atof(), */ *x[MAXSETN], *y[MAXSETN], xval, yr[MAXSETN];
-     char *s, *strtok(), buf[1024], tmpbuf[1024];
+     char *s, *strtok(), buf[4096], tmpbuf[4096];
      int readerror = 0;
      int do_restart = 0;
 
@@ -420,7 +420,7 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
      }
      if (cnt > MAXPLOT) {
     errwin("Maximum number of columns exceeded, reading first 31");
-    cnt = 31;
+    cnt = MAXPLOT+1;
      }
      s = buf;
      s = strtok(s, " \t\n");
@@ -438,7 +438,7 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
     s = strtok(s, " \t\n");
     if (s == NULL) {
         yr[j] = 0.0;
-        errwin("Number of items in column incorrect");
+        errwin("Number of items in column incorrect.");
     } else {
         yr[j] = atof(s);
     }
@@ -504,7 +504,7 @@ int readxy(int gno, char *fn, FILE *fp, int readone)
             s = strtok(s, " \t\n");
             if (s == NULL) {
             yr[j] = 0.0;
-            errwin("Number of items in column incorrect");
+            errwin("Number of items in column incorrect!");
             } else {
             yr[j] = atof(s);
             }

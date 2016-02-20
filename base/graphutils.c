@@ -1116,6 +1116,8 @@ static double nicenum(x, round)
     int exp;
     double f, y;
 
+    if (isnan(x) || x == 0.) return 0.;
+    
     exp = floor(log10(x));
     f = x / expt(10., exp);	/* fraction between 1 and 10 */
     if (round)
@@ -1135,6 +1137,7 @@ static double nicenum(x, round)
 	y = 5.;
     else
 	y = 10.;
+
     return y * expt(10., exp);
 }
 

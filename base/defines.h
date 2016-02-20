@@ -20,7 +20,7 @@
  *
  */
 #define MAX_SET_COLS 6		/* max number of data columns for a set */
-#define MAXPLOT 30		/* max number of sets in a graph */
+#define MAXPLOT 96		/* max number of sets in a graph */
 #define MAXGRAPH 10		/* max number of graphs */
 #define MAX_ZOOM_STACK 20	/* max stack depth for world stack */
 #define MAXREGION 5		/* max number of regions */

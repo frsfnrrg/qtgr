@@ -109,7 +109,11 @@ void save_svg(QGraphicsScene* scene, QString target, int width, int height) {
 }
 
 void save_pixel(QGraphicsScene* scene, QString target, int width, int height) {
-    QPixmap image(width, height);
+    QImage image(width, height, QImage::Format_RGB32);
+    if (image.isNull()) {
+        qDebug("Could not create image. Are the dimensions off?");
+        return;
+    }
     QPainter painter(&image);
     painter.setRenderHint(QPainter::Antialiasing);
     scene->render(&painter);
@@ -177,21 +181,30 @@ void FileExport::accept() {
     }
     //printf("type found: %i\n", index);
 
-    QGraphicsScene* scene = this->mainWindow->gwidget->scene();
+    ImageType types[] = {
+        PNG,
+        JPG,
+        JPG,
+        TIFF,
+        BMP,
+        SVG,
+        PDF
+    };
+    exportImage(types[index], target, this->mainWindow->gwidget->scene(), width, height);
+}
 
-    switch (index) {
-
-    case 0:// png
-    case 1:// jpg
-    case 2:// jpeg
-    case 3:// tiff
-    case 4:// bmp
+void FileExport::exportImage(FileExport::ImageType t, QString target, QGraphicsScene* scene, int width, int height) {
+    switch (t) {
+    case PNG:
+    case JPG:
+    case TIFF:
+    case BMP:
         save_pixel(scene, target, width, height);
         break;
-    case 5:// svg
+    case SVG:
         save_svg(scene, target, width, height);
         break;
-    case 6:// pdf
+    case PDF:
         save_pdf(scene, target);
         break;
     default:
