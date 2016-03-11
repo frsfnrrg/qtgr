@@ -14,6 +14,7 @@
 #endif
 
 const double FONT_BASE_SIZE = 14.0;
+const double MAGNIFICATION = 10.0;
 
 static MainWindow* mainWindow;
 static qreal dpiInvScale = 1.0;
@@ -27,7 +28,7 @@ GraphicsScene::GraphicsScene(MainWindow* mwin)
     // no direct interaction with the graph,
     this->setItemIndexMethod(QGraphicsScene::NoIndex);
 
-    this->setSceneRect(0, 0, 800, 600);
+    this->setSceneRect(0., 0., 800.*MAGNIFICATION, 600.*MAGNIFICATION);
     this->setBackgroundBrush(Qt::white);
 
     rec = NULL;
@@ -57,8 +58,8 @@ void GraphicsScene::drawForeground(QPainter* painter, const QRectF& /*exposed*/)
         return;
 
     painter->setRenderHint(QPainter::Antialiasing, false);
-    painter->setPen(QPen(Qt::black, 0.5));
-    painter->setBrush(QBrush());
+    QPen pen(Qt::black, 0.5*MAGNIFICATION);
+    painter->setPen(pen);
 
     double w = this->width();
     double h = this->height();
@@ -127,6 +128,9 @@ GraphWidget::GraphWidget(MainWindow* mwin)
 {
     myGraphWidget = this;
     GraphWidget::pen = new QPen();
+    pen->setCapStyle(Qt::RoundCap);
+    pen->setJoinStyle(Qt::RoundJoin);
+    pen->setStyle(Qt::CustomDashLine);
     GraphWidget::patnum = 0;
     GraphWidget::fontnum = 0;
 
@@ -280,7 +284,7 @@ void GraphWidget::linew(int w)
     if (drawing_line) {
         commitTrace();
     }
-    pen->setWidth(w);
+    pen->setWidthF(w*MAGNIFICATION);
 }
 
 void GraphWidget::lines(int s)
@@ -289,6 +293,37 @@ void GraphWidget::lines(int s)
         commitTrace();
     }
     pen->setStyle((Qt::PenStyle)s);
+    QVector<qreal> patt;
+    qreal gap = 4;
+    switch (s) {
+    case 0:
+        pen->setStyle(Qt::NoPen);
+        break;
+    default:
+    case 1://SolidLine
+        pen->setStyle(Qt::SolidLine);
+        break;
+    case 2://DashLine
+        pen->setStyle(Qt::CustomDashLine);
+        patt << 8 << gap;
+        pen->setDashPattern(patt);
+        break;
+    case 3://DotLine
+        pen->setStyle(Qt::CustomDashLine);
+        patt << 2 << gap;
+        pen->setDashPattern(patt);
+        break;
+    case 4://DashDotLine
+        pen->setStyle(Qt::CustomDashLine);
+        patt << 8 << gap << 2 << gap;
+        pen->setDashPattern(patt);
+        break;
+    case 5://DashDotDotLine
+        pen->setStyle(Qt::CustomDashLine);
+        patt << 8 << gap << 2 << gap << 2 << gap;
+        pen->setDashPattern(patt);
+        break;
+    }
 }
 
 void GraphWidget::linec(int c)
@@ -469,7 +504,7 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
 
     QFont font = FontComboBox::getFont(fontnum);
     // Avoid double dpi scaling
-    font.setPointSizeF(fontsize * dpiInvScale);
+    font.setPointSizeF(fontsize * dpiInvScale * MAGNIFICATION);
 
     QGraphicsTextItem* text = scene()->addText("");
     text->setHtml(texconvert(s, strlen(s)));
@@ -586,20 +621,22 @@ int GraphWidget::stringextentx(double scale, char* str)
     QFont font = FontComboBox::getFont(fontnum);
     font.setPointSizeF(FONT_BASE_SIZE * scale * dpiInvScale);
     QFontMetrics metric(font);
-    int w = metric.boundingRect(str).width();
+    QString converted = texconvert(str, strlen(str));
+    int w = metric.boundingRect(converted).width();
     // fudge factor.... (y axis labels)
     // could also be linked to devcharsize as exported by the driver.
     //
-    return (int)((double)w * 1.9);
+    return (int)((double)w * 1.9 * MAGNIFICATION);
 }
 
 int GraphWidget::stringextenty(double scale, char* str)
 {
     QFont font = FontComboBox::getFont(fontnum);
     font.setPointSizeF(FONT_BASE_SIZE * scale * dpiInvScale);
+    QString converted = texconvert(str, strlen(str));
     QFontMetrics metric(font);
-    int h = metric.boundingRect(str).height();
-    return (int)((double)h * 1.1);
+    int h = metric.boundingRect(converted).height();
+    return (int)((double)h * 1.1 * MAGNIFICATION);
 }
 
 int GraphWidget::setpattern(int num)
@@ -653,7 +690,7 @@ void GraphWidget::drawPoint(int x, int y)
 {
     // not external; no drawing_line check (may be
     // called by that fn. anyway
-    qreal size = 0.5;
+    qreal size = 0.5*MAGNIFICATION;
     scene()->addEllipse(QRectF(x - size, y - size, 2 * size, 2 * size), QPen(pen->color()), QBrush(pen->color()));
 }
 
@@ -665,11 +702,14 @@ void GraphWidget::commitTrace()
         drawPoint(currentTrace.last().x(), currentTrace.last().y());
     }
     else if (max >= 2) {
+        p.moveTo(currentTrace[0]);
         for (int i = 0; i < max - 1; i++) {
             // If you skips the moveTo's at each step, performance tanks because
             // the system plans to polygon fill the path, and does N^2
             // intersection calculations.
-            p.moveTo(currentTrace[i]);
+            //  On the other hand, jumping around everywhere makes the rendering
+            // ugly, because then dashed lines don't get properly interpolated.
+//            p.moveTo(currentTrace[i]);
             p.lineTo(currentTrace[i + 1]);
         }
         scene()->addPath(p, *pen);
@@ -764,5 +804,9 @@ void qtview_fillellipse(int x, int y, int xm, int ym)
 void qtview_setfont(int n)
 {
     myGraphWidget->setfont(n);
+}
+
+int qtview_getsymsize() {
+    return MAGNIFICATION;
 }
 }

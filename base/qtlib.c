@@ -370,10 +370,10 @@ int qtlibinitgraphics(int dmode)
     devfill = qtlibfill;
     devfillcolor = qtlibfillcolor;
     devleavegraphics = qtlibleavegraphics;
-    devxticl = 12;
-    devyticl = 12;
-    devarrowlength = 12;
-    devsymsize = 6;
+    devxticl = 12*qtview_getsymsize();;
+    devyticl = 12*qtview_getsymsize();;
+    devarrowlength = 12*qtview_getsymsize();;
+    devsymsize = 6*qtview_getsymsize();
     devcharsize = qtlibcharsize;
 
     // default values.

@@ -117,6 +117,7 @@ int qtview_setpattern(int n);
 void qtview_drawellipse(int x, int y, int xm, int ym);
 void qtview_drawellipse(int x, int y, int xm, int ym);
 void qtview_setfont(int k);
+int qtview_getsymsize();
 
 # ifdef __cplusplus 
 }
