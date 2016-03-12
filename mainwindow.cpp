@@ -214,29 +214,35 @@ void MainWindow::initialize()
         } else {
             drawgraph();
         }
-    } else if (arguments.size() == 3 && (arguments[1] == "--pdf" || arguments[1] == "--png"
+    } else if (arguments.size() >= 3 && (arguments[1] == "--pdf" || arguments[1] == "--png"
                                          || arguments[1] == "--jpg")) {
-        QFileInfo info(arguments[2]);
-        setFile( info.absoluteDir().path(), info.fileName());
-        QByteArray v = arguments[2].toUtf8();
-        getdata(0,v.data(),DISK,NXY);
-        drawgraph();
+        for (int i=2;i<arguments.size();i++) {
+            QString filename = arguments[i];
+            QFileInfo info(filename);
+            setFile( info.absoluteDir().path(), info.fileName());
+            QByteArray v = filename.toUtf8();
+            // Clear, then load
+            wipeout(0);
+            set_graph_active(0);
+            getdata(0,v.data(),DISK,NXY);
+            drawgraph();
 
-        QString target = info.canonicalFilePath();
-        FileExport::ImageType type;
-        if (arguments[1] == "--pdf") {
-            type = FileExport::PDF;
-            target += ".pdf";
-        } else if (arguments[1] == "--png") {
-            type = FileExport::PNG;
-            target += ".png";
-        } else if (arguments[1] == "--jpg") {
-            type = FileExport::JPG;
-            target += ".jpg";
+            QString target = info.canonicalFilePath();
+            FileExport::ImageType type;
+            if (arguments[1] == "--pdf") {
+                type = FileExport::PDF;
+                target += ".pdf";
+            } else if (arguments[1] == "--png") {
+                type = FileExport::PNG;
+                target += ".png";
+            } else if (arguments[1] == "--jpg") {
+                type = FileExport::JPG;
+                target += ".jpg";
+            }
+            FileExport::exportImage(type, target, gwidget->scene(), 2400, 1800);
         }
-        FileExport::exportImage(type, target, gwidget->scene(), 2400, 1800);
+        qApp->exit();
 
-        this->close();
         return;
     } else if (!isatty(fileno(stdin))) {
         qDebug("trying to read from stdin pipe: err: %d (%d is ENOTTY)", errno,  ENOTTY);
