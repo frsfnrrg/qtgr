@@ -1,24 +1,24 @@
-/* $Id: fourier.c,v 1.4 1993/03/10 16:32:11 pturner Exp pturner $
+/* $Id: fourier.c,v 1.1 1995/04/13 16:25:49 pturner Exp pturner $
  *
  * DFT by definition and FFT
  */
 
-#include <stdio.h>
+#include "config.h"
 #include <math.h>
 
-#ifndef M_PI
-#	define M_PI  3.14159265358979323846
-#endif
+#include <stdio.h>
+#include <stdlib.h>
 
-void sswap();
+#include "protos.h"
+#include "defines.h"
+
+static int bit_swap(int i, int nu);
+static void sswap(double *x1, double *x2);
 
 /*
 	DFT by definition
 */
-void dft(jr, ji, n, iflag)
-    double *jr, *ji;
-int n, iflag;
-
+void dft(double *jr, double *ji, int n, int iflag)
 {
     int i, j, sgn;
     double sumr, sumi, tpi, *w, *xr, *xi, co, si, o, on = 1.0 / n;
@@ -29,7 +29,7 @@ int n, iflag;
     xr = (double *) calloc(n, sizeof(double));
     xi = (double *) calloc(n, sizeof(double));
     if (w == NULL || xr == NULL || xi == NULL) {
-	errwin("Can't allocate temporary in DFT");
+	errmsg("Can't allocate temporary in DFT");
 	cxfree(w);
 	cxfree(xr);
 	cxfree(xi);
@@ -79,9 +79,7 @@ int n, iflag;
    nu ...... logarithm in base 2 of n_pts e.g. nu = 5 if n_pts = 32.
 */
 
-void fft(real_data, imag_data, n_pts, nu, inv)
-    double *real_data, *imag_data;
-    int n_pts, nu, inv;
+void fft(double *real_data, double *imag_data, int n_pts, int nu, int inv)
 {
     int n2, j, l, i, ib, k, k1, k2;
     int sgn;
@@ -148,8 +146,7 @@ void fft(real_data, imag_data, n_pts, nu, inv)
 * Bit swaping routine in which the bit pattern of the integer i is reordered.
 * See Brigham's book for details
 */
-bit_swap(i, nu)
-    int i, nu;
+static int bit_swap(int i, int nu)
 {
     int ib, i1, i2;
 
@@ -166,8 +163,7 @@ bit_swap(i, nu)
 /*
 * Simple exchange routine where *x1 & *x2 are swapped
 */
-void sswap(x1, x2)
-    double *x1, *x2;
+static void sswap(double *x1, double *x2)
 {
     double temp_x;
 

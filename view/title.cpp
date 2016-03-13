@@ -1,6 +1,7 @@
 #include "view/title.h"
-#include "base/globals.h"
 #include "choosers.h"
+
+#include "base/globals.h"
 
 #include <QLineEdit>
 #include <QGridLayout>

@@ -1,8 +1,11 @@
-/* $Id: externs.h,v 1.2 91/11/02 09:29:42 pturner Exp Locker: pturner $
+/* $Id: externs.h,v 1.1 1995/04/13 16:25:49 pturner Exp pturner $
  *
  *      declarations for draw.c
  *
  */
+#ifndef __EXTERNS_H_
+#define __EXTERNS_H_
+
 extern int devorient;           /* device has 0,0 at upper left if true */
 extern int devwidthmm;          /* device width in mm */
 extern int devwidth;            /* device number of points in width */
@@ -13,7 +16,6 @@ extern int devoffsy;            /* device offset in y (if not 0) */
 extern int devxticl, devyticl;	/* common length for device */
 extern int devarrowlength;	/* length for arrow device */
 extern int devsymsize;		/* default symbol size */
-extern double devcharsize; 	/* default character size */	
 extern int devcharh, devcharw;	/* typical character height and width */
 extern int (*devsetcolor) ();	/* routine to set colors */
 extern int (*devconvx) ();	/* map world x to device */
@@ -30,5 +32,14 @@ extern void (*devdrawarc) ();   /* device arc routine */
 extern void (*devfillarc) ();   /* device fill arc routine */
 extern void (*devdrawellipse) (); /* device ellipse routine */
 extern void (*devfillellipse) (); /* device ellipse arc routine */
+extern void (*devfillellipsecolour) (); /* device ellipse arc routine */
 extern void (*devfill) ();	/* device fill routine */
 extern void (*devfillcolor) ();	/* device fill color routine */
+
+#define MAXLINELEN 800
+
+#define NUM_COLORS 256
+extern int ncolors;
+extern unsigned char red[], green[], blue[];
+
+#endif /* __EXTERNS_H_ */

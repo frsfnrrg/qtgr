@@ -1,7 +1,8 @@
 #include "sets/kad.h"
-#include "base/globals.h"
 #include "choosers.h"
 #include "prop.h"
+
+#include "base/globals.h"
 
 #include <QButtonGroup>
 #include <QRadioButton>
@@ -66,7 +67,7 @@ void SetsKAD::updateDialog() {
         return;
     }
 
-    if (g[gno].p[cset].active == OFF && g[gno].p[cset].deact == 0) {
+    if (g[gno].p[cset].active == FALSE && g[gno].p[cset].deact == 0) {
         actChoice->setEnabled(false);
         deactChoice->setEnabled(false);
         killChoice->setEnabled(false);
@@ -88,21 +89,21 @@ void SetsKAD::applyDialog() {
     if (cset == -1) {
         if (deactChoice->isChecked()) {
             for (cset=0;cset<MAXPLOT;cset++) {
-                if (g[gno].p[cset].active == ON) {
+                if (g[gno].p[cset].active == TRUE) {
                     g[gno].p[cset].deact = 1;
-                    g[gno].p[cset].active = OFF;
+                    g[gno].p[cset].active = FALSE;
                 }
             }
         } if (actChoice->isChecked()) {
             for (cset=0;cset<MAXPLOT;cset++) {
-                if (g[gno].p[cset].active == OFF && g[gno].p[cset].deact == 1) {
+                if (g[gno].p[cset].active == FALSE && g[gno].p[cset].deact == 1) {
                     g[gno].p[cset].deact = 0;
-                    g[gno].p[cset].active = ON;
+                    g[gno].p[cset].active = TRUE;
                 }
             }
         } else {
             for (cset=0;cset<MAXPLOT;cset++) {
-                if (g[gno].p[cset].active == ON || g[gno].p[cset].deact == 1) {
+                if (g[gno].p[cset].active == TRUE || g[gno].p[cset].deact == 1) {
                     do_kill(gno, cset, 0);
                 }
             }
@@ -113,17 +114,17 @@ void SetsKAD::applyDialog() {
         return;
     }
 
-    if (g[gno].p[cset].active == OFF && g[gno].p[cset].deact == 0) {
+    if (g[gno].p[cset].active == FALSE && g[gno].p[cset].deact == 0) {
         return;
     }
 
     if (deactChoice->isChecked()) {
         g[gno].p[cset].deact = 1;
-        g[gno].p[cset].active = OFF;
+        g[gno].p[cset].active = FALSE;
         shift_to_first(actChoice, deactChoice);
     } else if (actChoice->isChecked()) {
         g[gno].p[cset].deact = 0;
-        g[gno].p[cset].active = ON;
+        g[gno].p[cset].active = TRUE;
         shift_to_first(deactChoice, actChoice);
     } else {
         // default, hard kill; soft is 1

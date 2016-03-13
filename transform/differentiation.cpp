@@ -1,10 +1,11 @@
 #include "transform/differentiation.h"
-#include "base/globals.h"
 #include "choosers.h"
 #include "prop.h"
 #include "tools.h"
 #include "tools/options.h"
 #include "mainwindow.h"
+
+#include "base/globals.h"
 
 #include <QGridLayout>
 #include <QLabel>
@@ -51,7 +52,7 @@ TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
 
 void TransformDifferentiation::updateDialog() {
     int setno = setNumber->currentIndex();
-    bool null = g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0;
+    bool null = g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0;
     diffType->setDisabled(null);
     destination->setDisabled(null);
     diffTypeLabel->setDisabled(null);
@@ -62,7 +63,7 @@ void TransformDifferentiation::applyDialog() {
     int setno, itype;
     setno = setNumber->currentIndex();
 
-    if (g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0) {
+    if (g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0) {
         return;
     }
 

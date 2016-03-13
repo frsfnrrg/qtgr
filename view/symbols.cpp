@@ -1,10 +1,11 @@
 #include "view/symbols.h"
 #include "view.h"
-#include "base/globals.h"
 #include "choosers.h"
 #include "prop.h"
 #include "mainwindow.h"
 #include "util.h"
+
+#include "base/globals.h"
 
 #include <QLineEdit>
 #include <QLabel>
@@ -75,7 +76,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     fillPattern = new PatternComboBox();
     
     legendS = new QLineEdit();
-    legendS->setMaxLength(MAXSTRLEN);
+//    legendS->setMaxLength(MAXSTRLEN);//fixme
 
     autoHook(fillColor);
     autoHook(legendS);
@@ -176,12 +177,12 @@ void ViewSymbols::updateDialog()
     lineWidth->setCurrentIndex(g[gno].p[cset].linew-1);
     lineColor->setCurrentIndex(g[gno].p[cset].color);
     
-    legendS->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));
+//    legendS->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));// fixme
 
     fillFill->setCurrentIndex(g[gno].p[cset].fill);
-    if (g[gno].p[cset].fillusing == PATTERN) {
-        fillColor->setCurrentIndex(1);
-    }
+//    if (g[gno].p[cset].fillusing == PATTERN) {//fixme
+//        fillColor->setCurrentIndex(1);
+//    }
     fillPattern->setCurrentIndex(g[gno].p[cset].fillpattern);
     fillColor->setCurrentIndex(g[gno].p[cset].fillcolor);
 }
@@ -190,7 +191,7 @@ void ViewSymbols::updateDialog()
 void ViewSymbols::updateLegend() {
     int gno = cg;
     int cset = setNumber->currentIndex();
-    legendS->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));
+//    legendS->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));//fixme
 }
 
 void ViewSymbols::applyDialog()
@@ -217,29 +218,29 @@ void ViewSymbols::applyDialog()
         // i.e., for black, use patterns as well.
         // the optimal solution is to allow
         // patterns of all colors
-        fillusing = PATTERN;
+//        fillusing = PATTERN;//fixme
     } else {
-        fillusing = COLOR;
+//        fillusing = COLOR;//fixme
     }
-    strcpy((char*)g[cg].l.str[cset].s,legendS->text().toUtf8().data());
+//    strcpy((char*)g[cg].l.str[cset].s,legendS->text().toUtf8().data());//fixme
 
     // Note: there is an apply-to-all-sets option
     // in XVGR
 
-    set_prop(cg, SET,
-	     SETNUM, cset,
-	     SYMBOL, TYPE, sym,
-	     SYMBOL, FILL, symfill,
-         SYMBOL, SIZE, symsize,
-         SKIP, symskip,
-	     LINESTYLE, style,
-	     LINEWIDTH, wid,
-	     COLOR, color,
-         FILL, TYPE, fill,
-         FILL, WITH, fillusing,
-         FILL, COLOR, fillcol,
-         FILL, PATTERN, fillpat,
-	     0); 
+//    set_prop(cg, SET,//fixme set_prop is deprecated..
+//	     SETNUM, cset,
+//	     SYMBOL, TYPE, sym,
+//	     SYMBOL, FILL, symfill,
+//         SYMBOL, SIZE, symsize,
+//         SKIP, symskip,
+//	     LINESTYLE, style,
+//	     LINEWIDTH, wid,
+//	     COLOR, color,
+//         FILL, TYPE, fill,
+//         FILL, WITH, fillusing,
+//         FILL, COLOR, fillcol,
+//         FILL, PATTERN, fillpat,
+//	     0);
 
     drawgraph();
 

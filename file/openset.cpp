@@ -13,19 +13,19 @@
 typedef struct {const char* name; int type;} FType;
 
 FType FILETYPES[] = {
-    {"X Y [Y2] [Y3] ...", NXY},
-    {"X Y", XY},
-    {"X Y DX",  XYDX},
-    {"X Y DY",  XYDY},
-    {"X Y DX DX",  XYDXDX},
-    {"X Y DY DY",  XYDYDY},
-    {"X Y DX DY",  XYDXDY},
-    {"X Y Z",  XYZ},
-    {"X Y RT",  XYRT},
-    {"X Y HI LO",  XYHILO},
-    {"X Y U V",  XYUV},
-    {"X Y BOX",  XYBOX},
-    {"IHL", IHL}
+    {"X Y [Y2] [Y3] ...", SET_NXY},
+    {"X Y", SET_XY},
+    {"X Y DX",  SET_XYDX},
+    {"X Y DY",  SET_XYDY},
+    {"X Y DX DX",  SET_XYDXDX},
+    {"X Y DY DY",  SET_XYDYDY},
+    {"X Y DX DY",  SET_XYDXDY},
+    {"X Y Z",  SET_XYZ},
+    {"X Y RT",  SET_XYRT},
+    {"X Y HI LO",  SET_XYHILO},
+    {"X Y U V",  SET_XYUV},
+    {"X Y BOX",  SET_XYBOX},
+    {"IHL", SET_IHL}
 };
 
 FileOpenSet::FileOpenSet(MainWindow *mwin) :
@@ -95,7 +95,7 @@ void FileOpenSet::accept() {
     for (int i = 0; i < files.size(); ++i) {
         QByteArray v = files.at(i).toUtf8();
         printf("%s \n",v.constData());
-        getdata(0,v.data(),DISK,type);
+        getdata(0,v.data(),SOURCE_DISK,type);
     }
 
     if (ToolsOptions::isRescaleOnLoad()) {

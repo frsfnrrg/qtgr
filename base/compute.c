@@ -1,26 +1,27 @@
-/* $Id: compute.c,v 1.5 1993/02/06 04:48:55 pturner Exp pturner $
+/* $Id: compute.c,v 1.1 1995/04/13 16:25:49 pturner Exp pturner $
  *
  * perform math between sets
  *
  */
 
+#include "config.h"
+
 #include <stdio.h>
+
 #include "globals.h"
+#include "protos.h"
 
-static double *xtmp, *ytmp;
-
-void loadset(gno, selset, toval, startno, stepno)
-    int gno, selset, toval;
-    double startno, stepno;
+void loadset(int gno, int selset, int toval, double startno, double stepno)
 {
     int i, lenset;
     double *ltmp;
+    double *xtmp, *ytmp;
 
     if ((lenset = getsetlength(gno, selset)) <= 0) {
 	char stmp[60];
 
 	sprintf(stmp, "Length of set %d <= 0", selset);
-	errwin(stmp);
+	errmsg(stmp);
 	return;
     }
     xtmp = getx(gno, selset);
@@ -51,31 +52,40 @@ void loadset(gno, selset, toval, startno, stepno)
 	*ltmp++ = startno + i * stepno;
     }
     updatesetminmax(gno, selset);
+    set_dirtystate();
+#ifndef NONE_GUI
     update_set_status(gno, selset);
+#endif
 }
 
 /*
  * evaluate the expression in sscanstr and place the result in selset
  */
-int formula(gno, selset, sscanstr)
-    int selset;
-    char sscanstr[];
-
+int formula(int gno, int selset, char *sscanstr)
 {
-    char stmp[64], tmpstr[512];
-    int i = 0, errpos, lenset;
+    char stmp[64];
+    int i = 0, errpos, lenset, oldcg;
+    double *xtmp, *ytmp;
 
     if ((lenset = getsetlength(gno, selset)) <= 0) {
 	sprintf(stmp, "Length of set %d = 0", selset);
-	errwin(stmp);
-	return;
+	errmsg(stmp);
+	return 0;
     }
     xtmp = getx(gno, selset);
     ytmp = gety(gno, selset);
-    strcpy(tmpstr, sscanstr);
-    fixupstr(tmpstr);
-    scanner(tmpstr, xtmp, ytmp, lenset, ax, bx, cx, dx, MAXARR, i, selset, &errpos);
-    updatesetminmax(gno, selset);
-    update_set_status(gno, selset);
+	
+	oldcg = cg;	  /* kludge to get around not being able to set result graph */ 
+	cg = gno;
+    scanner(sscanstr, xtmp, ytmp, lenset, ax, bx, cx, dx, MAXARR, i, selset, &errpos);
+	cg = oldcg;
+
+    if (!errpos) {
+    	updatesetminmax(gno, selset);
+#ifndef NONE_GUI
+    	update_set_status(gno, selset);
+#endif
+    	set_dirtystate();
+    }
     return (errpos);
 }

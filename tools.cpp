@@ -1,11 +1,14 @@
 #include "mainwindow.h"
 #include "tools.h"
-#include "base/globals.h"
 #include "prop.h"
 #include "graphwidget.h"
 #include "tools/options.h"
 #include "tools/status.h"
 #include "util.h"
+
+#include "base/globals.h"
+#include "base/noxprotos.h"
+#include "base/xprotos.h"
 
 #include <QToolBar>
 
@@ -53,7 +56,7 @@ void ToolsMenu::populateToolBar(QToolBar* foo) {
 
 void ToolsMenu::autoScale()
 {
-    autoscale_proc();
+//    autoscale_proc(); FIXME
     if (!activeset(cg)) {
         drawgraph();
     }

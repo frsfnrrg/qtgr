@@ -2,6 +2,7 @@
 
 #define MAIN
 #include "base/globals.h"
+#include "base/noxprotos.h"
 
 #include <QApplication>
 #include <QTimer>

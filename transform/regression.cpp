@@ -72,7 +72,7 @@ TransformRegression::TransformRegression(MainWindow* mainWin) :
 
 void TransformRegression::updateDialog() {
     int setno = setNumber->currentIndex();
-    bool isnull = g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0;
+    bool isnull = g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0;
 
     outputLabel->setDisabled(isnull);
     loadLabel->setDisabled(isnull);
@@ -85,11 +85,11 @@ void TransformRegression::updateDialog() {
 
 void TransformRegression::applyDialog() {
     int setno = setNumber->currentIndex();
-    if (g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0) {
+    if (g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0) {
         return;
     }
 
-    do_regress(setno, degree->currentIndex()+1, load->currentIndex());
+//    do_regress(setno, degree->currentIndex()+1, load->currentIndex());//fixme
 
     if (ToolsOptions::isRescaleOnTransform()) {
         mainWindow->toolsMenu->autoScale();

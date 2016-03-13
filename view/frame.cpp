@@ -1,6 +1,7 @@
 #include "view/frame.h"
-#include "base/globals.h"
 #include "choosers.h"
+
+#include "base/globals.h"
 
 #include <QCheckBox>
 #include <QLabel>
@@ -81,7 +82,7 @@ ViewFrame::ViewFrame(MainWindow* mainWin) :
 }
 
 void ViewFrame::updateDialog() {
-    if (g[cg].f.active == ON) {
+    if (g[cg].f.active == TRUE) {
         graphType->setCurrentIndex(g[cg].f.type);
     } else {
         graphType->setCurrentIndex(2);
@@ -90,7 +91,7 @@ void ViewFrame::updateDialog() {
     lineColor->setCurrentIndex(g[cg].f.color);
     fillColor->setCurrentIndex(g[cg].f.color);
 
-    fillBG->setChecked(g[cg].f.fillbg == ON);
+    fillBG->setChecked(g[cg].f.fillbg == TRUE);
     fillColor->setCurrentIndex(g[cg].f.bgcolor);
 
     lineWidth->setCurrentIndex(g[cg].f.linew - 1);
@@ -101,9 +102,9 @@ void ViewFrame::applyDialog() {
     int factive, ftype;
 
     if (graphType->currentIndex() == 2) {
-        factive = OFF; ftype = 0;
+        factive = FALSE; ftype = 0;
     } else {
-        factive = ON;
+        factive = TRUE;
         ftype = graphType->currentIndex();
     }
 
@@ -112,7 +113,7 @@ void ViewFrame::applyDialog() {
     g[cg].f.color =  lineColor->currentIndex();
     g[cg].f.linew = lineWidth->currentIndex() + 1;
     g[cg].f.lines = lineStyle->currentIndex();
-    g[cg].f.fillbg = fillBG->isChecked() ? ON : OFF;
+    g[cg].f.fillbg = fillBG->isChecked() ? TRUE : FALSE;
     g[cg].f.bgcolor = fillColor->currentIndex();
 
     drawgraph();

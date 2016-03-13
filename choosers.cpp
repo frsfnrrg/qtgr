@@ -78,11 +78,11 @@ SetComboBox::SetComboBox(bool a) : QComboBox() {
 
 void SetComboBox::updateSets() {
     for (int i = 0; i < MAXPLOT; i++) {
-        if (g[cg].p[i].active == OFF && g[cg].p[i].deact == 0) {
-            this->setItemText(i + add, QString("~: ") + g[cg].l.str[i].s);
+        if (g[cg].p[i].active == FALSE && g[cg].p[i].deact == 0) {
+//            this->setItemText(i + add, QString("~: ") + g[cg].l.str[i].s);//fixme
         } else {
-            this->setItemText(i + add,
-                              QString::number(i) + ": " + g[cg].l.str[i].s);
+//            this->setItemText(i + add,
+//                              QString::number(i) + ": " + g[cg].l.str[i].s);//fixme
         }
     }
 }

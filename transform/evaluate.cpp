@@ -1,10 +1,11 @@
 #include "transform/evaluate.h"
-#include "base/globals.h"
 #include "choosers.h"
 #include "prop.h"
 #include "tools.h"
 #include "tools/options.h"
 #include "mainwindow.h"
+
+#include "base/globals.h"
 
 #include <QGridLayout>
 #include <QLineEdit>
@@ -46,7 +47,7 @@ TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
 
 void TransformEvaluate::updateDialog() {
     int setno = setNumber->currentIndex();
-    bool null = g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0;
+    bool null = g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0;
     formulaBox->setDisabled(null);
     destination->setDisabled(null);
     formulaBoxLabel->setDisabled(null);
@@ -59,7 +60,7 @@ void TransformEvaluate::applyDialog() {
 
     setno = this->setNumber->currentIndex();
 
-    if (g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0) {
+    if (g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0) {
         return;
     }
 

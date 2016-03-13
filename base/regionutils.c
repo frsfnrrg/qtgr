@@ -1,63 +1,63 @@
-/* $Id: regionutils.c,v 1.7 92/06/30 19:30:32 pturner Exp Locker: pturner $
+/* $Id: regionutils.c,v 1.1 1995/04/13 16:25:49 pturner Exp pturner $
  *
  * routines to allocate, manipulate, and return
  * information about regions.
  *
  */
 
+#include "config.h"
+
 #include <stdio.h>
-#include <math.h>
+#include <stdlib.h>
 #include "globals.h"
+#include "draw.h"
+#include "protos.h"
 
-extern int regiontype, regionlinkto;
+int regiontype = 0;
 
-void droppoints(gno, setno, startno, endno, dist);
+extern int regionlinkto;
 
 /*
  * see if (x,y) lies inside the plot
  */
-int inbounds(gno, x, y)
-    int gno;
-    double x, y;
+int inbounds(int gno, double x, double y)
 {
     return ((x >= g[gno].w.xg1 && x <= g[gno].w.xg2) && (y >= g[gno].w.yg1 && y <= g[gno].w.yg2));
 }
 
-int isactive_region(regno)
-    int regno;
+int isactive_region(int regno)
 {
-    return (rg[regno].active == ON);
+    return (regno == MAXREGION || regno == MAXREGION + 1 || rg[regno].active == TRUE);
 }
 
-char *region_types(it, which)
-    int it, which;
+char *region_types(int it, int which)
 {
     static char s[128];
 
     strcpy(s, "UNDEFINED");
     switch (it) {
-    case LEFT:
-	strcpy(s, "LEFT");
+    case REGION_TOLEFT:
+	strcpy(s, "REGION_TOLEFT");
 	break;
-    case RIGHT:
-	strcpy(s, "RIGHT");
+    case REGION_TORIGHT:
+	strcpy(s, "REGION_TORIGHT");
 	break;
-    case ABOVE:
-	strcpy(s, "ABOVE");
+    case REGION_ABOVE:
+	strcpy(s, "REGION_ABOVE");
 	break;
-    case BELOW:
-	strcpy(s, "BELOW");
+    case REGION_BELOW:
+	strcpy(s, "REGION_BELOW");
 	break;
-    case POLYI:
+    case REGION_POLYI:
 	if (which) {
-	    strcpy(s, "POLYI");
+	    strcpy(s, "REGION_POLYI");
 	} else {
 	    strcpy(s, "INSIDE POLY");
 	}
 	break;
-    case POLYO:
+    case REGION_POLYO:
 	if (which) {
-	    strcpy(s, "POLYO");
+	    strcpy(s, "REGION_POLYO");
 	} else {
 	    strcpy(s, "OUTSIDE POLY");
 	}
@@ -66,267 +66,427 @@ char *region_types(it, which)
     return s;
 }
 
-void kill_region(r)
-    int r;
+void kill_region(int r)
 {
     int i;
 
-    if (rg[r].active == ON) {
+    if (rg[r].active == TRUE) {
 	if (rg[r].x != NULL) {
-	    cfree(rg[r].x);
+	    free(rg[r].x);
 	    rg[r].x = NULL;
 	}
 	if (rg[r].y != NULL) {
-	    cfree(rg[r].y);
+	    free(rg[r].y);
 	    rg[r].y = NULL;
 	}
     }
-    rg[r].active = OFF;
+    rg[r].active = FALSE;
     for (i = 0; i < maxgraph; i++) {
 	rg[r].linkto[i] = FALSE;
     }
 }
 
-void activate_region(r, type)
-    int r, type;
+void activate_region(int r, int type)
 {
     kill_region(r);
-    rg[r].active = ON;
+    rg[r].active = TRUE;
     rg[r].type = type;
 }
 
-void define_region(nr, regionlinkto, rtype)
-    int nr, regionlinkto, rtype;
-{
-    kill_region(nr);
-    switch (rtype) {
-    case 0:
-	regiontype = POLYI;
-    //frsfnrrg do_select_region();
-	break;
-    case 1:
-	regiontype = POLYO;
-    //frsfnrrg do_select_region();
-	break;
-    case 2:
-	regiontype = ABOVE;
-	set_action(0);
-    set_action(DEF_REGION1ST);
-	break;
-    case 3:
-	regiontype = BELOW;
-	set_action(0);
-	set_action(DEF_REGION1ST);
-	break;
-    case 4:
-	regiontype = LEFT;
-	set_action(0);
-	set_action(DEF_REGION1ST);
-	break;
-    case 5:
-	regiontype = RIGHT;
-	set_action(0);
-	set_action(DEF_REGION1ST);
-	break;
-    }
-}
+//void define_region(int nr, int regionlinkto, int rtype)
+//{
+//    kill_region(nr);
+//    switch (rtype) {
+//    case 0:
+//	regiontype = REGION_POLYI;
+//#ifndef NONE_GUI
+//	do_select_region();
+//#endif
+//	break;
+//    case 1:
+//	regiontype = REGION_POLYO;
+//#ifndef NONE_GUI
+//	do_select_region();
+//#endif
+//	break;
+//    case 2:
+//	regiontype = REGION_ABOVE;
+//#ifndef NONE_GUI
+//	set_action(0);
+//	set_action(DEF_REGION1ST);
+//#endif
+//	break;
+//    case 3:
+//	regiontype = REGION_BELOW;
+//#ifndef NONE_GUI
+//	set_action(0);
+//	set_action(DEF_REGION1ST);
+//#endif
+//	break;
+//    case 4:
+//	regiontype = REGION_TOLEFT;
+//#ifndef NONE_GUI
+//	set_action(0);
+//	set_action(DEF_REGION1ST);
+//#endif
+//	break;
+//    case 5:
+//	regiontype = REGION_TORIGHT;
+//#ifndef NONE_GUI
+//	set_action(0);
+//	set_action(DEF_REGION1ST);
+//#endif
+//	break;
+//    }
+//}
 
-void extract_region(gno, setno, regno)
-    int gno, setno, regno;
+/*
+ * extract sets from region 
+ */
+void extract_region(int gno, int fromset, int toset, int regno)
 {
     int i, j;
     double *x, *y;
-
+    int startno, stopno;
+    if (fromset == -1) {
+	startno = 0;
+	stopno = maxplot - 1;
+    } else {
+	startno = stopno = fromset;
+    }
     if (regno >= MAXREGION) {
-	for (j = 0; j < g[cg].maxplot; j++) {
+	for (j = startno; j <= stopno; j++) {
 	    x = getx(cg, j);
 	    y = gety(cg, j);
-	    if (isactive(cg, j) && (setno != j || gno != cg)) {
+	    if (isactive_set(cg, j) && (toset != j || gno != cg)) {
 		for (i = 0; i < getsetlength(cg, j); i++) {
 		    if (regno == MAXREGION) {
 			if (inbounds(cg, x[i], y[i])) {
-			    add_point(gno, setno, x[i], y[i], 0.0, 0.0, XY);
+			    add_point(gno, toset, x[i], y[i], 0.0, 0.0, SET_XY);
 			}
 		    } else {
 			if (!inbounds(cg, x[i], y[i])) {
-			    add_point(gno, setno, x[i], y[i], 0.0, 0.0, XY);
+			    add_point(gno, toset, x[i], y[i], 0.0, 0.0, SET_XY);
 			}
 		    }
 		}
 	    }
 	}
     } else {
-	if (rg[regno].active == OFF) {
-	    errwin("Region not active");
+	if (rg[regno].active == FALSE) {
+	    errmsg("Region not active");
 	    return;
 	}
 	if (rg[regno].linkto[cg] == FALSE) {
-	    errwin("Region not linked to this graph");
+	    errmsg("Region not linked to this graph");
 	    return;
 	}
-	for (j = 0; j < g[cg].maxplot; j++) {
+	for (j = startno; j <= stopno; j++) {
 	    x = getx(cg, j);
 	    y = gety(cg, j);
-	    if (isactive(cg, j) && (setno != j || gno != cg)) {
+	    if (isactive_set(cg, j) && (toset != j || gno != cg)) {
 		for (i = 0; i < getsetlength(cg, j); i++) {
 		    if (inregion(regno, x[i], y[i])) {
-			add_point(gno, setno, x[i], y[i], 0.0, 0.0, XY);
+			add_point(gno, toset, x[i], y[i], 0.0, 0.0, SET_XY);
 		    }
 		}
 	    }
 	}
     }
-    updatesetminmax(gno, setno);
-    update_set_status(gno, setno);
+    updatesetminmax(gno, toset);
+#ifndef NONE_GUI
+    update_set_status(gno, toset);
     drawgraph();
+#endif
 }
 
-void delete_region(gno, regno)
-    int gno, regno;
+void delete_byindex(int gno, int setno, int *ind)
 {
-    int i, j, setno, len;
+    int i, j, cnt = 0;
+    int ncols = getncols(gno, setno);
+    for (i = 0; i < getsetlength(gno, setno); i++) {
+	if (ind[i]) {
+	    cnt++;
+	}
+    }
+    if (cnt == getsetlength(gno, setno)) {
+	killset(gno, setno);
+	return;
+    }
+    cnt = 0;
+    for (i = 0; i < getsetlength(gno, setno); i++) {
+	if (ind[i] == 0) {
+	    for (j = 0; j < ncols; j++) {
+		g[gno].p[setno].ex[j][cnt] = g[gno].p[setno].ex[j][i];
+	    }
+	    cnt++;
+	}
+    }
+    setlength(gno, setno, cnt);
+}
+
+void delete_region(int gno, int setno, int regno)
+{
+    int i, j, k, len, *ind = NULL;
+    int gstart, gstop;
+    int sstart, sstop;
     double *x, *y;
 
-    if (regno >= MAXREGION) {
-	for (j = 0; j < g[gno].maxplot; j++) {
-    junk1: ;
-	    x = getx(gno, j);
-	    y = gety(gno, j);
-	    if (isactive(gno, j)) {
-		len = getsetlength(gno, j);
-		for (i = 0; i < len; i++) {
-		    if (regno == MAXREGION) {
-			if (inbounds(gno, x[i], y[i])) {
-			    if (getsetlength(gno, j) == 1) {
-				killset(gno, j);
-				break;
-			    }
-			    droppoints(gno, j, i, i, 1);
-			    goto junk1;
-			}
-		    } else {
-			if (!inbounds(gno, x[i], y[i])) {
-			    if (getsetlength(gno, j) == 1) {
-				killset(gno, j);
-				break;
-			    }
-			    droppoints(gno, j, i, i, 1);
-			    goto junk1;
-			}
-		    }
-		}
-		updatesetminmax(gno, j);
-        update_set_status(gno, j);
-	    }
-	}
-    } else {
-	if (rg[regno].active == OFF) {
-	    errwin("Region not active");
+    if (regno < 0 || regno > MAXREGION + 1) {
+	errmsg("Invalid region");
+	return;
+    }
+    if (regno < MAXREGION) {
+	if (rg[regno].active == FALSE) {
+	    errmsg("Region not active");
 	    return;
 	}
-	if (rg[regno].linkto[gno] == FALSE) {
-	    errwin("Region not linked to this graph");
-	    return;
-	}
-	for (j = 0; j < g[gno].maxplot; j++) {
-    junk2: ;
-	    x = getx(gno, j);
-	    y = gety(gno, j);
-	    if (isactive(gno, j)) {
-		len = getsetlength(gno, j);
-		for (i = 0; i < len; i++) {
-		    if (inregion(regno, x[i], y[i])) {
-			if (getsetlength(gno, j) == 1) {
-			    killset(gno, j);
-			    break;
-			}
-			droppoints(gno, j, i, i, 1);
-			goto junk2;
-		    }
-		}
-		updatesetminmax(gno, j);
-        update_set_status(gno, j);
+	if (gno >= 0) {
+	    if (rg[regno].linkto[gno] == FALSE) {
+		errmsg("Region not linked to this graph");
+		return;
 	    }
 	}
     }
+    if (gno == GRAPH_SELECT_CURRENT) {	/* current graph */
+	gstart = cg;
+	gstop = cg;
+    } else if (gno == GRAPH_SELECT_ALL) {	/* all graphs */
+	gstart = 0;
+	gstop = maxgraph - 1;
+    } else {
+	gstart = gno;		/* particular graph */
+	gstop = gno;
+    }
+
+    for (k = gstart; k <= gstop; k++) {
+	if (isactive_graph(k)) {
+	    if (setno < 0) {
+		sstart = 0;
+		sstop = g[k].maxplot - 1;
+	    } else {
+		sstart = setno;
+		sstop = setno;
+	    }
+	    for (j = sstart; j <= sstop; j++) {
+		x = getx(k, j);
+		y = gety(k, j);
+		if (isactive_set(k, j)) {
+		    len = getsetlength(k, j);
+		    if (ind != NULL) {
+			free(ind);
+		    }
+		    ind = (int *) malloc(len * sizeof(int));
+		    if (ind == NULL) {
+			errmsg("Error mallocing memory in delete_region, operation cancelled");
+			return;
+		    }
+		    for (i = 0; i < len; i++) {
+			ind[i] = 0;
+			if (regno == MAXREGION) {	/* inside world */
+			    if (inbounds(k, x[i], y[i])) {
+				ind[i] = 1;
+			    }
+			} else if (regno == MAXREGION + 1) {	/* outside world */
+			    if (!inbounds(k, x[i], y[i])) {
+				ind[i] = 1;
+			    }
+			} else {
+			    if (inregion(regno, x[i], y[i])) {	/* inside region */
+				ind[i] = 1;
+			    }
+			}
+		    }
+		    delete_byindex(k, j, ind);
+		    updatesetminmax(k, j);
+#ifndef NONE_GUI
+		    update_set_status(k, j);
+#endif
+		}
+	    }
+	}
+    }
+#ifndef NONE_GUI
     drawgraph();
+#endif
 }
 
-void evaluate_region(regno, buf)
-    int regno;
-    char *buf;
+void evaluate_region(int regno, int gno, int setno, char *buf)
 {
     double a, b, c, d;
-    double *x, *y;
+    double *x, *y, tmpx, tmpy;
     int errpos;
-    int i, j;
-    extern double resx, resy;	/* result passed from the expression
-				 * interpreter */
+    int i, j, k;
+    int gstart, gstop;
+    int sstart, sstop;
 
-    if (regno >= MAXREGION) {
-	for (j = 0; j < g[cg].maxplot; j++) {
-	    x = getx(cg, j);
-	    y = gety(cg, j);
-	    if (isactive(cg, j)) {
-		for (i = 0; i < getsetlength(cg, j); i++) {
-		    if (regno == MAXREGION) {
-			if (inbounds(cg, x[i], y[i])) {
-			    scanner(buf, &x[i], &y[i], 1, &a, &b, &c, &d, 1, i, j, &errpos);
-			    if (errpos) {
-				updatesetminmax(cg, j);
-                update_set_status(cg, j);
-				return;
-			    }
-			}
-		    } else {
-			if (!inbounds(cg, x[i], y[i])) {
-			    scanner(buf, &x[i], &y[i], 1, &a, &b, &c, &d, 1, i, j, &errpos);
-			    if (errpos) {
-				updatesetminmax(cg, j);
-                update_set_status(cg, j);
-				return;
-			    }
-			}
-		    }
-		}
-		updatesetminmax(cg, j);
-        update_set_status(cg, j);
-	    }
-	}
+
+    if (gno == GRAPH_SELECT_CURRENT) {      /* current graph */
+        gstart = cg;
+        gstop = cg;
+    } else if (gno == GRAPH_SELECT_ALL) {   /* all graphs */
+        gstart = 0;
+        gstop = maxgraph - 1;
     } else {
-	if (rg[regno].active == OFF) {
-	    errwin("Region not active");
+        gstart = gno;                       /* particular graph */
+        gstop = gno;
+    }
+    if (regno < MAXREGION) {
+	if (rg[regno].active == FALSE) {
+	    errmsg("Region not active");
 	    return;
 	}
 	if (rg[regno].linkto[cg] == FALSE) {
-	    errwin("Region not linked to this graph");
+	    errmsg("Region not linked to the current graph");
 	    return;
 	}
-	for (j = 0; j < g[cg].maxplot; j++) {
-	    x = getx(cg, j);
-	    y = gety(cg, j);
-	    if (isactive(cg, j)) {
-		for (i = 0; i < getsetlength(cg, j); i++) {
-		    if (inregion(regno, x[i], y[i])) {
-			scanner(buf, &x[i], &y[i], 1, &a, &b, &c, &d, 1, i, j, &errpos);
-			if (errpos) {
-			    updatesetminmax(cg, j);
-                update_set_status(cg, j);
-			    return;
-			}
+    }
+    for (k = gstart; k <= gstop; k++) {
+        if (isactive_graph(k)) {
+            if (setno == SET_SELECT_ALL) {  /* all sets */
+                sstart = 0;
+                sstop = g[k].maxplot - 1;
+            } else {                        /* particular set */
+                sstart = setno;
+                sstop = setno;
+            }
+            for (j = sstart; j <= sstop; j++) {
+                if (isactive_set(k, j)) {
+		    x = getx(k, j);
+		    y = gety(k, j);
+		    tmpx = x[0];
+		    tmpy = y[0];
+		    for (i = 0; i < getsetlength(k, j); i++) {
+	
+		        if ( (regno < MAXREGION && inregion(regno, x[i], y[i]))
+		           ||(regno == MAXREGION && inbounds(k, x[i], y[i]))
+		           ||(regno > MAXREGION && !inbounds(k, x[i], y[i])) ) {
+	
+		            x[0] = x[i];
+		            y[0] = y[i];
+		            scanner(buf, &x[i], &y[i], 1, 
+		                    &a, &b, &c, &d, 1, i, j, &errpos);
+		            if (errpos) {
+		                x[0] = tmpx;
+		                y[0] = tmpy;
+		                updatesetminmax(k, j);
+#ifndef NONE_GUI
+		                update_set_status(k, j);
+#endif
+		                return;
+		            }
+		            if ( i != 0) {
+		                x[i] = x[0];
+		                y[i] = y[0];
+		            } else {
+		                tmpx = x[0];
+		                tmpy = y[0];
+		            }
+		            set_dirtystate();
+		        }
 		    }
+		    x[0] = tmpx;
+		    y[0] = tmpy;
+		    updatesetminmax(k, j);
+		} /* isactive */
+#ifndef NONE_GUI
+	        update_set_status(k, j);
+#endif
+	    } /* j */
+	} /* isactive_graph */
+    } /* k */
+}
+
+/*
+ * extract sets from graph gfrom to graph gto
+ * a set is in a region if any point of the set is in the region
+ */
+void extractsets_region(int gfrom, int gto, int rno)
+{
+    int i, j;
+    double *x, *y;
+    for (j = 0; j < g[gfrom].maxplot; j++) {
+	if (isactive_set(gfrom, j)) {
+	    x = getx(gfrom, j);
+	    y = gety(gfrom, j);
+	    for (i = 0; i < getsetlength(gfrom, j); i++) {
+		if (inregion(rno, x[i], y[i])) {
 		}
-		updatesetminmax(cg, j);
-        update_set_status(cg, j);
 	    }
 	}
     }
-    drawgraph();
 }
 
-void load_poly_region(r, n, x, y)
-    int r, n;
+/*
+ * delete sets from graph gno
+ * a set is in a region if any point of the set is in the region
+ */
+void deletesets_region(int gno, int rno)
+{
+    int i, j;
     double *x, *y;
+    for (j = 0; j < g[gno].maxplot; j++) {
+	if (isactive_set(gno, j)) {
+	    x = getx(gno, j);
+	    y = gety(gno, j);
+	    for (i = 0; i < getsetlength(gno, j); i++) {
+		if (inregion(rno, x[i], y[i])) {
+		    killset(gno, j);
+		    break;	/* set no longer exists, so get out */
+		}
+	    }
+	}
+    }
+}
+
+/*
+ * report on sets in a region
+ */
+void reporton_region(int gno, int rno, int type, int strict)
+{
+    char buf[256];
+    int i, j, first, contained;
+    double *x, *y;
+    sprintf(buf, "\nRegion R%1d contains:\n", rno);
+    stufftext(buf, STUFF_START);
+    for (j = 0; j < g[gno].maxplot; j++) {
+	if (isactive_set(gno, j)) {
+	    x = getx(gno, j);
+	    y = gety(gno, j);
+	    first = 1;
+	    contained = 0;
+	    for (i = 0; i < getsetlength(gno, j); i++) {
+		if (inregion(rno, x[i], y[i])) {
+		    contained = 1;
+		    switch (type) {
+		    case 0:	/* report on sets */
+			if (first) {
+			    first = 0;
+			    sprintf(buf, "  Set S%1d\n", j);
+			    stufftext(buf, STUFF_TEXT);
+			}
+			break;
+		    case 1:	/* points */
+			if (first) {
+			    first = 0;
+			    sprintf(buf, "  Set S%1d\n", j);
+			    stufftext(buf, STUFF_TEXT);
+			}
+			sprintf(buf, "    %d %f %f\n", i + 1, x[i], y[i]);
+			stufftext(buf, STUFF_TEXT);
+			break;
+		    }
+		} else {
+		    contained = 0;
+		}
+	    }
+	}
+    }
+    strcpy(buf, "\n");
+    stufftext(buf, STUFF_STOP);
+}
+
+void load_poly_region(int r, int n, double *x, double *y)
 {
     int i;
 
@@ -342,8 +502,7 @@ void load_poly_region(r, n, x, y)
     }
 }
 
-void draw_region(r)
-    int r;
+void draw_region(int r)
 {
     int i, c, s, w;
     double vx, vy, wx, wy;
@@ -352,7 +511,7 @@ void draw_region(r)
     s = setlinestyle(rg[r].lines);
     w = setlinewidth(rg[r].linew);
     switch (rg[r].type) {
-    case ABOVE:
+    case REGION_ABOVE:
 	my_move2(rg[r].x1, rg[r].y1);
 	my_draw2(rg[r].x2, rg[r].y2);
 	world2view(rg[r].x1, rg[r].y1, &vx, &vy);
@@ -362,7 +521,7 @@ void draw_region(r)
 	view2world(vx, vy + 0.05, &wx, &wy);
 	draw_arrow(rg[r].x2, rg[r].y2, rg[r].x2, wy, 2, 1.0, 0);
 	break;
-    case BELOW:
+    case REGION_BELOW:
 	my_move2(rg[r].x1, rg[r].y1);
 	my_draw2(rg[r].x2, rg[r].y2);
 	world2view(rg[r].x1, rg[r].y1, &vx, &vy);
@@ -372,7 +531,7 @@ void draw_region(r)
 	view2world(vx, vy - 0.05, &wx, &wy);
 	draw_arrow(rg[r].x2, rg[r].y2, rg[r].x2, wy, 2, 1.0, 0);
 	break;
-    case LEFT:
+    case REGION_TOLEFT:
 	my_move2(rg[r].x1, rg[r].y1);
 	my_draw2(rg[r].x2, rg[r].y2);
 	world2view(rg[r].x1, rg[r].y1, &vx, &vy);
@@ -382,7 +541,7 @@ void draw_region(r)
 	view2world(vx - 0.05, vy, &wx, &wy);
 	draw_arrow(rg[r].x2, rg[r].y2, wx, rg[r].y2, 2, 1.0, 0);
 	break;
-    case RIGHT:
+    case REGION_TORIGHT:
 	my_move2(rg[r].x1, rg[r].y1);
 	my_draw2(rg[r].x2, rg[r].y2);
 	world2view(rg[r].x1, rg[r].y1, &vx, &vy);
@@ -392,8 +551,8 @@ void draw_region(r)
 	view2world(vx + 0.05, vy, &wx, &wy);
 	draw_arrow(rg[r].x2, rg[r].y2, wx, rg[r].y2, 2, 1.0, 0);
 	break;
-    case POLYI:
-    case POLYO:
+    case REGION_POLYI:
+    case REGION_POLYO:
 	if (rg[r].x != NULL && rg[r].n > 2) {
 	    my_move2(rg[r].x[0], rg[r].y[0]);
 	    for (i = 1; i < rg[r].n; i++) {
@@ -411,8 +570,7 @@ void draw_region(r)
 /*
  * routines to determine if a point lies in a polygon
 */
-int intersect_to_left(x, y, x1, y1, x2, y2)
-    double x, y, x1, y1, x2, y2;
+int intersect_to_left(double x, double y, double x1, double y1, double x2, double y2)
 {
     double xtmp, m, b;
 
@@ -459,12 +617,9 @@ int intersect_to_left(x, y, x1, y1, x2, y2)
 /*
  * determine if (x,y) is in the polygon xlist[], ylist[]
  */
-int inbound(x, y, xlist, ylist, n)
-    double x, y, xlist[], ylist[];
-int n;
-
+int inbound(double x, double y, double *xlist, double *ylist, int n)
 {
-    int i, l = 0, ll = 0;
+    int i, l = 0;
 
     for (i = 0; i < n; i++) {
 	l += intersect_to_left(x, y, xlist[i], ylist[i], xlist[(i + 1) % n], ylist[(i + 1) % n]);
@@ -475,8 +630,7 @@ int n;
 /*
  * routines to determine if a point lies to the left of an infinite line
 */
-int isleft(x, y, x1, y1, x2, y2)
-    double x, y, x1, y1, x2, y2;
+int isleft(double x, double y, double x1, double y1, double x2, double y2)
 {
     double xtmp, m, b;
 
@@ -502,8 +656,7 @@ int isleft(x, y, x1, y1, x2, y2)
 /*
  * routines to determine if a point lies to the left of an infinite line
 */
-int isright(x, y, x1, y1, x2, y2)
-    double x, y, x1, y1, x2, y2;
+int isright(double x, double y, double x1, double y1, double x2, double y2)
 {
     double xtmp, m, b;
 
@@ -527,10 +680,9 @@ int isright(x, y, x1, y1, x2, y2)
 /*
  * routines to determine if a point lies above an infinite line
 */
-int isabove(x, y, x1, y1, x2, y2)
-    double x, y, x1, y1, x2, y2;
+int isabove(double x, double y, double x1, double y1, double x2, double y2)
 {
-    double xtmp, ytmp, m, b;
+    double ytmp, m, b;
 
     /* vertical lines */
     if (x1 == x2) {
@@ -552,10 +704,9 @@ int isabove(x, y, x1, y1, x2, y2)
 /*
  * routines to determine if a point lies below an infinite line
 */
-int isbelow(x, y, x1, y1, x2, y2)
-    double x, y, x1, y1, x2, y2;
+int isbelow(double x, double y, double x1, double y1, double x2, double y2)
 {
-    double xtmp, ytmp, m, b;
+    double ytmp, m, b;
 
     /* vertical lines */
     if (x1 == x2) {
@@ -574,40 +725,42 @@ int isbelow(x, y, x1, y1, x2, y2)
     return 0;
 }
 
-int inregion(regno, x, y)
-    int regno;
-    double x, y;
+int inregion(int regno, double x, double y)
 {
-    int i;
-
-    if (rg[regno].active == ON) {
+    if (regno == MAXREGION) {
+	return (inbounds(cg, x, y));
+    }
+    if (regno == MAXREGION + 1) {
+	return (!inbounds(cg, x, y));
+    }
+    if (rg[regno].active == TRUE) {
 	switch (rg[regno].type) {
-	case POLYI:
+	case REGION_POLYI:
 	    if (inbound(x, y, rg[regno].x, rg[regno].y, rg[regno].n)) {
 		return 1;
 	    }
 	    break;
-	case POLYO:
+	case REGION_POLYO:
 	    if (!inbound(x, y, rg[regno].x, rg[regno].y, rg[regno].n)) {
 		return 1;
 	    }
 	    break;
-	case RIGHT:
+	case REGION_TORIGHT:
 	    if (isright(x, y, rg[regno].x1, rg[regno].y1, rg[regno].x2, rg[regno].y2)) {
 		return 1;
 	    }
 	    break;
-	case LEFT:
+	case REGION_TOLEFT:
 	    if (isleft(x, y, rg[regno].x1, rg[regno].y1, rg[regno].x2, rg[regno].y2)) {
 		return 1;
 	    }
 	    break;
-	case ABOVE:
+	case REGION_ABOVE:
 	    if (isabove(x, y, rg[regno].x1, rg[regno].y1, rg[regno].x2, rg[regno].y2)) {
 		return 1;
 	    }
 	    break;
-	case BELOW:
+	case REGION_BELOW:
 	    if (isbelow(x, y, rg[regno].x1, rg[regno].y1, rg[regno].x2, rg[regno].y2)) {
 		return 1;
 	    }

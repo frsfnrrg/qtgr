@@ -225,8 +225,8 @@ void ViewAxis::updateDialog() {
     majTic->setText(QString::number(t.tmajor,'g',9));
     minTic->setText(QString::number(t.tminor,'g',9));
 
-    startOpt->setChecked(t.tl_starttype == AUTO);
-    stopOpt->setChecked(t.tl_stoptype == AUTO);
+    startOpt->setChecked(t.tl_starttype == TYPE_AUTO);
+    stopOpt->setChecked(t.tl_stoptype == TYPE_AUTO);
     uStart->setText(QString::number(t.tl_start, 'g',9));
     uStop->setText(QString::number(t.tl_stop, 'g',9));
 
@@ -234,25 +234,25 @@ void ViewAxis::updateDialog() {
     labelPrecision->setCurrentIndex(t.tl_prec);
     labelSkip->setValue(t.tl_skip);
 
-    if (t.tl_flag == OFF) {
+    if (t.tl_flag == FALSE) {
         textSide->setCurrentIndex(0);
     } else {
-        if (t.tl_op == BOTH) {
+        if (t.tl_op == PLACE_BOTH) {
             textSide->setCurrentIndex(3);
         } else if (axis % 2 == Y_AXIS) {
-            textSide->setCurrentIndex(t.tl_op == LEFT ? 1 : 2);
+            textSide->setCurrentIndex(t.tl_op == PLACE_LEFT ? 1 : 2);
         } else {
-            textSide->setCurrentIndex(t.tl_op == BOTTOM ? 1 : 2);
+            textSide->setCurrentIndex(t.tl_op == PLACE_BOTTOM ? 1 : 2);
         }
     }
 
     // note: sync with ticks sub-dialog; should be doable (pass in constructor)
-    if (t.t_op == BOTH) {
+    if (t.t_op == PLACE_BOTH) {
         tickSide->setCurrentIndex(2);
     } else if (axis % 2 == Y_AXIS) {
-        tickSide->setCurrentIndex(t.t_op == LEFT ? 0 : 1);
+        tickSide->setCurrentIndex(t.t_op == PLACE_LEFT ? 0 : 1);
     } else {
-        tickSide->setCurrentIndex(t.t_op == BOTTOM ? 0 : 1);
+        tickSide->setCurrentIndex(t.t_op == PLACE_BOTTOM ? 0 : 1);
     }
 }
 
@@ -276,8 +276,8 @@ void ViewAxis::applyDialog() {
     if (leVal(majTic, &val)) t.tmajor = val;
     if (leVal(minTic, &val)) t.tminor = val;
 
-    t.tl_starttype = startOpt->isChecked() ? AUTO : SPEC;
-    t.tl_stoptype = stopOpt->isChecked() ? AUTO : SPEC;
+    t.tl_starttype = startOpt->isChecked() ? TYPE_AUTO : TYPE_SPEC;
+    t.tl_stoptype = stopOpt->isChecked() ? TYPE_AUTO : TYPE_SPEC;
 
     if (leVal(uStart, &val)) t.tl_start = val;
     if (leVal(uStop, &val)) t.tl_stop = val;
@@ -288,25 +288,25 @@ void ViewAxis::applyDialog() {
 
     indx = textSide->currentIndex();
     if (indx == 0) {
-        t.tl_flag = OFF;
+        t.tl_flag = FALSE;
     } else {
-        t.tl_flag = ON;
+        t.tl_flag = TRUE;
         if (indx == 3) {
-            t.tl_op = BOTH;
+            t.tl_op = PLACE_BOTH;
         } else if (axis % 2 == Y_AXIS) {
-            t.tl_op = (indx == 1) ? LEFT : RIGHT;
+            t.tl_op = (indx == 1) ? PLACE_LEFT : PLACE_RIGHT;
         } else {
-            t.tl_op = (indx == 1) ? BOTTOM : TOP;
+            t.tl_op = (indx == 1) ? PLACE_BOTTOM : PLACE_TOP;
         }
     }
 
     indx = tickSide->currentIndex();
     if (indx == 2) {
-        t.t_op = BOTH;
+        t.t_op = PLACE_BOTH;
     } else if (axis % 2 == Y_AXIS) {
-        t.t_op = (indx == 0) ? LEFT : RIGHT;
+        t.t_op = (indx == 0) ? PLACE_LEFT : PLACE_RIGHT;
     } else {
-        t.t_op = (indx == 0) ? BOTTOM : TOP;
+        t.t_op = (indx == 0) ? PLACE_BOTTOM : PLACE_TOP;
     }
 
     g[cg].t[axis] = t;
@@ -453,16 +453,16 @@ void ViewAxisText::updateDialog() {
     axisFont->setCurrentIndex(t.label.font);
     axisColor->setCurrentIndex(t.label.color);
     axisSize->setValue(t.label.charsize);
-    axisLayout->setCurrentIndex(t.label_layout == PARA ? 0 : 1);
+    axisLayout->setCurrentIndex(t.label_layout == LAYOUT_PARALLEL ? 0 : 1);
 
     tickFont->setCurrentIndex(t.tl_font);
     tickColor->setCurrentIndex(t.tl_color);
     tickSize->setValue(t.tl_charsize);
 
-    if (t.tl_layout == SPEC) {
+    if (t.tl_layout == TYPE_SPEC) {
         tickLayout->setCurrentIndex(2);
     } else {
-        tickLayout->setCurrentIndex(t.tl_layout == HORIZONTAL ? 0 : 1);
+        tickLayout->setCurrentIndex(t.tl_layout == TICKS_HORIZONTAL ? 0 : 1);
     }
     tickAngle->setValue(t.tl_angle);
 
@@ -480,16 +480,16 @@ void ViewAxisText::applyDialog() {
     t.label.font = axisFont->currentIndex();
     t.label.color = axisColor->currentIndex();
     t.label.charsize = axisSize->value();
-    t.label_layout = axisLayout->currentIndex() == 0 ? PARA : PERP;
+    t.label_layout = axisLayout->currentIndex() == 0 ? LAYOUT_PARALLEL : LAYOUT_PERPENDICULAR;
 
     t.tl_font = tickFont->currentIndex();
     t.tl_color = tickColor->currentIndex();
     t.tl_charsize = tickSize->value();
 
     if (tickLayout->currentIndex() == 2) {
-        t.tl_layout = SPEC;
+        t.tl_layout = TYPE_SPEC;
     } else {
-        t.tl_layout = tickLayout->currentIndex() == 0 ? HORIZONTAL : VERTICAL;
+        t.tl_layout = tickLayout->currentIndex() == 0 ? TICKS_HORIZONTAL : TICKS_VERTICAL;
     }
     t.tl_angle = tickAngle->value() % 360;
 
@@ -649,28 +649,28 @@ void ViewAxisTicks::updateDialog() {
     int axis = editAxis->currentIndex();
     tickmarks t = g[cg].t[axis];
 
-    tickBox->setChecked((t.t_flag == ON || t.t_mflag == ON));
+    tickBox->setChecked((t.t_flag == TRUE || t.t_mflag == TRUE));
 
-    if (t.t_inout == BOTH) {
+    if (t.t_inout == TICKS_BOTH) {
         tickDirection->setCurrentIndex(2);
     } else {
-        tickDirection->setCurrentIndex(t.t_inout == IN ? 0 : 1);
+        tickDirection->setCurrentIndex(t.t_inout == TICKS_IN ? 0 : 1);
     }
 
     tickMajLength->setValue(t.t_size);
     tickMinLength->setValue(t.t_msize);
 
-    axisBarBox->setChecked(t.t_drawbar == ON);
+    axisBarBox->setChecked(t.t_drawbar == TRUE);
     axisBarStyle->setCurrentIndex(t.t_drawbarlines);
     axisBarColor->setCurrentIndex(t.t_drawbarcolor);
     axisBarWidth->setCurrentIndex(t.t_drawbarlinew - 1);
 
-    majGridBox->setChecked(t.t_gridflag == ON);
+    majGridBox->setChecked(t.t_gridflag == TRUE);
     majGridStyle->setCurrentIndex(t.t_lines);
     majGridColor->setCurrentIndex(t.t_color);
     majGridWidth->setCurrentIndex(t.t_linew - 1);
 
-    minGridBox->setChecked(t.t_mgridflag == ON);
+    minGridBox->setChecked(t.t_mgridflag == TRUE);
     minGridStyle->setCurrentIndex(t.t_mlines);
     minGridColor->setCurrentIndex(t.t_mcolor);
     minGridWidth->setCurrentIndex(t.t_mlinew - 1);
@@ -681,30 +681,30 @@ void ViewAxisTicks::applyDialog() {
     int tm;
     tickmarks t = g[cg].t[axis];
 
-    tm = tickBox->isChecked() ? ON : OFF;
+    tm = tickBox->isChecked() ? TRUE : FALSE;
     t.t_mflag = tm;
     t.t_flag = tm;
 
     if (tickDirection->currentIndex() == 2) {
-        t.t_inout = BOTH;
+        t.t_inout = TICKS_BOTH;
     } else {
-        t.t_inout = tickDirection->currentIndex() == 0 ? IN : OUT;
+        t.t_inout = tickDirection->currentIndex() == 0 ? TICKS_IN : TICKS_OUT;
     }
 
     t.t_size = tickMajLength->value();
     t.t_msize = tickMinLength->value();
 
-    t.t_drawbar = axisBarBox->isChecked() ? ON : OFF;
+    t.t_drawbar = axisBarBox->isChecked() ? TRUE : FALSE;
     t.t_drawbarcolor = axisBarColor->currentIndex();
     t.t_drawbarlines = axisBarStyle->currentIndex();
     t.t_drawbarlinew = axisBarWidth->currentIndex() + 1;
 
-    t.t_gridflag = majGridBox->isChecked() ? ON : OFF;
+    t.t_gridflag = majGridBox->isChecked() ? TRUE : FALSE;
     t.t_color = majGridColor->currentIndex();
     t.t_lines = majGridStyle->currentIndex();
     t.t_linew = majGridWidth->currentIndex() + 1;
 
-    t.t_mgridflag = minGridBox->isChecked() ? ON : OFF;
+    t.t_mgridflag = minGridBox->isChecked() ? TRUE : FALSE;
     t.t_mcolor = minGridColor->currentIndex();
     t.t_mlines = minGridStyle->currentIndex();
     t.t_mlinew = minGridWidth->currentIndex() + 1;

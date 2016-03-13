@@ -1,10 +1,11 @@
 #include "transform/integration.h"
-#include "base/globals.h"
 #include "choosers.h"
 #include "prop.h"
 #include "tools.h"
 #include "tools/options.h"
-#include <mainwindow.h>
+#include "mainwindow.h"
+
+#include "base/globals.h"
 
 #include <QLabel>
 #include <QGridLayout>
@@ -45,7 +46,7 @@ TransformIntegration::TransformIntegration(MainWindow* mainWin) :
 void TransformIntegration::updateDialog() {
     resultL->setText(".....");
     int setno = setNumber->currentIndex();
-    bool null = g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0;
+    bool null = g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0;
     integrationType->setDisabled(null);
     resultL->setDisabled(null);
     resultLabel->setDisabled(null);
@@ -56,7 +57,7 @@ void TransformIntegration::applyDialog() {
     int setno, itype;
 
     setno = setNumber->currentIndex();
-    if (g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0) {
+    if (g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0) {
         return;
     }
 

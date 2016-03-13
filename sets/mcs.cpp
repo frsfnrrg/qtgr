@@ -67,7 +67,7 @@ void SetsMCS::updateTarget() {
         copyChoice->setText(tr("Copy (No-op)"));
         swapChoice->setText(tr("Swap (No-op)"));
     } else {
-        if (g[cg].p[cs].active == ON || g[cg].p[cs].deact == 1) {
+        if (g[cg].p[cs].active == TRUE || g[cg].p[cs].deact == 1) {
             moveChoice->setText(tr("Move (Overwrites)"));
             copyChoice->setText(tr("Copy (Overwrites)"));
         } else {

@@ -70,7 +70,7 @@ TransformFourier::TransformFourier(MainWindow* mainWin) :
 
 void TransformFourier::updateDialog() {
     int setno = setNumber->currentIndex();
-    bool noSet = g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0;
+    bool noSet = g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0;
 //    destination->setDisabled(noSet);
 //    destinationLabel->setDisabled(noSet);
     windowLabel->setDisabled(noSet);
@@ -90,7 +90,7 @@ void TransformFourier::applyDialog() {
 
     setno = this->setNumber->currentIndex();
 
-    if (g[cg].p[setno].active == OFF && g[cg].p[setno].deact == 0) {
+    if (g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0) {
         return;
     }
 

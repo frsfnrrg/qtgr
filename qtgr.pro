@@ -3,7 +3,6 @@ HEADERS       = edit.h \
     graphwidget.h \
     base/globals.h \
     base/defines.h \
-    base/pars.h \
     base/externs.h \
     base/patterns.h \
     base/symdefs.h \
@@ -47,29 +46,6 @@ SOURCES       = edit.cpp \
     tools.cpp \
     view.cpp \
     view/symbols.cpp \
-    base/alerts.c \
-    base/checkon.c \
-    base/defaults.c \
-    base/draw.c \
-    base/drawticks.c \
-    base/events.c \
-    base/files.c \
-    base/fit.c \
-    base/graphutils.c \
-    base/objutils.c \
-    base/pars.c \
-    base/plotone.c \
-    base/qtlib.c \
-    base/utils.c \
-    base/setutils.c \
-    base/getparms.c \
-    base/setprops.c \
-    base/compute.c \
-    base/computils.c \
-    base/fourier.c \
-    base/lmdif1.c \
-    base/params.c \
-    base/regionutils.c \
     transform.cpp \
     transform/integration.cpp \
     dialog.cpp \
@@ -95,7 +71,46 @@ SOURCES       = edit.cpp \
     transform/regression.cpp \
     view/text.cpp \
     tools/status.cpp \
-    transform/fouriertransform.cpp
+    transform/fouriertransform.cpp \
+    base/checkon.c \
+    base/defaults.c \
+    base/draw.c \
+    base/drawticks.c \
+    base/events.c \
+    base/files.c \
+    base/fit.c \
+    base/objutils.c \
+    base/plotone.c \
+    base/qtlib.c \
+    base/utils.c \
+    base/setutils.c \
+    base/compute.c \
+    base/computils.c \
+    base/fourier.c \
+    base/lmdif.c \
+    base/params.c \
+    base/regionutils.c \
+    base/graphu1.c \
+    base/graphu2.c \
+    base/misc.c \
+    base/symfunc.c \
+    base/dlmodule.c \
+    base/nonlfit.c \
+    base/as274c.c
+
+YSOURCES =  base/pars.yacc
+
+yaccsource.input = YSOURCES
+yaccsource.output = ${QMAKE_FILE_BASE}.yacctmp.c
+yaccsource.commands = yacc -d --defines=${QMAKE_FILE_BASE}.yacctmp.h -o ${QMAKE_FILE_BASE}.yacctmp.c ${QMAKE_FILE_IN}
+yaccsource.variable_out = SOURCES
+yaccsource.name = Yacc Sources ${QMAKE_FILE_IN}
+yaccsource.CONFIG += target_predeps
+
+QMAKE_EXTRA_COMPILERS += yaccsource
+
+
+# Need to figure out how to handle yacc cleanly
 
 RESOURCES     = qtgr.qrc
 

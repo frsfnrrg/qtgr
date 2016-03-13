@@ -19,15 +19,15 @@ const struct {
     int ikey;
     const char* iname;
 } opts[OPTS_LEN] = {
-    {XY, "X Linear, Y Linear"},
-    {LOGY, "X Linear, Y Logarithmic"},
-    {LOGX, "X Logarithmic, Y Linear"},
-    {LOGXY, "X Logarithmic, Y Logarithmic"},
+    {GRAPH_XY, "X Linear, Y Linear"},
+    {GRAPH_LOGY, "X Linear, Y Logarithmic"},
+    {GRAPH_LOGX, "X Logarithmic, Y Linear"},
+    {GRAPH_LOGXY, "X Logarithmic, Y Logarithmic"},
 
-    {BAR, "Vertical Bar"},
-    {STACKEDBAR, "Vertical Bar Stacked"},
-    {HBAR, "Horizontal Bar"},
-    {STACKEDHBAR, "Horizontal Bar Stacked"}
+    {GRAPH_BAR, "Vertical Bar"},
+    {GRAPH_STACKEDBAR, "Vertical Bar Stacked"},
+    {GRAPH_HBAR, "Horizontal Bar"},
+    {GRAPH_STACKEDHBAR, "Horizontal Bar Stacked"}
 };
 
 /*
@@ -161,20 +161,20 @@ void ViewDimensions::updateDialog() {
 
     int vk = -1;
     switch (g[cg].type) {
-    case POLAR:
-    case PIE:
-    case STACKEDLINE:
+    case GRAPH_POLAR:
+//    case GRAPH_PIE://fixme?
+    case GRAPH_STACKEDLINE:
         printf("type not implemented\n");
         break;
 
-    case XY: vk = 0; break;
-    case LOGY: vk = 1; break;
-    case LOGX: vk = 2; break;
-    case LOGXY: vk = 3; break;
-    case BAR: vk = 4; break;
-    case STACKEDBAR: vk = 5; break;
-    case HBAR: vk = 6; break;
-    case STACKEDHBAR: vk = 7; break;
+    case GRAPH_XY: vk = 0; break;
+    case GRAPH_LOGY: vk = 1; break;
+    case GRAPH_LOGX: vk = 2; break;
+    case GRAPH_LOGXY: vk = 3; break;
+    case GRAPH_BAR: vk = 4; break;
+    case GRAPH_STACKEDBAR: vk = 5; break;
+    case GRAPH_HBAR: vk = 6; break;
+    case GRAPH_STACKEDHBAR: vk = 7; break;
     }
     if (vk != -1) {
         worldType->setCurrentIndex(vk);
@@ -248,7 +248,7 @@ void ViewDimensions::updateScale() {
 
     x1 = leVal(worldXMin, &valn);
     x2 = leVal(worldXMax, &valx);
-    if (o == LOGX || o == LOGXY) {
+    if (o == GRAPH_LOGX || o == GRAPH_LOGXY) {
         x1 &= valn > 0.0;
         x2 &= valx > 0.0;
     }
@@ -258,7 +258,7 @@ void ViewDimensions::updateScale() {
 
     y1 = leVal(worldYMin, &valn);
     y2 = leVal(worldYMax, &valx);
-    if (o == LOGY || o == LOGXY) {
+    if (o == GRAPH_LOGY || o == GRAPH_LOGXY) {
         y1 &= valn > 0.0;
         y2 &= valx > 0.0;
     }

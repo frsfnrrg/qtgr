@@ -54,7 +54,7 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
 
     for (int i=0;i<MAXPLOT;i++) {
         setLabels[i] = new QLineEdit();
-        setLabels[i]->setMaxLength(MAXSTRLEN);
+//        setLabels[i]->setMaxLength(MAXSTRLEN);//fixme
         setLabelLabels[i] = new QLabel(QString("Set ")+QString::number(i));
         intern->addWidget(setLabelLabels[i],i,0);
         intern->addWidget(setLabels[i],i,1);
@@ -111,13 +111,13 @@ void ViewLegend::fadeOpts() {
 }
 
 void ViewLegend::updateDialog() {
-    showLegend->setChecked(g[cg].l.active == ON);
+    showLegend->setChecked(g[cg].l.active == TRUE);
 
-    locType->setCurrentIndex(g[cg].l.loctype == VIEW ? 0 : 1);
+    locType->setCurrentIndex(g[cg].l.loctype == COORD_VIEW ? 0 : 1);
 
     for (int i=0; i<MAXPLOT; i++) {
-       setLabels[i]->setText(QString::fromLocal8Bit(g[cg].l.str[i].s));
-       setLabelLabels[i]->setDisabled(g[cg].p[i].active == OFF && g[cg].p[i].deact == 0);
+//       setLabels[i]->setText(QString::fromLocal8Bit(g[cg].l.str[i].s));//fixme
+       setLabelLabels[i]->setDisabled(g[cg].p[i].active == FALSE && g[cg].p[i].deact == 0);
     }
 
     legendX->setText(QString::number(g[cg].l.legx, 'g', 9));
@@ -128,21 +128,21 @@ void ViewLegend::updateDialog() {
 // only the on/off updates
 void ViewLegend::updateSets() {
     for (int i=0; i<MAXPLOT; i++) {
-       setLabelLabels[i]->setDisabled(g[cg].p[i].active == OFF && g[cg].p[i].deact == 0);
+       setLabelLabels[i]->setDisabled(g[cg].p[i].active == FALSE && g[cg].p[i].deact == 0);
     }
 }
 
 void ViewLegend::applyDialog() {
 
-    g[cg].l.active = showLegend->isChecked() ? ON : OFF;
+    g[cg].l.active = showLegend->isChecked() ? TRUE : FALSE;
 
-    g[cg].l.loctype = locType->currentIndex() == 0 ? VIEW : WORLD;
+    g[cg].l.loctype = locType->currentIndex() == 0 ? COORD_VIEW : COORD_WORLD;
 
     g[cg].l.legx = legendX->text().toDouble();
     g[cg].l.legy = legendY->text().toDouble();
 
     for (int i=0;i<MAXPLOT;i++) {
-        strcpy((char*)g[cg].l.str[i].s,setLabels[i]->text().toUtf8().data());
+//        strcpy((char*)g[cg].l.str[i].s,setLabels[i]->text().toUtf8().data());//fixme
     }
 
     SetsSender::send();
@@ -175,11 +175,11 @@ public:
 void ViewLegend::applyLegendPos(double vx, double vy) {
     double x, y;
     if (locType->currentIndex() == 0) {
-        g[cg].l.loctype = VIEW;
+        g[cg].l.loctype = COORD_VIEW;
         x = vx;
         y = vy;
     } else {
-        g[cg].l.loctype = WORLD;
+        g[cg].l.loctype = COORD_WORLD;
         view2world(vx, vy, &x, &y);
     }
 
@@ -197,7 +197,7 @@ void ViewLegend::placeLegend() {
 }
 
 void ViewLegend::updateLegendsField(int cset) {
-    setLabels[cset]->setText(QString::fromLocal8Bit(g[cg].l.str[cset].s));
+//    setLabels[cset]->setText(QString::fromLocal8Bit(g[cg].l.str[cset].s));//fixme
 }
 
 void ViewLegend::legendProp() {
@@ -289,13 +289,13 @@ void ViewLegendProp::updateDialog() {
     styleSpacing->setCurrentIndex(g[cg].l.vgap - 1);
     styleWidth->setCurrentIndex(g[cg].l.len - 1);
 
-    frame->setChecked(g[cg].l.box == ON);
+    frame->setChecked(g[cg].l.box == TRUE);
 
     frameColor->setCurrentIndex(g[cg].l.boxlcolor);
     frameWidth->setCurrentIndex(g[cg].l.boxlinew);
     frameStyle->setCurrentIndex(g[cg].l.boxlines);
 
-    frameFill->setChecked(g[cg].l.boxfill == ON);
+    frameFill->setChecked(g[cg].l.boxfill == TRUE);
     frameFillColor->setCurrentIndex(g[cg].l.boxfillcolor);
     frameFillPattern->setCurrentIndex(g[cg].l.boxfillpat);
 }
@@ -307,16 +307,16 @@ void ViewLegendProp::applyDialog() {
     g[cg].l.vgap = styleSpacing->currentIndex() + 1;
     g[cg].l.len = styleWidth->currentIndex() + 1;
 
-    g[cg].l.box = frame->isChecked() ? ON : OFF;
+    g[cg].l.box = frame->isChecked() ? TRUE : FALSE;
 
     g[cg].l.boxlcolor = frameColor->currentIndex();
     g[cg].l.boxlinew = frameWidth->currentIndex();
     g[cg].l.boxlines = frameStyle->currentIndex();
 
-    g[cg].l.boxfill = frameFill->isChecked() ? ON : OFF;
+    g[cg].l.boxfill = frameFill->isChecked() ? TRUE : FALSE;
     g[cg].l.boxfillcolor = frameFillColor->currentIndex();
     g[cg].l.boxfillpat = frameFillPattern->currentIndex();
-    g[cg].l.boxfillusing = frameFillColor->currentIndex() == 1 ? PATTERN : COLOR;
+//    g[cg].l.boxfillusing = frameFillColor->currentIndex() == 1 ? PATTERN : COLOR;//fixme
 
     drawgraph();
 }

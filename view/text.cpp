@@ -109,7 +109,7 @@ void ViewText::placeText() {
     // next string takes the next not enabled or not empty string
     int i = next_string();
     if (!texts[i]) {// if the string is empty, make it!
-        pstr[i].active = ON;
+        pstr[i].active = TRUE;
         texts[i] = new ViewTextElement(this, i);
         textsLayout->addWidget(texts[i]);
         if (propsDialog) propsDialog->addItem(i);
@@ -309,7 +309,7 @@ void ViewTextElement::prop() {
 
 void ViewTextElement::applyValues() {
     // use sizeof for field
-    strncpy((char*)pstr[num].s, textArea->toPlainText().toUtf8().data(), MAXSTRLEN+1);
+//    strncpy((char*)pstr[num].s, textArea->toPlainText().toUtf8().data(), MAXSTRLEN+1);//fixme
     pstr[num].x = xCoord->value();
     pstr[num].y = yCoord->value();
 }

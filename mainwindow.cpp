@@ -6,12 +6,15 @@
 #include "sets.h"
 #include "transform.h"
 #include "graphwidget.h"
-#include "base/globals.h"
 #include "prop.h"
 #include "dialog.h"
 #include "graphwidget.h"
 #include "tools/options.h"
 #include "file/export.h"
+
+#include "base/globals.h"
+#include "base/noxprotos.h"
+#include "base/xprotos.h"
 
 #include <time.h>
 #include <unistd.h>
@@ -202,12 +205,12 @@ void MainWindow::initialize()
 
     // only accept one argument so far: a file to be loaded
     if (arguments.size() == 2) {
-        int type=NXY;
+        int type=SET_NXY;
 
         QFileInfo info(arguments[1]);
         setFile( info.absoluteDir().path(), info.fileName());
         QByteArray v = arguments[1].toUtf8();
-        getdata(0,v.data(),DISK,type);
+        getdata(0,v.data(),SOURCE_DISK,type);
 
         if (ToolsOptions::isRescaleOnLoad()) {
             this->toolsMenu->autoScale();
@@ -224,7 +227,7 @@ void MainWindow::initialize()
             // Clear, then load
             wipeout(0);
             set_graph_active(0);
-            getdata(0,v.data(),DISK,NXY);
+            getdata(0,v.data(),SOURCE_DISK,SET_NXY);
             drawgraph();
 
             QString target = info.canonicalFilePath();
@@ -249,7 +252,7 @@ void MainWindow::initialize()
         // TODO: figure out how to thread-decouple
         // base (graph, input) processes from UI. (if the program
         // is fed an empty pipe, it hangs.)
-        getdata(cg, (char*)"STDIN", 2/*means stdin*/, NXY);
+        getdata(cg, (char*)"STDIN", 2/*means stdin*/, SET_NXY);
         if (ToolsOptions::isRescaleOnLoad()) {
             this->toolsMenu->autoScale();
         } else {

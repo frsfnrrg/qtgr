@@ -146,7 +146,7 @@ void ToolsStatus::update_set_status(int, int setno) {
 
     clear_row(o, 2 * setno);
     clear_row(o, 2 * setno + 1);
-    if (isactive(cg, setno)) {
+    if (isactive_set(cg, setno)) {
 
         minmax(getx(cg, setno), getsetlength(cg, setno), &x1, &x2, &ix1, &ix2);
         minmax(gety(cg, setno), getsetlength(cg, setno), &y1, &y2, &iy1, &iy2);
@@ -164,56 +164,56 @@ void ToolsStatus::update_set_status(int, int setno) {
         stasum(gety(cg, setno), getsetlength(cg, setno), &ybar, &ysd, 0);
 
         switch (dataset_type(cg, setno)) {
-        case XY:
+        case SET_XY:
             type = "XY";
             break;
-        case XYZ:
+        case SET_XYZ:
             type = "XY Z";
-            stasum(getdx(cg, setno), getsetlength(cg, setno), &dxbar, &dxsd, 0);
+            stasum(getcol(cg, setno, 2), getsetlength(cg, setno), &dxbar, &dxsd, 0);
             break;
-        case XYDX:
+        case SET_XYDX:
             type = "XY DX";
             break;
-        case XYDY:
+        case SET_XYDY:
             type = "XY DY";
             break;
-        case XYDXDX:
+        case SET_XYDXDX:
             type = "XY DXDX";
             break;
-        case XYDYDY:
+        case SET_XYDYDY:
             type = "XY DYDY";
             break;
-        case XYDXDY:
+        case SET_XYDXDY:
             type = "XY DXDY";
             break;
-        case XYZW:
+        case SET_XYZW:
             type = "XY ZW";
             break;
-        case XYRT:
+        case SET_XYRT:
             type = "XY R";
             break;
-        case XYX2Y2:
-            type = "XY X2Y2";
-            break;
-        case XYSEG:
-            type = "XY SEG";
-            break;
-        case XYBOX:
+//        case SET_XYX2Y2:
+//            type = "XY X2Y2";
+//            break;
+//        case SET_XYSEG:
+//            type = "XY SEG";
+//            break;
+        case SET_XYBOX:
             type = "XY BOX";
             break;
-        case XYARC:
-            type = "XY ARC";
-            break;
-        case XYYY:
+//        case SET_XYARC:
+//            type = "XY ARC";
+//            break;
+        case SET_XYYY:
             type = "XY Y1 Y2";
             break;
-        case XYXX:
+        case SET_XYXX:
             type = "XY X1 X2";
             break;
-        case XYHILO:
+        case SET_XYHILO:
             type = "XY HILO";
             break;
-        case XYUV:
+        case SET_XYUV:
             type = "XY UV";
             break;
         }

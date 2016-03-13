@@ -1,264 +1,302 @@
-/* $Id: defaults.c,v 1.25 92/09/27 10:55:17 pturner Exp Locker: pturner $
+/* $Id: defaults.c,v 1.6 1995/07/01 04:53:30 pturner Exp pturner $
  *
  * set defaults - changes to the types in defines.h
  * will require changes in here also
  *
  */
 
+#include "config.h"
+#include <math.h>
+
 #include <stdio.h>
+#include <stdlib.h>
 #include "globals.h"
+#ifdef VMS
+#  include <string.h>
+#endif
 
-void set_program_defaults();
-void set_region_defaults();
-void set_default_defaults();
-void set_default_framep();
-void set_default_world();
-void set_default_view();
-void set_default_string();
-void set_default_line();
-void set_default_box();
-void set_default_legend();
-void set_default_plotarr();
-void set_default_graph();
-void set_default_annotation();
-void set_default_ticks();
+#include "protos.h"
 
-static plotarr d_p = {OFF,	/* active */
-    XY,				/* dataset type */
-    0,				/* deactivate flag */
-    DATASET_MISSING,		/* value for missing data */
-    NULL, NULL, NULL, NULL, NULL, NULL,	/* data array */
-    NULL,			/* string pointer */
-    4,				/* string font */
-    DECIMAL,			/* val format */
-    1,				/* val prec */
-    0.0,			/* xmin */
-    0.0,			/* xmax */
-    0.0,			/* ymin */
-    0.0,			/* ymax */
-    0,				/* length */
-    0,				/* symbol */
-    0,				/* symchar */
-    0,				/* symskip */
-    0,				/* symfill */
-    0,				/* symdot */
-    1.0,			/* symsize */
-    1,				/* line style */
-    1,				/* line width */
-    1,				/* color */
-    0,				/* fill type */
-    COLOR,			/* fill using color or pattern */
-    0,				/* fill color */
-    0,				/* fill pattern */
-    -1,				/* is errbar */
-    BOTH,			/* errbar type */
-    1,				/* errbar linew */
-    1,				/* errbar lines */
-    ON,				/* errbar riser */
-    1,				/* errbar riser linew */
-    1,				/* errbar riser lines */
-    1.0,			/* length of error bar */
-    1.0,			/* length of hi low ticks */
-    0,				/* flag for density plots if type is XYZ */
-    0.0,			/* zmin for density plots */
-    0.0,			/* zmax for density plots */
-    0				/* default comment */
-};
+static defaults d_d =
+{1, 1, 1, 1.0, 4, 0, 1.0};
 
-static linetype d_l = {OFF,	/* active */
-    VIEW,			/* location type */
-    -1,				/* if loctype == WORLD then graph number */
-    0.0,			/* x1 */
-    0.0,			/* y1 */
-    0.0,			/* x2 */
-    0.0,			/* y2 */
-    1,				/* line style */
-    1,				/* line width */
-    1,				/* color */
-    0,				/* arrow type */
-    0,				/* arrow head type */
-    1.0				/* arrow size */
-};
+/* defaults layout
+    int color;
+    int lines;
+    int linew;
+    double charsize;
+    int font;
+    int fontsrc;
+    double symsize;
+*/
 
-static boxtype d_b = {OFF,	/* active */
-    VIEW,			/* location type */
-    -1,				/* if loctype == WORLD then graph number */
-    0.0,			/* x1 */
-    0.0,			/* y1 */
-    0.0,			/* x2 */
-    0.0,			/* y2 */
-    1,				/* line style */
-    1,				/* line width */
-    1,				/* color */
-    OFF,			/* fill */
-    1,				/* fill color */
-    1				/* fill pattern */
-};
+static world d_w =
+{0.0, 1.0, 0.0, 1.0};
 
-static plotstr d_s = {OFF,	/* active */
-    VIEW,			/* location type */
-    -1,				/* if loctype == WORLD then graph number */
-    0.0,			/* x */
-    0.0,			/* y */
-    1,				/* line style */
-    1,				/* line width */
-    1,				/* color */
-    0,				/* rotation (degrees) */
-    4,				/* font */
-    0,				/* justification */
-    1.0,			/* character size */
-    0				/* string */
-};
+static view d_v =
+{0.15, 0.85, 0.15, 0.85};
 
-static framep d_f = {ON,	/* active */
-    0,				/* type */
-    1,				/* color */
-    1,				/* line style */
-    1,				/* line width */
-    OFF,			/* fill background */
-    0				/* background color */
-};
-
-static region d_r = {OFF,	/* active */
-    0,				/* type */
-    1,				/* color */
-    1,				/* line style */
-    1,				/* line width */
-    0,				/* link to */
-    0,				/* number of points */
-    NULL, NULL,			/* x and y if a polygon */
-    0.0, 0.0,			/* x1 and y1 if a line */
-    0.0, 0.0,			/* x2 and y2 if a line */
-};
-
-static world d_w = {0.0, 1.0, 0.0, 1.0};
-
-static view d_v = {0.15, 0.85, 0.15, 0.85};
-
-static defaults d_d = {1, 1, 1, 1.0, 2, 0, 1.0};
-
-void set_program_defaults()
+void set_program_defaults(void)
 {
     int i;
+    grdefaults = d_d;
     g = (graph *) calloc(maxgraph, sizeof(graph));
     for (i = 0; i < maxgraph; i++) {
 	g[i].p = (plotarr *) calloc(maxplot, sizeof(plotarr));
+	if (g[i].p == NULL) {
+	    fprintf(stderr, 
+		"Couldn't allocate memory for sets in graph %d, maxplot = %d, fatal error", i, maxplot);
+	    exit(1);
+	}
 	set_default_graph(i);
+	setdefaultcolors(i);
     }
     for (i = 0; i < MAXREGION; i++) {
 	set_region_defaults(i);
     }
     set_default_annotation();
     set_default_string(&timestamp);
+    alloc_blockdata(maxplot);
     timestamp.x = 0.03;
     timestamp.y = 0.03;
-    init_scratch_arrays(maxarr);
+    if (init_scratch_arrays(maxarr)) {
+	errmsg("Couldn't allocate memory for scratch arrays, don't use them");
+    }
+    
+    target_set.gno = -1;
+    target_set.setno = -1;
 }
 
-void set_region_defaults(i)
-    int i;
+void set_region_defaults(int rno)
 {
-    memcpy(&rg[i], &d_r, sizeof(region));
+    int j;
+    rg[rno].active = FALSE;
+    rg[rno].type = 0;
+    rg[rno].color = grdefaults.color;
+    rg[rno].lines = grdefaults.lines;
+    rg[rno].linew = grdefaults.linew;
+    rg[rno].linkto = (int *) malloc(maxgraph * sizeof(int));
+    for (j = 0; j < maxgraph; j++) {
+	rg[rno].linkto[j] = -1;
+    }
+    rg[rno].n = 0;
+    rg[rno].x = rg[rno].y = (double *) NULL;
+    rg[rno].x1 = rg[rno].y1 = rg[rno].x2 = rg[rno].y2 = 0.0;
 }
 
-void set_default_defaults(d)
-    defaults *d;
+void set_default_framep(framep * f)
 {
-    memcpy(d, &d_d, sizeof(defaults));
+    f->active = TRUE;		/* frame on or off */
+    f->type = 0;		/* frame type */
+    f->lines = grdefaults.lines;
+    f->linew = grdefaults.linew;
+    f->color = grdefaults.color;
+    f->fillbg = FALSE;		/* fill background */
+    f->bgcolor = 0;		/* background color inside frame */
 }
 
-void set_default_framep(f)
-    framep *f;
-{
-    memcpy(f, &d_f, sizeof(framep));
-}
-
-void set_default_world(w)
-    world *w;
+void set_default_world(world * w)
 {
     memcpy(w, &d_w, sizeof(world));
 }
 
-void set_default_view(v)
-    view *v;
+void set_default_view(view * v)
 {
     memcpy(v, &d_v, sizeof(view));
 }
 
-void set_default_string(s)
-    plotstr *s;
+void set_default_string(plotstr * s)
 {
-    memcpy(s, &d_s, sizeof(plotstr));
+    s->active = FALSE;
+    s->loctype = COORD_VIEW;
+    s->gno = -1;
+    s->x = s->y = 0.0;
+    s->lines = grdefaults.lines;
+    s->linew = grdefaults.linew;
+    s->color = grdefaults.color;
+    s->rot = 0;
+    s->font = grdefaults.font;
+    s->just = 0;
+    s->charsize = grdefaults.charsize;
+    s->s = (char *) malloc(sizeof(char));
+    s->s[0] = 0;
 }
 
-void set_default_line(l)
-    linetype *l;
+void set_default_line(linetype * l)
 {
-    memcpy(l, &d_l, sizeof(linetype));
+    l->active = FALSE;
+    l->loctype = COORD_VIEW;
+    l->gno = -1;
+    l->x1 = l->y1 = l->x2 = l->y2 = 0.0;
+    l->lines = grdefaults.lines;
+    l->linew = grdefaults.linew;
+    l->color = grdefaults.color;
+    l->arrow = 0;
+    l->atype = 0;
+    l->asize = 1.0;
 }
 
-void set_default_box(b)
-    boxtype *b;
+void set_default_box(boxtype * b)
 {
-    memcpy(b, &d_b, sizeof(boxtype));
+    b->active = FALSE;
+    b->loctype = COORD_VIEW;
+    b->gno = -1;
+    b->x1 = b->y1 = b->x2 = b->y2 = 0.0;
+    b->lines = grdefaults.lines;
+    b->linew = grdefaults.linew;
+    b->color = grdefaults.color;
+    b->fill = FALSE;
+    b->fillcolor = 1;
+    b->fillpattern = 1;
 }
 
-void set_default_legend(l)
-    legend *l;
+void set_default_ellipse(ellipsetype * e)
 {
-    int i;
+    e->active = FALSE;
+    e->loctype = COORD_VIEW;
+    e->gno = -1;
+    e->x1 = e->y1 = e->x2 = e->y2 = 0.0;
+    e->lines = grdefaults.lines;
+    e->linew = grdefaults.linew;
+    e->color = grdefaults.color;
+    e->fill = FALSE;
+    e->fillcolor = 1;
+    e->fillpattern = 1;
+}
 
-    l->active = OFF;
-    l->loctype = VIEW;
+void set_default_arc(arctype * a)
+{
+    a->active = FALSE;
+    a->loctype = COORD_VIEW;
+    a->gno = -1;
+    a->xc = a->yc = 0.0;
+    a->lines = grdefaults.lines;
+    a->linew = grdefaults.linew;
+    a->color = grdefaults.color;
+    a->fill = FALSE;
+    a->fillcolor = 1;
+    a->fillpattern = 1;
+}
+
+void set_default_circle(circletype * c)
+{
+    c->active = FALSE;
+    c->loctype = COORD_VIEW;
+    c->gno = -1;
+    c->xc = c->yc = 0.0;
+    c->lines = grdefaults.lines;
+    c->linew = grdefaults.linew;
+    c->color = grdefaults.color;
+    c->fill = FALSE;
+    c->fillcolor = 1;
+    c->fillpattern = 1;
+}
+
+void set_default_legend(int gno, legend * l)
+{
+    l->active = FALSE;
+    l->loctype = COORD_VIEW;
     l->layout = 0;
     l->vgap = 2;
     l->hgap = 1;
     l->len = 4;
     l->legx = 0.8;
     l->legy = 0.8;
-    l->font = 4;
+    l->font = grdefaults.font;
     l->charsize = 1.0;
-    l->color = 1;
-    l->linew = 1;
-    l->lines = 1;
-    l->box = OFF;
-    l->boxfill = OFF;
-    l->boxfillusing = COLOR;
+    l->color = grdefaults.color;
+    l->linew = grdefaults.linew;
+    l->lines = grdefaults.lines;
+    l->box = FALSE;
+    l->boxfill = FALSE;
+    l->boxfillusing = CLRFILLED;
     l->boxfillcolor = 0;
     l->boxfillpat = 1;
-    l->boxlcolor = 1;
-    l->boxlinew = 1;
-    l->boxlines = 1;
-    for (i = 0; i < MAXPLOT; i++) {
-	set_default_string(&(l->str[i]));
-    }
+    l->boxlcolor = grdefaults.color;	/* color for symbol */
+    l->boxlinew = grdefaults.linew;	/* set plot sym line width */
+    l->boxlines = grdefaults.lines;	/* set plot sym line style */
 }
 
-void set_default_plotarr(p)
-    plotarr *p;
+void set_default_plotarr(plotarr * p)
 {
     int i;
+    p->active = FALSE;		/* active flag */
+    p->type = SET_XY;		/* dataset type */
+    p->deact = 0;		/* deactivated set */
+    p->hotlink = 0;		/* hot linked set */
+    p->hotfile[0] = 0;		/* hot linked file name */
+    p->len = 0;			/* set length */
+    p->missing = DATASET_MISSING;	/* value for missing data */
+    p->s = (char **) NULL;	/* pointer to strings */
+    p->xmin = p->xmax = p->ymin = p->ymax = 0.0;
+
+    p->sym = 0;			/* set plot symbol */
+    p->symchar = 0;		/* character for symbol */
+    p->symskip = 0;		/* How many symbols to skip */
+    p->symfill = 0;		/* Symbol fill type */
+    p->symdot = 0;		/* Symbol dot in center */
+    p->symlines = grdefaults.lines;	/* set plot sym line style */
+    p->symlinew = grdefaults.linew;	/* set plot sym line width */
+    p->symcolor = -1;		/* color for symbol; -1 means same color as line */
+    p->symsize = 1.0;		/* size of symbols */
+
+    p->font = grdefaults.font;	/* font for strings */
+    p->format = FORMAT_DECIMAL;	/* format for drawing values */
+    p->prec = 1;		/* precision for drawing values */
+    p->just = JUST_LEFT;	/* justification for drawing values */
+    p->where = PLACE_RIGHT;	/* where to draw values */
+    p->valsize = 1.0;		/* char size for drawing values */
+
+    p->lines = grdefaults.lines;
+    p->linew = grdefaults.linew;
+    p->color = grdefaults.color;
+    p->lineskip = 0;		/* How many points to skip when drawing lines */
+
+    p->fill = 0;		/* fill type */
+    p->fillusing = CLRFILLED;	/* fill using color or pattern */
+    p->fillcolor = 1;		/* fill color */
+    p->fillpattern = 0;		/* fill pattern */
+
+    p->errbar = -1;		/* if type is _DX, _DY, _DXDY and errbar =
+				 * TRUE */
+    p->errbarxy = PLACE_BOTH;	/* type of error bar */
+    p->errbar_lines = grdefaults.lines;	/* error bar line width */
+    p->errbar_linew = grdefaults.linew;	/* error bar line style */
+    p->errbar_riser = TRUE;	/* connecting line between error limits */
+    p->errbar_riser_linew = 1;	/* connecting line between error limits line
+				 * width */
+    p->errbar_riser_lines = 1;	/* connecting line between error limits line
+				 * style */
+
+    p->errbarper = 1.0;		/* length of error bar */
+    p->hilowper = 1.0;		/* length of hi-low */
+
+    p->density_plot = 0;	/* if type is XYZ then density_plot  = 1 */
+    p->zmin = p->zmax = 0.0;	/* min max for density plots */
+
+    p->comments[0] = 0;		/* how did this set originate */
+    p->lstr[0] = 0;		/* legend */
 
     for (i = 0; i < MAX_SET_COLS; i++) {
-	if (p->ex[i] != NULL) {
-	    cfree(p->ex[i]);
-	}
 	p->ex[i] = NULL;
+	p->emin[i] = 0.0;	/* min for each column */
+	p->emax[i] = 0.0;	/* max for each column */
+	p->imin[i] = 0;		/* min loc for each column */
+	p->imax[i] = 0;		/* max loc for each column */
     }
-    memcpy(p, &d_p, sizeof(plotarr));
+    p->ep = NULL;		/* EditPoints pointer */
 }
 
-void set_default_velocityp(vp)
-    velocityp *vp;
+void set_default_velocityp(velocityp * vp)
 {
-    vp->active = OFF;
+    vp->active = FALSE;
     vp->type = 0;
-    vp->loctype = VIEW;
+    vp->loctype = COORD_VIEW;
     vp->velx = 0.8;
     vp->vely = 0.7;
-    vp->color = 1;
-    vp->linew = 1;
-    vp->lines = 1;
+    vp->lines = grdefaults.lines;
+    vp->linew = grdefaults.linew;
+    vp->color = grdefaults.color;
     set_default_string(&(vp->vstr));
     vp->arrowtype = 0;
     vp->vscale = 1.0;
@@ -266,39 +304,42 @@ void set_default_velocityp(vp)
     vp->userlength = 1.0;
 }
 
-void set_default_graph(gno)
-    int gno;
+void set_default_graph(int gno)
 {
     int i;
-    char buf[256];
 
-    g[gno].active = OFF;
+    g[gno].active = FALSE;
     g[gno].hidden = FALSE;
-    g[gno].label = OFF;
-    g[gno].type = XY;
-    g[gno].auto_type = AUTO;
+    g[gno].label = FALSE;
+    g[gno].type = GRAPH_XY;
+    g[gno].auto_type = TYPE_AUTO;
+    g[gno].autoscale = 0;
+    g[gno].noautoscale = 0;
     g[gno].revx = FALSE;
     g[gno].revy = FALSE;
-    g[gno].ws_top = 0;
+    g[gno].ws_top = 1;
+    g[gno].ws[0].w.xg1=g[gno].ws[0].w.xg2=g[gno].ws[0].w.yg1=g[gno].ws[0].w.yg2=0;
+	g[gno].curw = 0;
     g[gno].maxplot = maxplot;
     g[gno].dsx = g[gno].dsy = 0.0;	/* locator props */
     g[gno].pointset = FALSE;
     g[gno].pt_type = 0;
-    g[gno].fx = GENERAL;
-    g[gno].fy = GENERAL;
+    g[gno].fx = FORMAT_GENERAL;
+    g[gno].fy = FORMAT_GENERAL;
     g[gno].px = 6;
     g[gno].py = 6;
-    set_default_defaults(&g[gno].d);
+    g[gno].barwid = 0.85;
+    g[gno].sbarwid = 0.75;
     set_default_ticks(&g[gno].t[0], X_AXIS);
     set_default_ticks(&g[gno].t[1], Y_AXIS);
     set_default_ticks(&g[gno].t[2], ZX_AXIS);
     set_default_ticks(&g[gno].t[3], ZY_AXIS);
-    set_default_ticks(&g[gno].t[4], XA_AXIS);
-    set_default_ticks(&g[gno].t[5], YA_AXIS);
     set_default_framep(&g[gno].f);
     set_default_world(&g[gno].w);
     set_default_view(&g[gno].v);
-    set_default_legend(&g[gno].l);
+    g[gno].rt.xg1 = 1.0;
+    g[gno].rt.yg1 = 2.0 * M_PI;
+    set_default_legend(gno, &g[gno].l);
     set_default_string(&g[gno].labs.title);
     g[gno].labs.title.charsize = 1.5;
     set_default_string(&g[gno].labs.stitle);
@@ -309,59 +350,68 @@ void set_default_graph(gno)
     set_default_velocityp(&g[gno].vp);
 }
 
-void realloc_plots(maxplot)
-int maxplot;
+void realloc_plots(int maxplot)
 {
     int i, j;
     for (i = 0; i < maxgraph; i++) {
 	g[i].p = (plotarr *) realloc(g[i].p, maxplot * sizeof(plotarr));
 	for (j = g[i].maxplot; j < maxplot; j++) {
+	    g[i].p[j].len = 0;
 	    set_default_plotarr(&g[i].p[j]);
 	}
 	g[i].maxplot = maxplot;
+	setdefaultcolors(i);
     }
 }
 
-void realloc_graph_plots(gno, maxplot)
-    int gno, maxplot;
+void realloc_graph_plots(int gno, int maxplot)
 {
     int j;
     g[gno].p = (plotarr *) realloc(g[gno].p, maxplot * sizeof(plotarr));
     for (j = g[gno].maxplot; j < maxplot; j++) {
+	g[gno].p[j].len = 0;
 	set_default_plotarr(&g[gno].p[j]);
     }
     g[gno].maxplot = maxplot;
+	setdefaultcolors(gno);
 }
 
-void realloc_graphs()
+void realloc_graphs(void)
 {
-    int i, j;
+    int j;
 
     g = (graph *) realloc(g, maxgraph * sizeof(graph));
     for (j = MAXGRAPH; j < maxgraph; j++) {
-	g[j].p = (plotarr *) calloc(maxplot, sizeof(plotarr));
-	set_default_graph(j);
+		g[j].p = (plotarr *) calloc(maxplot, sizeof(plotarr));
+		set_default_graph(j);
+		setdefaultcolors(j);
     }
 }
 
-void set_default_annotation()
+void set_default_annotation(void)
 {
     int i;
 
-    for (i = 0; i < MAXBOXES; i++) {
+    lines = (linetype *) malloc(maxlines * sizeof(linetype));
+    boxes = (boxtype *) malloc(maxboxes * sizeof(boxtype));    
+    pstr = (plotstr *) malloc(maxstr * sizeof(plotstr));
+    ellip = (ellipsetype *) malloc(maxellipses * sizeof(ellipsetype));
+
+    for (i = 0; i < maxboxes; i++) {
 	set_default_box(&boxes[i]);
     }
-    for (i = 0; i < MAXLINES; i++) {
+    for (i = 0; i < maxlines; i++) {
 	set_default_line(&lines[i]);
     }
-    for (i = 0; i < MAXSTR; i++) {
+    for (i = 0; i < maxellipses; i++) {
+	set_default_ellipse(&ellip[i]);
+    }
+    for (i = 0; i < maxstr; i++) {
 	set_default_string(&pstr[i]);
     }
 }
 
-void set_default_ticks(t, a)
-    tickmarks *t;
-    int a;
+void set_default_ticks(tickmarks * t, int a)
 {
     int i;
 
@@ -369,24 +419,17 @@ void set_default_ticks(t, a)
     switch (a) {
     case X_AXIS:
     case Y_AXIS:
-	t->active = ON;
-	t->alt = OFF;
-	t->tl_flag = ON;
-	t->t_flag = ON;
-	break;
-    case XA_AXIS:
-    case YA_AXIS:
-	t->active = ON;
-	t->alt = OFF;
-	t->tl_flag = OFF;
-	t->t_flag = OFF;
+	t->active = TRUE;
+	t->alt = FALSE;
+	t->tl_flag = TRUE;
+	t->t_flag = TRUE;
 	break;
     case ZX_AXIS:
     case ZY_AXIS:
-	t->active = ON;
-	t->alt = OFF;
-	t->tl_flag = OFF;
-	t->t_flag = OFF;
+	t->active = TRUE;
+	t->alt = FALSE;
+	t->tl_flag = FALSE;
+	t->t_flag = FALSE;
 	break;
     }
     set_default_string(&t->label);
@@ -396,56 +439,55 @@ void set_default_ticks(t, a)
     t->tminor = 0.25;
     t->offsx = 0.0;
     t->offsy = 0.0;
-    t->label_layout = PARA;
-    t->label_place = AUTO;
-    t->tl_type = AUTO;
-    t->tl_layout = HORIZONTAL;
-    t->tl_sign = NORMAL;
-    t->tl_prec = 1;
-    t->tl_format = DECIMAL;
+    t->label_layout = LAYOUT_PARALLEL;
+    t->label_place = TYPE_AUTO;
+    t->tl_type = TYPE_AUTO;
+    t->tl_layout = TICKS_HORIZONTAL;
+    t->tl_loc = LABEL_ONTICK;
+    t->tl_sign = SIGN_NORMAL;
+    t->tl_prec = 5;
+    t->tl_format = FORMAT_GENERAL;
     t->tl_angle = 0;
-    t->tl_just = (a % 2) ? RIGHT : CENTER;
+    t->tl_just = (a % 2) ? JUST_RIGHT : JUST_CENTER;
     t->tl_skip = 0;
     t->tl_staggered = 0;
-    t->tl_starttype = AUTO;
-    t->tl_stoptype = AUTO;
+    t->tl_starttype = TYPE_AUTO;
+    t->tl_stoptype = TYPE_AUTO;
     t->tl_start = 0.0;
     t->tl_stop = 0.0;
-    t->tl_op = (a % 2) ? LEFT : BOTTOM;
-    t->tl_vgap = 0.7;// frsfnrrg: changed to look nicer
-    t->tl_hgap = 0.7;// frsfnrrg: changed to look nicer
-    t->tl_font = 4;
+    t->tl_op = (a % 2) ? PLACE_LEFT : PLACE_BOTTOM;
+    t->tl_vgap = 1.0;
+    t->tl_hgap = 1.0;
+    t->tl_font = grdefaults.font;
     t->tl_charsize = 1.0;
-    t->tl_color = 1;
-    t->tl_linew = 1;
+    t->tl_linew = grdefaults.linew;
+    t->tl_color = grdefaults.color;
     t->tl_appstr[0] = 0;
     t->tl_prestr[0] = 0;
-    t->t_color = 1;
-    t->t_linew = 1;
-    t->t_type = AUTO;
-    t->t_mflag = ON;
-    t->t_integer = OFF;
+    t->t_type = TYPE_AUTO;
+    t->t_mflag = TRUE;
+    t->t_integer = FALSE;
     t->t_num = 6;
-    t->t_inout = IN;
-    t->t_log = OFF;
-    t->t_op = BOTH;
+    t->t_inout = TICKS_IN;
+    t->t_log = FALSE;
+    t->t_op = PLACE_BOTH;
     t->t_size = 1.0;
     t->t_msize = 0.5;
-    t->t_drawbar = OFF;
-    t->t_drawbarcolor = 1;
-    t->t_drawbarlines = 1;
-    t->t_drawbarlinew = 1;
-    t->t_gridflag = OFF;
-    t->t_mgridflag = OFF;
-    t->t_color = 1;
-    t->t_lines = 1;
-    t->t_linew = 1;
-    t->t_mcolor = 1;
-    t->t_mlines = 1;
-    t->t_mlinew = 1;
+    t->t_drawbar = FALSE;
+    t->t_drawbarcolor = grdefaults.color;
+    t->t_drawbarlines = grdefaults.lines;
+    t->t_drawbarlinew = grdefaults.linew;
+    t->t_gridflag = FALSE;
+    t->t_mgridflag = FALSE;
+    t->t_color = grdefaults.color;
+    t->t_lines = grdefaults.lines;
+    t->t_linew = grdefaults.linew;
+    t->t_mcolor = grdefaults.color;
+    t->t_mlines = grdefaults.lines;
+    t->t_mlinew = grdefaults.linew;
     t->t_spec = 0;
     for (i = 0; i < MAX_TICK_LABELS; i++) {
 	t->t_specloc[i] = 0.0;
-	t->t_speclab[i].s[0] = '\0';
+	t->t_speclab[i].s = NULL;
     }
 }

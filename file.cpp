@@ -1,7 +1,11 @@
 #include "mainwindow.h"
 #include "graphwidget.h"
-#include "file.h"
+
 #include "base/globals.h"
+#include "base/noxprotos.h"
+#include "base/xprotos.h"
+
+#include "file.h"
 #include "prop.h"
 #include "tools.h"
 #include "tools/options.h"
