@@ -4095,7 +4095,7 @@ symtab_entry ikey[] = {
 	{"IN", IN, NULL},
 //	{"INCBET", FUNC_PPD, incbet},
 //	{"INCBI", FUNC_PPD, incbi},
-        {"INCREMENT", INCREMENT, NULL},
+    {"INCREMENT", INCREMENT, NULL},
 	{"INDEX", INDEX, NULL},
 	{"INIT", INIT, NULL},
 	{"INOUT", INOUT, NULL},

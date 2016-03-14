@@ -579,7 +579,8 @@ void GraphWidget::fill(int n, int px[], int py[])
     QBrush brush = QBrush();
     QVector<QPointF> path;
 
-    brush.setTexture(PatternComboBox::getPattern(patnum));
+    QPixmap tex = PatternComboBox::getPattern(patnum);
+    brush.setTexture(tex.scaled(tex.width()*MAGNIFICATION,tex.height()*MAGNIFICATION));
 
     for (int i = 0; i < n; i++) {
         path.append(QPointF(px[i], py[i]));

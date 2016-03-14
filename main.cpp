@@ -9,8 +9,12 @@
 
 int main(int argc, char *argv[])
 {
-
+    // Run underlying initialization
     set_program_defaults();  
+    initialize_cms_data();
+    initialize_nonl();
+    init_symtab();
+
     Q_INIT_RESOURCE(qtgr);
 
     QApplication app(argc, argv);

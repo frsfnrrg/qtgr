@@ -162,7 +162,7 @@ void ViewDimensions::updateDialog() {
     int vk = -1;
     switch (g[cg].type) {
     case GRAPH_POLAR:
-//    case GRAPH_PIE://fixme?
+    case GRAPH_SMITH:
     case GRAPH_STACKEDLINE:
         printf("type not implemented\n");
         break;

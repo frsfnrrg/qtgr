@@ -52,9 +52,12 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
     QWidget* opl = new QWidget();
     QGridLayout* intern = new QGridLayout();
 
+    setLabels = new QLineEdit*[MAXPLOT];
+    setLabelLabels = new QLabel*[MAXPLOT];
+
     for (int i=0;i<MAXPLOT;i++) {
         setLabels[i] = new QLineEdit();
-//        setLabels[i]->setMaxLength(MAXSTRLEN);//fixme
+        setLabels[i]->setMaxLength(256);
         setLabelLabels[i] = new QLabel(QString("Set ")+QString::number(i));
         intern->addWidget(setLabelLabels[i],i,0);
         intern->addWidget(setLabels[i],i,1);
@@ -98,6 +101,11 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
     this->setDialogLayout(over);
 }
 
+ViewLegend::~ViewLegend() {
+    delete[] setLabels;
+    delete[] setLabelLabels;
+}
+
 void ViewLegend::fadeOpts() {
     bool on = showLegend->isChecked();
     placer->setEnabled(on);
@@ -116,7 +124,7 @@ void ViewLegend::updateDialog() {
     locType->setCurrentIndex(g[cg].l.loctype == COORD_VIEW ? 0 : 1);
 
     for (int i=0; i<MAXPLOT; i++) {
-//       setLabels[i]->setText(QString::fromLocal8Bit(g[cg].l.str[i].s));//fixme
+       setLabels[i]->setText(QString::fromUtf8(g[cg].p[i].lstr));
        setLabelLabels[i]->setDisabled(g[cg].p[i].active == FALSE && g[cg].p[i].deact == 0);
     }
 
@@ -142,7 +150,7 @@ void ViewLegend::applyDialog() {
     g[cg].l.legy = legendY->text().toDouble();
 
     for (int i=0;i<MAXPLOT;i++) {
-//        strcpy((char*)g[cg].l.str[i].s,setLabels[i]->text().toUtf8().data());//fixme
+        strncpy((char*)g[cg].p[i].lstr,setLabels[i]->text().toUtf8().data(), 256);
     }
 
     SetsSender::send();
@@ -197,7 +205,7 @@ void ViewLegend::placeLegend() {
 }
 
 void ViewLegend::updateLegendsField(int cset) {
-//    setLabels[cset]->setText(QString::fromLocal8Bit(g[cg].l.str[cset].s));//fixme
+    setLabels[cset]->setText(QString::fromLocal8Bit(g[cg].p[cset].lstr));
 }
 
 void ViewLegend::legendProp() {
@@ -296,7 +304,7 @@ void ViewLegendProp::updateDialog() {
     frameStyle->setCurrentIndex(g[cg].l.boxlines);
 
     frameFill->setChecked(g[cg].l.boxfill == TRUE);
-    frameFillColor->setCurrentIndex(g[cg].l.boxfillcolor);
+    frameFillColor->setCurrentIndex(g[cg].l.boxfillcolor == PTNFILLED);
     frameFillPattern->setCurrentIndex(g[cg].l.boxfillpat);
 }
 
@@ -316,7 +324,7 @@ void ViewLegendProp::applyDialog() {
     g[cg].l.boxfill = frameFill->isChecked() ? TRUE : FALSE;
     g[cg].l.boxfillcolor = frameFillColor->currentIndex();
     g[cg].l.boxfillpat = frameFillPattern->currentIndex();
-//    g[cg].l.boxfillusing = frameFillColor->currentIndex() == 1 ? PATTERN : COLOR;//fixme
+    g[cg].l.boxfillusing = frameFillColor->currentIndex() == 1 ? PTNFILLED : CLRFILLED;
 
     drawgraph();
 }

@@ -78,6 +78,7 @@ ViewAxis::ViewAxis(MainWindow *parent) :
     labelFormat->addItem("Decimal");
     labelFormat->addItem("Exponential");
     labelFormat->addItem("Power");
+    labelFormat->addItem("General");
 
     labelPrecision = new QComboBox;
     for (int i=0; i<10; i++) {
@@ -220,7 +221,7 @@ void ViewAxis::updateDialog() {
         uMax->setText(QString::number(g[cg].w.xg2,'g',9));
     }
 
-    axisLabel->setText(QString::fromLocal8Bit(t.label.s));
+    axisLabel->setText(QString::fromUtf8(t.label.s));
 
     majTic->setText(QString::number(t.tmajor,'g',9));
     minTic->setText(QString::number(t.tminor,'g',9));
@@ -230,7 +231,8 @@ void ViewAxis::updateDialog() {
     uStart->setText(QString::number(t.tl_start, 'g',9));
     uStop->setText(QString::number(t.tl_stop, 'g',9));
 
-    labelFormat->setCurrentIndex(get_format_index(t.tl_format));
+    int ftype = get_format_index(t.tl_format);
+    labelFormat->setCurrentIndex(ftype);
     labelPrecision->setCurrentIndex(t.tl_prec);
     labelSkip->setValue(t.tl_skip);
 

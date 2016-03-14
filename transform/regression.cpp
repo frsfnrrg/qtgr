@@ -89,7 +89,8 @@ void TransformRegression::applyDialog() {
         return;
     }
 
-//    do_regress(setno, degree->currentIndex()+1, load->currentIndex());//fixme
+    do_regress(setno, degree->currentIndex()+1,
+               load->currentIndex(), -1, -1);
 
     if (ToolsOptions::isRescaleOnTransform()) {
         mainWindow->toolsMenu->autoScale();

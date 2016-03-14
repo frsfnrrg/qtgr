@@ -3,8 +3,6 @@
 
 #include "dialog.h"
 
-#define MAXPLOT 96
-
 class ViewLegendProp;
 
 class ViewLegend : public Dialog
@@ -12,6 +10,7 @@ class ViewLegend : public Dialog
     Q_OBJECT
 public:
     explicit ViewLegend(MainWindow* mwin);
+    ~ViewLegend();
 
     void applyLegendPos(double, double);
 
@@ -37,8 +36,8 @@ private:
 
     ViewLegendProp* propDialog;
 
-    QLineEdit* setLabels[MAXPLOT];
-    QLabel* setLabelLabels[MAXPLOT];
+    QLineEdit** setLabels;
+    QLabel** setLabelLabels;
 private slots:
 
     void applyDialog();

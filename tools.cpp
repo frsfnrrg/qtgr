@@ -56,10 +56,8 @@ void ToolsMenu::populateToolBar(QToolBar* foo) {
 
 void ToolsMenu::autoScale()
 {
-//    autoscale_proc(); FIXME
-    if (!activeset(cg)) {
-        drawgraph();
-    }
+    autoscale_graph(cg, -3);
+    drawgraph();
     WorldDimProp::send(this);
 }
 

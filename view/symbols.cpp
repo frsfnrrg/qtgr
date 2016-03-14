@@ -76,7 +76,7 @@ ViewSymbols::ViewSymbols(MainWindow* mainWin) :
     fillPattern = new PatternComboBox();
     
     legendS = new QLineEdit();
-//    legendS->setMaxLength(MAXSTRLEN);//fixme
+    legendS->setMaxLength(256);
 
     autoHook(fillColor);
     autoHook(legendS);
@@ -177,21 +177,18 @@ void ViewSymbols::updateDialog()
     lineWidth->setCurrentIndex(g[gno].p[cset].linew-1);
     lineColor->setCurrentIndex(g[gno].p[cset].color);
     
-//    legendS->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));// fixme
+    legendS->setText(QString::fromLocal8Bit(g[gno].p[cset].lstr));
 
     fillFill->setCurrentIndex(g[gno].p[cset].fill);
-//    if (g[gno].p[cset].fillusing == PATTERN) {//fixme
-//        fillColor->setCurrentIndex(1);
-//    }
     fillPattern->setCurrentIndex(g[gno].p[cset].fillpattern);
-    fillColor->setCurrentIndex(g[gno].p[cset].fillcolor);
+    fillColor->setCurrentIndex(g[gno].p[cset].fillcolor == PTNFILLED);
 }
   
 
 void ViewSymbols::updateLegend() {
     int gno = cg;
     int cset = setNumber->currentIndex();
-//    legendS->setText(QString::fromLocal8Bit(g[gno].l.str[cset].s));//fixme
+    legendS->setText(QString::fromLocal8Bit(g[gno].p[cset].lstr));
 }
 
 void ViewSymbols::applyDialog()
@@ -218,29 +215,23 @@ void ViewSymbols::applyDialog()
         // i.e., for black, use patterns as well.
         // the optimal solution is to allow
         // patterns of all colors
-//        fillusing = PATTERN;//fixme
+        fillusing = PTNFILLED;
     } else {
-//        fillusing = COLOR;//fixme
+        fillusing = CLRFILLED;
     }
-//    strcpy((char*)g[cg].l.str[cset].s,legendS->text().toUtf8().data());//fixme
+    strncpy((char*)g[cg].p[cset].lstr,legendS->text().toUtf8().data(),256);
 
-    // Note: there is an apply-to-all-sets option
-    // in XVGR
-
-//    set_prop(cg, SET,//fixme set_prop is deprecated..
-//	     SETNUM, cset,
-//	     SYMBOL, TYPE, sym,
-//	     SYMBOL, FILL, symfill,
-//         SYMBOL, SIZE, symsize,
-//         SKIP, symskip,
-//	     LINESTYLE, style,
-//	     LINEWIDTH, wid,
-//	     COLOR, color,
-//         FILL, TYPE, fill,
-//         FILL, WITH, fillusing,
-//         FILL, COLOR, fillcol,
-//         FILL, PATTERN, fillpat,
-//	     0);
+    g[cg].p[cset].sym = sym;
+    g[cg].p[cset].symfill = symfill;
+    g[cg].p[cset].symsize = symsize;
+    g[cg].p[cset].symskip = symskip;
+    g[cg].p[cset].lines = style;
+    g[cg].p[cset].linew = wid;
+    g[cg].p[cset].color = color;
+    g[cg].p[cset].fill = fill;
+    g[cg].p[cset].fillusing = fillusing;
+    g[cg].p[cset].fillcolor = fillcol;
+    g[cg].p[cset].fillpattern = fillpat;
 
     drawgraph();
 
