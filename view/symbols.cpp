@@ -225,9 +225,14 @@ void ViewSymbols::applyDialog()
     g[cg].p[cset].symfill = symfill;
     g[cg].p[cset].symsize = symsize;
     g[cg].p[cset].symskip = symskip;
+
     g[cg].p[cset].lines = style;
     g[cg].p[cset].linew = wid;
     g[cg].p[cset].color = color;
+    // Extend line color/width to symbols for simplicity
+    g[cg].p[cset].symcolor = color;
+    g[cg].p[cset].symlinew = wid;
+
     g[cg].p[cset].fill = fill;
     g[cg].p[cset].fillusing = fillusing;
     g[cg].p[cset].fillcolor = fillcol;
