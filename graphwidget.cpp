@@ -737,9 +737,9 @@ void qtview_linew(int w)
     myGraphWidget->linew(w);
 }
 
-void qtview_lines(int w)
+void qtview_lines(int s)
 {
-    myGraphWidget->lines(w);
+    myGraphWidget->lines(s);
 }
 
 void qtview_linec(int c)

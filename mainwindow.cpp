@@ -203,21 +203,8 @@ void MainWindow::initialize()
     QStringList arguments = QCoreApplication::arguments();
     // Now you can parse the arguments *after* the main window has been created.
 
-    // only accept one argument so far: a file to be loaded
-    if (arguments.size() == 2) {
-        int type=SET_NXY;
-
-        QFileInfo info(arguments[1]);
-        setFile( info.absoluteDir().path(), info.fileName());
-        QByteArray v = arguments[1].toUtf8();
-        getdata(0,v.data(),SOURCE_DISK,type);
-
-        if (ToolsOptions::isRescaleOnLoad()) {
-            this->toolsMenu->autoScale();
-        } else {
-            drawgraph();
-        }
-    } else if (arguments.size() >= 3 && (arguments[1] == "--pdf" || arguments[1] == "--png"
+    // Either run in export mode
+    if (arguments.size() >= 3 && (arguments[1] == "--pdf" || arguments[1] == "--png"
                                          || arguments[1] == "--jpg")) {
         for (int i=2;i<arguments.size();i++) {
             QString filename = arguments[i];
@@ -247,6 +234,22 @@ void MainWindow::initialize()
         qApp->exit();
 
         return;
+    } else if (arguments.size() >= 2) {
+        // TODO: make SET_NXY autodetect other modes if need be
+        int type=SET_NXY;
+
+        for (int i=1;i<arguments.size();i++) {
+            QFileInfo info(arguments[i]);
+            setFile( info.absoluteDir().path(), info.fileName());
+            QByteArray v = arguments[i].toUtf8();
+            getdata(0,v.data(),SOURCE_DISK,type);
+        }
+
+        if (ToolsOptions::isRescaleOnLoad()) {
+            this->toolsMenu->autoScale();
+        } else {
+            drawgraph();
+        }
     } else if (!isatty(fileno(stdin))) {
         qDebug("trying to read from stdin pipe: err: %d (%d is ENOTTY)", errno,  ENOTTY);
         // TODO: figure out how to thread-decouple
