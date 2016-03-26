@@ -255,7 +255,7 @@ void MainWindow::initialize()
         // TODO: figure out how to thread-decouple
         // base (graph, input) processes from UI. (if the program
         // is fed an empty pipe, it hangs.)
-        getdata(cg, (char*)"STDIN", 2/*means stdin*/, SET_NXY);
+        getdata(cg, (char*)"STDIN", SOURCE_STDIN, SET_NXY);
         if (ToolsOptions::isRescaleOnLoad()) {
             this->toolsMenu->autoScale();
         } else {

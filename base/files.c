@@ -743,10 +743,17 @@ int readnxy(int gno, char *fn, FILE * fp)
 	readline++;
 	if (buf[0] == '@') {
 	    change_gno = -1;
+        change_type = cur_type;
 	    read_param(buf + 1);
 	    if (change_gno >= 0) {
-		cur_gno = gno = change_gno;
+            cur_gno = gno = change_gno;
 	    }
+        if (change_type != cur_type) {
+            cur_type = change_type;
+
+            retval = -1;
+            return retval; /* exit this module; no changes to save */
+        }
 	}
     }
     convertchar(buf);
