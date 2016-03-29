@@ -78,8 +78,16 @@ void ViewTitle::updateDialog() {
 void ViewTitle::applyDialog() {
     int gno = cg;
 
-    strcpy((char*)g[gno].labs.title.s,ttext->text().toUtf8().data());
-    strcpy((char*)g[gno].labs.stitle.s,stext->text().toUtf8().data());
+    if (g[gno].labs.title.s) free(g[gno].labs.title.s);
+    if (g[gno].labs.stitle.s) free(g[gno].labs.stitle.s);
+    const char* tt = ttext->text().toUtf8().constData();
+    const char* st = stext->text().toUtf8().constData();
+    int tlen = strlen(tt);
+    int slen = strlen(st);
+    g[gno].labs.title.s = (char*)malloc(tlen+1);
+    g[gno].labs.stitle.s = (char*)malloc(slen+1);
+    strncpy(g[gno].labs.title.s, tt, tlen+1);
+    strncpy(g[gno].labs.stitle.s, st, slen+1);
 
     g[gno].labs.title.charsize = tsize->value();
     g[gno].labs.stitle.charsize = ssize->value();

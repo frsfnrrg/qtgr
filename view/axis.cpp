@@ -272,8 +272,11 @@ void ViewAxis::applyDialog() {
         if (leVal(uMax, &val)) g[cg].w.xg2 = val;
     }
 
-    strcpy(t.label.s,
-           axisLabel->text().toUtf8().data());
+    if (t.label.s) free(t.label.s);
+    const char* lt = axisLabel->text().toUtf8().data();
+    int llen = strlen(lt);
+    t.label.s = (char*)malloc(llen+1);
+    strncpy(t.label.s, lt, llen+1);
 
     if (leVal(majTic, &val)) t.tmajor = val;
     if (leVal(minTic, &val)) t.tminor = val;
