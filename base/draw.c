@@ -1176,7 +1176,7 @@ void drawtitle(char *title, int which)
     tmp = ((*devconvx) (rxg2) + (*devconvx) (rxg1)) / 2;	/* center x-axis label
 								 * and title */
     if (title[0] && !which) {
-	iy = (int) (3.0 * stringextenty(charsize * devcharsize, "X"));
+    iy = (int) (1.7 * stringextenty(charsize * devcharsize, "X"));
     } else {
 	iy = stringextenty(charsize * devcharsize, "Xy");
     }

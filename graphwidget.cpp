@@ -621,23 +621,31 @@ int GraphWidget::stringextentx(double scale, char* str)
 {
     QFont font = FontComboBox::getFont(fontnum);
     font.setPointSizeF(FONT_BASE_SIZE * scale * dpiInvScale);
-    QFontMetrics metric(font);
-    QString converted = texconvert(str, strlen(str));
-    int w = metric.boundingRect(converted).width();
+    // Using html mode explicitly
+    QGraphicsTextItem* text = new QGraphicsTextItem();
+    text->setHtml(texconvert(str, strlen(str)));
+    text->setFont(font);
+    text->setDefaultTextColor(pen->color());
+    qreal w = text->boundingRect().width();
+
     // fudge factor.... (y axis labels)
     // could also be linked to devcharsize as exported by the driver.
     //
-    return (int)((double)w * 1.9 * MAGNIFICATION);
+    return (int)((double)w * 1.1 * MAGNIFICATION);
 }
 
 int GraphWidget::stringextenty(double scale, char* str)
 {
     QFont font = FontComboBox::getFont(fontnum);
     font.setPointSizeF(FONT_BASE_SIZE * scale * dpiInvScale);
-    QString converted = texconvert(str, strlen(str));
-    QFontMetrics metric(font);
-    int h = metric.boundingRect(converted).height();
-    return (int)((double)h * 1.1 * MAGNIFICATION);
+
+    QGraphicsTextItem* text = new QGraphicsTextItem();
+    text->setHtml(texconvert(str, strlen(str)));
+    text->setFont(font);
+    text->setDefaultTextColor(pen->color());
+    qreal h = text->boundingRect().height();
+
+    return (int)((double)h * 1.0 * MAGNIFICATION);
 }
 
 int GraphWidget::setpattern(int num)
