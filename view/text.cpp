@@ -309,7 +309,10 @@ void ViewTextElement::prop() {
 
 void ViewTextElement::applyValues() {
     // use sizeof for field
-    strncpy((char*)pstr[num].s, textArea->toPlainText().toUtf8().data(), 256);
+    if (pstr[num].s) free(pstr[num].s);
+    int len = textArea->toPlainText().toUtf8().length();
+    pstr[num].s = (char*)malloc(len);
+    strncpy(pstr[num].s, textArea->toPlainText().toUtf8().constData(), len);
     pstr[num].x = xCoord->value();
     pstr[num].y = yCoord->value();
 }

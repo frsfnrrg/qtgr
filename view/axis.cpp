@@ -273,10 +273,9 @@ void ViewAxis::applyDialog() {
     }
 
     if (t.label.s) free(t.label.s);
-    const char* lt = axisLabel->text().toUtf8().data();
-    int llen = strlen(lt);
+    int llen = axisLabel->text().toUtf8().length();
     t.label.s = (char*)malloc(llen+1);
-    strncpy(t.label.s, lt, llen+1);
+    strncpy(t.label.s, axisLabel->text().toUtf8().data(), llen+1);
 
     if (leVal(majTic, &val)) t.tmajor = val;
     if (leVal(minTic, &val)) t.tminor = val;

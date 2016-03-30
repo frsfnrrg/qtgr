@@ -76,27 +76,24 @@ void ViewTitle::updateDialog() {
 }
 
 void ViewTitle::applyDialog() {
-    int gno = cg;
+    if (g[cg].labs.title.s) free(g[cg].labs.title.s);
+    int tlen = ttext->text().toUtf8().length();
+    g[cg].labs.title.s = (char*)malloc(tlen+1);
+    strncpy(g[cg].labs.title.s, ttext->text().toUtf8().constData(), tlen+1);
 
-    if (g[gno].labs.title.s) free(g[gno].labs.title.s);
-    if (g[gno].labs.stitle.s) free(g[gno].labs.stitle.s);
-    const char* tt = ttext->text().toUtf8().constData();
-    const char* st = stext->text().toUtf8().constData();
-    int tlen = strlen(tt);
-    int slen = strlen(st);
-    g[gno].labs.title.s = (char*)malloc(tlen+1);
-    g[gno].labs.stitle.s = (char*)malloc(slen+1);
-    strncpy(g[gno].labs.title.s, tt, tlen+1);
-    strncpy(g[gno].labs.stitle.s, st, slen+1);
+    if (g[cg].labs.stitle.s) free(g[cg].labs.stitle.s);
+    int slen = stext->text().toUtf8().length();
+    g[cg].labs.stitle.s = (char*)malloc(slen+1);
+    strncpy(g[cg].labs.stitle.s, stext->text().toUtf8().constData(), slen+1);
 
-    g[gno].labs.title.charsize = tsize->value();
-    g[gno].labs.stitle.charsize = ssize->value();
+    g[cg].labs.title.charsize = tsize->value();
+    g[cg].labs.stitle.charsize = ssize->value();
 
-    g[gno].labs.title.font = tfont->currentIndex();
-    g[gno].labs.stitle.font = sfont->currentIndex();
+    g[cg].labs.title.font = tfont->currentIndex();
+    g[cg].labs.stitle.font = sfont->currentIndex();
 
-    g[gno].labs.title.color = tcolor->currentIndex();
-    g[gno].labs.stitle.color = scolor->currentIndex();
+    g[cg].labs.title.color = tcolor->currentIndex();
+    g[cg].labs.stitle.color = scolor->currentIndex();
 
     drawgraph();
 }
