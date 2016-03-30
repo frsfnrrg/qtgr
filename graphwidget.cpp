@@ -475,7 +475,7 @@ QString texconvert(char* s, int slen)
             if (tex2html.contains(s_tmp)) {
                 // 	      printf("test %s ",tex2html.value(s_tmp).toAscii().data());
                 s_html += tex2html.value(s_tmp);
-                i = l;
+                i = l - 1;
             }
             else {
                 s_html += s[i];
@@ -622,11 +622,11 @@ int GraphWidget::stringextentx(double scale, char* str)
     QFont font = FontComboBox::getFont(fontnum);
     font.setPointSizeF(FONT_BASE_SIZE * scale * dpiInvScale);
     // Using html mode explicitly
-    QGraphicsTextItem* text = new QGraphicsTextItem();
-    text->setHtml(texconvert(str, strlen(str)));
-    text->setFont(font);
-    text->setDefaultTextColor(pen->color());
-    qreal w = text->boundingRect().width();
+    QGraphicsTextItem text;
+    text.setHtml(texconvert(str, strlen(str)));
+    text.setFont(font);
+    text.setDefaultTextColor(pen->color());
+    qreal w = text.boundingRect().width();
 
     // fudge factor.... (y axis labels)
     // could also be linked to devcharsize as exported by the driver.
@@ -639,11 +639,11 @@ int GraphWidget::stringextenty(double scale, char* str)
     QFont font = FontComboBox::getFont(fontnum);
     font.setPointSizeF(FONT_BASE_SIZE * scale * dpiInvScale);
 
-    QGraphicsTextItem* text = new QGraphicsTextItem();
-    text->setHtml(texconvert(str, strlen(str)));
-    text->setFont(font);
-    text->setDefaultTextColor(pen->color());
-    qreal h = text->boundingRect().height();
+    QGraphicsTextItem text;
+    text.setHtml(texconvert(str, strlen(str)));
+    text.setFont(font);
+    text.setDefaultTextColor(pen->color());
+    qreal h = text.boundingRect().height();
 
     return (int)((double)h * 1.0 * MAGNIFICATION);
 }
