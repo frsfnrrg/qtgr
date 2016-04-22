@@ -102,7 +102,7 @@ YSOURCES =  base/pars.yacc
 
 yaccsource.input = YSOURCES
 yaccsource.output = ${QMAKE_FILE_BASE}.yacctmp.c
-yaccsource.commands = yacc -d --defines=${QMAKE_FILE_BASE}.yacctmp.h -o ${QMAKE_FILE_BASE}.yacctmp.c ${QMAKE_FILE_IN}
+yaccsource.commands = yacc -d -o ${QMAKE_FILE_BASE}.yacctmp.c ${QMAKE_FILE_IN}
 yaccsource.variable_out = SOURCES
 yaccsource.name = Yacc Sources ${QMAKE_FILE_IN}
 yaccsource.CONFIG += target_predeps
