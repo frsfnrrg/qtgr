@@ -420,7 +420,7 @@ void plotone(int gno)
     case GRAPH_BAR:
 	{
 	    int tset = 0, maxn = 0;
-	    double x1, y1, x2, y2, minx, miny, maxx, maxy;
+        double x1, y1, x2, y2, minx, miny, maxx, maxy, tmp;
 	    double tdx, fmin(double x, double y), fmax(double x, double y);
 
 	    minx = miny = maxx = maxy = 0.0;
@@ -428,7 +428,7 @@ void plotone(int gno)
 		if (isactive_set(gno, i)) {
 		    tset++;
 		    maxn += getsetlength(gno, i);
-		    getsetminmax(gno, i, &x1, &x2, &y1, &y2);
+            getsetminmax(gno, i, &x1, &x2, &y1, &y2, &tmp, &tmp);
 		    if (tset == 1) {
 			minx = x1;
 			miny = y1;
@@ -480,14 +480,14 @@ void plotone(int gno)
     case GRAPH_STACKEDBAR:
 	{
 	    int tset = 0, maxn = 0;
-	    double x1, y1, x2, y2, minx, miny, maxx, maxy;
+        double x1, y1, x2, y2, minx, miny, maxx, maxy, tmp;
 	    double tdx, fmin(double x, double y), fmax(double x, double y);
 
 	    minx = miny = maxx = maxy = 0.0;
 	    for (i = 0; i < g[gno].maxplot; i++) {
 		if (isactive_set(gno, i)) {
 		    tset++;
-		    getsetminmax(gno, i, &x1, &x2, &y1, &y2);
+            getsetminmax(gno, i, &x1, &x2, &y1, &y2, &tmp, &tmp);
 		    if (tset == 1) {
 			maxn = getsetlength(gno, i);
 			minx = x1;
@@ -514,7 +514,7 @@ void plotone(int gno)
     case GRAPH_HBAR:
 	{
 	    int tset = 0, maxn = 0;
-	    double x1, y1, x2, y2, minx, miny, maxx, maxy;
+        double x1, y1, x2, y2, minx, miny, maxx, maxy, tmp;
 	    double tdy, fmin(double x, double y), fmax(double x, double y);
 
 	    minx = miny = maxx = maxy = 0.0;
@@ -522,7 +522,7 @@ void plotone(int gno)
 		if (isactive_set(gno, i)) {
 		    tset++;
 		    maxn += getsetlength(gno, i);
-		    getsetminmax(gno, i, &x1, &x2, &y1, &y2);
+            getsetminmax(gno, i, &x1, &x2, &y1, &y2, &tmp, &tmp);
 		    if (tset == 1) {
 			minx = x1;
 			miny = y1;
@@ -572,14 +572,14 @@ void plotone(int gno)
     case GRAPH_STACKEDHBAR:
 	{
 	    int tset = 0, maxn = 0;
-	    double x1, y1, x2, y2, minx, miny, maxx, maxy;
+        double x1, y1, x2, y2, minx, miny, maxx, maxy, tmp;
 	    double tdy, fmin(double x, double y), fmax(double x, double y);
 
 	    minx = miny = maxx = maxy = 0.0;
 	    for (i = 0; i < g[gno].maxplot; i++) {
 		if (isactive_set(gno, i)) {
 		    tset++;
-		    getsetminmax(gno, i, &x1, &x2, &y1, &y2);
+            getsetminmax(gno, i, &x1, &x2, &y1, &y2, &tmp, &tmp);
 		    if (tset == 1) {
 			maxn = getsetlength(gno, i);
 			minx = x1;

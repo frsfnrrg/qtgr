@@ -640,8 +640,9 @@ void set_graph_legend(int gno, legend * leg)
 
 void defaultgraph(int gno)
 {
-    double x1, x2, y1, y2;
-    double xgmax, xgmin, ygmax, ygmin;
+    double x1, x2, y1, y2, x1z, y1z;
+    double xgmax, xgmin, ygmax, ygmin, xgminz, ygminz;
+    double tmp;
     int i, first = 1;
 
     if (g[gno].type == GRAPH_SMITH) {
@@ -654,31 +655,39 @@ void defaultgraph(int gno)
     xgmax = xgmin = ygmax = ygmin = 0.0;
     for (i = 0; i < g[gno].maxplot; i++) {
 	if (isactive_set(gno, i)) {
-	    getsetminmax(gno, i, &x1, &x2, &y1, &y2);
+        getsetminmax(gno, i, &x1, &x2, &y1, &y2, &x1z, &y1z);
 	    if (g[gno].type == GRAPH_STACKEDBAR) {
 		if (first) {
 		    xgmin = x1;
 		    xgmax = x2;
 		    ygmin = y1;
 		    ygmax = y2;
+            xgminz = x1z;
+            ygminz = y1z;
 		    first = 0;
 		} else {
 		    xgmin = (x1 < xgmin) ? x1 : xgmin;
+            xgminz = (x1z < xgminz) ? x1z : xgminz;
 		    xgmax = (x2 > xgmax) ? x2 : xgmax;
 		    ygmin = (y1 < ygmin) ? y1 : ygmin;
+            ygminz = (y1z < ygminz) ? y1z : ygminz;
 		    ygmax += y2;
 		}
 	    } else if (g[gno].type == GRAPH_STACKEDHBAR) {
 		if (first) {
-		    xgmin = x1;
-		    xgmax = x2;
-		    ygmin = y1;
-		    ygmax = y2;
-		    first = 0;
+            xgmin = x1;
+            xgmax = x2;
+            ygmin = y1;
+            ygmax = y2;
+            xgminz = x1z;
+            ygminz = y1z;
+            first = 0;
 		} else {
 		    ygmin = (y1 < ygmin) ? y1 : ygmin;
+            ygminz = (y1z < ygminz) ? y1z : ygminz;
 		    ygmax = (y2 > ygmax) ? y2 : ygmax;
 		    xgmin = (x1 < xgmin) ? x1 : xgmin;
+            xgminz = (x1z < xgminz) ? x1z : xgminz;
 		    xgmax += x2;
 		}
 	    } else {
@@ -687,16 +696,28 @@ void defaultgraph(int gno)
 		    xgmax = x2;
 		    ygmin = y1;
 		    ygmax = y2;
+            xgminz = x1z;
+            ygminz = y1z;
 		    first = 0;
 		} else {
 		    xgmin = (x1 < xgmin) ? x1 : xgmin;
+            xgminz = (x1z < xgminz) ? x1z : xgminz;
 		    xgmax = (x2 > xgmax) ? x2 : xgmax;
 		    ygmin = (y1 < ygmin) ? y1 : ygmin;
+            ygminz = (y1z < ygminz) ? y1z : ygminz;
 		    ygmax = (y2 > ygmax) ? y2 : ygmax;
 		}
 	    }
 	}
     }
+
+    if (g[gno].type == GRAPH_LOGX || g[gno].type == GRAPH_LOGXY) {
+        xgmin = xgminz;
+    }
+    if (g[gno].type == GRAPH_LOGY || g[gno].type == GRAPH_LOGXY) {
+        ygmin = ygminz;
+    }
+
     if (xgmin != xgmax) {
 	g[gno].w.xg2 = xgmax;
 	g[gno].w.xg1 = xgmin;
@@ -747,26 +768,8 @@ void defaultgraph(int gno)
 	}
 	break;
     case GRAPH_LOGX:
-	if (g[gno].w.xg1 <= 0.0) {
-	    errmsg("can't set graph type to log-linear, X minimum = 0.0");
-	    g[gno].type = GRAPH_XY;
-	}
-	break;
     case GRAPH_LOGY:
-	if (g[gno].w.yg1 <= 0.0) {
-	    errmsg("can't set graph type to linear-log, Y minimum = 0.0");
-	    g[gno].type = GRAPH_XY;
-	}
-	break;
     case GRAPH_LOGXY:
-	if (g[gno].w.xg1 <= 0.0) {
-	    errmsg("can't set graph to log-log, X minimum <= 0.0");
-	    g[gno].type = GRAPH_XY;
-	} else if (g[gno].w.yg1 <= 0.0) {
-	    errmsg("can't set graph type to log-log, Y minimum <= 0.0");
-	    g[gno].type = GRAPH_XY;
-	}
-	break;
     case GRAPH_POLAR:
 	break;
     }
@@ -786,7 +789,7 @@ void defaultx(int gno, int setno)
     if (setno < 0) {
 	for (i = 0; i < g[gno].maxplot; i++) {
 	    if (isactive_set(gno, i)) {
-		getsetminmax(gno, i, &xmin, &xmax, &tmp, &tmp);
+        getsetminmax(gno, i, &xmin, &xmax, &tmp, &tmp, &tmp, &tmp);
 		if (g[gno].type == GRAPH_STACKEDBAR) {
 		    if (first) {
 			xgmin = xmin;
@@ -819,7 +822,7 @@ void defaultx(int gno, int setno)
 	}
     } else {
 	if (isactive_set(gno, setno)) {
-	    getsetminmax(gno, setno, &xgmin, &xgmax, &tmp, &tmp);
+        getsetminmax(gno, setno, &xgmin, &xgmax, &tmp, &tmp, &tmp, &tmp);
 	} else {
 	    return;
 	}
@@ -887,7 +890,7 @@ void defaulty(int gno, int setno)
     if (setno < 0) {
 	for (i = 0; i < g[gno].maxplot; i++) {
 	    if (isactive_set(gno, i)) {
-		getsetminmax(gno, i, &tmp, &tmp, &ymin, &ymax);
+        getsetminmax(gno, i, &tmp, &tmp, &ymin, &ymax, &tmp, &tmp);
 		if (g[gno].type == GRAPH_STACKEDBAR) {
 		    if (first) {
 			ygmin = ymin;
@@ -920,7 +923,7 @@ void defaulty(int gno, int setno)
 	}
     } else {
 	if (isactive_set(gno, setno)) {
-	    getsetminmax(gno, setno, &tmp, &tmp, &ygmin, &ygmax);
+        getsetminmax(gno, setno, &tmp, &tmp, &ygmin, &ygmax, &tmp, &tmp);
 	} else {
 	    return;
 	}
@@ -1222,9 +1225,16 @@ static double nicenum(double x, int round)
 
 void defaultsetgraph(int gno, int setno)
 {
-    double xmax, xmin, ymax, ymin, extra_range;
+    double xmax, xmin, ymax, ymin, extra_range, xminz, yminz;
 
-    getsetminmax(gno, setno, &xmin, &xmax, &ymin, &ymax);
+    getsetminmax(gno, setno, &xmin, &xmax, &ymin, &ymax, &xminz, &yminz);
+
+    if (g[gno].type == GRAPH_LOGX || g[gno].type == GRAPH_LOGXY) {
+        xmin = xminz;
+    }
+    if (g[gno].type == GRAPH_LOGY || g[gno].type == GRAPH_LOGXY) {
+        ymin = yminz;
+    }
 
     if (xmin != xmax) {
         extra_range = 0.0;

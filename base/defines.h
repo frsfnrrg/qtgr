@@ -28,7 +28,7 @@
  *
  */
 #define MAX_SET_COLS 6		/* max number of data columns for a set */
-#define MAXPLOT 30		/* max number of sets in a graph */
+#define MAXPLOT 101		/* max number of sets in a graph */
 #define MAXGRAPH 10		/* max number of graphs */
 #define MAX_ZOOM_STACK 20	/* max stack depth for world stack */
 #define MAXREGION 5		/* max number of regions */
@@ -656,6 +656,7 @@ typedef struct {
 
     double xmin, xmax;		/* min max for x */
     double ymin, ymax;		/* min max for y */
+    double xminz, yminz;    /* min excluding negatives */
 
     int sym;			/* set plot symbol */
     char symchar;		/* character for symbol */
@@ -714,8 +715,10 @@ typedef struct {
 
     double emin[MAX_SET_COLS];	/* min for each column */
     double emax[MAX_SET_COLS];	/* max for each column */
+    double eminz[MAX_SET_COLS];	/* min for each column */
     int imin[MAX_SET_COLS];	/* min loc for each column */
     int imax[MAX_SET_COLS];	/* max loc for each column */
+    int iminz[MAX_SET_COLS];	/* min loc for each column */
 
     Regression *r;		/* coefs from any regression performed on this set */
     Spline *spl;		/* coefs from any spline performed on this set */

@@ -141,6 +141,8 @@ void ToolsStatus::update_set_status(int, int setno) {
     double x1, y1, x2, y2, xbar, ybar, xsd, ysd, dx1, dx2, dy1, dy2, dxbar, dybar, dxsd, dysd;
     int ix1, ix2;
     int iy1, iy2;
+    int itmp;
+    double dtmp;
 
     const char* type;
 
@@ -148,8 +150,8 @@ void ToolsStatus::update_set_status(int, int setno) {
     clear_row(o, 2 * setno + 1);
     if (isactive_set(cg, setno)) {
 
-        minmax(getx(cg, setno), getsetlength(cg, setno), &x1, &x2, &ix1, &ix2);
-        minmax(gety(cg, setno), getsetlength(cg, setno), &y1, &y2, &iy1, &iy2);
+        minmax(getx(cg, setno), getsetlength(cg, setno), &x1, &x2, &dtmp, &ix1, &ix2, &itmp);
+        minmax(gety(cg, setno), getsetlength(cg, setno), &y1, &y2, &dtmp, &iy1, &iy2, &itmp);
 
         xbar = 0.0;
         ybar = 0.0;

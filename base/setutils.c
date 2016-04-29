@@ -186,12 +186,14 @@ int init_scratch_arrays(int n)
 /*
  * get the min/max fields of a set
  */
-void getsetminmax(int gno, int setno, double *x1, double *x2, double *y1, double *y2)
+void getsetminmax(int gno, int setno, double *x1, double *x2, double *y1, double *y2, double* x1z, double* y1z)
 {
     *x1 = g[gno].p[setno].xmin;
     *x2 = g[gno].p[setno].xmax;
     *y1 = g[gno].p[setno].ymin;
     *y2 = g[gno].p[setno].ymax;
+    *x1z = g[gno].p[setno].xminz;
+    *y1z = g[gno].p[setno].yminz;
 }
 
 /*
@@ -210,14 +212,18 @@ void getminmaxall(int gno, int setno)
 	if (n == 0) {
 	    g[gno].p[setno].emin[i] = 0.0;
 	    g[gno].p[setno].emax[i] = 0.0;
+        g[gno].p[setno].eminz[i] = INFINITY;
 	    g[gno].p[setno].imin[i] = 0;
 	    g[gno].p[setno].imax[i] = 0;
+        g[gno].p[setno].iminz[i] = 0;
 	} else {
 	    x = getcol(gno, setno, i);
 	    minmax(x, n, &g[gno].p[setno].emin[i],
 		   &g[gno].p[setno].emax[i],
+           &g[gno].p[setno].eminz[i],
 		   &g[gno].p[setno].imin[i],
-		   &g[gno].p[setno].imax[i]);
+           &g[gno].p[setno].imax[i],
+           &g[gno].p[setno].iminz[i]);
 	}
     }
 }
@@ -225,18 +231,24 @@ void getminmaxall(int gno, int setno)
 /*
  * compute the mins and maxes of a vector x
  */
-void minmax(double *x, int n, double *xmin, double *xmax, int *imin, int *imax)
+void minmax(double *x, int n, double *xmin, double *xmax, double *xminz, int *imin, int *imax, int *iminz)
 {
     int i;
     *xmin = x[0];
+    *xminz = x[0] > 0 ? x[0] : INFINITY;
     *xmax = x[0];
     *imin = 1;
     *imax = 1;
+    *iminz = 1;
     for (i = 1; i < n; i++) {
 	if (x[i] < *xmin) {
 	    *xmin = x[i];
 	    *imin = i + 1;
 	}
+    if (x[i] > 0 && x[i] < *xminz) {
+        *iminz = i + 1;
+        *xminz = x[i];
+    }
 	if (x[i] > *xmax) {
 	    *xmax = x[i];
 	    *imax = i + 1;
@@ -282,12 +294,13 @@ double vmax(double *x, int n)
 void getsetdxdyminmax(int gno, int setno, double *dx1, double *dx2, double *dy1, double *dy2)
 {
     int itmp;
+    double dtmp;
 
     if (getcol(gno, setno, 2) != NULL) {
-	minmax(getcol(gno, setno, 2), getsetlength(gno, setno), dx1, dx2, &itmp, &itmp);
+    minmax(getcol(gno, setno, 2), getsetlength(gno, setno), dx1, dx2, &dtmp, &itmp, &itmp, &itmp);
     }
     if (getcol(gno, setno, 3) != NULL) {
-	minmax(getcol(gno, setno, 3), getsetlength(gno, setno), dy1, dy2, &itmp, &itmp);
+    minmax(getcol(gno, setno, 3), getsetlength(gno, setno), dy1, dy2, &dtmp, &itmp, &itmp, &itmp);
     }
 }
 
@@ -298,8 +311,8 @@ void getsetdxdyminmax(int gno, int setno, double *dx1, double *dx2, double *dy1,
 void updatesetminmax(int gno, int setno)
 {
     double *tmp = (double *) NULL;
-    double b1, b2;
-    int i, n, itmp1, itmp2;
+    double b1, b2, b3;
+    int i, n, itmp1, itmp2, itmp3;
 
     if (isactive_set(gno, setno)) {
 	n = getsetlength(gno, setno);
@@ -308,8 +321,10 @@ void updatesetminmax(int gno, int setno)
 /* compute global min max (applies over all columns) */
 	g[gno].p[setno].xmin = g[gno].p[setno].emin[0];
 	g[gno].p[setno].xmax = g[gno].p[setno].emax[0];
+    g[gno].p[setno].xminz = g[gno].p[setno].eminz[0];
 	g[gno].p[setno].ymin = g[gno].p[setno].emin[1];
 	g[gno].p[setno].ymax = g[gno].p[setno].emax[1];
+    g[gno].p[setno].yminz = g[gno].p[setno].eminz[1];
 	tmp = (double *) calloc(getsetlength(gno, setno), sizeof(double));
 	if (tmp == (double *) NULL) {
 	    errmsg("Error: Unable to malloc temporary in updatesetminmax()");
@@ -326,82 +341,94 @@ void updatesetminmax(int gno, int setno)
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[0][i] + g[gno].p[setno].ex[2][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].xmin = min(b1, g[gno].p[setno].xmin);
+        g[gno].p[setno].xminz = b3 > 0 ? min(b1, g[gno].p[setno].xminz) : g[gno].p[setno].xminz;
 	    g[gno].p[setno].xmax = max(b2, g[gno].p[setno].xmax);
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[0][i] - g[gno].p[setno].ex[2][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].xmin = min(b1, g[gno].p[setno].xmin);
+        g[gno].p[setno].xminz = b3 > 0 ? min(b3, g[gno].p[setno].xminz) : g[gno].p[setno].xminz;
 	    g[gno].p[setno].xmax = max(b2, g[gno].p[setno].xmax);
 	    break;
 	case SET_XYDY:
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[1][i] + g[gno].p[setno].ex[2][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].ymin = min(b1, g[gno].p[setno].ymin);
+        g[gno].p[setno].yminz = b3 > 0 ? min(b3, g[gno].p[setno].yminz) : g[gno].p[setno].yminz;
 	    g[gno].p[setno].ymax = max(b2, g[gno].p[setno].ymax);
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[1][i] - g[gno].p[setno].ex[2][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].ymin = min(b1, g[gno].p[setno].ymin);
+        g[gno].p[setno].yminz = b3 > 0 ? min(b3, g[gno].p[setno].yminz) : g[gno].p[setno].yminz;
 	    g[gno].p[setno].ymax = max(b2, g[gno].p[setno].ymax);
 	    break;
 	case SET_XYDXDX:
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[0][i] + g[gno].p[setno].ex[2][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].xmin = min(b1, g[gno].p[setno].xmin);
+        g[gno].p[setno].xminz = b3 > 0 ? min(b3, g[gno].p[setno].xminz) : g[gno].p[setno].xminz;
 	    g[gno].p[setno].xmax = max(b2, g[gno].p[setno].xmax);
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[0][i] - g[gno].p[setno].ex[3][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].xmin = min(b1, g[gno].p[setno].xmin);
+        g[gno].p[setno].xminz = b3 > 0 ? min(b3, g[gno].p[setno].xminz) : g[gno].p[setno].xminz;
 	    g[gno].p[setno].xmax = max(b2, g[gno].p[setno].xmax);
 	    break;
 	case SET_XYDYDY:
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[1][i] + g[gno].p[setno].ex[2][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].ymin = min(b1, g[gno].p[setno].ymin);
+        g[gno].p[setno].yminz = b3 > 0 ? min(b3, g[gno].p[setno].yminz) : g[gno].p[setno].yminz;
 	    g[gno].p[setno].ymax = max(b2, g[gno].p[setno].ymax);
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[1][i] - g[gno].p[setno].ex[3][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].ymin = min(b1, g[gno].p[setno].ymin);
+        g[gno].p[setno].yminz = b3 > 0 ? min(b3, g[gno].p[setno].yminz) : g[gno].p[setno].yminz;
 	    g[gno].p[setno].ymax = max(b2, g[gno].p[setno].ymax);
 	    break;
 	case SET_XYDXDY:
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[0][i] + g[gno].p[setno].ex[2][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].xmin = min(b1, g[gno].p[setno].xmin);
+        g[gno].p[setno].xminz = b3 > 0 ? min(b3, g[gno].p[setno].xminz) : g[gno].p[setno].xminz;
 	    g[gno].p[setno].xmax = max(b2, g[gno].p[setno].xmax);
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[0][i] - g[gno].p[setno].ex[2][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].xmin = min(b1, g[gno].p[setno].xmin);
+        g[gno].p[setno].xminz = b3 > 0 ? min(b3, g[gno].p[setno].xminz) : g[gno].p[setno].xminz;
 	    g[gno].p[setno].xmax = max(b2, g[gno].p[setno].xmax);
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[1][i] + g[gno].p[setno].ex[2][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].ymin = min(b1, g[gno].p[setno].ymin);
+        g[gno].p[setno].yminz = b3 > 0 ? min(b3, g[gno].p[setno].yminz) : g[gno].p[setno].yminz;
 	    g[gno].p[setno].ymax = max(b2, g[gno].p[setno].ymax);
 	    for (i = 0; i < n; i++) {
 		tmp[i] = g[gno].p[setno].ex[1][i] - g[gno].p[setno].ex[2][i];
 	    }
-	    minmax(tmp, n, &b1, &b2, &itmp1, &itmp2);
+        minmax(tmp, n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].ymin = min(b1, g[gno].p[setno].ymin);
+        g[gno].p[setno].yminz = b3 > 0 ? min(b3, g[gno].p[setno].yminz) : g[gno].p[setno].yminz;
 	    g[gno].p[setno].ymax = max(b2, g[gno].p[setno].ymax);
 	    break;
 	case SET_XYZW:
@@ -411,11 +438,13 @@ void updatesetminmax(int gno, int setno)
 	case SET_XYUV:
 	    break;
 	case SET_XYBOX:
-	    minmax(g[gno].p[setno].ex[2], n, &b1, &b2, &itmp1, &itmp2);
+        minmax(g[gno].p[setno].ex[2], n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].xmin = min(b1, g[gno].p[setno].xmin);
+        g[gno].p[setno].xminz = b3 > 0 ? min(b3, g[gno].p[setno].xminz) : g[gno].p[setno].xminz;
 	    g[gno].p[setno].xmax = max(b2, g[gno].p[setno].xmax);
-	    minmax(g[gno].p[setno].ex[3], n, &b1, &b2, &itmp1, &itmp2);
+        minmax(g[gno].p[setno].ex[3], n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].ymin = min(b1, g[gno].p[setno].ymin);
+        g[gno].p[setno].yminz = b3 > 0 ? min(b3, g[gno].p[setno].yminz) : g[gno].p[setno].yminz;
 	    g[gno].p[setno].ymax = max(b2, g[gno].p[setno].ymax);
 	    break;
 	case SET_XYYY:
@@ -423,11 +452,13 @@ void updatesetminmax(int gno, int setno)
 	case SET_XYXX:
 	    break;
 	case SET_XYHILO:
-	    minmax(g[gno].p[setno].ex[2], n, &b1, &b2, &itmp1, &itmp2);
+        minmax(g[gno].p[setno].ex[2], n, &b1, &b2, &b3, &itmp1, &itmp2, &itmp3);
 	    g[gno].p[setno].ymin = min(b1, g[gno].p[setno].ymin);
+        g[gno].p[setno].yminz = b3 > 0 ? min(b3, g[gno].p[setno].yminz) : g[gno].p[setno].yminz;
 	    g[gno].p[setno].ymax = max(b2, g[gno].p[setno].ymax);
 	    break;
 	case SET_XYBOXPLOT:
+        g[gno].p[setno].yminz = g[gno].p[setno].eminz[4];
 	    g[gno].p[setno].ymin = g[gno].p[setno].emin[4];
 	    g[gno].p[setno].ymax = g[gno].p[setno].emax[5];
 	    break;
@@ -440,6 +471,8 @@ void updatesetminmax(int gno, int setno)
 	g[gno].p[setno].xmax = 0.0;
 	g[gno].p[setno].ymin = 0.0;
 	g[gno].p[setno].ymax = 0.0;
+    g[gno].p[setno].xminz = INFINITY;
+    g[gno].p[setno].yminz = INFINITY;
     }
 }
 

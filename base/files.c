@@ -23,7 +23,7 @@
 #endif
 
 #define MAXERR 50
-#define MAX_LINE_LEN 512
+#define MAX_LINE_LEN 4096
 /*
  * number of doubles to allocate for each call to realloc
  */
@@ -720,7 +720,7 @@ int readihl(int gno, char *fn, FILE * fp)
  * read x1 y1 y2 ... y30 formatted files
  * note that the maximum number of sets is 30
  */
-#define MAXSETN 30
+#define MAXSETN MAXPLOT
 
 int readnxy(int gno, char *fn, FILE * fp)
 {
