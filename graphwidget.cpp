@@ -475,7 +475,12 @@ QString texconvert(char* s, int slen)
             if (tex2html.contains(s_tmp)) {
                 // 	      printf("test %s ",tex2html.value(s_tmp).toAscii().data());
                 s_html += tex2html.value(s_tmp);
-                i = l - 1;
+                if (s[l] == ' ') {
+                    // Following space gets swallowed
+                    i = l;
+                } else {
+                    i = l - 1;
+                }
             }
             else {
                 s_html += s[i];
