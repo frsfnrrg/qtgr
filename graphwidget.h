@@ -23,6 +23,7 @@ class GraphicsScene : public QGraphicsScene {
     Q_OBJECT
 public:
     GraphicsScene(MainWindow*);
+    ~GraphicsScene();
 
     void startRect(RectReceiver* r);
     void updateMouse(double x, double y);
@@ -83,7 +84,7 @@ private:
     void drawPoint(int x, int y);
     void commitTrace();
 
-    QPen *pen;
+    QPen pen;
     int fontnum;
     int patnum;
     int colornum;

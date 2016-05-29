@@ -40,6 +40,10 @@ GraphicsScene::GraphicsScene(MainWindow* mwin)
     connect(cancelRectSelect, SIGNAL(triggered()), this, SLOT(cancelRect()));
 }
 
+GraphicsScene::~GraphicsScene() {
+    delete cancelRectSelect;
+}
+
 void GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     QMenu menu(event->widget());
@@ -127,10 +131,10 @@ GraphWidget::GraphWidget(MainWindow* mwin)
     : QGraphicsView(mscene = new GraphicsScene(mwin), mwin)
 {
     myGraphWidget = this;
-    GraphWidget::pen = new QPen();
-    pen->setCapStyle(Qt::RoundCap);
-    pen->setJoinStyle(Qt::RoundJoin);
-    pen->setStyle(Qt::CustomDashLine);
+    GraphWidget::pen = QPen();
+    pen.setCapStyle(Qt::RoundCap);
+    pen.setJoinStyle(Qt::RoundJoin);
+    pen.setStyle(Qt::CustomDashLine);
     GraphWidget::patnum = 0;
     GraphWidget::fontnum = 0;
 
@@ -284,7 +288,7 @@ void GraphWidget::linew(int w)
     if (drawing_line) {
         commitTrace();
     }
-    pen->setWidthF(w*MAGNIFICATION);
+    pen.setWidthF(w*MAGNIFICATION);
 }
 
 void GraphWidget::lines(int s)
@@ -292,36 +296,36 @@ void GraphWidget::lines(int s)
     if (drawing_line) {
         commitTrace();
     }
-    pen->setStyle((Qt::PenStyle)s);
+    pen.setStyle((Qt::PenStyle)s);
     QVector<qreal> patt;
     qreal gap = 4;
     switch (s) {
     case 0:
-        pen->setStyle(Qt::NoPen);
+        pen.setStyle(Qt::NoPen);
         break;
     default:
     case 1://SolidLine
-        pen->setStyle(Qt::SolidLine);
+        pen.setStyle(Qt::SolidLine);
         break;
     case 2://DashLine
-        pen->setStyle(Qt::CustomDashLine);
+        pen.setStyle(Qt::CustomDashLine);
         patt << 8 << gap;
-        pen->setDashPattern(patt);
+        pen.setDashPattern(patt);
         break;
     case 3://DotLine
-        pen->setStyle(Qt::CustomDashLine);
+        pen.setStyle(Qt::CustomDashLine);
         patt << 2 << gap;
-        pen->setDashPattern(patt);
+        pen.setDashPattern(patt);
         break;
     case 4://DashDotLine
-        pen->setStyle(Qt::CustomDashLine);
+        pen.setStyle(Qt::CustomDashLine);
         patt << 8 << gap << 2 << gap;
-        pen->setDashPattern(patt);
+        pen.setDashPattern(patt);
         break;
     case 5://DashDotDotLine
-        pen->setStyle(Qt::CustomDashLine);
+        pen.setStyle(Qt::CustomDashLine);
         patt << 8 << gap << 2 << gap << 2 << gap;
-        pen->setDashPattern(patt);
+        pen.setDashPattern(patt);
         break;
     }
 }
@@ -331,7 +335,7 @@ void GraphWidget::linec(int c)
     if (drawing_line) {
         commitTrace();
     }
-    pen->setColor(ColorComboBox::getColor(c));
+    pen.setColor(ColorComboBox::getColor(c));
 }
 
 QMap<QString, QString> tex2html;
@@ -514,7 +518,7 @@ void GraphWidget::text(int x, int y, int rot, char* s, int just)
     QGraphicsTextItem* text = scene()->addText("");
     text->setHtml(texconvert(s, strlen(s)));
     text->setFont(font);
-    text->setDefaultTextColor(pen->color());
+    text->setDefaultTextColor(pen.color());
     QRectF bRect = text->boundingRect();
 
     qreal width, height, xoff, yoff;
@@ -557,10 +561,10 @@ void GraphWidget::arc(int x, int y, int r, int fill)
     }
     QBrush brush = QBrush();
     if (fill == 1) {
-        brush = QBrush(pen->color());
+        brush = QBrush(pen.color());
     }
 
-    scene()->addEllipse(QRectF(x - r, y - r, 2 * r, 2 * r), *pen, brush);
+    scene()->addEllipse(QRectF(x - r, y - r, 2 * r, 2 * r), pen, brush);
 }
 
 void GraphWidget::fillcolor(int n, int px[], int py[])
@@ -568,12 +572,12 @@ void GraphWidget::fillcolor(int n, int px[], int py[])
     if (drawing_line) {
         commitTrace();
     }
-    QBrush brush = QBrush(pen->color(), Qt::SolidPattern);
+    QBrush brush = QBrush(pen.color(), Qt::SolidPattern);
     QVector<QPointF> path;
     for (int i = 0; i < n; i++) {
         path.append(QPointF(px[i], py[i]));
     }
-    scene()->addPolygon(QPolygonF(path), *pen, brush);
+    scene()->addPolygon(QPolygonF(path), pen, brush);
 }
 
 void GraphWidget::fill(int n, int px[], int py[])
@@ -590,7 +594,7 @@ void GraphWidget::fill(int n, int px[], int py[])
     for (int i = 0; i < n; i++) {
         path.append(QPointF(px[i], py[i]));
     }
-    scene()->addPolygon(QPolygonF(path), *pen, brush);
+    scene()->addPolygon(QPolygonF(path), pen, brush);
 }
 
 void GraphWidget::ellipse(int x, int y, int xm, int ym)
@@ -604,7 +608,7 @@ void GraphWidget::ellipse(int x, int y, int xm, int ym)
     }
     QBrush brush = QBrush();
     int h = scene()->height();
-    scene()->addEllipse(QRectF(x - xm / 2, h - y - ym / 2, xm, ym), *pen, brush);
+    scene()->addEllipse(QRectF(x - xm / 2, h - y - ym / 2, xm, ym), pen, brush);
 }
 
 void GraphWidget::fillellipse(int x, int y, int xm, int ym)
@@ -617,9 +621,9 @@ void GraphWidget::fillellipse(int x, int y, int xm, int ym)
         return;
     }
 
-    QBrush brush = QBrush(pen->color());
+    QBrush brush = QBrush(pen.color());
     int h = scene()->height();
-    scene()->addEllipse(QRectF(x - xm / 2, h - y - ym / 2, xm, ym), *pen, brush);
+    scene()->addEllipse(QRectF(x - xm / 2, h - y - ym / 2, xm, ym), pen, brush);
 }
 
 int GraphWidget::stringextentx(double scale, char* str)
@@ -630,7 +634,7 @@ int GraphWidget::stringextentx(double scale, char* str)
     QGraphicsTextItem text;
     text.setHtml(texconvert(str, strlen(str)));
     text.setFont(font);
-    text.setDefaultTextColor(pen->color());
+    text.setDefaultTextColor(pen.color());
     qreal w = text.boundingRect().width();
 
     // fudge factor.... (y axis labels)
@@ -647,7 +651,7 @@ int GraphWidget::stringextenty(double scale, char* str)
     QGraphicsTextItem text;
     text.setHtml(texconvert(str, strlen(str)));
     text.setFont(font);
-    text.setDefaultTextColor(pen->color());
+    text.setDefaultTextColor(pen.color());
     qreal h = text.boundingRect().height();
 
     return (int)((double)h * 1.0 * MAGNIFICATION);
@@ -705,7 +709,7 @@ void GraphWidget::drawPoint(int x, int y)
     // not external; no drawing_line check (may be
     // called by that fn. anyway
     qreal size = 0.5*MAGNIFICATION;
-    scene()->addEllipse(QRectF(x - size, y - size, 2 * size, 2 * size), QPen(pen->color()), QBrush(pen->color()));
+    scene()->addEllipse(QRectF(x - size, y - size, 2 * size, 2 * size), QPen(pen.color()), QBrush(pen.color()));
 }
 
 void GraphWidget::commitTrace()
@@ -726,7 +730,7 @@ void GraphWidget::commitTrace()
 //            p.moveTo(currentTrace[i]);
             p.lineTo(currentTrace[i + 1]);
         }
-        scene()->addPath(p, *pen);
+        scene()->addPath(p, pen);
     }
     currentTrace = QPolygonF();
 

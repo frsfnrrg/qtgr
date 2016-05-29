@@ -111,6 +111,10 @@ MainWindow::MainWindow() :
     this->statusBar()->showMessage(tr("Ready"));
 }
 
+MainWindow::~MainWindow() {
+    delete gwidget;
+}
+
 void MainWindow::about()
 {
     QMessageBox::about(this, tr("About Application"),

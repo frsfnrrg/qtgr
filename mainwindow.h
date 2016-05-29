@@ -23,6 +23,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     MainWindow();
+    ~MainWindow();
     QGraphicsView* view;
     GraphWidget* gwidget;
 
