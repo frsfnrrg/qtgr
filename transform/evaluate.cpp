@@ -26,6 +26,7 @@ TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
     destinationLabel = makeLabel("Target");
 
     formulaBox = new QLineEdit();
+    formulaBox->setMaxLength(MAX_STRING_LENGTH);
 
     QGridLayout* layout = new QGridLayout();
 
@@ -56,7 +57,6 @@ void TransformEvaluate::updateDialog() {
 
 void TransformEvaluate::applyDialog() {
     int setno, loadto, graphto;
-    char* fstr;
 
     setno = this->setNumber->currentIndex();
 
@@ -72,8 +72,10 @@ void TransformEvaluate::applyDialog() {
         loadto = 0; // send to the next set
     }
 
-    fstr = formulaBox->text().toLocal8Bit().data();
-
+    // Copy the string over to ensure it backing data isn't
+    // erased during operation
+    char fstr[MAX_STRING_LENGTH];
+    strncpy(fstr, formulaBox->text().toLocal8Bit().data(), MAX_STRING_LENGTH);
     do_compute(setno, loadto, graphto, fstr);
 
     // recognized double redraw: in both
