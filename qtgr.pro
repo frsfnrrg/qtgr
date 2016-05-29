@@ -123,3 +123,7 @@ RCC_DIR = build/rcc
 UI_DIR = build/ui
 
 QMAKE_CXXFLAGS += -pipe
+# Debug
+#QMAKE_CXXFLAGS += "-fsanitize=address -fno-omit-frame-pointer"
+#QMAKE_CXXFLAGS += -ggdb3
+#QMAKE_LFLAGS   += "-fsanitize=address"
