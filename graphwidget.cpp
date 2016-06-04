@@ -176,7 +176,7 @@ void GraphWidget::mouseMoveEvent(QMouseEvent* event)
     if (vx > g[cg].v.xv1 && vx < g[cg].v.xv2 && vy > g[cg].v.yv1 && vy < g[cg].v.yv2) {
         view2world(vx, vy, &wx, &wy);
         this->setCursor(Qt::WhatsThisCursor);
-        message = "[x,y] = " + QString::number(wx, 'f', 6) + "," + QString::number(wy, 'f', 6);
+        message = "[x,y] = " + QString::number(wx, 'g', 6) + "," + QString::number(wy, 'g', 6);
         mainWindow->statusBar()->showMessage(message, 5000);
     }
     else {
