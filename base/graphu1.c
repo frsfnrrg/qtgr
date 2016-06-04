@@ -1143,8 +1143,12 @@ void default_ticks(int gno, int axis, double *gmin, double *gmax)
     tmpmin = floor(tmpmin / d) * d;
     tmpmax = ceil(tmpmax / d) * d;
     if (axis % 2 && (g[gno].type == GRAPH_LOGY || g[gno].type == GRAPH_LOGXY)) {
+    if (isfinite(pow(10.0, tmpmax))) {
 	*gmax = pow(10.0, tmpmax);
-	*gmin = pow(10.0, tmpmin);
+    }
+    if (pow(10.0, tmpmin) > 0.0) {
+    *gmin = pow(10.0, tmpmin);
+    }
 	t.tmajor = (int) d;
 	if (t.tmajor == 0.0) {
 	    t.tmajor = 1.0;
@@ -1162,8 +1166,12 @@ void default_ticks(int gno, int axis, double *gmin, double *gmax)
 	    t.tl_prec = 0;
 	}
     } else if ((axis % 2 == 0) && (g[gno].type == GRAPH_LOGX || g[gno].type == GRAPH_LOGXY)) {
+    if (isfinite(pow(10.0, tmpmax))) {
 	*gmax = pow(10.0, tmpmax);
+    }
+    if (pow(10.0, tmpmin) > 0.0) {
 	*gmin = pow(10.0, tmpmin);
+    }
 	t.tmajor = (int) d;
 	if (t.tmajor == 0.0) {
 	    t.tmajor = 1.0;
@@ -1181,8 +1189,12 @@ void default_ticks(int gno, int axis, double *gmin, double *gmax)
 	    t.tminor = 0.0;
 	}
     } else {
+    if (isfinite(tmpmax)) {
 	*gmax = tmpmax;
+    }
+    if (isfinite(tmpmin)) {
 	*gmin = tmpmin;
+    }
 	t.tmajor = d;
 	t.tminor = d * 0.5;
     }
