@@ -417,8 +417,37 @@ static int goodpointxy(double x, double y)
 
 static int clip2d(double *x0, double *y0, double *x1, double *y1)
 {
+    // infinity checks & horiz/verticalizing
+    if (!isfinite(*y0) && !isfinite(*y1)) {
+        return 0;
+    }
+    if (!isfinite(*x0) && !isfinite(*x1)) {
+        return 0;
+    }
+    // the !(>0) checks capture -inf and nan
+    int ny0,ny1,nx0,nx1;
+    ny0 = !isfinite(*y0) && !(*y0 > 0);
+    ny1 = !isfinite(*y1) && !(*y1 > 0);
+    nx0 = !isfinite(*x0) && !(*x0 > 0);
+    nx1 = !isfinite(*x1) && !(*x1 > 0);
+    if (nx0 && ny0) {
+        *x0 = xg1; *y0 = yg1;
+    } else if (nx0 && ny1) {
+        *x0 = xg1; *y1 = yg1;
+    } else if (nx1 && ny0) {
+        *x1 = xg1; *y0 = yg1;
+    } else if (nx0 && ny1) {
+        *x0 = xg1; *y1 = yg1;
+    } else if (nx0) {
+        *x0 = xg1; *y0 = *y1;
+    } else if (nx1) {
+        *x1 = xg1; *y1 = *y0;
+    } else if (ny0) {
+        *y0 = yg1; *x0 = *x1;
+    } else if (ny1) {
+        *y1 = yg1; *x1 = *x0;
+    }
     double te = 0.0, tl = 1.0, dx = (*x1 - *x0), dy = (*y1 - *y0);
-
     if (dx == 0.0 && dy == 0.0 && goodpointxy(*x1, *y1)) {
 	return 1;
     }
