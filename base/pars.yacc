@@ -1650,13 +1650,13 @@ parmset:
 	    g[cg].l.layout = (int) $3;
 	}
 	| LEGEND VGAP NUMBER {
-	    g[cg].l.vgap = (int) $3;
+        g[cg].l.vgap = $3;
 	}
 	| LEGEND HGAP NUMBER {
 	    g[cg].l.hgap = (int) $3;
 	}
 	| LEGEND LENGTH NUMBER {
-	    g[cg].l.len = (int) $3;
+        g[cg].l.len = $3;
 	}
 	| LEGEND BOX onoff {
 	    g[cg].l.box = $3;

@@ -473,9 +473,9 @@ void putparms(int gno, FILE * pp, int embed)
 	    fprintf(pp, "%s    legend %s\n", embedstr, on_or_off(leg.active));
 	    fprintf(pp, "%s    legend loctype %s\n", embedstr, w_or_v(leg.loctype));
 	    fprintf(pp, "%s    legend layout %d\n", embedstr, leg.layout);
-	    fprintf(pp, "%s    legend vgap %d\n", embedstr, leg.vgap);
+        fprintf(pp, "%s    legend vgap %g\n", embedstr, leg.vgap);
 	    fprintf(pp, "%s    legend hgap %d\n", embedstr, leg.hgap);
-	    fprintf(pp, "%s    legend length %d\n", embedstr, leg.len);
+        fprintf(pp, "%s    legend length %g\n", embedstr, leg.len);
 	    fprintf(pp, "%s    legend box %s\n", embedstr, on_or_off(leg.box));
 	    fprintf(pp, "%s    legend box fill %s\n", embedstr, on_or_off(leg.box));
 	    fprintf(pp, "%s    legend box fill with %s\n", embedstr, leg.boxfillusing == CLRFILLED ? "color" : "pattern");

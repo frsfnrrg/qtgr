@@ -111,8 +111,8 @@ void drawpolysym(double *x, double *y, int len, int sym, int skip, int fill, dou
 void putlegend(int i,		/* which set */
 	        int d,		/* flag, 1 = no draw, just compute min/max
 				 * for bounding box */
-	        int xlen,	/* length of legend */
-	        int ylen,	/* distance between entries */
+                double xlen,	/* length of legend */
+                double ylen,	/* distance between entries */
 	        double size,	/* symbol size */
 	        double x,	/* location x */
 	        double y,	/* location y */
@@ -128,8 +128,8 @@ void putlegend(int i,		/* which set */
 void putbarlegend(int i,	/* which set */
 	        int d,		/* flag, 1 = no draw, just compute min/max
 				 * for bounding box */
-	        int xlen,	/* length of legend */
-	        int ylen,	/* distance between entries */
+                double xlen,	/* length of legend */
+                double ylen,	/* distance between entries */
 	        double size,	/* symbol size */
 	        double x,	/* location x */
 	        double y,	/* location y */

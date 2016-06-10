@@ -2081,8 +2081,8 @@ void set_leg_bb( int gno, int hardcopy )
 void putlegend(int i,		/* which set */
 	       int d,		/* flag, 1 = no draw, just compute min/max
 				 * for bounding box */
-	       int xlen,	/* length of legend */
-	       int ylen,	/* distance between entries */
+           double xlen,	/* length of legend */
+           double ylen,	/* distance between entries */
 	       double size,	/* symbol size */
 	       double x,	/* location x */
 	       double y,	/* location y */
@@ -2122,14 +2122,14 @@ void putlegend(int i,		/* which set */
     slins = setlinestyle(ly);
     slinw = setlinewidth(wy);
     (*vector) (xtmp, ytmp, 0);
-    if (ly && xlen) {
-	(*vector) (xtmp + xlen * ifudgex, ytmp, 1);
+    if (ly && xlen > 0.0) {
+    (*vector) ((int)(xtmp + xlen * ifudgex), ytmp, 1);
     }
     if ((sy > 0) && (sy <= SYM_SPLAT)) {
 	setcolor(sc);
 	setlinestyle(sl);
 	setlinewidth(sw);
-	if (ly && xlen) {
+    if (ly && xlen > 0.0) {
 	    drawsym(xtmp, ytmp, sy, size, fill);
 	    drawsym(xtmp + xlen * ifudgex, ytmp, sy, size, fill);
 	} else { /* line 'none' or otherwise single symbol requested */
@@ -2141,13 +2141,13 @@ void putlegend(int i,		/* which set */
         setlinestyle(sl);
         setlinewidth(sw);
 	(*vector) (xtmp, ytmp, 0);
-        (*vector) (xtmp + xlen * ifudgex, ytmp, 1);
+        (*vector) ((int)(xtmp + xlen * ifudgex), ytmp, 1);
     } else { /* ??? */
     }
     setcolor(scol);
     setlinestyle(slins);
     setlinewidth(slinw);
-    (*devwritestr) (xtmp + (xlen + 1) * ifudgex, ytmp, 0, s, 0, 1);
+    (*devwritestr) ((int)(xtmp + (xlen + 1) * ifudgex), ytmp, 0, s, 0, 1);
 }
 
 /*
@@ -2156,8 +2156,8 @@ void putlegend(int i,		/* which set */
 void putbarlegend(int i,	/* which set */
 		  int d,	/* flag, 1 = no draw, just compute min/max
 				 * for bounding box */
-		  int xlen,	/* length of legend */
-		  int ylen,	/* distance between entries */
+          double xlen,	/* length of legend */
+          double ylen,	/* distance between entries */
 		  double size,	/* symbol size */
 		  double x,	/* location x */
 		  double y,	/* location y */
@@ -2227,7 +2227,7 @@ void putbarlegend(int i,	/* which set */
     setcolor(scol);
     setlinestyle(slins);
     setlinewidth(slinw);
-    (*devwritestr) (xtmp + (xlen + 1) * ifudgex, ytmp, 0, s, 0, 1);
+    (*devwritestr) ((int)(xtmp + (xlen + 1) * ifudgex), (int)ytmp, 0, s, 0, 1);
 }
 
 void putlegendrect(int fill, int fillusing, int fillcolor, int fillpat, int cy, 

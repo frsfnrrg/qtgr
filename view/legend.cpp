@@ -223,12 +223,12 @@ ViewLegendProp::ViewLegendProp(MainWindow* mainWin) :
     styleSize = makeTextSizer();
     // abstract it!; makeNumberedComboBox
     styleWidth = new QComboBox();
-    for (int i=0;i<8;i++) {
-        styleWidth->addItem(QString::number(i+1));
+    for (int i=0;i<15;i++) {
+        styleWidth->addItem(QString::number(i*0.5+1.0));
     }
     styleSpacing = new QComboBox();
-    for (int i=0;i<4;i++) {
-        styleSpacing->addItem(QString::number(i+1));
+    for (int i=0;i<7;i++) {
+        styleSpacing->addItem(QString::number(i*0.5+1.0));
     }
 
     frameColor = new ColorComboBox();
@@ -294,8 +294,8 @@ void ViewLegendProp::updateDialog() {
     styleFont->setCurrentIndex(g[cg].l.font);
     styleColor->setCurrentIndex(g[cg].l.color);
     styleSize->setValue(g[cg].l.charsize);
-    styleSpacing->setCurrentIndex(g[cg].l.vgap - 1);
-    styleWidth->setCurrentIndex(g[cg].l.len - 1);
+    styleSpacing->setCurrentIndex((int)(2.0*g[cg].l.vgap) - 2);
+    styleWidth->setCurrentIndex((int)(2.0*g[cg].l.len) - 2);
 
     frame->setChecked(g[cg].l.box == TRUE);
 
@@ -312,8 +312,8 @@ void ViewLegendProp::applyDialog() {
     g[cg].l.font = styleFont->currentIndex();
     g[cg].l.color = styleColor->currentIndex();
     g[cg].l.charsize = styleSize->value();
-    g[cg].l.vgap = styleSpacing->currentIndex() + 1;
-    g[cg].l.len = styleWidth->currentIndex() + 1;
+    g[cg].l.vgap = styleSpacing->currentIndex()*0.5 + 1.0;
+    g[cg].l.len = styleWidth->currentIndex()*0.5 + 1.0;
 
     g[cg].l.box = frame->isChecked() ? TRUE : FALSE;
 

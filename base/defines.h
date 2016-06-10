@@ -796,9 +796,9 @@ typedef struct {
     int active;			/* legend on or off */
     int loctype;		/* locate in world or viewport coords */
     int layout;			/* verticle or horizontal */
-    int vgap;			/* verticle gap between entries */
+    double vgap;			/* verticle gap between entries */
     int hgap;			/* horizontal gap between entries */
-    int len;			/* length of line to draw */
+    double len;			/* length of line to draw */
     int box;			/* box around legend on or off */
     double legx;		/* location on graph */
     double legy;
