@@ -84,6 +84,11 @@ void SetComboBox::updateSets() {
             this->setItemText(i + add,
                               QString::number(i) + ": " + g[cg].p[i].lstr);
         }
+        if (g[cg].p[i].active == FALSE || g[cg].p[i].deact == 1) {
+            this->setItemData(i + add, QColor(Qt::gray), Qt::TextColorRole);
+        } else {
+            this->setItemData(i + add, QColor(Qt::black), Qt::TextColorRole);
+        }
     }
 }
 

@@ -102,6 +102,7 @@ void save_svg(QGraphicsScene* scene, QString target, int width, int height) {
     gen.setFileName(target);
     gen.setSize(QSize(width, height));
     gen.setViewBox(QRect(0,0,width, height));
+    gen.setResolution(192.0);
     QPainter painter(&gen);
     scene->render(&painter);
     painter.end();

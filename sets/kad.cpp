@@ -107,8 +107,8 @@ void SetsKAD::applyDialog() {
                     do_kill(gno, cset, 0);
                 }
             }
-            SetsSender::send();
         }
+        SetsSender::send();
 
         drawgraph();
         return;
@@ -129,9 +129,8 @@ void SetsKAD::applyDialog() {
     } else {
         // default, hard kill; soft is 1
         do_kill(gno, cset, 0);
-
-        SetsSender::send();
     }
+    SetsSender::send();
 
     drawgraph();
 }
