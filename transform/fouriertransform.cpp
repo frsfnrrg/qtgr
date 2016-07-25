@@ -13,6 +13,8 @@
 TransformFourier::TransformFourier(MainWindow* mainWin) :
     Dialog(mainWin, "Fourier Transform")
 {
+    SetsSender::addViaDialog(this);
+
     setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
@@ -70,7 +72,7 @@ TransformFourier::TransformFourier(MainWindow* mainWin) :
 
 void TransformFourier::updateDialog() {
     int setno = setNumber->currentIndex();
-    bool noSet = g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0;
+    bool noSet = !isactive_set(cg, setno);
 //    destination->setDisabled(noSet);
 //    destinationLabel->setDisabled(noSet);
     windowLabel->setDisabled(noSet);
@@ -89,11 +91,6 @@ void TransformFourier::applyDialog() {
     int setno;
 
     setno = this->setNumber->currentIndex();
-
-    if (g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0) {
-        return;
-    }
-
 
     int fftflag, loadx, invflag, type, wind, load;
 

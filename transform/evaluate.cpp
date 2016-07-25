@@ -14,6 +14,8 @@
 TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
     Dialog(mainWin, "Evaluate")
 {
+    SetsSender::addViaDialog(this);
+
     setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
@@ -48,7 +50,7 @@ TransformEvaluate::TransformEvaluate(MainWindow* mainWin) :
 
 void TransformEvaluate::updateDialog() {
     int setno = setNumber->currentIndex();
-    bool null = g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0;
+    bool null = !isactive_set(cg, setno);
     formulaBox->setDisabled(null);
     destination->setDisabled(null);
     formulaBoxLabel->setDisabled(null);
@@ -59,10 +61,6 @@ void TransformEvaluate::applyDialog() {
     int setno, loadto, graphto;
 
     setno = this->setNumber->currentIndex();
-
-    if (g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0) {
-        return;
-    }
 
     graphto = cg;
 

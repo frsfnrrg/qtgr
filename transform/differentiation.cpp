@@ -13,6 +13,8 @@
 TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
     Dialog(mainWin, "Differentiate")
 {
+    SetsSender::addViaDialog(this);
+
     setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
@@ -52,7 +54,7 @@ TransformDifferentiation::TransformDifferentiation(MainWindow* mainWin) :
 
 void TransformDifferentiation::updateDialog() {
     int setno = setNumber->currentIndex();
-    bool null = g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0;
+    bool null = !isactive_set(cg, setno);
     diffType->setDisabled(null);
     destination->setDisabled(null);
     diffTypeLabel->setDisabled(null);
@@ -62,10 +64,6 @@ void TransformDifferentiation::updateDialog() {
 void TransformDifferentiation::applyDialog() {
     int setno, itype;
     setno = setNumber->currentIndex();
-
-    if (g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0) {
-        return;
-    }
 
     switch (diffType->currentIndex()) {
     case 0:

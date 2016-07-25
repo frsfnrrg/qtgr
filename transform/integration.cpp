@@ -13,6 +13,7 @@
 TransformIntegration::TransformIntegration(MainWindow* mainWin) :
     Dialog(mainWin, "Integration")
 {
+    SetsSender::addViaDialog(this);
     resultL = new QLabel(".....");
 
     setNumber = new SetComboBox();
@@ -46,7 +47,7 @@ TransformIntegration::TransformIntegration(MainWindow* mainWin) :
 void TransformIntegration::updateDialog() {
     resultL->setText(".....");
     int setno = setNumber->currentIndex();
-    bool null = g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0;
+    bool null = !isactive_set(cg, setno);
     integrationType->setDisabled(null);
     resultL->setDisabled(null);
     resultLabel->setDisabled(null);
@@ -57,9 +58,6 @@ void TransformIntegration::applyDialog() {
     int setno, itype;
 
     setno = setNumber->currentIndex();
-    if (g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0) {
-        return;
-    }
 
     // like so
     if (integrationType->currentIndex() == 0) {

@@ -48,6 +48,13 @@ void SetsSender::add(QObject* receiver) {
     connect(me, SIGNAL(setsUpdate()), receiver, SLOT(updateSets()));
 }
 
+void SetsSender::addViaDialog(QObject* receiver) {
+    if (me == NULL) {
+        me = new SetsSender();
+    }
+    connect(me, SIGNAL(setsUpdate()), receiver, SLOT(updateDialog()));
+}
+
 void SetsSender::prop() {
     emit setsUpdate();
 }

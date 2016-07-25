@@ -15,6 +15,8 @@ TransformRegression* TransformRegression::me = NULL;
 TransformRegression::TransformRegression(MainWindow* mainWin) :
     Dialog(mainWin, "Regression")
 {
+    SetsSender::addViaDialog(this);
+
     setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
 
@@ -72,7 +74,7 @@ TransformRegression::TransformRegression(MainWindow* mainWin) :
 
 void TransformRegression::updateDialog() {
     int setno = setNumber->currentIndex();
-    bool isnull = g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0;
+    bool isnull = !isactive_set(cg, setno);
 
     outputLabel->setDisabled(isnull);
     loadLabel->setDisabled(isnull);
@@ -85,9 +87,6 @@ void TransformRegression::updateDialog() {
 
 void TransformRegression::applyDialog() {
     int setno = setNumber->currentIndex();
-    if (g[cg].p[setno].active == FALSE && g[cg].p[setno].deact == 0) {
-        return;
-    }
 
     do_regress(setno, degree->currentIndex()+1,
                load->currentIndex(), -1, -1);

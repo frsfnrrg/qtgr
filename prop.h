@@ -45,6 +45,7 @@ class SetsSender : public QObject
 public:
     static void send();
     static void add(QObject* reciever);
+    static void addViaDialog(QObject* reciever);
 
 private:
     explicit SetsSender();
