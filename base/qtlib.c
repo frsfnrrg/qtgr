@@ -100,24 +100,15 @@ void qtlibsetfont(int n)
 
 int qtlibsetlinewidth(int width)
 {
-    if (width) {
-        width = width % MAXLINEW;
-        if (width == 0)
-            width = 1;
-        if (qtliblinestyle == 1) {
-            qtview_linew(width);
-        }
-    }
+    if (width > MAXLINEW) width = MAXLINEW;
+    if (width < 1) width = 1;
+    qtview_linew(width);
     return (qtliblinewidth = width);
 }
 
 int qtlibsetlinestyle(int style)
 {
-    if (style > 1 && qtliblinewidth) {
-        qtview_lines(style);
-    } else if (style == 1 && qtliblinewidth) {
-        qtview_lines(style);
-    }
+    qtview_lines(style);
     return (qtliblinestyle = style);
 }
 
