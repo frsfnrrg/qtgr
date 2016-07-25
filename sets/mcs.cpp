@@ -24,7 +24,7 @@ SetsMCS::SetsMCS(MainWindow* mainWin) :
     swapChoice->setChecked(true);
 
     targetNumber = new SetComboBox();
-    connect(targetNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateTarget()));
+    connect(targetNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
     targetNumberLabel = new QLabel(tr("To"));
 
     QGridLayout* layout = new QGridLayout();
@@ -48,25 +48,23 @@ SetsMCS::SetsMCS(MainWindow* mainWin) :
 
     this->setDialogLayout(layout);
 
-    SetsSender::add(this);
-}
-
-void SetsMCS::updateSets() {
-    updateTarget();
+    SetsSender::addViaDialog(this);
 }
 
 void SetsMCS::updateDialog() {
-    updateTarget();
-}
-
-void SetsMCS::updateTarget() {
     // i.e, change label to show "(Overwrites)"
     int cs = targetNumber->currentIndex();
     if (cs == setNumber->currentIndex()) {
+        moveChoice->setDisabled(true);
+        copyChoice->setDisabled(true);
+        swapChoice->setDisabled(true);
         moveChoice->setText(tr("Move (No-op)"));
         copyChoice->setText(tr("Copy (No-op)"));
         swapChoice->setText(tr("Swap (No-op)"));
     } else {
+        moveChoice->setEnabled(true);
+        copyChoice->setEnabled(true);
+        swapChoice->setEnabled(true);
         if (g[cg].p[cs].active == TRUE || g[cg].p[cs].deact == 1) {
             moveChoice->setText(tr("Move (Overwrites)"));
             copyChoice->setText(tr("Copy (Overwrites)"));
@@ -77,7 +75,6 @@ void SetsMCS::updateTarget() {
         swapChoice->setText(tr("Swap"));
     }
 }
-
 void SetsMCS::applyDialog() {
     int from, to;
     from = setNumber->currentIndex();

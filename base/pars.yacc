@@ -1710,9 +1710,24 @@ parmset:
 	    g[cg].l.color = checkon(COLOR, g[cg].l.color, (int) $3);
 	}
 	| LEGEND STRING NUMBER CHRSTR {
+        if ((int) $3 >= g[cg].maxplot) {
+            realloc_graph_plots(cg, (int) $3 + 1);
+        }
 	    strcpy(g[cg].p[(int) $3].lstr, (char *) $4);
 	    free((char *) $4);
 	}
+    | LEGEND STRING AUTO CHRSTR {
+        for (int i=0;i<=g[cg].maxplot;i++) {
+            if (i == g[cg].maxplot) {
+                realloc_graph_plots(cg, g[cg].maxplot + 1);
+            }
+            if (g[cg].p[i].lstr == 0 || strlen(g[cg].p[i].lstr) == 0) {
+                strcpy(g[cg].p[i].lstr, (char *) $4);
+                free((char *) $4);
+                break;
+            }
+        }
+    }
 	| FRAMEP onoff {
 	    g[cg].f.active = $2;
 	}
@@ -4611,7 +4626,11 @@ int yylex(void)
 	    } else if (ctmp == 'S') {
 	        stmp[i] = '\0';
 		sn = atoi(stmp);
-		if (sn >= 0 && sn < g[whichgraph].maxplot) {
+        if (sn >= 0) {
+            // expand precautionarily
+            if (sn >= g[whichgraph].maxplot) {
+                realloc_graph_plots(whichgraph, sn+1);
+            }
 		    lxy = getsetlength(whichgraph, sn);
 		    yylval.ival = sn;
 		    whichset = sn;
@@ -4834,7 +4853,7 @@ void set_prop(int gno,...)
 	case SETS:
 	    allsets = 1;
 	    starts = 0;
-	    ends = maxplot - 1;
+        ends = g[gno].maxplot - 1;
 	    break;
 	case SET:
 	    switch (prop = va_arg(var, int)) {
@@ -4843,7 +4862,7 @@ void set_prop(int gno,...)
 		if (prop == -1) {
 		    allsets = 1;
 		    starts = 0;
-		    ends = maxplot - 1;
+            ends = g[gno].maxplot - 1;
 		} else {
 		    allsets = 0;
 		    starts = ends = prop;
@@ -4884,7 +4903,7 @@ void set_prop(int gno,...)
 	    }
 	    break;
 	case FONTP:
-	    prop = va_arg(var, int);
+        prop = va_arg(var, int);
 	    for (i = startg; i <= endg; i++) {
 		if (allsets) {
 		    ends = g[i].maxplot - 1;

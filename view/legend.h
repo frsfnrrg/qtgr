@@ -3,6 +3,9 @@
 
 #include "dialog.h"
 
+#include <QVector>
+#include <QGridLayout>
+
 class ViewLegendProp;
 
 class ViewLegend : public Dialog
@@ -22,6 +25,9 @@ public slots:
 private:
     QComboBox* locType;
 
+    QWidget* opl;
+    QGridLayout* intern;
+
     QPushButton* placer;
     QPushButton* prop;
 
@@ -36,8 +42,8 @@ private:
 
     ViewLegendProp* propDialog;
 
-    QLineEdit** setLabels;
-    QLabel** setLabelLabels;
+    QVector<QLineEdit*> setLabels;
+    QVector<QLabel*> setLabelLabels;
 private slots:
 
     void applyDialog();

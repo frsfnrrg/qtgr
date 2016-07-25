@@ -116,7 +116,7 @@ int qtview_stringextentx(double scale, char* str);
 int qtview_stringextenty(double scale, char* str);
 int qtview_setpattern(int n);
 void qtview_drawellipse(int x, int y, int xm, int ym);
-void qtview_drawellipse(int x, int y, int xm, int ym);
+void qtview_fillellipse(int x, int y, int xm, int ym);
 void qtview_setfont(int k);
 int qtview_getsymsize();
 

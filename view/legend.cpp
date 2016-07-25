@@ -49,28 +49,33 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
     autoHook(legendY);
 
     QScrollArea* scrollArea = new QScrollArea();
-    QWidget* opl = new QWidget();
-    QGridLayout* intern = new QGridLayout();
+    opl = new QWidget();
+    intern = new QGridLayout();
 
-    setLabels = new QLineEdit*[MAXPLOT];
-    setLabelLabels = new QLabel*[MAXPLOT];
+    // TODO: realloc
+    setLabels = QVector<QLineEdit*>(g[cg].maxplot);
+    setLabelLabels = QVector<QLabel*>(g[cg].maxplot);
 
-    for (int i=0;i<MAXPLOT;i++) {
+    for (int i=0;i<g[cg].maxplot;i++) {
         setLabels[i] = new QLineEdit();
         setLabels[i]->setMaxLength(256);
         setLabelLabels[i] = new QLabel(QString("Set ")+QString::number(i));
         intern->addWidget(setLabelLabels[i],i,0);
         intern->addWidget(setLabels[i],i,1);
+        intern->setRowStretch(i, 0);
         autoHook(setLabels[i]);
     }
 
     intern->setColumnMinimumWidth(1, 200);
     intern->setColumnStretch(0, 0);
     intern->setColumnStretch(1, 3);
+    intern->setRowStretch(g[cg].maxplot, 1);
 
     opl->setLayout(intern);
     scrollArea->setWidget(opl);
-    scrollArea->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    scrollArea->setWidgetResizable(true);
 
     QHBoxLayout* over = new QHBoxLayout();
 
@@ -102,8 +107,6 @@ ViewLegend::ViewLegend(MainWindow* mainWin) :
 }
 
 ViewLegend::~ViewLegend() {
-    delete[] setLabels;
-    delete[] setLabelLabels;
 }
 
 void ViewLegend::fadeOpts() {
@@ -118,14 +121,40 @@ void ViewLegend::fadeOpts() {
     yLabel->setEnabled(on);
 }
 
+void handleColoring(QLineEdit* label, QLabel* labelLabel, int i) {
+    bool dead = g[cg].p[i].active == FALSE && g[cg].p[i].deact == 0;
+   bool deact_or_dead = g[cg].p[i].active == FALSE || g[cg].p[i].deact == 1;
+   labelLabel->setDisabled(deact_or_dead);
+   QPalette p = label->palette();
+   p.setColor(QPalette::Text, dead ? Qt::gray : Qt::black);
+   label->setPalette(p);
+}
+
 void ViewLegend::updateDialog() {
     showLegend->setChecked(g[cg].l.active == TRUE);
 
     locType->setCurrentIndex(g[cg].l.loctype == COORD_VIEW ? 0 : 1);
 
-    for (int i=0; i<MAXPLOT; i++) {
+    while (setLabels.count() > g[cg].maxplot) {
+        // todo: test me
+        setLabels.pop_back();
+        setLabelLabels.pop_back();
+    }
+    while (setLabels.count() < g[cg].maxplot) {
+        setLabels.append(new QLineEdit());
+        setLabels.last()->setMaxLength(256);
+        int i = setLabelLabels.count();
+        setLabelLabels.append(new QLabel(QString("Set ")+QString::number(i)));
+        intern->addWidget(setLabelLabels.last(),i,0);
+        intern->addWidget(setLabels.last(),i,1);
+        intern->setRowStretch(i, 0);
+        intern->setRowStretch(i+1, 1);
+        autoHook(setLabels.last());
+        opl->setMinimumSize(opl->sizeHint());
+    }
+    for (int i=0; i<g[cg].maxplot; i++) {
        setLabels[i]->setText(QString::fromUtf8(g[cg].p[i].lstr));
-       setLabelLabels[i]->setDisabled(g[cg].p[i].active == FALSE && g[cg].p[i].deact == 0);
+       handleColoring(setLabels[i], setLabelLabels[i], i);
     }
 
     legendX->setText(QString::number(g[cg].l.legx, 'g', 9));
@@ -135,8 +164,11 @@ void ViewLegend::updateDialog() {
 
 // only the on/off updates
 void ViewLegend::updateSets() {
-    for (int i=0; i<MAXPLOT; i++) {
-       setLabelLabels[i]->setDisabled(g[cg].p[i].active == FALSE && g[cg].p[i].deact == 0);
+    if (setLabels.count() != g[cg].maxplot) {
+        updateDialog();
+    }
+    for (int i=0; i<g[cg].maxplot; i++) {
+       handleColoring(setLabels[i], setLabelLabels[i], i);
     }
 }
 
@@ -149,7 +181,7 @@ void ViewLegend::applyDialog() {
     g[cg].l.legx = legendX->text().toDouble();
     g[cg].l.legy = legendY->text().toDouble();
 
-    for (int i=0;i<MAXPLOT;i++) {
+    for (int i=0;i<g[cg].maxplot;i++) {
         strncpy((char*)g[cg].p[i].lstr,setLabels[i]->text().toUtf8().data(), 256);
     }
 

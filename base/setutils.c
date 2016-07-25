@@ -690,7 +690,11 @@ int nextset(int gno)
 	    return (i);
 	}
     }
-    errmsg("Error - no sets available");
+    // activate a new set
+    realloc_graph_plots(gno, g[gno].maxplot + 1);
+//    errmsg("Error - no sets available");
+    return g[gno].maxplot - 1;
+
     return (-1);
 }
 

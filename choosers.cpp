@@ -67,7 +67,7 @@ SetComboBox::SetComboBox(bool a) : QComboBox() {
     if (add) {
         this->addItem("-- All live sets --");
     }
-    for (int i = 0; i < MAXPLOT; i++) {
+    for (int i = 0; i < g[cg].maxplot; i++) {
         this->addItem("");
     }
     updateSets();
@@ -77,7 +77,14 @@ SetComboBox::SetComboBox(bool a) : QComboBox() {
 }
 
 void SetComboBox::updateSets() {
-    for (int i = 0; i < MAXPLOT; i++) {
+    int target = add ? g[cg].maxplot + 1 : g[cg].maxplot;
+    while (target > this->count()) {
+        this->addItem("");
+    }
+    while (target < this->count()) {
+        this->removeItem(this->count()-1);
+    }
+    for (int i = 0; i < g[cg].maxplot; i++) {
         if (g[cg].p[i].active == FALSE && g[cg].p[i].deact == 0) {
             this->setItemText(i + add, QString("~: ") + g[cg].p[i].lstr);
         } else {
@@ -248,7 +255,7 @@ typedef struct {
     const char *name;
 } named_color;
 
-named_color colors[MAXCOLORS] = {{QColor(255, 255, 255), "White"},
+static named_color colors[MAXCOLORS] = {{QColor(255, 255, 255), "White"},
                                  {QColor(0, 5, 0), "Black"},
                                  {QColor(255, 0, 0), "Red"},
                                  {QColor(0, 255, 0), "Green"},

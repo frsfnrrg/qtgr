@@ -42,10 +42,10 @@ void set_program_defaults(void)
     grdefaults = d_d;
     g = (graph *) calloc(maxgraph, sizeof(graph));
     for (i = 0; i < maxgraph; i++) {
-	g[i].p = (plotarr *) calloc(maxplot, sizeof(plotarr));
+    g[i].p = (plotarr *) calloc(1, sizeof(plotarr));
 	if (g[i].p == NULL) {
 	    fprintf(stderr, 
-		"Couldn't allocate memory for sets in graph %d, maxplot = %d, fatal error", i, maxplot);
+        "Couldn't allocate memory for sets in graph %d, maxplot = %d, fatal error", i, 1);
 	    exit(1);
 	}
 	set_default_graph(i);
@@ -56,7 +56,7 @@ void set_program_defaults(void)
     }
     set_default_annotation();
     set_default_string(&timestamp);
-    alloc_blockdata(maxplot);
+    alloc_blockdata(1);
     timestamp.x = 0.03;
     timestamp.y = 0.03;
     if (init_scratch_arrays(maxarr)) {
@@ -320,7 +320,7 @@ void set_default_graph(int gno)
     g[gno].ws_top = 1;
     g[gno].ws[0].w.xg1=g[gno].ws[0].w.xg2=g[gno].ws[0].w.yg1=g[gno].ws[0].w.yg2=0;
 	g[gno].curw = 0;
-    g[gno].maxplot = maxplot;
+    g[gno].maxplot = 1;
     g[gno].dsx = g[gno].dsy = 0.0;	/* locator props */
     g[gno].pointset = FALSE;
     g[gno].pt_type = 0;
@@ -344,7 +344,7 @@ void set_default_graph(int gno)
     g[gno].labs.title.charsize = 1.5;
     set_default_string(&g[gno].labs.stitle);
     g[gno].labs.stitle.charsize = 1.0;
-    for (i = 0; i < maxplot; i++) {
+    for (i = 0; i < 1; i++) {
 	set_default_plotarr(&g[gno].p[i]);
     }
     set_default_velocityp(&g[gno].vp);
@@ -382,7 +382,7 @@ void realloc_graphs(void)
 
     g = (graph *) realloc(g, maxgraph * sizeof(graph));
     for (j = MAXGRAPH; j < maxgraph; j++) {
-		g[j].p = (plotarr *) calloc(maxplot, sizeof(plotarr));
+        g[j].p = (plotarr *) calloc(1, sizeof(plotarr));
 		set_default_graph(j);
 		setdefaultcolors(j);
     }

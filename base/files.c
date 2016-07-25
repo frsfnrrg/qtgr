@@ -720,14 +720,16 @@ int readihl(int gno, char *fn, FILE * fp)
  * read x1 y1 y2 ... y30 formatted files
  * note that the maximum number of sets is 30
  */
-#define MAXSETN MAXPLOT
+#define MAXSETN 201
+#define LINELEN 4096
+//^todo make extendable
 
 int readnxy(int gno, char *fn, FILE * fp)
 {
     int i, j, pstat, cnt, scnt[MAXSETN], setn[MAXSETN],
      retval = 0;
     double *x[MAXSETN], *y[MAXSETN], xval, yr[MAXSETN];
-    char *s, buf[1024], tmpbuf[1024];
+    char *s, buf[LINELEN], tmpbuf[LINELEN];
     int do_restart = 0;
 
 /* if more than one set of nxy data is in the file,
@@ -761,15 +763,14 @@ int readnxy(int gno, char *fn, FILE * fp)
     /*
      * count the columns
      */
-    strcpy(tmpbuf, buf);
+    strncpy(tmpbuf, buf, LINELEN-1);
     s = tmpbuf;
     while ((s = strtok(s, " \t\n")) != NULL) {
 	cnt++;
 	s = NULL;
     }
-    if (cnt > maxplot) {
-	errmsg("Maximum number of columns exceeded, reading first 31");
-	cnt = 31;
+    if (cnt > g[cg].maxplot) {
+        // todo ensure that many spots exist
     }
     s = buf;
     s = strtok(s, " \t\n");
@@ -1424,8 +1425,8 @@ void alloc_blockdata(int ncols)
     if (blockdata != NULL) {
 	kill_blockdata();
     }
-    if (ncols < maxplot) {
-	ncols = maxplot;
+    if (ncols < 1) {
+    ncols = 1;
     }
     blockdata = (double **) malloc(ncols * sizeof(double *));
     if (blockdata != NULL) {
@@ -1822,11 +1823,6 @@ void create_set_fromblock(int gno, int type, char *cols)
 /******************************************************************************/
 /******************************************************************************/
 /******************************************************************************/
-
-/*
- * note that the maximum number of sets is 30
- */
-#define MAXSETN 30
 
 int readrawspice(int gno, char *fn, FILE * fp)
 {

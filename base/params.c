@@ -491,7 +491,7 @@ void putparms(int gno, FILE * pp, int embed)
 	    fprintf(pp, "%s    legend linestyle %d\n", embedstr, leg.lines);
 	    fprintf(pp, "%s    legend linewidth %d\n", embedstr, leg.linew);
 	    fprintf(pp, "%s    legend color %d\n", embedstr, leg.color);
-	    for (i = 0; i < maxplot; i++) {
+        for (i = 0; i < g[gno].maxplot; i++) {
 		if (isactive_set(gno, i)) {
 		    if (strlen(g[gno].p[i].lstr)) {
 			fprintf(pp, "%s    legend string %d \"%s\"\n", 

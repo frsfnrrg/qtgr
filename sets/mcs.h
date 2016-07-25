@@ -20,12 +20,9 @@ private:
 signals:
 
 public slots:
-    void updateSets();
     void updateDialog();
 private slots:
     void applyDialog();
-    void updateTarget();
-    
 };
 
 #endif // MCS_H

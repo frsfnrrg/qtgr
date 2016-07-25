@@ -46,7 +46,6 @@ char workingdir[MAXPATHLEN];
 int debuglevel = 0;
 int sigcatch = 1;		/* we handle signals ourselves */
 
-int maxplot = MAXPLOT;
 int maxarr = MAXARR;
 int maxgraph = MAXGRAPH;
 int maxcolors = MAXCOLORS;
@@ -259,7 +258,7 @@ int format_types[] = { FORMAT_DECIMAL, FORMAT_EXPONENTIAL, FORMAT_POWER, FORMAT_
 
 /* block data globals */
 double **blockdata;
-int maxblock = MAXPLOT;
+int maxblock = 1;
 int blocklen;
 int blockncols;
 
@@ -297,7 +296,7 @@ extern int sigcatch;		/* true if we handle signals ourselves */
 extern int inwin;		/* true if running X */
 extern int ispipe;		/* true if reading from stdin */
 
-extern int maxarr, maxplot, maxgraph, maxcolors;
+extern int maxarr, maxgraph, maxcolors;
 
 extern int maxboxes;
 extern int maxlines;

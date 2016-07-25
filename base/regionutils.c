@@ -150,7 +150,7 @@ void extract_region(int gno, int fromset, int toset, int regno)
     int startno, stopno;
     if (fromset == -1) {
 	startno = 0;
-	stopno = maxplot - 1;
+    stopno = g[gno].maxplot - 1;
     } else {
 	startno = stopno = fromset;
     }

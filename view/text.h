@@ -20,10 +20,10 @@ class ViewText : public Dialog
 public:
     explicit ViewText(MainWindow* mainWin);
 
-    void addText(int id, float x, float y);
+    void addText(int id, double x, double y);
 
     void relocateText(int id);
-    void setText(int id, float x, float y);
+    void setText(int id, double x, double y);
 
     void deleteText(int id);
 

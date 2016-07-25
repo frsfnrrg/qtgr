@@ -17,7 +17,6 @@ private:
 signals:
     
 public slots:
-    void updateSets();
     void updateDialog();
 private slots:
     void applyDialog();

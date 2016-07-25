@@ -39,11 +39,7 @@ SetsKAD::SetsKAD(MainWindow* mainWin) :
 
     this->setDialogLayout(layout);
 
-    SetsSender::add(this);
-}
-
-void SetsKAD::updateSets() {
-    updateDialog();
+    SetsSender::addViaDialog(this);
 }
 
 void shift_to_first(QRadioButton* a, QRadioButton* b) {
@@ -88,21 +84,21 @@ void SetsKAD::applyDialog() {
     int cset = setNumber->currentIndex() - 1;
     if (cset == -1) {
         if (deactChoice->isChecked()) {
-            for (cset=0;cset<MAXPLOT;cset++) {
+            for (cset=0;cset<g[gno].maxplot;cset++) {
                 if (g[gno].p[cset].active == TRUE) {
                     g[gno].p[cset].deact = 1;
                     g[gno].p[cset].active = FALSE;
                 }
             }
         } if (actChoice->isChecked()) {
-            for (cset=0;cset<MAXPLOT;cset++) {
+            for (cset=0;cset<g[gno].maxplot;cset++) {
                 if (g[gno].p[cset].active == FALSE && g[gno].p[cset].deact == 1) {
                     g[gno].p[cset].deact = 0;
                     g[gno].p[cset].active = TRUE;
                 }
             }
         } else {
-            for (cset=0;cset<MAXPLOT;cset++) {
+            for (cset=0;cset<g[gno].maxplot;cset++) {
                 if (g[gno].p[cset].active == TRUE || g[gno].p[cset].deact == 1) {
                     do_kill(gno, cset, 0);
                 }

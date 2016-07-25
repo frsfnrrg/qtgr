@@ -2062,7 +2062,7 @@ void set_leg_bb( int gno, int hardcopy )
 	int i;
 	double xconvps_inv(int), xmv2, ymv2;
 	
-	for (i = 0; i < maxplot; i++) 
+    for (i = 0; i < g[gno].maxplot; i++)
 		if ( isactive_set(gno, i) && g[gno].p[i].lstr[0]=='\\' && g[gno].p[i].lstr[1]=='L' ) {
 			if( hardcopy )
 				xm2 = xm1+g[gno].l.hgap;

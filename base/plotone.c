@@ -791,7 +791,7 @@ void dolegend(int gno)
     setcharsize(l.charsize);
     setfont(l.font);
     if (l.box == TRUE) {	/* compute a bounding box for the legend */
-		for (i = 0; i < maxplot; i++) {
+        for (i = 0; i < g[gno].maxplot; i++) {
 	    	if (isactive_set(gno, i) && (g[gno].p[i].lstr[0])) {
 				get_graph_plotarr(gno, i, &p);
 				putlegend(j, 1, l.len, l.vgap, p.symsize,
@@ -812,7 +812,7 @@ void dolegend(int gno)
 		    	  g[gno].l.vgap );
     }
     j = 0;
-    for (i = 0; i < maxplot; i++) {
+    for (i = 0; i < g[gno].maxplot; i++) {
 	if (isactive_set(gno, i) && (g[gno].p[i].lstr[0])) {
 	    setcolor(l.color);
 	    setcharsize(l.charsize);

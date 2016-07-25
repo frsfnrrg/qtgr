@@ -39,7 +39,7 @@ ViewText::ViewText(MainWindow* mainWin) :
     scrollBox = new QScrollArea();
     scrollBox->setWidgetResizable(true);
     scrollBox->setWidget(frame);
-    scrollBox->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollBox->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollBox->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     scrollBox->setMinimumWidth(500);
@@ -83,12 +83,13 @@ void ViewText::applyDialog() {
     drawgraph();
 }
 
-class StringPlacingThingy : public MouseCallBack
+static class StringPlacingThingy : public MouseCallBack
 {
 private:
     ViewText* view;
     int id;
 public:
+    virtual ~StringPlacingThingy() {}
     void set(ViewText* t, QString txt, int n) {
         view = t;
         id = n;
@@ -119,7 +120,7 @@ void ViewText::placeText() {
     stringPlacer.set(this, tr("Click to place string"), i);
 }
 
-void ViewText::addText(int id, float x, float y) {
+void ViewText::addText(int id, double x, double y) {
     if (texts[id]) {
         texts[id]->setLocation(x,y,true);
     }
@@ -153,7 +154,7 @@ void ViewText::relocateText(int id) {
     stringRelocater.set(this, tr("Click to move string"), id);
 }
 
-void ViewText::setText(int id, float x, float y) {
+void ViewText::setText(int id, double x, double y) {
     if (texts[id]) {
         texts[id]->setLocation(x,y);
 
@@ -310,9 +311,10 @@ void ViewTextElement::prop() {
 void ViewTextElement::applyValues() {
     // use sizeof for field
     if (pstr[num].s) free(pstr[num].s);
-    int len = textArea->toPlainText().toUtf8().length();
-    pstr[num].s = (char*)malloc(len);
+    size_t len = (size_t)textArea->toPlainText().toUtf8().length();
+    pstr[num].s = (char*)malloc(len + 1);
     strncpy(pstr[num].s, textArea->toPlainText().toUtf8().constData(), len);
+    pstr[num].s[len] = '\0';
     pstr[num].x = xCoord->value();
     pstr[num].y = yCoord->value();
 }
@@ -444,11 +446,13 @@ void ViewTextProperties::spreadTextStyle() {
     int font = tFont->currentIndex();
     int color = tColor->currentIndex();
     double size = tSize->value();
+    double angle = tAngle->value();
 
     for (int i=0;i<MAXSTR;i++) {
         pstr[i].font = font;
         pstr[i].color = color;
         pstr[i].charsize = size;
+        pstr[id].rot = angle;tAngle->value();
     }
 
     drawgraph();

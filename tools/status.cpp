@@ -64,21 +64,20 @@ ToolsStatus::ToolsStatus(MainWindow* mainWin) :
     Dialog(mainWin, "Status", true)
 {
     output = new QTableWidget();
-    output->setRowCount(MAXPLOT * 2);
+    output->setRowCount(g[cg].maxplot * 2);
     output->setColumnCount(numcols);
     output->horizontalHeader()->setStretchLastSection(true);
 
-    QTableWidgetItem* it;
 
     for (int i=0;i<numcols;i++) {
         output->setHorizontalHeaderItem(i, new QTableWidgetItem(tr(columns[i])));
-        for (int j=0;j<MAXPLOT * 2;j++) {
-            it = new QTableWidgetItem();
+        for (int j=0;j<g[cg].maxplot * 2;j++) {
+            QTableWidgetItem* it = new QTableWidgetItem();
             it->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
             output->setItem(j, i, it);
         }
     }
-    for (int j=0;j<MAXPLOT;j++) {
+    for (int j=0;j<g[cg].maxplot;j++) {
         output->setVerticalHeaderItem(j*2, new QTableWidgetItem(QString::number(j)));
         output->setVerticalHeaderItem(j*2+1, new QTableWidgetItem());
         disable_item(output, j*2+1, 0);
@@ -133,10 +132,34 @@ void clear_row(QTableWidget* o, int row) {
     }
 }
 
-void ToolsStatus::update_set_status(int, int setno) {
+void ToolsStatus::update_set_status(int graphno, int setno) {
     if (!me) return;
 
     QTableWidget* o = me->output;
+    int nc = o->rowCount() / 2;
+        if (nc != g[cg].maxplot) {
+        int oc = nc;
+        o->setRowCount(g[cg].maxplot*2);
+        for (;nc < g[cg].maxplot;nc++) {
+            o->setVerticalHeaderItem(nc*2, new QTableWidgetItem(QString::number(nc)));
+            o->setVerticalHeaderItem(nc*2+1, new QTableWidgetItem());
+            for (int j=0;j<numcols;j++) {
+                QTableWidgetItem* it = new QTableWidgetItem();
+                it->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+                o->setItem(nc*2, j, it);
+                QTableWidgetItem* it2 = new QTableWidgetItem();
+                it2->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+                o->setItem(nc*2+1, j, it2);
+            }
+            disable_item(o, nc*2+1, 0);
+            disable_item(o, nc*2+1, 1);
+            disable_item(o, nc*2+1, 2);
+            if (nc != setno) {
+                update_set_status(graphno, setno);
+            }
+        }
+    }
+
 
     double x1, y1, x2, y2, xbar, ybar, xsd, ysd, dx1, dx2, dy1, dy2, dxbar, dybar, dxsd, dysd;
     int ix1, ix2;
@@ -256,7 +279,7 @@ void ToolsStatus::update_set_status(int, int setno) {
 }
 
 void ToolsStatus::updateDialog() {
-    for (int i=0;i<MAXPLOT;i++) {
+    for (int i=0;i<g[cg].maxplot;i++) {
         update_set_status(cg, i);
     }
 }
