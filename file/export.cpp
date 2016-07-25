@@ -123,19 +123,23 @@ void save_pixel(QGraphicsScene* scene, QString target, int width, int height) {
 }
 
 void save_pdf(QGraphicsScene* scene, QString target) {
-    QPrinter printer;
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setOutputFileName(target);
-    printer.setFullPage(true);
-    printer.setColorMode(QPrinter::Color);
+    static QPrinter* printer = NULL;
+    if (!printer) {
+        // cache printer to reduce network/init delays
+        // on second+ printings
+        printer = new QPrinter();
+        printer->setOutputFormat(QPrinter::PdfFormat);
+        printer->setFullPage(true);
+        printer->setColorMode(QPrinter::Color);
 #if QT_VERSION >= 0x040400
-    printer.setPaperSize(QSize(100, 75), QPrinter::Millimeter);
+        printer->setPaperSize(QSize(100, 75), QPrinter::Millimeter);
 #else
-    printer.setPageSize(QPrinter::A5);
-    printer.setOrientation(QPrinter::Landscape);
+        printer->setPageSize(QPrinter::A5);
+        printer->setOrientation(QPrinter::Landscape);
 #endif
-
-    QPainter painter(&printer);
+    }
+    printer->setOutputFileName(target);
+    QPainter painter(printer);
     scene->render(&painter);
     painter.end();
 }
