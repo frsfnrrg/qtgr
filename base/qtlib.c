@@ -39,9 +39,7 @@ extern double charsize;
 
 static int qtliblinewidth = 0;
 static int qtlibdmode;
-static int qtlibfont = 0;
 static int qtliblinestyle = 1;
-static int qtdoublebuff = 0;	/* no double buffering by default */
 int win_h, win_w;
 
 // /*
@@ -60,10 +58,6 @@ double xconv(), yconv();
 
 static void qtlibinit()
 {
-    double wx1, wx2, wy1, wy2;
-    static int inc = 1;
-    extern int invert, overlay, doclear, bgcolor;
-    
     qtview_getcanvas(&win_w,&win_h);
     
     devwidth = win_w;
