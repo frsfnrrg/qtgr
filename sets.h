@@ -6,6 +6,8 @@
 class SetsEdit;
 class SetsKAD;
 class SetsMCS;
+class SetsJoin;
+class SetsSplit;
 
 /*
  This menu contains all whole-set operations:
@@ -20,8 +22,8 @@ public:
     SetsEdit* editDialog;
     SetsKAD* kadDialog;
     SetsMCS* mcsDialog;
-    void* joinDialog;
-    void* splitDialog;
+    SetsJoin* joinDialog;
+    SetsSplit* splitDialog;
 
     void populateMenu(QMenu*);
 

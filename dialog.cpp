@@ -29,7 +29,7 @@ Dialog::Dialog(MainWindow* mainWin, const char* title, bool autoenabled) :
     this->mainWindow = mainWin;
     layout = new QVBoxLayout();
 
-    QPushButton* apply = new QPushButton(tr("Apply"));
+    apply = new QPushButton(tr("Apply"));
     apply->setToolTip(tr("Apply dialog values."));
     connect(apply, SIGNAL(clicked()), this, SLOT(applyDialog()));
 
@@ -188,4 +188,8 @@ QGroupBox* Dialog::makeGroupBox(const char* text, bool checkable) {
 void Dialog::setAutoUpdate(bool on) {
     auto_update = on;
     AutoDisabler::send(on);
+}
+
+void Dialog::deactivate(bool block_apply) {
+    apply->setDisabled(block_apply);
 }

@@ -2,6 +2,8 @@
 #include "sets/kad.h"
 #include "sets/mcs.h"
 #include "sets/sedit.h"
+#include "sets/join.h"
+#include "sets/split.h"
 #include "util.h"
 
 #include <QToolBar>
@@ -40,12 +42,10 @@ void SetsMenu::createActions() {
     splitAct = makeAction("Split",
                           "Divide set",
                           "", SLOT(split()));
-    splitAct->setEnabled(false);
 
     joinAct = makeAction("Join",
                          "Join sets",
                          "", SLOT(join()));
-    joinAct->setEnabled(false);
 }
 
 void SetsMenu::populateMenu(QMenu* q) {
@@ -87,9 +87,13 @@ void SetsMenu::mcs() {
 }
 
 void SetsMenu::join() {
-    // FILL ME
+    if (showDialog(joinDialog)) return;
+    joinDialog = new SetsJoin(mainWindow);
+    loadDialog(joinDialog);
 }
 
 void SetsMenu::split() {
-    // FILL ME
+    if (showDialog(splitDialog)) return;
+    splitDialog = new SetsSplit(mainWindow);
+    loadDialog(splitDialog);
 }

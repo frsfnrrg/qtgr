@@ -15,6 +15,7 @@ class QComboBox;
 class QCheckBox;
 class QGroupBox;
 class QLabel;
+class QPushButton;
 
 class QRadioButton;
 class QVBoxLayout;
@@ -52,11 +53,13 @@ protected:
     void setTip(QWidget*, QWidget*, const char* text);
     void setTip(QWidget*, QWidget*, QWidget*, const char* text);
 
+    void deactivate(bool block_apply);
 private:
     static bool auto_update;
     bool autoen;
 
     QVBoxLayout* layout;
+    QPushButton* apply;
 signals:
     
 public slots:

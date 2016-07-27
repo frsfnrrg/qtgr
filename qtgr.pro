@@ -36,7 +36,9 @@ HEADERS       = edit.h \
     transform/regression.h \
     view/text.h \
     tools/status.h \
-    transform/fouriertransform.h
+    transform/fouriertransform.h \
+    sets/join.h \
+    sets/split.h
 
 SOURCES       = edit.cpp \
     file.cpp \
@@ -72,6 +74,8 @@ SOURCES       = edit.cpp \
     view/text.cpp \
     tools/status.cpp \
     transform/fouriertransform.cpp \
+    sets/split.cpp \
+    sets/join.cpp \
     base/checkon.c \
     base/defaults.c \
     base/draw.c \
@@ -126,4 +130,4 @@ QMAKE_CXXFLAGS += -pipe
 # Debug
 #QMAKE_CXXFLAGS += "-fsanitize=address -fno-omit-frame-pointer"
 #QMAKE_CXXFLAGS += -ggdb3
-#QMAKE_LFLAGS   += "-fsanitize=address"
+#MAKE_LFLAGS   += "-fsanitize=address"
