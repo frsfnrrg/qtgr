@@ -2,6 +2,8 @@
 #include "choosers.h"
 #include "prop.h"
 #include "base/globals.h"
+#include "view.h"
+#include "mainwindow.h"
 
 #include <QButtonGroup>
 #include <QLabel>
@@ -86,6 +88,8 @@ void SetsMCS::applyDialog() {
     } else {
         do_swapset(cg, from, cg, to);
     }
+    mainWindow->viewMenu->updateIndividualLegend(from);
+    mainWindow->viewMenu->updateIndividualLegend(to);
 
     drawgraph();
     SetsSender::send();
