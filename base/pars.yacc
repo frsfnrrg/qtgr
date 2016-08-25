@@ -3168,7 +3168,7 @@ vexpr:
 	    freelist[fcnt++] = $$;
 	    if ($3 == 0.0) {
 		yyerror("Divide by Zero");
-		return 1;
+//		return 1;
 	    }
 	    for (i = 0; i < lxy; i++) {
 		$$[i] = $1 / $3;
@@ -3182,7 +3182,7 @@ vexpr:
 	    for (i = 0; i < lxy; i++) {
 		if ($3[i] == 0.0) {
 		    yyerror("Divide by Zero");
-		    return 1;
+//		    return 1;
 		}
 	    }
 	    for (i = 0; i < lxy; i++) {
@@ -3197,7 +3197,7 @@ vexpr:
 	    for (i = 0; i < lxy; i++) {
 		if ($3[i] == 0.0) {
 		    yyerror("Divide by Zero");
-		    return 1;
+//		    return 1;
 		}
 	    }
 	    for (i = 0; i < lxy; i++) {
@@ -3211,7 +3211,7 @@ vexpr:
 	    freelist[fcnt++] = $$;
 	    if ($3 == 0.0) {
 		yyerror("Divide by Zero");
-		return 1;
+//		return 1;
 	    }
 	    for (i = 0; i < lxy; i++) {
 		$$[i] = $1[i] / $3;
@@ -3692,7 +3692,7 @@ expr:	NUMBER {
 		$$ = $1 / $3;
 	    } else {
 		yyerror("Divide by Zero");
-		return 1;
+//		return 1;
 	    }
 	}
 	| expr '%' expr {
