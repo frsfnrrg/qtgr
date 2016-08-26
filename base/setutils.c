@@ -234,13 +234,17 @@ void getminmaxall(int gno, int setno)
 void minmax(double *x, int n, double *xmin, double *xmax, double *xminz, int *imin, int *imax, int *iminz)
 {
     int i;
-    *xmin = x[0];
-    *xminz = x[0] > 0 ? x[0] : INFINITY;
-    *xmax = x[0];
+    *xmin = INFINITY;
+    *xminz = INFINITY;
+    *xmax = -INFINITY;
     *imin = 1;
     *imax = 1;
     *iminz = 1;
-    for (i = 1; i < n; i++) {
+    for (i = 0; i < n; i++) {
+    // nan test
+    if (x[i] != x[i]) {
+        continue;
+    }
 	if (x[i] < *xmin) {
 	    *xmin = x[i];
 	    *imin = i + 1;
