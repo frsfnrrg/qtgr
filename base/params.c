@@ -410,6 +410,8 @@ void putparms(int gno, FILE * pp, int embed)
 		fprintf(pp, "%s ticklabel font %d\n", buf, t.tl_font);
 		fprintf(pp, "%s ticklabel color %d\n", buf, t.tl_color);
 		fprintf(pp, "%s ticklabel linewidth %d\n", buf, t.tl_linew);
+        fprintf(pp, "%s ticklabel hgap %f\n", buf, t.tl_hgap);
+        fprintf(pp, "%s ticklabel vgap %f\n", buf, t.tl_vgap);
 
 		fprintf(pp, "%s tick major %s\n", buf, on_or_off(t.t_flag));
 		fprintf(pp, "%s tick minor %s\n", buf, on_or_off(t.t_mflag));
