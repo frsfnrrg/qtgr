@@ -218,11 +218,22 @@ void MainWindow::initialize()
             // Clear, then load
             wipeout(0);
             set_graph_active(0);
-            getdata(0,v.data(),SOURCE_DISK,SET_NXY);
+            int retval = getdata(0,v.data(),SOURCE_DISK,SET_NXY);
+            if (!retval) {
+                // Don't bother if acquisition fails
+                qDebug("Failed to load: %s", info.canonicalFilePath().toUtf8().constData());
+                continue;
+            }
             drawgraph();
 
             QString target = info.canonicalFilePath();
+            QString origtype = info.suffix();
             FileExport::ImageType type;
+            // Need a dedicate mode changer
+            if (target.right(origtype.length()) == origtype) {
+                target = target.left(target.length() - origtype.length() - 1);
+            }
+
             if (arguments[1] == "--pdf") {
                 type = FileExport::PDF;
                 target += ".pdf";
