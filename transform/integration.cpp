@@ -15,6 +15,7 @@ TransformIntegration::TransformIntegration(MainWindow* mainWin) :
 {
     SetsSender::addViaDialog(this);
     resultL = new QLabel(".....");
+    resfor = -1;
 
     setNumber = new SetComboBox();
     connect(setNumber, SIGNAL(currentIndexChanged(int)), this, SLOT(updateDialog()));
@@ -45,8 +46,10 @@ TransformIntegration::TransformIntegration(MainWindow* mainWin) :
 }
 
 void TransformIntegration::updateDialog() {
-    resultL->setText(".....");
     int setno = setNumber->currentIndex();
+    if (setno != resfor) {
+        resultL->setText(".....");
+    }
     bool null = !isactive_set(cg, setno);
     integrationType->setDisabled(null);
     resultL->setDisabled(null);
@@ -68,6 +71,7 @@ void TransformIntegration::applyDialog() {
 
     double result;
     result = do_int(setno, itype);
+    resfor = setno;
     resultL->setText(QString::number(result));
 
     // recognized double redraw: in both

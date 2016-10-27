@@ -15,6 +15,7 @@ private:
     QLabel* resultL;
     QLabel* resultLabel;
     QLabel* typeLabel;
+    int resfor;
 
 signals:
     
