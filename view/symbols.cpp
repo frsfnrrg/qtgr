@@ -181,7 +181,7 @@ void ViewSymbols::updateDialog()
 
     fillFill->setCurrentIndex(g[gno].p[cset].fill);
     fillPattern->setCurrentIndex(g[gno].p[cset].fillpattern);
-    fillColor->setCurrentIndex(g[gno].p[cset].fillcolor == PTNFILLED);
+    fillColor->setCurrentIndex(g[gno].p[cset].fillcolor);
 }
   
 
