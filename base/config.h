@@ -177,7 +177,7 @@
 /* #undef HAVE_MFHDF */
 
 /* Define if you have the XDR functions.  */
-#define HAVE_XDR 1
+/* #undef HAVE_XDR */
 
 /* Define if you have a Fortran compiler.  */
 /* #undef HAVE_F77 */

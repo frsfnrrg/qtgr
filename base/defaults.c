@@ -197,9 +197,9 @@ void set_default_legend(int gno, legend * l)
     l->active = FALSE;
     l->loctype = COORD_VIEW;
     l->layout = 0;
-    l->vgap = 2;
+    l->vgap = 1;
     l->hgap = 1;
-    l->len = 4;
+    l->len = 2.0;
     l->legx = 0.8;
     l->legy = 0.8;
     l->font = grdefaults.font;
@@ -249,7 +249,7 @@ void set_default_plotarr(plotarr * p)
 
     p->lines = grdefaults.lines;
     p->linew = grdefaults.linew;
-    p->color = grdefaults.color;
+    p->color = 0;           // white; to be overwritten
     p->lineskip = 0;		/* How many points to skip when drawing lines */
 
     p->fill = 0;		/* fill type */

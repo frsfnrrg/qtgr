@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QDir>
 #include <QSettings>
+#include <QTime>
 
 class Menu;
 class ViewMenu;
@@ -52,6 +53,8 @@ private:
     QString fName;
     QString fDir;
     QDir lastDir;
+
+    QTime startuptime;
 
 protected:
     void closeEvent(QCloseEvent *);

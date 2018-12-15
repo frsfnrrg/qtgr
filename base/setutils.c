@@ -86,7 +86,10 @@ void setdefaultcolors(int gno)
 {
     int i;
     for (i = 0; i < g[gno].maxplot; i++) {
- 	g[gno].p[i].color = (i % ( MAXCOLORS-1)) + 1;
+        if (g[gno].p[i].color == 0) {
+            // Only set if white
+            g[gno].p[i].color = (i % ( MAXCOLORS-1)) + 1;
+        }
     }
 }
 
